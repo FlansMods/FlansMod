@@ -93,7 +93,7 @@ public class ContainerMechaInventory extends Container
 				yPos = 25 + 19 * (row - scroll);
 			for(int col = 0; col < ((row + 1) * 8 < numItems ? 8 : numItems % 8); col++)
 			{
-				((Slot)inventorySlots.get(row * 8 + col)).yPos = yPos;
+				inventorySlots.get(row * 8 + col).yPos = yPos;
 			}
 		}
 	}
@@ -108,7 +108,7 @@ public class ContainerMechaInventory extends Container
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
 		ItemStack stack = ItemStack.EMPTY.copy();
-		Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		Slot currentSlot = inventorySlots.get(slotID);
 		
 		if(currentSlot != null && currentSlot.getHasStack())
 		{

@@ -13,7 +13,7 @@ public class TexturedPolygon
 		this.invertNormal = false;
 		this.vertexPositions = apositionTexturevertex;
 		this.nVertices = apositionTexturevertex.length;
-		this.iNormals = new ArrayList<Vec3d>();
+		this.iNormals = new ArrayList<>();
 		this.normals = new float[0];
 	}
 	
@@ -65,7 +65,7 @@ public class TexturedPolygon
 		else
 			tessellator.startDrawing(GL11.GL_POLYGON);
 		
-		if(iNormals.size() == 0)
+		if(iNormals.isEmpty())
 		{
 			if(normals.length == 3)
 			{

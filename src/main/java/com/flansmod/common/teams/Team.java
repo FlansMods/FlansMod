@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,10 +20,10 @@ import com.flansmod.common.types.TypeFile;
 
 public class Team extends InfoType
 {
-	public static List<Team> teams = new ArrayList<Team>();
-	public List<String> members = new ArrayList<String>();
+	public static List<Team> teams = new ArrayList<>();
+	public List<String> members = new ArrayList<>();
 	//public List<ITeamBase> bases = new ArrayList<ITeamBase>();
-	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
+	public List<PlayerClass> classes = new ArrayList<>();
 	
 	public static Team spectators;
 	
@@ -210,7 +209,7 @@ public class Team extends InfoType
 	
 	public String addPlayer(String username)
 	{
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		list.add(username);
 		for(Team team : teams)
 		{
@@ -224,14 +223,14 @@ public class Team extends InfoType
 	public String removeWorstPlayer()
 	{
 		sortPlayers();
-		if(members.size() == 0)
+		if(members.isEmpty())
 			return null;
 		else return removePlayer(members.get(members.size() - 1));
 	}
 	
 	public void sortPlayers()
 	{
-		Collections.sort(members, new ComparatorScore());
+		members.sort(new ComparatorScore());
 	}
 	
 	public static class ComparatorScore implements Comparator<String>

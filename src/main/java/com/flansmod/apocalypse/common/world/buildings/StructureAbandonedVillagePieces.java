@@ -72,15 +72,7 @@ public class StructureAbandonedVillagePieces
 		arraylist.add(new StructureAbandonedVillagePieces.PieceWeight(StructureAbandonedVillagePieces.House3.class, 8, MathHelper.getInt(p_75084_0_, 0 + p_75084_1_, 3 + p_75084_1_ * 2)));
 		net.minecraftforge.fml.common.registry.VillagerRegistry.addExtraVillageComponents(arraylist, p_75084_0_, p_75084_1_);
 		
-		Iterator iterator = arraylist.iterator();
-		
-		while(iterator.hasNext())
-		{
-			if(((StructureAbandonedVillagePieces.PieceWeight)iterator.next()).villagePiecesLimit == 0)
-			{
-				iterator.remove();
-			}
-		}
+		arraylist.removeIf(o -> ((PieceWeight)o).villagePiecesLimit == 0);
 		
 		return arraylist;
 	}
@@ -165,11 +157,10 @@ public class StructureAbandonedVillagePieces
 			{
 				++j1;
 				int k1 = p_176067_2_.nextInt(i1);
-				Iterator iterator = p_176067_0_.structureVillageWeightedPieceList.iterator();
 				
-				while(iterator.hasNext())
+				for(Object aStructureVillageWeightedPieceList : p_176067_0_.structureVillageWeightedPieceList)
 				{
-					StructureAbandonedVillagePieces.PieceWeight pieceweight = (StructureAbandonedVillagePieces.PieceWeight)iterator.next();
+					PieceWeight pieceweight = (PieceWeight)aStructureVillageWeightedPieceList;
 					k1 -= pieceweight.villagePieceWeight;
 					
 					if(k1 < 0)
@@ -179,7 +170,7 @@ public class StructureAbandonedVillagePieces
 							break;
 						}
 						
-						StructureAbandonedVillagePieces.Village village = func_176065_a(p_176067_0_, pieceweight, p_176067_1_, p_176067_2_, p_176067_3_, p_176067_4_, p_176067_5_, p_176067_6_, p_176067_7_);
+						Village village = func_176065_a(p_176067_0_, pieceweight, p_176067_1_, p_176067_2_, p_176067_3_, p_176067_4_, p_176067_5_, p_176067_6_, p_176067_7_);
 						
 						if(village != null)
 						{
@@ -1573,7 +1564,7 @@ public class StructureAbandonedVillagePieces
 		
 		public Start(BiomeProvider p_i2104_1_, int p_i2104_2_, Random p_i2104_3_, int p_i2104_4_, int p_i2104_5_, List p_i2104_6_, int p_i2104_7_)
 		{
-			super((StructureAbandonedVillagePieces.Start)null, 0, p_i2104_3_, p_i2104_4_, p_i2104_5_);
+			super(null, 0, p_i2104_3_, p_i2104_4_, p_i2104_5_);
 			this.worldChunkMngr = p_i2104_1_;
 			this.structureVillageWeightedPieceList = p_i2104_6_;
 			this.terrainType = p_i2104_7_;
@@ -1602,7 +1593,6 @@ public class StructureAbandonedVillagePieces
 			}
 			catch(NoSuchFieldError var4)
 			{
-				;
 			}
 			
 			try
@@ -1611,7 +1601,6 @@ public class StructureAbandonedVillagePieces
 			}
 			catch(NoSuchFieldError var3)
 			{
-				;
 			}
 			
 			try
@@ -1620,7 +1609,6 @@ public class StructureAbandonedVillagePieces
 			}
 			catch(NoSuchFieldError var2)
 			{
-				;
 			}
 			
 			try
@@ -1629,7 +1617,6 @@ public class StructureAbandonedVillagePieces
 			}
 			catch(NoSuchFieldError var1)
 			{
-				;
 			}
 		}
 	}

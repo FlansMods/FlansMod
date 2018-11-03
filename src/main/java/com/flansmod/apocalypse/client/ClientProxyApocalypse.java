@@ -109,7 +109,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		*/
 		
 		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockLabStone, 0, new ModelResourceLocation("flansmodapocalypse:itemblocklabstone", "inventory"));
-		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation[]{new ResourceLocation("flansmodapocalypse:itemblocklabstone")});
+		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation("flansmodapocalypse:itemblocklabstone"));
 	}
 	
 	/**

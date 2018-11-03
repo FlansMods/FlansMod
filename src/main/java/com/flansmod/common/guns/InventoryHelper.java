@@ -3,7 +3,6 @@ package com.flansmod.common.guns;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import com.flansmod.common.FlansMod;
 
@@ -131,7 +130,7 @@ public class InventoryHelper
 				{
 					oldStack = new ItemStack(item, 0, stack.getItemDamage());
 					if(stack.hasTagCompound())
-						oldStack.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+						oldStack.setTagCompound(stack.getTagCompound().copy());
 					inventory.setInventorySlotContents(k, oldStack);
 				}
 				

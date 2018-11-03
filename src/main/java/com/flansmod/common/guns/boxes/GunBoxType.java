@@ -33,14 +33,14 @@ public class GunBoxType extends BoxType
 	public GunBoxPage defaultPage;
 	
 	private static int lastIconIndex = 2;
-	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
+	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<>();
 	
 	public GunBoxType(TypeFile file)
 	{
 		super(file);
 		
-		pagesByTitle = new HashMap<String, GunBoxPage>();
-		pages = new ArrayList<GunBoxPage>();
+		pagesByTitle = new HashMap<>();
+		pages = new ArrayList<>();
 	}
 	
 	@Override
@@ -123,7 +123,7 @@ public class GunBoxType extends BoxType
 
 	private List<ItemStack> getRecipe(String[] split)
 	{
-		List<ItemStack> recipe = new ArrayList<ItemStack>();
+		List<ItemStack> recipe = new ArrayList<>();
 		
 		for(int i = 0; i < (split.length - 2) / 2; i++)
 		{
@@ -273,7 +273,7 @@ public class GunBoxType extends BoxType
 		public GunBoxPage(String s)
 		{
 			name = s;
-			entries = new ArrayList<GunBoxEntryTopLevel>();
+			entries = new ArrayList<>();
 		}
 		
 		public void addNewEntry(InfoType type, List<ItemStack> requiredParts)
@@ -367,7 +367,7 @@ public class GunBoxType extends BoxType
 		public GunBoxEntryTopLevel(InfoType type, List<ItemStack> requiredParts)
 		{
 			super(type, requiredParts);
-			childEntries = new ArrayList<GunBoxEntry>();
+			childEntries = new ArrayList<>();
 		}
 
 		public void addAmmo(InfoType type, List<ItemStack> requiredParts)

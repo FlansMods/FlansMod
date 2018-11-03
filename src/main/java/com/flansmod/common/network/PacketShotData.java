@@ -41,7 +41,7 @@ public class PacketShotData extends PacketBase
 	
 	public PacketShotData(ShotData shotData)
 	{
-		this.shotData = new ArrayList<ShotData>();
+		this.shotData = new ArrayList<>();
 		this.shotData.add(shotData);
 	}
 	
@@ -49,9 +49,8 @@ public class PacketShotData extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(shotData.size());
-		for(int i = 0; i < shotData.size(); i++)
+		for(ShotData current : shotData)
 		{
-			ShotData current = shotData.get(i);
 			data.writeByte((byte)current.slot);
 			data.writeInt(current.shotFrom.hashCode());
 			data.writeInt(current.shotType.hashCode());
@@ -82,7 +81,7 @@ public class PacketShotData extends PacketBase
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
-		shotData = new ArrayList<ShotData>();
+		shotData = new ArrayList<>();
 		int numEntries = data.readInt();
 		for(int i = 0; i < numEntries; i++)
 		{

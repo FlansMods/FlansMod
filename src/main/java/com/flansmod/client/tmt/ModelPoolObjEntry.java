@@ -24,10 +24,10 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 			
 			String s;
 			
-			ArrayList<PositionTransformVertex> verts = new ArrayList<PositionTransformVertex>();
-			ArrayList<float[]> uvs = new ArrayList<float[]>();
-			ArrayList<float[]> normals = new ArrayList<float[]>();
-			ArrayList<TexturedPolygon> face = new ArrayList<TexturedPolygon>();
+			ArrayList<PositionTransformVertex> verts = new ArrayList<>();
+			ArrayList<float[]> uvs = new ArrayList<>();
+			ArrayList<float[]> normals = new ArrayList<>();
+			ArrayList<TexturedPolygon> face = new ArrayList<>();
 			
 			while((s = in.readLine()) != null)
 			{
@@ -56,7 +56,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 						if(ind > -1)
 							v[i] = Float.parseFloat(s.substring(0, ind));
 						else
-							v[i] = Float.parseFloat(s.substring(0));
+							v[i] = Float.parseFloat(s);
 						s = s.substring(s.indexOf(" ") + 1).trim();
 					}
 					
@@ -77,7 +77,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 						if(ind > -1)
 							v[i] = Float.parseFloat(s.substring(0, ind));
 						else
-							v[i] = Float.parseFloat(s.substring(0));
+							v[i] = Float.parseFloat(s);
 						s = s.substring(s.indexOf(" ") + 1).trim();
 					}
 					
@@ -94,7 +94,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 						if(ind > -1)
 							v[i] = Float.parseFloat(s.substring(0, ind));
 						else
-							v[i] = Float.parseFloat(s.substring(0));
+							v[i] = Float.parseFloat(s);
 						s = s.substring(s.indexOf(" ") + 1).trim();
 					}
 					
@@ -108,11 +108,11 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 				if(s.startsWith("f "))
 				{
 					s = s.substring(s.indexOf(" ") + 1).trim();
-					ArrayList<PositionTextureVertex> v = new ArrayList<PositionTextureVertex>();
+					ArrayList<PositionTextureVertex> v = new ArrayList<>();
 					String s1;
 					int finalPhase = 0;
 					float[] normal = new float[]{0F, 0F, 0F};
-					ArrayList<Vec3d> iNormal = new ArrayList<Vec3d>();
+					ArrayList<Vec3d> iNormal = new ArrayList<>();
 					do
 					{
 						int vInt;

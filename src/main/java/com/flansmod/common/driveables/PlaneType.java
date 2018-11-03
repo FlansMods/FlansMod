@@ -50,11 +50,11 @@ public class PlaneType extends DriveableType
 	/**
 	 * The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly
 	 */
-	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
+	public ArrayList<Propeller> propellers = new ArrayList<>();
 	/**
 	 * The positions, parent parts and recipe items of the helicopter propellers, used to calculate forces and render the plane correctly
 	 */
-	public ArrayList<Propeller> heliPropellers = new ArrayList<Propeller>(), heliTailPropellers = new ArrayList<Propeller>();
+	public ArrayList<Propeller> heliPropellers = new ArrayList<>(), heliTailPropellers = new ArrayList<>();
 	
 	/**
 	 * Aesthetic features
@@ -70,7 +70,7 @@ public class PlaneType extends DriveableType
 	 */
 	public boolean invInflight = true;
 	
-	public static ArrayList<PlaneType> types = new ArrayList<PlaneType>();
+	public static ArrayList<PlaneType> types = new ArrayList<>();
 	
 	public PlaneType(TypeFile file)
 	{

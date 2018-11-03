@@ -23,7 +23,7 @@ import com.flansmod.common.types.InfoType;
 
 public abstract class Gametype
 {
-	public static HashMap<String, Gametype> gametypes = new HashMap<String, Gametype>();
+	public static HashMap<String, Gametype> gametypes = new HashMap<>();
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 	public static Random rand = new Random();
 	

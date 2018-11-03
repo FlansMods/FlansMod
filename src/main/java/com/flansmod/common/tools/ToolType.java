@@ -21,7 +21,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class ToolType extends InfoType
 {
-	public static HashMap<String, ToolType> tools = new HashMap<String, ToolType>();
+	public static HashMap<String, ToolType> tools = new HashMap<>();
 	
 	@SideOnly(value = Side.CLIENT)
 	/** The parachute model */
@@ -46,7 +46,7 @@ public class ToolType extends InfoType
 	/**
 	 * The items required to be added (shapelessly) to recharge the tool
 	 */
-	public ArrayList<ItemStack> rechargeRecipe = new ArrayList<ItemStack>();
+	public ArrayList<ItemStack> rechargeRecipe = new ArrayList<>();
 	/**
 	 * Not yet implemented. For making tools chargeable with IC2 EU
 	 */
@@ -132,7 +132,7 @@ public class ToolType extends InfoType
 			return;
 		rechargeRecipe.add(new ItemStack(item, 1, toolLife));
 		
-		NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+		NonNullList<Ingredient> ingredients = NonNullList.create();
 		for(ItemStack stack : rechargeRecipe)
 		{
 			ingredients.add(Ingredient.fromStacks(stack));

@@ -205,7 +205,7 @@ public class GametypeCTF extends Gametype
 		if(teamsManager.currentRound == null)
 			return null;
 		PlayerData data = getPlayerData(player);
-		List<BlockPos> validSpawnPoints = new ArrayList<BlockPos>();
+		List<BlockPos> validSpawnPoints = new ArrayList<>();
 		if(data.newTeam == null)
 			return null;
 		

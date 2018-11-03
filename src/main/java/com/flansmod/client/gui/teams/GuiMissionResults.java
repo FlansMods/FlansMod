@@ -30,7 +30,7 @@ public class GuiMissionResults extends GuiTeamsBase
 	
 	private static final int WIDTH = 256, HEIGHT = 256;
 	
-	private static enum EnumResultsState
+	private enum EnumResultsState
 	{
 		IDLE,
 		
@@ -47,7 +47,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		REVEAL_UNLOCK3,
 		REVEAL_UNLOCK4,
 		
-		DONE;
+		DONE
 	}
 	
 	private static final int[] stateTimes = new int[]{

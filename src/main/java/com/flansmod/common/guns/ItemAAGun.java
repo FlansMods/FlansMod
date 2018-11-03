@@ -22,7 +22,7 @@ import com.flansmod.common.types.InfoType;
 
 public class ItemAAGun extends Item implements IFlanItem
 {
-	public static final ArrayList<String> names = new ArrayList<String>();
+	public static final ArrayList<String> names = new ArrayList<>();
 	public AAGunType type;
 	
 	public ItemAAGun(AAGunType type1)
@@ -51,7 +51,7 @@ public class ItemAAGun extends Item implements IFlanItem
 		//Result check
 		if(RayTraceResult == null)
 		{
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+			return new ActionResult<>(EnumActionResult.PASS, itemstack);
 		}
 		if(RayTraceResult.typeOfHit == Type.BLOCK)
 		{
@@ -66,9 +66,9 @@ public class ItemAAGun extends Item implements IFlanItem
 			{
 				itemstack.setCount(itemstack.getCount() - 1);
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<>(EnumActionResult.PASS, itemstack);
 	}
 	
 	public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)

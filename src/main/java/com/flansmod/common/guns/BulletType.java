@@ -52,12 +52,12 @@ public class BulletType extends ShootableType
 	
 	public String trailTexture = "defaultBulletTrail";
 	
-	public ArrayList<PotionEffect> hitEffects = new ArrayList<PotionEffect>();
+	public ArrayList<PotionEffect> hitEffects = new ArrayList<>();
 	
 	/**
 	 * The static bullets list
 	 */
-	public static List<BulletType> bullets = new ArrayList<BulletType>();
+	public static List<BulletType> bullets = new ArrayList<>();
 	
 	public BulletType(TypeFile file)
 	{

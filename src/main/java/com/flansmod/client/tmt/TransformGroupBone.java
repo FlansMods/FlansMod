@@ -73,15 +73,12 @@ public class TransformGroupBone extends TransformGroup
 	
 	protected void setVectorRotations(Vec3d vector, float xRot, float yRot, float zRot)
 	{
-		float x = xRot;
-		float y = yRot;
-		float z = zRot;
-		float xC = MathHelper.cos(x);
-		float xS = MathHelper.sin(x);
-		float yC = MathHelper.cos(y);
-		float yS = MathHelper.sin(y);
-		float zC = MathHelper.cos(z);
-		float zS = MathHelper.sin(z);
+		float xC = MathHelper.cos(xRot);
+		float xS = MathHelper.sin(xRot);
+		float yC = MathHelper.cos(yRot);
+		float yS = MathHelper.sin(yRot);
+		float zC = MathHelper.cos(zRot);
+		float zS = MathHelper.sin(zRot);
 		
 		double xVec = vector.x;
 		double yVec = vector.y;

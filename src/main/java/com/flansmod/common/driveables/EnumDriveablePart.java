@@ -47,7 +47,7 @@ public enum EnumDriveablePart
 	private String name;
 	private EnumDriveablePart[] children;
 	
-	private EnumDriveablePart(EnumDriveablePart[] parts, String s, String s2)
+	EnumDriveablePart(EnumDriveablePart[] parts, String s, String s2)
 	{
 		children = parts;
 		shortName = s;
@@ -67,7 +67,7 @@ public enum EnumDriveablePart
 	 */
 	public EnumDriveablePart[] getParents()
 	{
-		ArrayList<EnumDriveablePart> parents = new ArrayList<EnumDriveablePart>();
+		ArrayList<EnumDriveablePart> parents = new ArrayList<>();
 		for(EnumDriveablePart part : values())
 		{
 			for(EnumDriveablePart childPart : part.getChildren())

@@ -69,7 +69,7 @@ public class BiomeProviderApocalypse extends BiomeProvider
 	@Override
 	public Biome getBiome(BlockPos pos)
 	{
-		Biome biome = this.myBiomeCache.getBiome(pos.getX(), pos.getZ(), (Biome)null);
+		Biome biome = this.myBiomeCache.getBiome(pos.getX(), pos.getZ(), null);
 		if(biome == null)
 		{
 			return BiomeApocalypse.desert;

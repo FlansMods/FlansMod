@@ -12,7 +12,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class LoadoutPool extends InfoType
 {
-	public static ArrayList<LoadoutPool> pools = new ArrayList<LoadoutPool>();
+	public static ArrayList<LoadoutPool> pools = new ArrayList<>();
 	
 	public static class LoadoutEntry
 	{
@@ -31,7 +31,7 @@ public class LoadoutPool extends InfoType
 	{
 		public InfoType type = null;
 		
-		public ArrayList<ItemStack> extraItems = new ArrayList<ItemStack>(2);
+		public ArrayList<ItemStack> extraItems = new ArrayList<>(2);
 	}
 	
 	public int maxLevel = 20;
@@ -52,7 +52,7 @@ public class LoadoutPool extends InfoType
 		unlocks = new ArrayList[EnumLoadoutSlot.values().length];
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
-			unlocks[i] = new ArrayList<LoadoutEntryInfoType>();
+			unlocks[i] = new ArrayList<>();
 		}
 		
 		for(int i = 0; i < 5; i++)
@@ -78,7 +78,7 @@ public class LoadoutPool extends InfoType
 			for(int i = 0; i < maxLevel; i++)
 			{
 				XPPerLevel[i] = 10 * i;
-				rewardsPerLevel[i] = new ArrayList<RewardBox>();
+				rewardsPerLevel[i] = new ArrayList<>();
 			}
 		}
 		else if(KeyMatches(split, "XPPerLevel"))

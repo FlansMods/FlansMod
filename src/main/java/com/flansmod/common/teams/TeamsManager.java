@@ -164,10 +164,10 @@ public class TeamsManager
 		MinecraftForge.EVENT_BUS.register(this);
 		
 		//Init arrays
-		bases = new ArrayList<ITeamBase>();
-		objects = new ArrayList<ITeamObject>();
-		maps = new HashMap<String, TeamsMap>();
-		rounds = new ArrayList<TeamsRound>();
+		bases = new ArrayList<>();
+		objects = new ArrayList<>();
+		maps = new HashMap<>();
+		rounds = new ArrayList<>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 		//currentMap = TeamsMap.def;
@@ -191,10 +191,10 @@ public class TeamsManager
 		
 		currentRound = null;
 		
-		bases = new ArrayList<ITeamBase>();
-		objects = new ArrayList<ITeamObject>();
-		maps = new HashMap<String, TeamsMap>();
-		rounds = new ArrayList<TeamsRound>();
+		bases = new ArrayList<>();
+		objects = new ArrayList<>();
+		maps = new HashMap<>();
+		rounds = new ArrayList<>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 	}
@@ -389,7 +389,7 @@ public class TeamsManager
 	
 	public void start()
 	{
-		if(!enabled || rounds.size() == 0)
+		if(!enabled || rounds.isEmpty())
 			return;
 		
 		//Can only start once
@@ -409,7 +409,7 @@ public class TeamsManager
 	
 	public void startNextRound()
 	{
-		if(!enabled || rounds.size() == 0)
+		if(!enabled || rounds.isEmpty())
 			return;
 		
 		//If the next round has not been forced
@@ -670,7 +670,7 @@ public class TeamsManager
 			return;
 		
 		ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
-		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
+		if(currentItem.getItem() instanceof ItemOpStick)
 		{
 			//if(event.target instanceof ITeamObject)
 			//	((ItemOpStick)currentItem.getItem()).clickedObject(event.getEntityPlayer().world, (EntityPlayerMP)event.getEntityPlayer(), (ITeamObject)event.target);
@@ -703,7 +703,7 @@ public class TeamsManager
 		if(te != null)
 		{
 			ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
-			if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
+			if(currentItem.getItem() instanceof ItemOpStick)
 			{
 				if(te instanceof ITeamObject)
 					((ItemOpStick)currentItem.getItem()).clickedObject(event.getEntityPlayer().world, (EntityPlayerMP)event.getEntityPlayer(), (ITeamObject)te);
@@ -723,7 +723,7 @@ public class TeamsManager
 	@SubscribeEvent
 	public void playerDrops(PlayerDropsEvent event)
 	{
-		ArrayList<EntityItem> dropsToThrow = new ArrayList<EntityItem>();
+		ArrayList<EntityItem> dropsToThrow = new ArrayList<>();
 		//First collect together guns and ammo if smart drops are enabled
 		if(weaponDrops == 2)
 		{
@@ -1258,7 +1258,7 @@ public class TeamsManager
 		}
 		
 		int dimension = 0; //TODO : FIX THIS
-		if(maps.size() == 0)
+		if(maps.isEmpty())
 		{
 			maps.put("default" + dimension, new TeamsMap(world, "default" + dimension, "Default " + world.getWorldInfo().getWorldName()));
 		}

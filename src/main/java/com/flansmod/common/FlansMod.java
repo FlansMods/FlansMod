@@ -3,7 +3,6 @@ package com.flansmod.common;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -169,10 +168,10 @@ public class FlansMod
 	public static ItemBlockManyNames spawnerItem;
 	public static ItemOpStick opStick;
 	public static ItemFlagpole flag;
-	public static ArrayList<ItemPart> partItems = new ArrayList<ItemPart>();
-	public static ArrayList<ItemMecha> mechaItems = new ArrayList<ItemMecha>();
-	public static ArrayList<ItemTool> toolItems = new ArrayList<ItemTool>();
-	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
+	public static ArrayList<ItemPart> partItems = new ArrayList<>();
+	public static ArrayList<ItemMecha> mechaItems = new ArrayList<>();
+	public static ArrayList<ItemTool> toolItems = new ArrayList<>();
+	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
 	
@@ -271,7 +270,7 @@ public class FlansMod
 		
 		// Really randomise the rewards generator
 		rewardsRandom = new Random();
-		rewardsRandom.setSeed(System.currentTimeMillis() ^ 0x5AB49DE08DE3B1DFl);
+		rewardsRandom.setSeed(System.currentTimeMillis() ^ 0x5AB49DE08DE3B1DFL);
 		for(int i = 0; i < 10; i++)
 		{
 			for(int j = 0; j < rewardsRandom.nextInt(10); j++)
@@ -298,7 +297,7 @@ public class FlansMod
 		}
 		if(addGunpowderRecipe)
 		{
-			NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+			NonNullList<Ingredient> ingredients = NonNullList.create();
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GLOWSTONE_DUST, 1, 1)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
@@ -311,7 +310,7 @@ public class FlansMod
 		{
 			// ICI C = Cauldron
 			// III I = Iron ingot
-			NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+			NonNullList<Ingredient> ingredients = NonNullList.create();
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.CAULDRON)));
 			for(int i = 0; i < 4; i++)
@@ -323,7 +322,7 @@ public class FlansMod
 			// BBB B = Bowl
 			// III I = Iron ingot
 			// III
-			NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+			NonNullList<Ingredient> ingredients = NonNullList.create();
 			for(int i = 0; i < 3; i++)
 				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.BOWL)));
 			for(int i = 0; i < 6; i++)
@@ -550,10 +549,6 @@ public class FlansMod
 								typeFile.parseLine(line);
 							}
 							reader.close();
-						}
-						catch(FileNotFoundException e)
-						{
-							FlansMod.log.throwing(e);
 						}
 						catch(IOException e)
 						{

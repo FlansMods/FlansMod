@@ -74,7 +74,7 @@ public class FlansModClient extends FlansMod
 	/**
 	 * Gun animation variables for each entity holding a gun. Currently only applicable to the player
 	 */
-	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<EntityLivingBase, GunAnimations>(), gunAnimationsLeft = new HashMap<EntityLivingBase, GunAnimations>();
+	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<>(), gunAnimationsLeft = new HashMap<>();
 	
 	//Scope variables
 	/**
@@ -121,7 +121,7 @@ public class FlansModClient extends FlansMod
 	
 	public static int hitMarkerTime = 0;
 	
-	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<Vector3i>();
+	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<>();
 	public static int lightOverrideRefreshRate = 5;
 	
 	private static WorldRenderer wr;
@@ -419,13 +419,11 @@ public class FlansModClient extends FlansMod
 		}
 		
 		
-		Particle fx = mc.effectRenderer.spawnEffectParticle(particleID, x, y, z, 0D, 0D, 0D, data);
-		
 		// TODO : [1.12] Check that this is okay
 		//if(mc.gameSettings.fancyGraphics)
 		//	fx.renderDistanceWeight = 200D;
 		
-		return fx;
+		return mc.effectRenderer.spawnEffectParticle(particleID, x, y, z, 0D, 0D, 0D, data);
 	}
 	
 	public static GunAnimations getGunAnimations(EntityLivingBase living, EnumHand hand)
@@ -483,7 +481,7 @@ public class FlansModClient extends FlansMod
 			{
 				EntityPlayer player = (EntityPlayer)obj;
 				ItemStack currentHeldItem = player.getHeldItemMainhand();
-				if(currentHeldItem != null && currentHeldItem.getItem() instanceof ItemGun)
+				if(currentHeldItem.getItem() instanceof ItemGun)
 				{
 					GunType type = ((ItemGun)currentHeldItem.getItem()).GetType();
 					AttachmentType grip = type.getGrip(currentHeldItem);

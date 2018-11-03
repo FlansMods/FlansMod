@@ -47,7 +47,7 @@ public class PlayerSnapshot
 		pos = new Vector3f(p.posX, p.posY, p.posZ);
 		//if(FlansMod.proxy.isThePlayer(p))
 		//	pos = new Vector3f(p.posX, p.posY - 1.6F, p.posZ);
-		hitboxes = new ArrayList<PlayerHitbox>();
+		hitboxes = new ArrayList<>();
 		
 		RotatedAxes bodyAxes = new RotatedAxes(p.renderYawOffset, 0F, 0F);
 		RotatedAxes headAxes = new RotatedAxes(p.rotationYawHead - p.renderYawOffset, p.rotationPitch, 0F);
@@ -109,7 +109,7 @@ public class PlayerSnapshot
 		//Get the bullet raytrace vector into local coordinates
 		Vector3f localOrigin = Vector3f.sub(origin, pos, null);
 		//Prepare a list for the hits
-		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
+		ArrayList<BulletHit> hits = new ArrayList<>();
 		
 		//Check each hitbox for a hit
 		for(PlayerHitbox hitbox : hitboxes)

@@ -279,13 +279,13 @@ public class GuiGunBox extends GuiContainer
 		String bufferLine = "";
 		String bufferLine2 = "";
 		String bufferArray[] = entry.type.name.split(" ");
-
-		for(int i = 0; i < bufferArray.length; i++)
+		
+		for(String aBufferArray : bufferArray)
 		{
-			if((bufferLine.length() + bufferArray[i].length()) <= 16)
-				bufferLine += bufferArray[i] + " ";
+			if((bufferLine.length() + aBufferArray.length()) <= 16)
+				bufferLine += aBufferArray + " ";
 			else
-				bufferLine2 += bufferArray[i] + " ";
+				bufferLine2 += aBufferArray + " ";
 		}
 
 		fr.drawString(bufferLine, x + 5, y + 5, 0x00000000);

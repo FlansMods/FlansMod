@@ -70,8 +70,8 @@ public class ContainerGunModTable extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
-		ItemStack stack = ItemStack.EMPTY;
-		Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		ItemStack stack = ItemStack.EMPTY.copy();
+		Slot currentSlot = inventorySlots.get(slotID);
 		
 		if(currentSlot != null && currentSlot.getHasStack())
 		{
@@ -80,19 +80,19 @@ public class ContainerGunModTable extends Container
 			
 			if(slotID >= 13)
 			{
-				return ItemStack.EMPTY;
+				return ItemStack.EMPTY.copy();
 			}
 			else
 			{
 				if(!mergeItemStack(slotStack, 13, inventorySlots.size(), true))
 				{
-					return ItemStack.EMPTY;
+					return ItemStack.EMPTY.copy();
 				}
 			}
 			
 			if(slotStack.getCount() == 0)
 			{
-				currentSlot.putStack(ItemStack.EMPTY);
+				currentSlot.putStack(ItemStack.EMPTY.copy());
 			}
 			else
 			{
@@ -101,7 +101,7 @@ public class ContainerGunModTable extends Container
 			
 			if(slotStack.getCount() == stack.getCount())
 			{
-				return ItemStack.EMPTY;
+				return ItemStack.EMPTY.copy();
 			}
 			
 			currentSlot.onTake(player, slotStack);

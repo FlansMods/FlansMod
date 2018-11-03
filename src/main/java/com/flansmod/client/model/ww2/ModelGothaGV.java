@@ -257,7 +257,6 @@ public class ModelGothaGV extends ModelPlane
 	// Replace with your propeller function
 	private ModelRendererTurbo[] makeProp(int i, int j, int k)
 	{
-		ModelRendererTurbo[] prop = new ModelRendererTurbo[0];
-		return prop;
+		return new ModelRendererTurbo[0];
 	}
 }

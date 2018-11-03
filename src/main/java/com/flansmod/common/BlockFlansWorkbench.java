@@ -2,7 +2,6 @@ package com.flansmod.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +25,7 @@ public class BlockFlansWorkbench extends Block
 		setResistance(6F);
 		setRegistryName("flansWorkbench");
 		setCreativeTab(FlansMod.tabFlanDriveables);
-		setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
+		setDefaultState(blockState.getBaseState().withProperty(TYPE, 0));
 	}
 	
 	@Override
@@ -43,7 +42,7 @@ public class BlockFlansWorkbench extends Block
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		switch(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue())
+		switch(world.getBlockState(pos).getValue(TYPE))
 		{
 			case 0: if(world.isRemote)
 				entityplayer.openGui(FlansMod.INSTANCE, 0, world, pos.getX(), pos.getY(), pos.getZ());
@@ -59,25 +58,25 @@ public class BlockFlansWorkbench extends Block
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[]{TYPE});
+		return new BlockStateContainer(this, TYPE);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
+		return this.getDefaultState().withProperty(TYPE, meta);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Integer)state.getValue(TYPE)).intValue();
+		return state.getValue(TYPE);
 	}
 	
 	@Override
 	public int damageDropped(IBlockState state)
 	{
-		return ((Integer)state.getValue(TYPE)).intValue();
+		return state.getValue(TYPE);
 	}
 	
 }

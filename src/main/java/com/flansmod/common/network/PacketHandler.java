@@ -1,7 +1,5 @@
 package com.flansmod.common.network;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,15 +40,15 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	//Map of channels for each side
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	//The list of registered packets. Should contain no more than 256 packets.
-	private LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
+	private LinkedList<Class<? extends PacketBase>> packets = new LinkedList<>();
 	//Whether or not Flan's Mod has initialised yet. Once true, no more packets may be registered.
 	private boolean modInitialised = false;
 	
 	/**
 	 * Store received packets in these queues and have the main Minecraft threads use these
 	 */
-	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
-	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
+	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<>();
+	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<>();
 	
 	/**
 	 * Registers a packet with the handler
@@ -141,7 +139,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 					EntityPlayer player = ((NetHandlerPlayServer)netHandler).player;
 					if(!receivedPacketsServer.containsKey(player.getName()))
-						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<PacketBase>());
+						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<>());
 					receivedPacketsServer.get(player.getName()).offer(packet);
 					//packet.handleServerSide();
 					break;
@@ -230,18 +228,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		
 		modInitialised = true;
 		//Define our comparator on the fly and apply it to our list
-		Collections.sort(packets,
-				new Comparator<Class<? extends PacketBase>>()
-				{
-					@Override
-					public int compare(Class<? extends PacketBase> c1, Class<? extends PacketBase> c2)
-					{
-						int com = String.CASE_INSENSITIVE_ORDER.compare(c1.getCanonicalName(), c2.getCanonicalName());
-						if(com == 0)
-							com = c1.getCanonicalName().compareTo(c2.getCanonicalName());
-						return com;
-					}
-				});
+		packets.sort((c1, c2) ->
+		{
+			int com = String.CASE_INSENSITIVE_ORDER.compare(c1.getCanonicalName(), c2.getCanonicalName());
+			if(com == 0)
+				com = c1.getCanonicalName().compareTo(c2.getCanonicalName());
+			return com;
+		});
 	}
 	
 	@SideOnly(Side.CLIENT)

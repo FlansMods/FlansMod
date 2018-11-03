@@ -16,37 +16,37 @@ public interface IControllable
 	 * @param deltaX change in X of the mouse.
 	 * @param deltaY change in Y of the mouse.
 	 */
-	public void onMouseMoved(int deltaX, int deltaY);
+	void onMouseMoved(int deltaX, int deltaY);
 	
 	/**
 	 * @param key the keycode of the key. see @link:KeyInputHandler
 	 * @return boolean to indicate it this key was handled.
 	 */
-	public boolean pressKey(int key, EntityPlayer player);
+	boolean pressKey(int key, EntityPlayer player);
 	
-	public void updateKeyHeldState(int key, boolean held);
+	void updateKeyHeldState(int key, boolean held);
 	
 	/**
 	 * @return riddenByEntity
 	 */
-	public Entity getControllingEntity();
+	Entity getControllingEntity();
 	
-	public boolean isDead();
+	boolean isDead();
 	
 	/**
 	 * @return The player's view roll
 	 */
-	public float getPlayerRoll();
+	float getPlayerRoll();
 	
-	public float getPrevPlayerRoll();
+	float getPrevPlayerRoll();
 	
 	/**
 	 * @return The player's 3rd person view distance
 	 */
-	public float getCameraDistance();
+	float getCameraDistance();
 	
 	@SideOnly(Side.CLIENT)
-	public EntityLivingBase getCamera();
+	EntityLivingBase getCamera();
 	
-	public EntitySeat getSeat(EntityLivingBase living);
+	EntitySeat getSeat(EntityLivingBase living);
 }

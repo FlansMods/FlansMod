@@ -85,7 +85,7 @@ public class ClientRenderHooks
 	private float partialTicks;
 	
 	private static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
+	private static List<KillMessage> killMessages = new ArrayList<>();
 	
 	private CustomItemRenderer[] customRenderers = new CustomItemRenderer[EnumType.values().length];
 	
@@ -876,9 +876,8 @@ public class ClientRenderHooks
 	
 	private void RenderKillMessages(int i, int j)
 	{
-		for(int n = 0; n < killMessages.size(); n++)
+		for(KillMessage killMessage : killMessages)
 		{
-			KillMessage killMessage = killMessages.get(n);
 			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 		}
 		
@@ -888,9 +887,8 @@ public class ClientRenderHooks
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		for(int n = 0; n < killMessages.size(); n++)
+		for(KillMessage killMessage : killMessages)
 		{
-			KillMessage killMessage = killMessages.get(n);
 			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item, 1, killMessage.paint), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);

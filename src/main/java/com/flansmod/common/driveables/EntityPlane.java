@@ -144,7 +144,7 @@ public class EntityPlane extends EntityDriveable
 		
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
-		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+		if(currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
 		
 		PlaneType type = this.getPlaneType();
@@ -503,7 +503,7 @@ public class EntityPlane extends EntityDriveable
 				
 				Vector3f up = axes.getYAxis();
 				
-				throttleScaled *= numProps == 0 ? 0 : numPropsWorking / numProps * 2F;
+				throttleScaled *= numProps == 0 ? 0 : (float)numPropsWorking / numProps * 2F;
 				
 				float upwardsForce = throttle * throttleScaled + (g - throttleScaled / 2F);
 				if(throttle < 0.5F)
@@ -543,7 +543,7 @@ public class EntityPlane extends EntityDriveable
 						numPropsWorking++;
 				numProps = type.propellers.size();
 				
-				float throttleTemp = throttle * (numProps == 0 ? 0 : numPropsWorking / numProps * 2F);
+				float throttleTemp = throttle * (numProps == 0 ? 0 : (float)numPropsWorking / numProps * 2F);
 				
 				//Apply forces
 				Vector3f forwards = (Vector3f)axes.getXAxis().normalise();
@@ -792,7 +792,8 @@ public class EntityPlane extends EntityDriveable
 		
 		PlaneType type = PlaneType.getPlane(driveableType);
 		
-		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
+		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround
+				&& (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
 		{
 			ItemStack planeStack = new ItemStack(type.item, 1, driveableData.paintjobID);
 			NBTTagCompound tags = new NBTTagCompound();

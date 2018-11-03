@@ -26,7 +26,7 @@ import com.flansmod.common.PlayerHandler;
 public class EntityFlagpole extends Entity implements ITeamBase
 {
 	protected static final AxisAlignedBB POLE_AABB = new AxisAlignedBB(-0.2D, 0.0D, -0.2D, 0.4D, 2.0D, 0.4D);
-	private static final DataParameter<Integer> FLAGPOLE_ID = EntityDataManager.<Integer>createKey(EntityFlagpole.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FLAGPOLE_ID = EntityDataManager.createKey(EntityFlagpole.class, DataSerializers.VARINT);
 	
 	//Set this when an op sets the base and return to it when the gametype restarts
 	public int defaultTeamID;
@@ -35,9 +35,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	//The map this base is a part of
 	public TeamsMap map;
 	//List of all TeamObjects associated with this base
-	public List<ITeamObject> objects = new ArrayList<ITeamObject>();
+	public List<ITeamObject> objects = new ArrayList<>();
 	// List of spawn points. 
-	public List<BlockPos> spawnPoints = new ArrayList<BlockPos>();
+	public List<BlockPos> spawnPoints = new ArrayList<>();
 	//The name of this base, changeable by the baseList and baseRename commands
 	public String name = "Default Name";
 	//This base's ID
@@ -107,7 +107,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	protected void entityInit()
 	{
-		getDataManager().register(FLAGPOLE_ID, Integer.valueOf(0));
+		getDataManager().register(FLAGPOLE_ID, 0);
 	}
 	
 	@Override
@@ -309,8 +309,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
-		return stack;
+		return new ItemStack(FlansMod.flag, 1, 0);
 	}
 	
 	@Override

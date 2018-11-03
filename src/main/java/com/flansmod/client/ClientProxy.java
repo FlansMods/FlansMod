@@ -114,7 +114,7 @@ public class ClientProxy extends CommonProxy
 	 */
 	public List<File> contentPacks;
 	
-	public List<SoundEvent> eventsToRegister = new ArrayList<SoundEvent>();
+	public List<SoundEvent> eventsToRegister = new ArrayList<>();
 	
 	private FlansModClient flansModClient;
 	
@@ -167,7 +167,7 @@ public class ClientProxy extends CommonProxy
 					for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 					{
 						ModelLoader.registerItemVariants(type.item,
-								new ResourceLocation[]{new ResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)))});
+								new ResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName))));
 						ModelLoader.setCustomModelResourceLocation(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
 					}
 				}
@@ -183,36 +183,33 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 1, new ModelResourceLocation("flansmod:flansworkbench_vehicles", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 2, new ModelResourceLocation("flansmod:flansworkbench_parts", "inventory"));
 		ModelLoader.registerItemVariants(FlansMod.workbenchItem,
-				new ResourceLocation[]{
-						new ResourceLocation("flansmod:flansWorkbench_guns"),
-						new ResourceLocation("flansmod:flansWorkbench_parts"),
-						new ResourceLocation("flansmod:flansWorkbench_vehicles")});
+				new ResourceLocation("flansmod:flansWorkbench_guns"),
+				new ResourceLocation("flansmod:flansWorkbench_parts"),
+				new ResourceLocation("flansmod:flansWorkbench_vehicles"));
 		
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 0, new ModelResourceLocation("flansmod:opstick_Ownership", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 1, new ModelResourceLocation("flansmod:opstick_Connecting", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 2, new ModelResourceLocation("flansmod:opstick_Mapping", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 3, new ModelResourceLocation("flansmod:opstick_Destruction", "inventory"));
 		ModelLoader.registerItemVariants(FlansMod.opStick,
-				new ResourceLocation[]{
-						new ResourceLocation("flansmod:opstick_Ownership"),
-						new ResourceLocation("flansmod:opstick_Connecting"),
-						new ResourceLocation("flansmod:opstick_Mapping"),
-						new ResourceLocation("flansmod:opstick_Destruction")});
+				new ResourceLocation("flansmod:opstick_Ownership"),
+				new ResourceLocation("flansmod:opstick_Connecting"),
+				new ResourceLocation("flansmod:opstick_Mapping"),
+				new ResourceLocation("flansmod:opstick_Destruction"));
 		
 		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 0, new ModelResourceLocation("flansmod:teamsSpawner_items", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 1, new ModelResourceLocation("flansmod:teamsSpawner_players", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 2, new ModelResourceLocation("flansmod:teamsSpawner_vehicles", "inventory"));
 		ModelLoader.registerItemVariants(FlansMod.spawnerItem,
-				new ResourceLocation[]{
-						new ResourceLocation("flansmod:teamsSpawner_items"),
-						new ResourceLocation("flansmod:teamsSpawner_players"),
-						new ResourceLocation("flansmod:teamsSpawner_vehicles")});
+				new ResourceLocation("flansmod:teamsSpawner_items"),
+				new ResourceLocation("flansmod:teamsSpawner_players"),
+				new ResourceLocation("flansmod:teamsSpawner_vehicles"));
 		
 		ModelLoader.setCustomModelResourceLocation(FlansMod.flag, 0, new ModelResourceLocation("flansmod:flagpole", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.rainbowPaintcan, 0, new ModelResourceLocation("flansmod:rainbowPaintcan", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(FlansMod.paintjobTable), 0, new ModelResourceLocation("flansmod:paintjobTable", "inventory"));
 		ModelLoader.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable),
-				new ResourceLocation[]{new ResourceLocation("flansmod:paintjobTable")});
+				new ResourceLocation("flansmod:paintjobTable"));
 	}
 	
 	/**
@@ -230,7 +227,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
-		contentPacks = new ArrayList<File>();
+		contentPacks = new ArrayList<>();
 		for(File file : FlansMod.flanDir.listFiles())
 		{
 			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
@@ -239,7 +236,7 @@ public class ClientProxy extends CommonProxy
 				{
 					method.invoke(classloader, file.toURI().toURL());
 					
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					HashMap<String, Object> map = new HashMap<>();
 					map.put("modid", FlansMod.MODID);
 					map.put("name", "Flan's Mod : " + file.getName());
 					map.put("version", "1");
@@ -522,8 +519,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-		boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
-		return state;
+		return (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ import com.flansmod.common.types.PaintableType;
 
 public class Paintjob
 {
-	private static HashMap<Integer, Paintjob> paintjobs = new HashMap<Integer, Paintjob>();
+	private static HashMap<Integer, Paintjob> paintjobs = new HashMap<>();
 	
 	public PaintableType parent;
 	public String iconName;

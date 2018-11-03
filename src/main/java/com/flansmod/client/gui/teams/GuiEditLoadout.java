@@ -51,7 +51,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 	
 	private PlayerLoadout previousLoadout = null;
 	
-	protected ArrayList<LoadoutEntry> availableComponents = new ArrayList<LoadoutEntry>();
+	protected ArrayList<LoadoutEntry> availableComponents = new ArrayList<>();
 	
 	private static final String[] WEAPON_COMPONENT_NAMES = new String[]
 			{"Weapon", "Paint", "Scope", "Barrel", "Stock", "Grip", "Extra"};
@@ -191,7 +191,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 								NBTTagCompound attachmentTags = stack.getTagCompound().getCompoundTag("attachments");
 								if(attachmentTags != null)
 								{
-									ItemStack attachmentStack = ItemStack.EMPTY;
+									ItemStack attachmentStack = ItemStack.EMPTY.copy();
 									
 									switch(n)
 									{
@@ -530,8 +530,8 @@ public class GuiEditLoadout extends GuiTeamsBase
 		PlayerRankData data = ClientTeamsData.theRankData;
 		LoadoutPool pool = ClientTeamsData.currentPool;
 		
-		ArrayList<LoadoutEntry> unlockedEntries = new ArrayList<LoadoutEntry>();
-		ArrayList<LoadoutEntry> lockedEntries = new ArrayList<LoadoutEntry>();
+		ArrayList<LoadoutEntry> unlockedEntries = new ArrayList<>();
+		ArrayList<LoadoutEntry> lockedEntries = new ArrayList<>();
 		
 		if(selectedCategory == 1) // Paint
 		{

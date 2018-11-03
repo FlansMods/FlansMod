@@ -13,8 +13,8 @@ public class PlayerClassCustom implements IPlayerClass
 {
 	public int index;
 	public PlayerLoadout loadout;
-	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
-	public ItemStack chest = null;
+	public List<ItemStack> startingItems = new ArrayList<>();
+	public ItemStack chest = ItemStack.EMPTY.copy();
 	
 	public PlayerClassCustom(int i, PlayerLoadout playerLoadout)
 	{
@@ -47,10 +47,7 @@ public class PlayerClassCustom implements IPlayerClass
 				LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
 				if(loadoutEntry != null)
 				{
-					for(ItemStack extraStack : loadoutEntry.extraItems)
-					{
-						startingItems.add(extraStack);
-					}
+					startingItems.addAll(loadoutEntry.extraItems);
 				}
 			}
 		}
@@ -71,7 +68,7 @@ public class PlayerClassCustom implements IPlayerClass
 	@Override
 	public ItemStack GetHat()
 	{
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 	
 	@Override
@@ -83,13 +80,13 @@ public class PlayerClassCustom implements IPlayerClass
 	@Override
 	public ItemStack GetLegs()
 	{
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 	
 	@Override
 	public ItemStack GetShoes()
 	{
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 	
 	@Override

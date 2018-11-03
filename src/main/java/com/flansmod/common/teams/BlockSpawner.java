@@ -2,7 +2,6 @@ package com.flansmod.common.teams;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +33,7 @@ public class BlockSpawner extends BlockContainer
 		super(material);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		setRegistryName("teamsSpawner");
-		setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
+		setDefaultState(blockState.getBaseState().withProperty(TYPE, 0));
 	}
 	
 	@Override
@@ -112,25 +111,25 @@ public class BlockSpawner extends BlockContainer
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[]{TYPE});
+		return new BlockStateContainer(this, TYPE);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
+		return this.getDefaultState().withProperty(TYPE, meta);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Integer)state.getValue(TYPE)).intValue();
+		return state.getValue(TYPE);
 	}
 	
 	@Override
 	public int damageDropped(IBlockState state)
 	{
-		return ((Integer)state.getValue(TYPE)).intValue();
+		return state.getValue(TYPE);
 	}
 	
 	

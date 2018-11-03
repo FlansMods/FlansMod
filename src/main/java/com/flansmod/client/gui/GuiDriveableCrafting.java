@@ -263,7 +263,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			}
 			
 			//Collect up all the engines into neat and tidy stacks so we can find if any of them are big enough and which of those stacks are best
-			HashMap<PartType, ItemStack> engines = new HashMap<PartType, ItemStack>();
+			HashMap<PartType, ItemStack> engines = new HashMap<>();
 			
 			//Find some suitable engines
 			for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)
@@ -290,7 +290,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			
 			//Find the stack of engines that is fastest but which also has enough for this driveable
 			float bestEngineSpeed = -1F;
-			ItemStack bestEngineStack = ItemStack.EMPTY;
+			ItemStack bestEngineStack = ItemStack.EMPTY.copy();
 			for(PartType part : engines.keySet())
 			{
 				//If this engine outperforms the currently selected best one and there are enough of them, swap

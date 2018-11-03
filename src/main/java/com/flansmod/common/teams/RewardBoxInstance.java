@@ -11,7 +11,7 @@ public class RewardBoxInstance
 {
 	public static final int INVALID_HASH = 0;
 	
-	public static enum EnumRewardOrigin
+	public enum EnumRewardOrigin
 	{
 		UNKNOWN,
 		OP_CHEAT,

@@ -127,7 +127,7 @@ public class ItemGun extends Item implements IPaintableItem
 		else return hand == EnumHand.MAIN_HAND ? lastRightMouseHeld : lastLeftMouseHeld;
 	}
 	
-	private static List<ShotData> shotsFiredClient = new ArrayList<ShotData>(), shotsFiredServer = new ArrayList<ShotData>();
+	private static List<ShotData> shotsFiredClient = new ArrayList<>(), shotsFiredServer = new ArrayList<>();
 	
 	public ItemGun(GunType type)
 	{
@@ -148,7 +148,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(!gun.hasTagCompound())
 		{
 			gun.setTagCompound(new NBTTagCompound());
-			return null;
+			return ItemStack.EMPTY.copy();
 		}
 		//If the gun has no ammo tags, give it some
 		if(!gun.getTagCompound().hasKey("ammo"))
@@ -159,7 +159,7 @@ public class ItemGun extends Item implements IPaintableItem
 				ammoTagsList.appendTag(new NBTTagCompound());
 			}
 			gun.getTagCompound().setTag("ammo", ammoTagsList);
-			return null;
+			return ItemStack.EMPTY.copy();
 		}
 		//Take the list of ammo tags
 		NBTTagList ammoTagsList = gun.getTagCompound().getTagList("ammo", Constants.NBT.TAG_COMPOUND);
@@ -265,18 +265,16 @@ public class ItemGun extends Item implements IPaintableItem
 							for(EntityMG mg : EntityMG.mgs)
 							{
 								if(mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
-									return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+									return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 							}
-							if(!world.isRemote)
+							EntityMG mg = new EntityMG(world, i, j + 1, k, playerDir, type);
+							
+							if(getBulletItemStack(itemstack, 0) != null)
 							{
-								EntityMG mg = new EntityMG(world, i, j + 1, k, playerDir, type);
-								if(getBulletItemStack(itemstack, 0) != null)
-								{
-									mg.ammo = getBulletItemStack(itemstack, 0);
-								}
-								world.spawnEntity(mg);
-								
+								mg.ammo = getBulletItemStack(itemstack, 0);
 							}
+							world.spawnEntity(mg);
+							
 							if(!entityplayer.capabilities.isCreativeMode)
 								itemstack.setCount(0);
 						}
@@ -290,7 +288,7 @@ public class ItemGun extends Item implements IPaintableItem
 			for(int i = 0; i < 3; i++)
 				Minecraft.getMinecraft().entityRenderer.itemRenderer.updateEquippedItem();
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<>(EnumActionResult.PASS, itemstack);
 	}
 	
 	// _____________________________________________________________________________
@@ -580,7 +578,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 		
 		
-		boolean isExtraBullet = shotData instanceof InstantShotData ? ((InstantShotData)shotData).isExtraBullet : false;
+		boolean isExtraBullet = shotData instanceof InstantShotData && ((InstantShotData)shotData).isExtraBullet;
 		
 		//Go through the bullet stacks in the gun and see if any of them are not null
 		int bulletID = 0;
@@ -588,7 +586,7 @@ public class ItemGun extends Item implements IPaintableItem
 		for(; bulletID < type.numAmmoItemsInGun; bulletID++)
 		{
 			ItemStack checkingStack = getBulletItemStack(gunstack, bulletID);
-			if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+			if(checkingStack != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
 			{
 				bulletStack = checkingStack;
 				break;
@@ -717,7 +715,7 @@ public class ItemGun extends Item implements IPaintableItem
 				world.spawnEntity(new EntityDebugVector(world, origin, Vector3f.sub(hit, origin, null), 100, 0.5f, 0.5f, 1.0f));
 			}
 			
-			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
+			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, shotType));
 			
 			if(hitData instanceof BlockHit)
 			{
@@ -731,25 +729,22 @@ public class ItemGun extends Item implements IPaintableItem
 				bulletDir.normalise();
 				bulletDir.scale(0.5f);
 				
-				if(blockState != null)
+				for(int i = 0; i < 2; i++)
 				{
-					for(int i = 0; i < 2; i++)
-					{
-						// TODO: [1.12] Check why this isn't moving right 
-						float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
-						
-						double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-						double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-						double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
-						
-						motionX += bulletDir.x;
-						motionY += bulletDir.y;
-						motionZ += bulletDir.z;
-						
-						Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-								EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ,
-								Block.getIdFromBlock(blockState.getBlock()));
-					}
+					// TODO: [1.12] Check why this isn't moving right
+					float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
+					
+					double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+					double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+					double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+					
+					motionX += bulletDir.x;
+					motionY += bulletDir.y;
+					motionZ += bulletDir.z;
+					
+					Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+							EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ,
+							Block.getIdFromBlock(blockState.getBlock()));
 				}
 				
 				double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
@@ -760,38 +755,31 @@ public class ItemGun extends Item implements IPaintableItem
 				Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
 			}
 			
-			if(world.isRemote)
+			if(shooter == Minecraft.getMinecraft().player)
 			{
-				if(shooter == Minecraft.getMinecraft().player)
+				if(hitData instanceof EntityHit || hitData instanceof DriveableHit)
 				{
-					if(hitData instanceof EntityHit || hitData instanceof DriveableHit)
+					// Add a hit marker
+					FlansModClient.AddHitMarker();
+				}
+				else if(hitData instanceof PlayerBulletHit)
+				{
+					// Check teams
+					if(FlansModClient.teamInfo != null)
 					{
-						// Add a hit marker
-						FlansModClient.AddHitMarker();
-					}
-					else if(hitData instanceof PlayerBulletHit)
-					{
-						// Check teams
-						if(FlansModClient.teamInfo != null)
-						{
-							Team shooterTeam = FlansModClient.teamInfo.getTeam((EntityPlayer)shooter);
-							Team victimTeam = FlansModClient.teamInfo.getTeam(((PlayerBulletHit)hitData).hitbox.player);
-							if(shooterTeam == null || shooterTeam != victimTeam)
-							{
-								FlansModClient.AddHitMarker();
-							}
-						}
-						else // No teams mod, just add marker
+						Team shooterTeam = FlansModClient.teamInfo.getTeam((EntityPlayer)shooter);
+						Team victimTeam = FlansModClient.teamInfo.getTeam(((PlayerBulletHit)hitData).hitbox.player);
+						if(shooterTeam == null || shooterTeam != victimTeam)
 						{
 							FlansModClient.AddHitMarker();
 						}
 					}
+					else // No teams mod, just add marker
+					{
+						FlansModClient.AddHitMarker();
+					}
 				}
 			}
-		}
-		else
-		{
-			
 		}
 	}
 	
@@ -809,7 +797,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(player.inventory.getCurrentItem() != itemstack)
 		{
 			//If the player is no longer holding a gun, emulate a release of the shoot button
-			if(player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() == null || !(player.inventory.getCurrentItem().getItem() instanceof ItemGun))
+			if(player.inventory.getCurrentItem().isEmpty() || !(player.inventory.getCurrentItem().getItem() instanceof ItemGun))
 			{
 				data.isShootingRight = data.isShootingLeft = false;
 			}
@@ -833,7 +821,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(entity instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)entity;
-			EnumHand hand = EnumHand.MAIN_HAND;
+			EnumHand hand;
 			if(itemstack == player.getHeldItemMainhand())
 			{
 				hand = EnumHand.MAIN_HAND;
@@ -858,7 +846,7 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			ItemStack main = player.getHeldItemMainhand();
 			ItemStack off = player.getHeldItemOffhand();
-			boolean hasOffHand = main != null && !main.isEmpty() && off != null && !off.isEmpty();
+			boolean hasOffHand = !main.isEmpty() && !off.isEmpty();
 			
 			onUpdateEach(itemstack, i, world, entity, hand, hasOffHand);
 		}
@@ -900,7 +888,7 @@ public class ItemGun extends Item implements IPaintableItem
 				for(int j = 0; j < inventory.getSizeInventory(); j++)
 				{
 					ItemStack item = inventory.getStackInSlot(j);
-					if(item != null && item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
+					if(item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
 					{
 						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
 						if(bulletsInThisSlot > bulletsInBestSlot)
@@ -1260,8 +1248,6 @@ public class ItemGun extends Item implements IPaintableItem
 	private boolean isSolid(World world, int i, int j, int k)
 	{
 		IBlockState state = world.getBlockState(new BlockPos(i, j, k));
-		if(state == null)
-			return false;
 		return state.getMaterial().isSolid() && state.isOpaqueCube();
 	}
 	
@@ -1356,7 +1342,7 @@ public class ItemGun extends Item implements IPaintableItem
 		else addPaintjobToList(this, type, type.defaultPaintjob, items);
 	}
 	
-	private void addPaintjobToList(Item item, PaintableType type, Paintjob paintjob, List list)
+	private void addPaintjobToList(Item item, PaintableType type, Paintjob paintjob, List<ItemStack> list)
 	{
 		ItemStack paintableStack = new ItemStack(item, 1, paintjob.ID);
 		NBTTagCompound tags = new NBTTagCompound();
@@ -1384,7 +1370,7 @@ public class ItemGun extends Item implements IPaintableItem
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
 	{
-		Multimap multimap = super.getAttributeModifiers(slot, stack);
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 		if(slot == EntityEquipmentSlot.MAINHAND)
 		{
 			multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(KNOCKBACK_RESIST_MODIFIER, "KnockbackResist", type.knockbackModifier, 0));

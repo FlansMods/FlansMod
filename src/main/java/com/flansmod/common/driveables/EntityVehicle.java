@@ -135,7 +135,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
-		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+		if(currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
 		
 		VehicleType type = getVehicleType();
@@ -399,7 +399,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			//Apply velocity
 			//If the player driving this is in creative, then we can thrust, no matter what
 			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (getSeat(0) != null
-					&& getSeat(0).getControllingPassenger() instanceof EntityPlayer && ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode);
+					&& getSeat(0).getControllingPassenger() instanceof EntityPlayer
+					&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode);
 			//Otherwise, check the fuel tanks!
 			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
 			{
@@ -637,7 +638,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		VehicleType type = getVehicleType();
 		
-		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
+		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround
+				&& (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
 		{
 			ItemStack vehicleStack = new ItemStack(type.item, 1, driveableData.paintjobID);
 			NBTTagCompound tags = new NBTTagCompound();

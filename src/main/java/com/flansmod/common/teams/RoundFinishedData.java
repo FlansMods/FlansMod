@@ -85,12 +85,12 @@ public class RoundFinishedData
 		if(votingEnabled)
 		{
 			data.writeByte(votingOptions.length);
-			for(int i = 0; i < votingOptions.length; i++)
+			for(VotingOption votingOption : votingOptions)
 			{
-				PacketBase.writeUTF(data, votingOptions[i].gametype);
-				PacketBase.writeUTF(data, votingOptions[i].mapName);
-				PacketBase.writeUTF(data, votingOptions[i].teamNames[0]);
-				PacketBase.writeUTF(data, votingOptions[i].teamNames[1]);
+				PacketBase.writeUTF(data, votingOption.gametype);
+				PacketBase.writeUTF(data, votingOption.mapName);
+				PacketBase.writeUTF(data, votingOption.teamNames[0]);
+				PacketBase.writeUTF(data, votingOption.teamNames[1]);
 			}
 		}
 		
@@ -116,9 +116,9 @@ public class RoundFinishedData
 	{
 		data.writeByte(votingOptions.length);
 		
-		for(int i = 0; i < votingOptions.length; i++)
+		for(VotingOption votingOption : votingOptions)
 		{
-			data.writeInt(votingOptions[i].numVotes);
+			data.writeInt(votingOption.numVotes);
 		}
 	}
 	

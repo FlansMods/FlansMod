@@ -36,7 +36,7 @@ public class GuiDriveableRepair extends GuiScreen
 	/**
 	 * The list of parts that are actually damageable
 	 */
-	private ArrayList<DriveablePart> partsToDraw = new ArrayList<DriveablePart>();
+	private ArrayList<DriveablePart> partsToDraw = new ArrayList<>();
 	
 	/**
 	 * Item renderer
@@ -86,7 +86,7 @@ public class GuiDriveableRepair extends GuiScreen
 		for(int i = 0; i < partsToDraw.size(); i++)
 		{
 			DriveablePart part = partsToDraw.get(i);
-			GuiButton button = (GuiButton)buttonList.get(i);
+			GuiButton button = buttonList.get(i);
 			button.x = guiOriginX + 9;
 			button.y = part.health <= 0 ? guiOriginY + y : -1000;
 			y += part.health <= 0 ? 40 : 20;

@@ -11,5 +11,5 @@ public interface IExplodeable
 	/**
 	 * Explode the entity completely.
 	 */
-	public void explode();
+	void explode();
 }

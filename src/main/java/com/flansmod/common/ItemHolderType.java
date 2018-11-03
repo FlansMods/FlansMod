@@ -22,7 +22,7 @@ public class ItemHolderType extends InfoType
 	
 	public BlockItemHolder block;
 	
-	private static HashMap<String, ItemHolderType> itemHolders = new HashMap<String, ItemHolderType>();
+	private static HashMap<String, ItemHolderType> itemHolders = new HashMap<>();
 	
 	public ItemHolderType(TypeFile file)
 	{

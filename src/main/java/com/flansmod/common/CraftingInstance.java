@@ -30,7 +30,7 @@ public class CraftingInstance
 	
 	public CraftingInstance(IInventory i, ArrayList<ItemStack> in, ItemStack out)
 	{
-		this(i, in, Arrays.asList(new ItemStack[]{out}));
+		this(i, in, Arrays.asList(out));
 	}
 	
 	public boolean canCraft()

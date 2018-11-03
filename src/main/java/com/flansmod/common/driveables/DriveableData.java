@@ -56,7 +56,7 @@ public class DriveableData implements IInventory
 	
 	public DriveableData(NBTTagCompound tags)
 	{
-		parts = new HashMap<EnumDriveablePart, DriveablePart>();
+		parts = new HashMap<>();
 		readFromNBT(tags);
 	}
 	

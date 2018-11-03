@@ -562,7 +562,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if(getControllingPassenger() == entityplayer)
 			{
 				entityplayer.dismountRidingEntity();
-				;
 				return true;
 			}
 			if(!isSentry())
@@ -631,7 +630,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		ItemStack stack = new ItemStack(type.item, 1, 0);
-		return stack;
+		return new ItemStack(type.item, 1, 0);
 	}
 }

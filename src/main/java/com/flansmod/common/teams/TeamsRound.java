@@ -121,10 +121,6 @@ public class TeamsRound implements Comparable<TeamsRound>
 	@Override
 	public int compareTo(TeamsRound o)
 	{
-		if(getWeight() < o.getWeight())
-			return 1;
-		else if(getWeight() > o.getWeight())
-			return -1;
-		else return 0;
+		return Float.compare(o.getWeight(), getWeight());
 	}
 }

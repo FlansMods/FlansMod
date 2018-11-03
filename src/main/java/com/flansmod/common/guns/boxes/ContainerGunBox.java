@@ -33,8 +33,8 @@ public class ContainerGunBox extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
-		ItemStack stack = null;
-		Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		ItemStack stack = ItemStack.EMPTY.copy();
+		Slot currentSlot = inventorySlots.get(slotID);
 
 		if(currentSlot != null && currentSlot.getHasStack())
 		{
@@ -45,20 +45,20 @@ public class ContainerGunBox extends Container
 			{
 				if(!mergeItemStack(slotStack, 0, 1, false))
 				{
-					return null;
+					return ItemStack.EMPTY.copy();
 				}
 			}
 			else
 			{
 				if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
 				{
-					return null;
+					return ItemStack.EMPTY.copy();
 				}
 			}
 
 			if(slotStack.getCount() == 0)
 			{
-				currentSlot.putStack(null);
+				currentSlot.putStack(ItemStack.EMPTY.copy());
 			}
 			else
 			{

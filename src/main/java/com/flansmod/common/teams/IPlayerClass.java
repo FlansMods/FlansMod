@@ -6,19 +6,19 @@ import net.minecraft.item.ItemStack;
 
 public interface IPlayerClass
 {
-	public List<ItemStack> GetStartingItems();
+	List<ItemStack> GetStartingItems();
 	
-	public boolean GetHorse();
+	boolean GetHorse();
 	
-	public ItemStack GetHat();
+	ItemStack GetHat();
 	
-	public ItemStack GetChest();
+	ItemStack GetChest();
 	
-	public ItemStack GetLegs();
+	ItemStack GetLegs();
 	
-	public ItemStack GetShoes();
+	ItemStack GetShoes();
 	
-	public String GetName();
+	String GetName();
 	
-	public String GetShortName();
+	String GetShortName();
 }

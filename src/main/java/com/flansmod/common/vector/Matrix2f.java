@@ -31,7 +31,7 @@ public class Matrix2f
 		Integer[] array = new Integer[set.size()];
 		set.toArray(array);
 		int index = InfoType.random.nextInt(array.length);
-		InfoType type = InfoType.infoTypes.get(Integer.valueOf(array[index]));
+		InfoType type = InfoType.infoTypes.get(array[index]);
 		
 		return new Matrix2f(type);
 	}

@@ -49,12 +49,12 @@ public class FlansModLootGenerator
 	
 	public FlansModLootGenerator()
 	{
-		tanks = new ArrayList<VehicleType>();
-		cars = new ArrayList<VehicleType>();
-		planes = new ArrayList<PlaneType>();
-		helicopters = new ArrayList<PlaneType>();
-		mechas = new ArrayList<MechaType>();
-		dungeonMechas = new ArrayList<MechaType>();
+		tanks = new ArrayList<>();
+		cars = new ArrayList<>();
+		planes = new ArrayList<>();
+		helicopters = new ArrayList<>();
+		mechas = new ArrayList<>();
+		dungeonMechas = new ArrayList<>();
 		
 		
 		for(DriveableType type : DriveableType.types)
@@ -80,9 +80,9 @@ public class FlansModLootGenerator
 			}
 		}
 		
-		vehicleEngines = new ArrayList<PartType>();
-		mechaEngines = new ArrayList<PartType>();
-		planeEngines = new ArrayList<PartType>();
+		vehicleEngines = new ArrayList<>();
+		mechaEngines = new ArrayList<>();
+		planeEngines = new ArrayList<>();
 		
 		for(PartType type : PartType.partsByCategory.get(EnumPartCategory.ENGINE))
 		{
@@ -96,7 +96,7 @@ public class FlansModLootGenerator
 				mechaEngines.add(type);
 		}
 		
-		validGuns = new ArrayList<GunType>();
+		validGuns = new ArrayList<>();
 		for(GunType type : GunType.gunList)
 			if(type.dungeonChance != 0)
 				validGuns.add(type);
@@ -165,7 +165,7 @@ public class FlansModLootGenerator
 		//Add 1~5 random ammo
 		for(int i = 0; i < numAmmo; i++)
 		{
-			ShootableType type = ShootableType.shootables.get(new ArrayList<Integer>(ShootableType.shootables.keySet()).get(rand.nextInt(ShootableType.shootables.size())));
+			ShootableType type = ShootableType.shootables.get(new ArrayList<>(ShootableType.shootables.keySet()).get(rand.nextInt(ShootableType.shootables.size())));
 			if(type != null && type.dungeonChance != 0)
 				chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(type.item, 1 + (type.maxStackSize > 1 && rand.nextBoolean() ? 1 : 0)));
 		}
@@ -204,7 +204,7 @@ public class FlansModLootGenerator
 		//Add 0~1 tools
 		if(rand.nextBoolean())
 		{
-			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ToolType.tools.get(new ArrayList<String>(ToolType.tools.keySet()).get(rand.nextInt(ToolType.tools.size()))).item));
+			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ToolType.tools.get(new ArrayList<>(ToolType.tools.keySet()).get(rand.nextInt(ToolType.tools.size()))).item));
 		}
 	}
 	
@@ -279,12 +279,12 @@ public class FlansModLootGenerator
 		if(rand.nextInt(4) == 0)
 		{
 			//Get armour box
-			return ArmourBoxType.boxes.get(new ArrayList<String>(ArmourBoxType.boxes.keySet()).get(rand.nextInt(ArmourBoxType.boxes.size()))).block;
+			return ArmourBoxType.boxes.get(new ArrayList<>(ArmourBoxType.boxes.keySet()).get(rand.nextInt(ArmourBoxType.boxes.size()))).block;
 		}
 		else
 		{
 			//Get weapon box
-			return GunBoxType.gunBoxMap.get(new ArrayList<String>(GunBoxType.gunBoxMap.keySet()).get(rand.nextInt(GunBoxType.gunBoxMap.size()))).block;
+			return GunBoxType.gunBoxMap.get(new ArrayList<>(GunBoxType.gunBoxMap.keySet()).get(rand.nextInt(GunBoxType.gunBoxMap.size()))).block;
 		}
 	}
 	

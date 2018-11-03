@@ -15,10 +15,10 @@ public class RewardBox extends InfoType
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	// To anyone planning to add to this file in future, remember that the Minecraft EULA forbids monetization of any non-cosmetic additions
 	// -------------------------------------------------------------------------------------------------------------------------------------
-	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
+	public ArrayList<Paintjob> paintjobs = new ArrayList<>();
 	public float[] weightPerRarity = new float[]{1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 	
-	private static HashMap<Integer, RewardBox> boxes = new HashMap<Integer, RewardBox>();
+	private static HashMap<Integer, RewardBox> boxes = new HashMap<>();
 	
 	public RewardBox(TypeFile file)
 	{
@@ -75,17 +75,17 @@ public class RewardBox extends InfoType
 	public int GetReward(PlayerRankData data)
 	{
 		float totalWeight = 0.0f;
-		for(int i = 0; i < paintjobs.size(); i++)
+		for(Paintjob paintjob1 : paintjobs)
 		{
-			totalWeight += weightPerRarity[paintjobs.get(i).rarity.ordinal()];
+			totalWeight += weightPerRarity[paintjob1.rarity.ordinal()];
 		}
 		float pick = FlansMod.Pick(totalWeight);
-		for(int i = 0; i < paintjobs.size(); i++)
+		for(Paintjob paintjob : paintjobs)
 		{
-			pick -= weightPerRarity[paintjobs.get(i).rarity.ordinal()];
+			pick -= weightPerRarity[paintjob.rarity.ordinal()];
 			if(pick <= 0.0f)
 			{
-				return paintjobs.get(i).hashCode();
+				return paintjob.hashCode();
 			}
 		}
 		

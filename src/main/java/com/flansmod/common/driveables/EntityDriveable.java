@@ -420,10 +420,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		if(ticksExisted > 1)
 			return;
-		if(getControllingPassenger() instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)getControllingPassenger()))
-		{
-		}
-		else
+		if(!(getControllingPassenger() instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)getControllingPassenger()))
 		{
 			if(syncFromServer)
 			{
@@ -535,7 +532,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			ArrayList<DriveablePosition> shootPoints = type.shootPoints(secondary);
 			EnumWeaponType weaponType = type.weaponType(secondary);
 			//If there are no shoot points, return
-			if(shootPoints.size() == 0)
+			if(shootPoints.isEmpty())
 				return;
 			//For alternating guns, move on to the next one
 			int currentGun = getCurrentGun(secondary);
@@ -905,11 +902,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							if(type.materialsHarvested.contains(block.getMaterial()) && block.getBlockHardness(world, new BlockPos(blockX, blockY, blockZ)) >= 0F)
 							{
 								//Add the itemstack to mecha inventory
-								NonNullList<ItemStack> stacks = NonNullList.<ItemStack>create();
+								NonNullList<ItemStack> stacks = NonNullList.create();
 								block.getBlock().getDrops(stacks, world, new BlockPos(blockX, blockY, blockZ), world.getBlockState(new BlockPos(blockX, blockY, blockZ)), 0);
-								for(int i = 0; i < stacks.size(); i++)
+								for(ItemStack stack : stacks)
 								{
-									ItemStack stack = stacks.get(i);
 									if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative()) && !world.isRemote && world.getGameRules().getBoolean("doTileDrops"))
 									{
 										world.spawnEntity(new EntityItem(world, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, stack));
@@ -988,17 +984,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				canEmit = true;
 			}
-			else
-			{
-				canEmit = false;
-			}
 			if(emitterTimers[i] <= 0)
 			{
 				if(throttle >= emitter.minThrottle && throttle <= emitter.maxThrottle && canEmit)
 				{
 					//Emit!
 					Vector3f velocity = new Vector3f(0, 0, 0);
-					;
 					Vector3f pos = new Vector3f(0, 0, 0);
 					if(seats != null && seats[0] != null)
 					{
@@ -1412,7 +1403,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public ArrayList<BulletHit> attackFromBullet(Vector3f origin, Vector3f motion)
 	{
 		//Make an array to contain the hits
-		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
+		ArrayList<BulletHit> hits = new ArrayList<>();
 		//Get the position of the bullet origin, relative to the centre of the plane, and then rotate the vectors onto local co-ordinates
 		Vector3f relativePosVector = Vector3f.sub(origin, new Vector3f((float)posX, (float)posY, (float)posZ), null);
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
@@ -1489,12 +1480,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				killPart(part);
 			}
-		}
-		
-		
-		for(EntitySeat seat : seats)
-		{
-			
 		}
 		
 		//If the core was destroyed, kill the driveable

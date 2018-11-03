@@ -22,7 +22,7 @@ public class PlayerRankData
 	public int currentKillstreak = 0;
 	public int bestKillstreak = 0;
 	
-	public ArrayList<RewardBoxInstance> rewardBoxData = new ArrayList<RewardBoxInstance>();
+	public ArrayList<RewardBoxInstance> rewardBoxData = new ArrayList<>();
 	
 	public PlayerLoadout[] loadouts = new PlayerLoadout[5];
 	

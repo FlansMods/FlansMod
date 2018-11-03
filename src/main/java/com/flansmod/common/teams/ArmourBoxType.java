@@ -17,12 +17,12 @@ public class ArmourBoxType extends BoxType
 {
 	public BlockArmourBox block;
 	
-	public ArrayList<ArmourBoxEntry> pages = new ArrayList<ArmourBoxEntry>();
+	public ArrayList<ArmourBoxEntry> pages = new ArrayList<>();
 	
 	/**
 	 * The static box map. Indexed by shortName for server ~ client syncing
 	 */
-	public static HashMap<String, ArmourBoxType> boxes = new HashMap<String, ArmourBoxType>();
+	public static HashMap<String, ArmourBoxType> boxes = new HashMap<>();
 	
 	public ArmourBoxType(TypeFile file)
 	{
@@ -118,7 +118,7 @@ public class ArmourBoxType extends BoxType
 			armours = new ArmourType[4];
 			requiredStacks = new ArrayList[4];
 			for(int i = 0; i < 4; i++)
-				requiredStacks[i] = new ArrayList<ItemStack>();
+				requiredStacks[i] = new ArrayList<>();
 		}
 	}
 	

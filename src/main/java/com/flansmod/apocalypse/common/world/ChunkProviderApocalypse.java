@@ -66,9 +66,9 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	private WorldGenRunway runwayGenerator = new WorldGenRunway();
 	private WorldGenSkeleton skeletonGenerator = new WorldGenSkeleton();
 	private WorldGenDeadTree deadTreeGenerator = new WorldGenDeadTree();
-	public static List<Biome> runwaySpawnBiome = Arrays.asList(new Biome[]{BiomeApocalypse.highPlateau});
+	public static List<Biome> runwaySpawnBiome = Arrays.asList(BiomeApocalypse.highPlateau);
 	private WorldGenResearchLab researchLabGenerator = new WorldGenResearchLab();
-	public static List<Biome> labSpawnBiome = Arrays.asList(new Biome[]{BiomeApocalypse.highPlateau});
+	public static List<Biome> labSpawnBiome = Arrays.asList(BiomeApocalypse.highPlateau);
 	
 	private final int seaLevel = 24;
 	private final float coordinateScale = 684.412F, heightScale = 684.412F;
@@ -235,7 +235,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	
 	private void generateHeightmap(int p_185978_1_, int p_185978_2_, int p_185978_3_)
 	{
-		this.depthRegion = this.depthNoise.generateNoiseOctaves(this.depthRegion, p_185978_1_, p_185978_3_, 5, 5, (double)this.depthNoiseScaleX, (double)this.depthNoiseScaleZ, (double)this.depthNoiseScaleExponent);
+		this.depthRegion = this.depthNoise.generateNoiseOctaves(this.depthRegion, p_185978_1_, p_185978_3_, 5, 5, this.depthNoiseScaleX, this.depthNoiseScaleZ, this.depthNoiseScaleExponent);
 		float f = this.coordinateScale;
 		float f1 = this.heightScale;
 		this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, p_185978_1_, p_185978_2_, p_185978_3_, 5, 33, 5, (double)(f / this.mainNoiseScaleX), (double)(f1 / this.mainNoiseScaleY), (double)(f / this.mainNoiseScaleZ));
@@ -320,12 +320,12 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 				double d8 = (double)f3;
 				double d9 = (double)f2;
 				d8 = d8 + d7 * 0.2D;
-				d8 = d8 * (double)this.baseSize / 8.0D;
-				double d0 = (double)this.baseSize + d8 * 4.0D;
+				d8 = d8 * this.baseSize / 8.0D;
+				double d0 = this.baseSize + d8 * 4.0D;
 				
 				for(int l1 = 0; l1 < 33; ++l1)
 				{
-					double d1 = ((double)l1 - d0) * (double)this.stretchY * 128.0D / 256.0D / d9;
+					double d1 = ((double)l1 - d0) * this.stretchY * 128.0D / 256.0D / d9;
 					
 					if(d1 < 0.0D)
 					{
@@ -480,9 +480,8 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	 */
 	public boolean generateStructures(Chunk chunkIn, int x, int z)
 	{
-		boolean flag = false;
 		
-		return flag;
+		return false;
 	}
 	
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
@@ -542,8 +541,8 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	{
 		if(this.mapFeaturesEnabled)
 		{
-			this.mineshaftGenerator.generate(this.world, x, z, (ChunkPrimer)null);
-			this.villageGenerator.generate(this.world, x, z, (ChunkPrimer)null);
+			this.mineshaftGenerator.generate(this.world, x, z, null);
+			this.villageGenerator.generate(this.world, x, z, null);
 		}
 	}
 }

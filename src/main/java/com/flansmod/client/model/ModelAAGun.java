@@ -89,18 +89,18 @@ public class ModelAAGun extends ModelBase
 		}
 		for(ModelRendererTurbo[] aBarrelModel : barrelModel)
 		{
-			for(int j = 0; j < aBarrelModel.length; j++)
+			for(ModelRendererTurbo anABarrelModel : aBarrelModel)
 			{
-				aBarrelModel[j].doMirror(false, true, true);
-				aBarrelModel[j].setRotationPoint(aBarrelModel[j].rotationPointX, -aBarrelModel[j].rotationPointY, -aBarrelModel[j].rotationPointZ);
+				anABarrelModel.doMirror(false, true, true);
+				anABarrelModel.setRotationPoint(anABarrelModel.rotationPointX, -anABarrelModel.rotationPointY, -anABarrelModel.rotationPointZ);
 			}
 		}
 		for(ModelRendererTurbo[] anAmmoModel : ammoModel)
 		{
-			for(int j = 0; j < anAmmoModel.length; j++)
+			for(ModelRendererTurbo anAnAmmoModel : anAmmoModel)
 			{
-				anAmmoModel[j].doMirror(false, true, true);
-				anAmmoModel[j].setRotationPoint(anAmmoModel[j].rotationPointX, -anAmmoModel[j].rotationPointY, -anAmmoModel[j].rotationPointZ);
+				anAnAmmoModel.doMirror(false, true, true);
+				anAnAmmoModel.setRotationPoint(anAnAmmoModel.rotationPointX, -anAnAmmoModel.rotationPointY, -anAnAmmoModel.rotationPointZ);
 			}
 		}
 	}

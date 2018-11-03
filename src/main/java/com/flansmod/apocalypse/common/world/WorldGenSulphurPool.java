@@ -24,7 +24,6 @@ public class WorldGenSulphurPool extends WorldGenerator
 	{
 		for(pos = pos.add(-8, 0, -8); pos.getY() > 5 && world.isAirBlock(pos); pos = pos.down())
 		{
-			;
 		}
 		
 		if(pos.getY() <= 4)

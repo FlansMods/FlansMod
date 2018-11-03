@@ -200,9 +200,8 @@ public class GuiPaintjobTable extends GuiContainer
 	
 	private Vector3f GetRenderOrigin()
 	{
-		Vector3f mainPagePosition = new Vector3f(100.0f, 64.0f, 100.0f);
 		
-		return mainPagePosition;
+		return new Vector3f(100.0f, 64.0f, 100.0f);
 	}
 	
 	@Override

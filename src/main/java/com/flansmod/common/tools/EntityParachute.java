@@ -109,8 +109,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		ItemStack stack = new ItemStack(type.item, 1, 0);
-		return stack;
+		return new ItemStack(type.item, 1, 0);
 	}
 	
 	@Override

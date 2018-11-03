@@ -181,13 +181,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		//updatePosition();
 		
-		if(playYawSound == true && yawSoundDelay == 0 && seatInfo.traverseSounds == true)
+		if(playYawSound && yawSoundDelay == 0 && seatInfo.traverseSounds)
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, seatInfo.yawSound, false);
 			yawSoundDelay = seatInfo.yawSoundLength;
 		}
 		
-		if(playPitchSound == true && pitchSoundDelay == 0 && seatInfo.traverseSounds == true)
+		if(playPitchSound && pitchSoundDelay == 0 && seatInfo.traverseSounds)
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, seatInfo.pitchSound, false);
 			pitchSoundDelay = seatInfo.pitchSoundLength;
@@ -475,11 +475,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}
 			
 			float signDeltaX = 0;
-			if(yawToMove > (seatInfo.aimingSpeed.x / 2) && seatInfo.legacyAiming == false)
+			if(yawToMove > (seatInfo.aimingSpeed.x / 2) && !seatInfo.legacyAiming)
 			{
 				signDeltaX = 1;
 			}
-			else if(yawToMove < -(seatInfo.aimingSpeed.x / 2) && seatInfo.legacyAiming == false)
+			else if(yawToMove < -(seatInfo.aimingSpeed.x / 2) && !seatInfo.legacyAiming)
 			{
 				signDeltaX = -1;
 			}
@@ -491,7 +491,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			//Calculate new yaw and consider yaw limiters
 			float newYaw = 0f;
 			
-			if(seatInfo.legacyAiming == true || (signDeltaX == 0 && deltaX == 0))
+			if(seatInfo.legacyAiming || (signDeltaX == 0 && deltaX == 0))
 			{
 				newYaw = playerLooking.getYaw();
 			}
@@ -503,11 +503,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			float otherNewYaw = newYaw - 360F;
 			if(newYaw < 0)
 				otherNewYaw = newYaw + 360F;
-			if((newYaw >= seatInfo.minYaw && newYaw <= seatInfo.maxYaw) || (otherNewYaw >= seatInfo.minYaw && otherNewYaw <= seatInfo.maxYaw))
-			{
-				//All is well
-			}
-			else
+			if((!(newYaw >= seatInfo.minYaw) || !(newYaw <= seatInfo.maxYaw)) && (!(otherNewYaw >= seatInfo.minYaw) || !(otherNewYaw <= seatInfo.maxYaw)))
 			{
 				float newYawDistFromRange = Math.min(Math.abs(newYaw - seatInfo.minYaw), Math.abs(newYaw - seatInfo.maxYaw));
 				float otherNewYawDistFromRange = Math.min(Math.abs(otherNewYaw - seatInfo.minYaw), Math.abs(otherNewYaw - seatInfo.maxYaw));
@@ -545,11 +541,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}
 			
 			float signDeltaY = 0;
-			if(pitchToMove > (seatInfo.aimingSpeed.y / 2) && seatInfo.legacyAiming == false)
+			if(pitchToMove > (seatInfo.aimingSpeed.y / 2) && !seatInfo.legacyAiming)
 			{
 				signDeltaY = 1;
 			}
-			else if(pitchToMove < -(seatInfo.aimingSpeed.y / 2) && seatInfo.legacyAiming == false)
+			else if(pitchToMove < -(seatInfo.aimingSpeed.y / 2) && !seatInfo.legacyAiming)
 			{
 				signDeltaY = -1;
 			}
@@ -577,19 +573,19 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			currentYawToMove = (float)Math.sqrt((yawToMove) * (yawToMove));
 			
-			if(seatInfo.legacyAiming == true || (signDeltaY == 0 && deltaY == 0))
+			if(seatInfo.legacyAiming || (signDeltaY == 0 && deltaY == 0))
 			{
 				newPitch = playerLooking.getPitch();
 			}
-			else if(seatInfo.yawBeforePitch == false && currentYawToMove < minYawToMove)
+			else if(!seatInfo.yawBeforePitch && currentYawToMove < minYawToMove)
 			{
 				newPitch = looking.getPitch() + signDeltaY * seatInfo.aimingSpeed.y;
 			}
-			else if(seatInfo.yawBeforePitch == true && signDeltaX == 0)
+			else if(seatInfo.yawBeforePitch && signDeltaX == 0)
 			{
 				newPitch = looking.getPitch() + signDeltaY * seatInfo.aimingSpeed.y;
 			}
-			else if(seatInfo.yawBeforePitch == true && signDeltaX != 0)
+			else if(seatInfo.yawBeforePitch)
 			{
 				newPitch = looking.getPitch();
 			}
@@ -608,27 +604,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			FlansMod.getPacketHandler().sendToServer(new PacketSeatUpdates(this));
 			
-			if(signDeltaX != 0 && seatInfo.traverseSounds == true)
-			{
-				playYawSound = true;
-			}
-			else
-			{
-				playYawSound = false;
-			}
+			playYawSound = signDeltaX != 0 && seatInfo.traverseSounds;
 			
-			if(signDeltaY != 0 && seatInfo.yawBeforePitch == false && currentYawToMove < minYawToMove)
+			if(signDeltaY != 0 && !seatInfo.yawBeforePitch && currentYawToMove < minYawToMove)
 			{
 				playPitchSound = true;
 			}
-			else if(signDeltaY != 0 && seatInfo.yawBeforePitch == true && signDeltaX == 0)
-			{
-				playPitchSound = true;
-			}
-			else
-			{
-				playPitchSound = false;
-			}
+			else playPitchSound = signDeltaY != 0 && seatInfo.yawBeforePitch && signDeltaX == 0;
 		}
 	}
 	
@@ -755,9 +737,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return false;
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
-		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+		if(currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
-		if(currentItem != null && currentItem.getItem() instanceof ItemLead)
+		if(currentItem.getItem() instanceof ItemLead)
 		{
 			if(getControllingPassenger() != null && getControllingPassenger() instanceof EntityLiving && !(getControllingPassenger() instanceof EntityPlayer))
 			{
@@ -807,7 +789,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public Entity getControllingPassenger()
 	{
-		return getPassengers().size() == 0 ? null : getPassengers().get(0);
+		return getPassengers().isEmpty() ? null : getPassengers().get(0);
 	}
 	
 	@Override

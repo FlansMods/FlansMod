@@ -33,9 +33,9 @@ public class PacketLoadoutData extends PacketBase
 	{
 		writeUTF(data, motd);
 		data.writeInt(teamsAvailable.length);
-		for(int i = 0; i < teamsAvailable.length; i++)
+		for(Team aTeamsAvailable : teamsAvailable)
 		{
-			data.writeInt(teamsAvailable[i] == null ? 0 : teamsAvailable[i].shortName.hashCode());
+			data.writeInt(aTeamsAvailable == null ? 0 : aTeamsAvailable.shortName.hashCode());
 		}
 		
 		myRankData.writeToBuf(data);

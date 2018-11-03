@@ -15,11 +15,10 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer<TileEnt
 	{
 		WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 		
-		TileEntitySpawner spawner = (TileEntitySpawner)te;
-		int spawnerTeamID = spawner.getTeamID();
+		int spawnerTeamID = te.getTeamID();
 		Team spawnerTeam = FlansModClient.getTeam(spawnerTeamID);
 		
-		boolean currentMap = FlansModClient.isCurrentMap(spawner.map);
+		boolean currentMap = FlansModClient.isCurrentMap(te.map);
 		
 		//Use default colours
 		if(spawnerTeam == null || !currentMap)

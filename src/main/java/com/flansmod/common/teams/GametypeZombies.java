@@ -60,7 +60,7 @@ public class GametypeZombies extends Gametype
 		}
 		
 		//Do a periodic check for a lack of zombies
-		if(teamsManager.roundTimeLeft + humanPrepTime < teamsManager.currentRound.timeLimit * 20 * 60 && teamsManager.roundTimeLeft % 200 == 0 && teamsManager.currentRound.teams[1].members.size() == 0)
+		if(teamsManager.roundTimeLeft + humanPrepTime < teamsManager.currentRound.timeLimit * 20 * 60 && teamsManager.roundTimeLeft % 200 == 0 && teamsManager.currentRound.teams[1].members.isEmpty())
 			zombifySomeone();
 	}
 	
@@ -163,7 +163,7 @@ public class GametypeZombies extends Gametype
 			return teamsManager.roundTimeLeft == 1 && team.members.size() > 0;
 			//Zombies win if all the humans are dead
 		else if(isZombie(team))
-			return teamsManager.roundTimeLeft + humanPrepTime <= teamsManager.currentRound.timeLimit * 20 * 60 && teamsManager.currentRound.teams[0].members.size() == 0;
+			return teamsManager.roundTimeLeft + humanPrepTime <= teamsManager.currentRound.timeLimit * 20 * 60 && teamsManager.currentRound.teams[0].members.isEmpty();
 		return false;
 	}
 	
@@ -189,7 +189,7 @@ public class GametypeZombies extends Gametype
 		if(teamsManager.currentRound == null)
 			return null;
 		PlayerData data = getPlayerData(player);
-		List<BlockPos> validSpawnPoints = new ArrayList<BlockPos>();
+		List<BlockPos> validSpawnPoints = new ArrayList<>();
 		if(data.newTeam == null)
 			return null;
 		

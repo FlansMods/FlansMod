@@ -14,7 +14,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class ArmourType extends InfoType
 {
-	public static ArrayList<ArmourType> armours = new ArrayList<ArmourType>();
+	public static ArrayList<ArmourType> armours = new ArrayList<>();
 	
 	/**
 	 * 0 = Helmet, 1 = Chestplate, 2 = Legs, 3 = Shoes

@@ -45,7 +45,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public int reloadTimer;
 	public int soundDelay;
 	public float shootDelay;
-	public static List<EntityMG> mgs = new ArrayList<EntityMG>();
+	public static List<EntityMG> mgs = new ArrayList<>();
 	public EntityPlayer gunner;
 	//Server side
 	public boolean isShooting;
@@ -447,7 +447,6 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		ItemStack stack = new ItemStack(type.item, 1, 0);
-		return stack;
+		return new ItemStack(type.item, 1, 0);
 	}
 }

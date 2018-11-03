@@ -143,7 +143,7 @@ public class FlansModApocalypse
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{
-		NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+		NonNullList<Ingredient> ingredients = NonNullList.create();
 		ingredients.add(Ingredient.fromStacks(new ItemStack(Blocks.SAND)));
 		ingredients.add(Ingredient.fromStacks(new ItemStack(sulphur)));
 		
@@ -190,7 +190,7 @@ public class FlansModApocalypse
 		//Power Cube
 		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setTranslationKey("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
 		itemBlockPowerCube = new ItemBlock(blockPowerCube).setTranslationKey("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
-		GameRegistry.registerTileEntity(TileEntityPowerCube.class, "powerCube");
+		GameRegistry.registerTileEntity(TileEntityPowerCube.class, new ResourceLocation("flansmodapocalypse:powercube"));
 		
 		proxy.preInit(event);
 	}
@@ -273,7 +273,7 @@ public class FlansModApocalypse
 			configFile.save();
 	}
 	
-	public static enum TeleportOption
+	public enum TeleportOption
 	{
 		PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN;
 		

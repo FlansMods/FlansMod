@@ -514,7 +514,6 @@ public class EntityMecha extends EntityDriveable
 			{
 				wouldBeNegativeDamage = 1;
 			}
-			;
 			
 			float damageToInflict = takeFallDamage ? i * ((type.fallDamageMultiplier * vulnerability())) * wouldBeNegativeDamage : 0;
 			float blockDamageFromFalling = damageBlocksFromFalling ? i * (type.blockDamageFromFalling) / 10F : 0;
@@ -1335,7 +1334,7 @@ public class EntityMecha extends EntityDriveable
 	
 	public ArrayList<MechaItemType> getUpgradeTypes()
 	{
-		ArrayList<MechaItemType> types = new ArrayList<MechaItemType>();
+		ArrayList<MechaItemType> types = new ArrayList<>();
 		for(ItemStack stack : inventory.stacks.values())
 		{
 			if(stack != null && stack.getItem() instanceof ItemMechaAddon)

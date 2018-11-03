@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 public class PermanentBaseData
 {
 	public int baseID = 0;
-	public List<BlockPos> spawnPoints = new ArrayList<BlockPos>();
+	public List<BlockPos> spawnPoints = new ArrayList<>();
 	public int teamID = 0;
 	
 	public void writeBaseToNBT(NBTTagCompound tags)

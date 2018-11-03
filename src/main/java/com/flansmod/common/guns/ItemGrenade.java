@@ -93,9 +93,9 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 				ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
 				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, dropStack));
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+		return new ActionResult<>(EnumActionResult.FAIL, stack);
 	}
 	
 	@Override

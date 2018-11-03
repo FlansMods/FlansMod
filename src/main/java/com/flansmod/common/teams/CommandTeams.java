@@ -249,7 +249,7 @@ public class CommandTeams extends CommandBase
 		*/
 		if(split[0].equals("listTeams") || split[0].equals("listAllTeams"))
 		{
-			if(Team.teams.size() == 0)
+			if(Team.teams.isEmpty())
 			{
 				sender.sendMessage(new TextComponentString("\u00a74No teams available. You need a content pack that has some teams with it"));
 				return;

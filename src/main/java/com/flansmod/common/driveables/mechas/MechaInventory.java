@@ -20,7 +20,7 @@ public class MechaInventory implements IInventory
 	public MechaInventory(EntityMecha m)
 	{
 		mecha = m;
-		stacks = new HashMap<EnumMechaSlotType, ItemStack>();
+		stacks = new HashMap<>();
 		for(EnumMechaSlotType type : EnumMechaSlotType.values())
 		{
 			stacks.put(type, null);
@@ -78,14 +78,14 @@ public class MechaInventory implements IInventory
 		markDirty();
 		ItemStack slot = getStackInSlot(i);
 		if(slot == null)
-			return null;
+			return ItemStack.EMPTY.copy();
 		
 		int numToTake = Math.min(j, slot.getCount());
 		ItemStack returnStack = slot.copy();
 		returnStack.setCount(numToTake);
 		slot.setCount(slot.getCount() - numToTake);
 		if(slot.getCount() <= 0)
-			slot = null;
+			slot = ItemStack.EMPTY.copy();
 		
 		setInventorySlotContents(i, slot);
 		
@@ -194,7 +194,7 @@ public class MechaInventory implements IInventory
 	@Override
 	public ItemStack removeStackFromSlot(int index)
 	{
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 	
 	@Override

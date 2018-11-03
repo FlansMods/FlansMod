@@ -19,7 +19,7 @@ import com.flansmod.common.PlayerHandler;
 
 public class EntityFlag extends Entity implements ITeamObject
 {
-	private static final DataParameter<Byte> TEAMID = EntityDataManager.<Byte>createKey(EntityFlag.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> TEAMID = EntityDataManager.createKey(EntityFlag.class, DataSerializers.BYTE);
 	
 	public int baseID;
 	public EntityFlagpole base;
@@ -62,7 +62,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	@Override
 	protected void entityInit()
 	{
-		getDataManager().register(TEAMID, Byte.valueOf((byte)0));
+		getDataManager().register(TEAMID, (byte)0);
 	}
 	
 	@Override
@@ -243,8 +243,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
-		return stack;
+		return new ItemStack(FlansMod.flag, 1, 0);
 	}
 	
 	@Override

@@ -45,9 +45,9 @@ public class ModelRendererTurbo extends ModelRenderer
 		vertices = new PositionTextureVertex[0];
 		faces = new TexturedPolygon[0];
 		forcedRecompile = false;
-		transformGroup = new HashMap<String, TransformGroup>();
+		transformGroup = new HashMap<>();
 		transformGroup.put("0", new TransformGroupBone(new Bone(0, 0, 0, 0), 1D));
-		textureGroup = new HashMap<String, TextureGroup>();
+		textureGroup = new HashMap<>();
 		textureGroup.put("0", new TextureGroup());
 		currentTextureGroup = textureGroup.get("0");
 		boxName = s;
@@ -1883,16 +1883,16 @@ public class ModelRendererTurbo extends ModelRenderer
 	 */
 	public void doMirror(boolean x, boolean y, boolean z)
 	{
-		for(int i = 0; i < faces.length; i++)
+		for(TexturedPolygon face : faces)
 		{
-			PositionTextureVertex[] verts = faces[i].vertexPositions;
-			for(int j = 0; j < verts.length; j++)
+			PositionTextureVertex[] verts = face.vertexPositions;
+			for(PositionTextureVertex vert : verts)
 			{
-				verts[j].vector3D = new Vec3d(verts[j].vector3D.x * (x ? -1 : 1), verts[j].vector3D.y * (y ? -1 : 1), verts[j].vector3D.z * (z ? -1 : 1));
+				vert.vector3D = new Vec3d(vert.vector3D.x * (x ? -1 : 1), vert.vector3D.y * (y ? -1 : 1), vert.vector3D.z * (z ? -1 : 1));
 				
 			}
 			if(x ^ y ^ z)
-				faces[i].flipFace();
+				face.flipFace();
 		}
 	}
 	

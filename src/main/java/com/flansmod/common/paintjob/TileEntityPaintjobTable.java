@@ -57,9 +57,8 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 			}
 			else
 			{
-				ItemStack returnStack = getStackInSlot(index).splitStack(count);
 				
-				return returnStack;
+				return getStackInSlot(index).splitStack(count);
 			}
 		}
 		return null;

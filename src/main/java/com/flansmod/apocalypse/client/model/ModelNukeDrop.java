@@ -43,8 +43,7 @@ public class ModelNukeDrop extends ModelBase
 	
 	public void renderNuke(float scale)
 	{
-		for(int i = 0; i < nukeModel.length; i++)
-			nukeModel[i].render(scale);
+		for(ModelRendererTurbo aNukeModel : nukeModel) aNukeModel.render(scale);
 	}
 	
 	public void renderMushroomCloud(float scale)
@@ -54,7 +53,6 @@ public class ModelNukeDrop extends ModelBase
 	
 	public void renderBall(float scale)
 	{
-		for(int i = 0; i < ballModel.length; i++)
-			ballModel[i].render(scale);
+		for(ModelRendererTurbo aBallModel : ballModel) aBallModel.render(scale);
 	}
 }

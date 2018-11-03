@@ -57,16 +57,16 @@ public class PlayerDeathEventListener
 			{
 				FlansMod.getPacketHandler().sendToDimension(
 						new PacketKillMessage(false, ((EntityBullet)event.getSource().getTrueSource()).type,
-								(killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)event.getEntity()).getDisplayName().getFormattedText(),
-								(killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)event.getSource().getTrueSource()).getDisplayName().getFormattedText()),
+								(killedTeam == null ? "f" : killedTeam.textColour) + event.getEntity().getDisplayName().getFormattedText(),
+								(killerTeam == null ? "f" : killedTeam.textColour) + event.getSource().getTrueSource().getDisplayName().getFormattedText()),
 						event.getEntityLiving().dimension);
 			}
 			if(event.getEntityLiving() instanceof EntityPlayer && isGrenade)
 			{
 				FlansMod.getPacketHandler().sendToDimension(
 						new PacketKillMessage(false, ((EntityGrenade)event.getSource().getTrueSource()).type,
-								(killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)event.getEntity()).getDisplayName().getFormattedText(),
-								(killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)event.getSource().getTrueSource()).getDisplayName().getFormattedText()),
+								(killedTeam == null ? "f" : killedTeam.textColour) + event.getEntity().getDisplayName().getFormattedText(),
+								(killerTeam == null ? "f" : killedTeam.textColour) + event.getSource().getTrueSource().getDisplayName().getFormattedText()),
 						event.getEntityLiving().dimension);
 			}
 		}

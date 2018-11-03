@@ -109,7 +109,7 @@ public class MechaType extends DriveableType
 	public float rightHandModifierY = 0;
 	public float rightHandModifierZ = 0;
 
-	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
+	public static ArrayList<MechaType> types = new ArrayList<>();
 
 	public MechaType(TypeFile file)
 	{

@@ -26,8 +26,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	
 	//Server side
 	public int spawnDelay = 1200;
-	public List<ItemStack> stacksToSpawn = new ArrayList<ItemStack>();
-	public List<EntityTeamItem> itemEntities = new ArrayList<EntityTeamItem>();
+	public List<ItemStack> stacksToSpawn = new ArrayList<>();
+	public List<EntityTeamItem> itemEntities = new ArrayList<>();
 	public Entity spawnedEntity;
 	public ITeamBase base;
 	private int baseID = -1;
@@ -86,7 +86,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			destroy();
 			return;
 		}
-		if(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue() == 1)
+		if(world.getBlockState(pos).getValue(TYPE) == 1)
 		{
 			isSpawner = true;
 			return;
@@ -96,7 +96,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			if(itemEntities.get(i).isDead)
 				itemEntities.remove(i);
 		}
-		if(currentDelay > 0 && itemEntities.size() == 0)
+		if(currentDelay > 0 && itemEntities.isEmpty())
 		{
 			currentDelay--;
 		}
@@ -105,7 +105,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			currentDelay = spawnDelay;
 			for(int i = 0; i < stacksToSpawn.size(); i++)
 			{
-				if(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue() == 2)
+				if(world.getBlockState(pos).getValue(TYPE) == 2)
 				{
 					if(spawnedEntity != null && !spawnedEntity.isDead)
 					{
@@ -250,7 +250,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 				&& world.getBlockState(pos).getProperties() != null
 				&& world.getBlockState(pos).getProperties().containsKey(TYPE))
 		{
-			int metadata = ((Integer)world.getBlockState(pos).getValue(TYPE)).intValue();
+			int metadata = world.getBlockState(pos).getValue(TYPE);
 			return metadata == 1;
 		}
 		FlansMod.Assert(false, "Spawn point has no property");

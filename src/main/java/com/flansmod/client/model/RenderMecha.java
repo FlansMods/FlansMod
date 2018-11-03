@@ -365,8 +365,8 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 	@Override
 	protected ResourceLocation getEntityTexture(EntityMecha entity)
 	{
-		DriveableType type = ((EntityDriveable)entity).getDriveableType();
-		Paintjob paintjob = type.getPaintjob(((EntityDriveable)entity).getDriveableData().paintjobID);
+		DriveableType type = entity.getDriveableType();
+		Paintjob paintjob = type.getPaintjob(entity.getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 	

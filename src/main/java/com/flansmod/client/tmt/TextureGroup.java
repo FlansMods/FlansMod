@@ -10,7 +10,7 @@ public class TextureGroup
 {
 	public TextureGroup()
 	{
-		poly = new ArrayList<TexturedPolygon>();
+		poly = new ArrayList<>();
 		texture = "";
 	}
 	

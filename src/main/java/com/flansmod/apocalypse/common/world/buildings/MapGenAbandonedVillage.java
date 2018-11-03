@@ -19,7 +19,7 @@ import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 
 public class MapGenAbandonedVillage extends MapGenStructure
 {
-	public static List<Biome> villageSpawnBiomes = Arrays.asList(new Biome[]{BiomeApocalypse.canyon, BiomeApocalypse.desert});
+	public static List<Biome> villageSpawnBiomes = Arrays.asList(BiomeApocalypse.canyon, BiomeApocalypse.desert);
 	
 	private int terrainType;
 	/**

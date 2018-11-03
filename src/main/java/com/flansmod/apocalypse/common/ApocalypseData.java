@@ -24,7 +24,7 @@ public class ApocalypseData
 	/**
 	 * The point at which each player entered the apocalypse. For deciding where they should come out
 	 */
-	public HashMap<UUID, BlockPos> entryPoints = new HashMap<UUID, BlockPos>();
+	public HashMap<UUID, BlockPos> entryPoints = new HashMap<>();
 	
 	@SubscribeEvent
 	public void worldData(WorldEvent event)
@@ -63,10 +63,9 @@ public class ApocalypseData
 				
 				
 				//Save per-player file
-				Iterator iterator = entryPoints.entrySet().iterator();
-				while(iterator.hasNext())
+				for(Map.Entry<UUID, BlockPos> uuidBlockPosEntry : entryPoints.entrySet())
 				{
-					UUID uuid = ((Map.Entry<UUID, BlockPos>)iterator.next()).getKey();
+					UUID uuid = (uuidBlockPosEntry).getKey();
 					File playerFile = new File(dir, uuid.toString() + ".dat");
 					NBTTagCompound playerTags = new NBTTagCompound();
 					if(!playerFile.exists())

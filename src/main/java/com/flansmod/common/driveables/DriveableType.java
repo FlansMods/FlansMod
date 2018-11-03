@@ -35,15 +35,15 @@ public abstract class DriveableType extends PaintableType
 	/**
 	 * Health of each driveable part
 	 */
-	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<EnumDriveablePart, CollisionBox>();
+	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<>();
 	/**
 	 * Recipe parts associated to each driveable part
 	 */
-	public HashMap<EnumDriveablePart, ItemStack[]> partwiseRecipe = new HashMap<EnumDriveablePart, ItemStack[]>();
+	public HashMap<EnumDriveablePart, ItemStack[]> partwiseRecipe = new HashMap<>();
 	/**
 	 * Recipe parts as one complete list
 	 */
-	public ArrayList<ItemStack> driveableRecipe = new ArrayList<ItemStack>();
+	public ArrayList<ItemStack> driveableRecipe = new ArrayList<>();
 	
 	//Ammo
 	/**
@@ -53,7 +53,7 @@ public abstract class DriveableType extends PaintableType
 	/**
 	 * The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc)
 	 */
-	public List<BulletType> ammo = new ArrayList<BulletType>();
+	public List<BulletType> ammo = new ArrayList<>();
 	
 	//Harvesting variables
 	/**
@@ -63,7 +63,7 @@ public abstract class DriveableType extends PaintableType
 	/**
 	 * What materials this harvester eats
 	 */
-	public ArrayList<Material> materialsHarvested = new ArrayList<Material>();
+	public ArrayList<Material> materialsHarvested = new ArrayList<>();
 	
 	
 	//Weapon variables
@@ -94,11 +94,11 @@ public abstract class DriveableType extends PaintableType
 	/**
 	 * Positions of primary and secondary weapons
 	 */
-	public ArrayList<DriveablePosition> shootPointsPrimary = new ArrayList<DriveablePosition>(), shootPointsSecondary = new ArrayList<DriveablePosition>();
+	public ArrayList<DriveablePosition> shootPointsPrimary = new ArrayList<>(), shootPointsSecondary = new ArrayList<>();
 	/**
 	 * Pilot guns also have their own seperate array so ammo handling can be done
 	 */
-	public ArrayList<PilotGun> pilotGuns = new ArrayList<PilotGun>();
+	public ArrayList<PilotGun> pilotGuns = new ArrayList<>();
 	
 	//Passengers
 	/**
@@ -136,7 +136,7 @@ public abstract class DriveableType extends PaintableType
 	/**
 	 * A list of ambient particle emitters on this vehicle
 	 */
-	public ArrayList<ParticleEmitter> emitters = new ArrayList<ParticleEmitter>();
+	public ArrayList<ParticleEmitter> emitters = new ArrayList<>();
 	
 	//Movement variables
 	/**
@@ -171,7 +171,7 @@ public abstract class DriveableType extends PaintableType
 	/**
 	 * Collision points for block based collisions
 	 */
-	public ArrayList<DriveablePosition> collisionPoints = new ArrayList<DriveablePosition>();
+	public ArrayList<DriveablePosition> collisionPoints = new ArrayList<>();
 	
 	/**
 	 * Coefficient of drag
@@ -217,7 +217,7 @@ public abstract class DriveableType extends PaintableType
 	public int animFrames = 0;
 	
 	
-	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
+	public static ArrayList<DriveableType> types = new ArrayList<>();
 	
 	public DriveableType(TypeFile file)
 	{
@@ -713,7 +713,7 @@ public abstract class DriveableType extends PaintableType
 	 */
 	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
 	{
-		ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> stacks = new ArrayList<>();
 		//Start with the items required to build this part
 		if(partwiseRecipe.get(part.type) != null)
 		{

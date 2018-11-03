@@ -20,7 +20,7 @@ import com.flansmod.common.vector.Vector3f;
 public class InstantBulletRenderer
 {
 	private static TextureManager textureManager;
-	private static ArrayList<InstantShotTrail> trails = new ArrayList<InstantShotTrail>();
+	private static ArrayList<InstantShotTrail> trails = new ArrayList<>();
 	
 	public static void AddTrail(InstantShotTrail trail)
 	{

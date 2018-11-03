@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +46,7 @@ public class EntityGunItem extends EntityItemCustomRender
 		super(entity.world, entity.posX, entity.posY, entity.posZ, entity
 				.getItem().copy());
 		setSize(1F, 1F);
-		ammoStacks = new ArrayList<ItemStack>();
+		ammoStacks = new ArrayList<>();
 	}
 	
 	public EntityGunItem(World w, double x, double y, double z,
@@ -53,7 +54,7 @@ public class EntityGunItem extends EntityItemCustomRender
 	{
 		super(w, x, y, z, stack);
 		setSize(1F, 1F);
-		ammoStacks = new ArrayList<ItemStack>();
+		ammoStacks = new ArrayList<>();
 		for(ItemStack ammoStack : stacks)
 		{
 			if(ammoStack != null && (ammoStack.getItem() instanceof ItemBullet))
@@ -89,8 +90,7 @@ public class EntityGunItem extends EntityItemCustomRender
 	public void onUpdate()
 	{
 		onEntityUpdate();
-		if(getItem() == null || getItem().getItem() == null
-				|| !(getItem().getItem() instanceof ItemGun))
+		if(getItem().isEmpty() || !(getItem().getItem() instanceof ItemGun))
 			setDead();
 		
 		if(!world.isRemote && ammoStacks == null)
@@ -100,13 +100,8 @@ public class EntityGunItem extends EntityItemCustomRender
 		prevPosY = posY;
 		prevPosZ = posZ;
 		motionY -= 0.03999999910593033D;
-		if(getEntityBoundingBox() != null)
-		{
-			pushOutOfBlocks(
-					posX,
-					(getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D,
-					posZ); // PushOutOfBlocks
-		}
+		getEntityBoundingBox();
+		pushOutOfBlocks(posX, (getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D, posZ);
 		move(MoverType.SELF, motionX, motionY, motionZ);
 		
 		float var2 = 0.98F;
@@ -114,14 +109,14 @@ public class EntityGunItem extends EntityItemCustomRender
 		if(onGround)
 		{
 			var2 = 0.58800006F;
-			Block block = world.getBlockState(
-					new BlockPos(MathHelper.floor(posX), MathHelper
-							.floor(getEntityBoundingBox().minY) - 1,
-							MathHelper.floor(posZ))).getBlock();
+			BlockPos blockPos = new BlockPos(MathHelper.floor(posX),
+					MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(posZ));
+			IBlockState blockState = world.getBlockState(blockPos);
+			Block block = blockState.getBlock();
 			
-			if(block != null)
+			if(!block.isAir(blockState, world, blockPos))
 			{
-				var2 = block.slipperiness * 0.98F;
+				var2 = block.getSlipperiness(blockState, world, blockPos, this) * 0.98F;
 			}
 		}
 		
@@ -140,11 +135,10 @@ public class EntityGunItem extends EntityItemCustomRender
 		
 		if(!world.isRemote && age >= lifespan)
 		{
-			if(item != null)
+			if(!item.isEmpty())
 			{
-				ItemExpireEvent event = new ItemExpireEvent(this,
-						(item.getItem() == null ? 6000 : item.getItem()
-								.getEntityLifespan(item, world)));
+				item.getItem();
+				ItemExpireEvent event = new ItemExpireEvent(this, item.getItem().getEntityLifespan(item, world));
 				if(MinecraftForge.EVENT_BUS.post(event))
 				{
 					lifespan += event.getExtraLife();
@@ -160,7 +154,7 @@ public class EntityGunItem extends EntityItemCustomRender
 			}
 		}
 		
-		if(item != null && item.getCount() <= 0)
+		if(item.isEmpty())
 		{
 			setDead();
 		}
@@ -186,7 +180,7 @@ public class EntityGunItem extends EntityItemCustomRender
 				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 				{
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if(stack != null && stack.getItem() instanceof ItemGun)
+					if(!stack.isEmpty() && stack.getItem() instanceof ItemGun)
 					{
 						GunType type = ((ItemGun)stack.getItem()).GetType();
 						for(int j = ammoStacks.size() - 1; j >= 0; j--)
@@ -205,7 +199,7 @@ public class EntityGunItem extends EntityItemCustomRender
 								}
 							}
 						}
-						if(ammoStacks.size() == 0)
+						if(ammoStacks.isEmpty())
 							setDead();
 					}
 				}
@@ -227,22 +221,21 @@ public class EntityGunItem extends EntityItemCustomRender
 		if(!event.isCanceled())
 		{
 			ItemStack currentItem = player.getHeldItemMainhand();
-			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
+			if(!currentItem.isEmpty() && currentItem.getItem() instanceof ItemGun)
 			{
 				GunType gunType = ((ItemGun)currentItem.getItem()).GetType();
-				List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
+				List<ItemStack> newAmmoStacks = new ArrayList<>();
 				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 				{
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if(stack != null
-							&& stack.getItem() instanceof ItemShootable)
+					if(!stack.isEmpty() && stack.getItem() instanceof ItemShootable)
 					{
 						ShootableType bulletType = ((ItemShootable)stack
 								.getItem()).type;
 						if(gunType.isAmmo(bulletType))
 						{
 							newAmmoStacks.add(stack.copy());
-							player.inventory.setInventorySlotContents(i, null);
+							player.inventory.setInventorySlotContents(i, ItemStack.EMPTY.copy());
 						}
 					}
 				}

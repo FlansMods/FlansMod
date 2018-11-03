@@ -37,7 +37,7 @@ public class InfoType
 	/**
 	 * infoTypes
 	 */
-	public static HashMap<Integer, InfoType> infoTypes = new HashMap<Integer, InfoType>();
+	public static HashMap<Integer, InfoType> infoTypes = new HashMap<>();
 	
 	public String contentPack;
 	public Item item;
@@ -165,7 +165,7 @@ public class InfoType
 					{
 						continue;
 					}
-					if(line == null || line.startsWith("//"))
+					if(line.startsWith("//"))
 					{
 						i--;
 						continue;
@@ -429,17 +429,17 @@ public class InfoType
 				int height = maxY - minY + 1;
 				
 				// Make a menu of ingredients from the main recipe line
-				HashMap<Character, ItemStack> menu = new HashMap<Character, ItemStack>();
+				HashMap<Character, ItemStack> menu = new HashMap<>();
 				for(int i = 0; i < (recipeLine.length - 1) / 2; i++)
 				{
 					char c = recipeLine[i * 2 + 1].charAt(0);
 					ItemStack stack = getRecipeElement(recipeLine[i * 2 + 2]);
 					
-					menu.put(Character.valueOf(c), stack);
+					menu.put(c, stack);
 				}
 				
 				// Now pick off the menu and fill out the list
-				NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+				NonNullList<Ingredient> ingredients = NonNullList.create();
 				for(int i = 0; i < width; i++)
 				{
 					for(int j = 0; j < height; j++)
@@ -451,7 +451,7 @@ public class InfoType
 						}
 						else
 						{
-							ItemStack stack = menu.get(Character.valueOf(c));
+							ItemStack stack = menu.get(c);
 							if(stack == null || stack.isEmpty())
 							{
 								FlansMod.log.warn("Failed to find " + c + " in recipe for " + shortName);
@@ -467,7 +467,7 @@ public class InfoType
 			}
 			else
 			{
-				NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+				NonNullList<Ingredient> ingredients = NonNullList.create();
 				for(int i = 0; i < (recipeLine.length - 1); i++)
 				{
 					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));

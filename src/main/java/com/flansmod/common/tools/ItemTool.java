@@ -85,7 +85,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 			if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 				itemstack.setCount(itemstack.getCount() - 1);
 			//Our work here is done. Let's be off
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 		}
 		else if(type.remote)
 		{
@@ -106,7 +106,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 					itemstack.setCount(itemstack.getCount() - 1);
 				//Our work here is done. Let's be off
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+				return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 			}
 		}
 		else
@@ -155,7 +155,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 								if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 									itemstack.setCount(itemstack.getCount() - 1);
 								//Our work here is done. Let's be off
-								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+								return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 							}
 						}
 					}
@@ -168,7 +168,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				EntityLivingBase hitLiving = entityplayer;
 				
 				//Iterate over entities within range of the ray
-				List list = world.<EntityLivingBase>getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
+				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
 						Math.min(posVec.x, lookVec.x), Math.min(posVec.y, lookVec.y), Math.min(posVec.z, lookVec.z),
 						Math.max(posVec.x, lookVec.x), Math.max(posVec.y, lookVec.y), Math.max(posVec.z, lookVec.z)));
 				for(Object aList : list)
@@ -190,7 +190,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				{
 					//If its finished, don't use it
 					if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
-						return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+						return new ActionResult<>(EnumActionResult.FAIL, itemstack);
 					
 					hitLiving.heal(type.healAmount);
 					FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
@@ -202,11 +202,11 @@ public class ItemTool extends ItemFood implements IFlanItem
 					if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() >= itemstack.getMaxDamage())
 						itemstack.setCount(itemstack.getCount() - 1);
 					
-					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+					return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 				}
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+		return new ActionResult<>(EnumActionResult.FAIL, itemstack);
 	}
 	
 	@Override

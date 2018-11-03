@@ -38,14 +38,14 @@ public class FlansModRaytracer
 	public static List<BulletHit> Raytrace(World world, Entity playerToIgnore, boolean canHitSelf, Entity entityToIgnore, Vector3f origin, Vector3f motion, int pingOfShooter)
 	{
 		//Create a list for all bullet hits
-		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
+		ArrayList<BulletHit> hits = new ArrayList<>();
 
 		float speed = motion.length();
 		
 		//Iterate over all entities
 		for(int i = 0; i < world.loadedEntityList.size(); i++)
 		{
-			Object obj = world.loadedEntityList.get(i);
+			Entity obj = world.loadedEntityList.get(i);
 			boolean shouldDoNormalHitDetect = true;
 			//Get driveables
 			if(obj instanceof EntityDriveable)
@@ -103,7 +103,7 @@ public class FlansModRaytracer
 
 			if(shouldDoNormalHitDetect)
 			{
-				Entity entity = (Entity)obj;
+				Entity entity = obj;
 				if(entity != entityToIgnore && entity != playerToIgnore
 						&& !entity.isDead
 						&& (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade)

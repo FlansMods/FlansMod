@@ -122,7 +122,7 @@ public class ContainerDriveableInventory extends Container
 					int yPos = -1000;
 					if(slotsDone < 3 + scroll && slotsDone >= scroll)
 						yPos = 25 + 19 * (slotsDone - scroll);
-					((Slot)inventorySlots.get(slotsDone)).yPos = yPos;
+					inventorySlots.get(slotsDone).yPos = yPos;
 					slotsDone++;
 				}
 				break;
@@ -139,7 +139,7 @@ public class ContainerDriveableInventory extends Container
 						yPos = 25 + 19 * (row - scroll);
 					for(int col = 0; col < ((row + 1) * 8 <= numItems ? 8 : numItems % 8); col++)
 					{
-						((Slot)inventorySlots.get(row * 8 + col)).yPos = yPos;
+						inventorySlots.get(row * 8 + col).yPos = yPos;
 					}
 				}
 				break;
@@ -157,7 +157,7 @@ public class ContainerDriveableInventory extends Container
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
 		ItemStack stack = ItemStack.EMPTY.copy();
-		Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		Slot currentSlot = inventorySlots.get(slotID);
 		
 		if(currentSlot != null && currentSlot.getHasStack())
 		{

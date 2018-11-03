@@ -45,7 +45,7 @@ public class FlansHooks
 		catch(Exception e)
 		{
 			FlansMod.log.error("Unable to retrieve BuildCraft item " + name + ".");
-			return null;
+			return ItemStack.EMPTY.copy();
 		}
 	}
 }

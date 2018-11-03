@@ -55,7 +55,7 @@ public class CommonProxyApocalypse
 	private EntityMecha apocalypseMecha = null;
 	public ApocalypseData data;
 	
-	private static HashMap<EntityPlayer, BlockPos> deathPoints = new HashMap<EntityPlayer, BlockPos>();
+	private static HashMap<EntityPlayer, BlockPos> deathPoints = new HashMap<>();
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -135,8 +135,8 @@ public class CommonProxyApocalypse
 						{
 							case DIM:
 								for(int i = 0; i < placer.world.playerEntities.size(); i++)
-									if(((Entity)placer.world.playerEntities.get(i)).dimension == 0)
-										sendPlayerToApocalypse((EntityPlayer)placer.world.playerEntities.get(i));
+									if(placer.world.playerEntities.get(i).dimension == 0)
+										sendPlayerToApocalypse(placer.world.playerEntities.get(i));
 								break;
 							case DIM_OPT_IN:
 								break;
@@ -161,7 +161,7 @@ public class CommonProxyApocalypse
 			{
 				for(int i = 0; i < world.playerEntities.size(); i++)
 				{
-					EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
+					EntityPlayer player = world.playerEntities.get(i);
 					//FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(FlansModApocalypse.dimensionID)));
 					
 					if(world.rand.nextInt(5000) == 0)

@@ -75,8 +75,8 @@ public class PacketSeatUpdates extends PacketBase
 		EntityDriveable driveable = null;
 		for(int i = 0; i < clientPlayer.world.loadedEntityList.size(); i++)
 		{
-			Object obj = clientPlayer.world.loadedEntityList.get(i);
-			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
+			Entity obj = clientPlayer.world.loadedEntityList.get(i);
+			if(obj instanceof EntityDriveable && obj.getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;
 				break;

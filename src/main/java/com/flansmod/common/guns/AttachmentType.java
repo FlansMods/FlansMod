@@ -16,7 +16,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class AttachmentType extends PaintableType implements IScope
 {
-	public static ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
+	public static ArrayList<AttachmentType> attachments = new ArrayList<>();
 	
 	/**
 	 * The type of attachment. Each gun can have one barrel, one scope, one

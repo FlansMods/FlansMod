@@ -51,7 +51,7 @@ public enum EnumType
 	
 	public String folderName;
 	
-	private EnumType(String s)
+	EnumType(String s)
 	{
 		folderName = s;
 	}

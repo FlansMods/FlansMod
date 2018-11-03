@@ -42,8 +42,8 @@ public class ModelPool
 			FlansMod.log.warn("The model with the name " + file + " does not exist.");
 			return null;
 		}
-		entry.groups = new HashMap<String, TransformGroupBone>();
-		entry.textures = new HashMap<String, TextureGroup>();
+		entry.groups = new HashMap<>();
+		entry.textures = new HashMap<>();
 		entry.name = file;
 		entry.setGroup("0");
 		entry.setTextureGroup("0");
@@ -53,7 +53,7 @@ public class ModelPool
 		return entry;
 	}
 	
-	private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
+	private static Map<String, ModelPoolEntry> modelMap = new HashMap<>();
 	private static String[] resourceDir = new String[]{
 			"/resources/models/",
 			"/resources/mod/models/",

@@ -1,7 +1,6 @@
 package com.flansmod.common.network;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -157,7 +156,7 @@ public class PacketTeamInfo extends PacketBase
 			else
 			{
 				data.writeBoolean(false);
-				ArrayList<String> playerNames = new ArrayList<String>();
+				ArrayList<String> playerNames = new ArrayList<>();
 				for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
 				{
 					Team team = TeamsManager.getInstance().currentRound.teams[i];
@@ -168,7 +167,7 @@ public class PacketTeamInfo extends PacketBase
 					playerNames.addAll(team.members);
 				}
 				
-				Collections.sort(playerNames, new Team.ComparatorScore());
+				playerNames.sort(new Team.ComparatorScore());
 				data.writeInt(playerNames.size());
 				for(String username : playerNames)
 				{
@@ -317,13 +316,13 @@ public class PacketTeamInfo extends PacketBase
 	
 	public Team getTeam(EntityPlayer player)
 	{
-		for(int i = 0; i < teamData.length; i++)
+		for(TeamData aTeamData : teamData)
 		{
-			for(int j = 0; j < teamData[i].playerData.length; j++)
+			for(int j = 0; j < aTeamData.playerData.length; j++)
 			{
-				if(teamData[i].playerData[j].username.equals(player.getDisplayNameString()))
+				if(aTeamData.playerData[j].username.equals(player.getDisplayNameString()))
 				{
-					return teamData[i].team;
+					return aTeamData.team;
 				}
 			}
 		}

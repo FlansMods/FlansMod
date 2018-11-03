@@ -42,14 +42,13 @@ public class ItemFlagpole extends Item
 		float f5 = -MathHelper.cos(-f1 * 0.01745329F);
 		float f6 = MathHelper.sin(-f1 * 0.01745329F);
 		float f7 = f4 * f5;
-		float f8 = f6;
 		float f9 = f3 * f5;
 		double d3 = 5D;
-		Vec3d vec3d1 = vec3d.add(f7 * d3, f8 * d3, f9 * d3);
+		Vec3d vec3d1 = vec3d.add(f7 * d3, f6 * d3, f9 * d3);
 		RayTraceResult RayTraceResult = world.rayTraceBlocks(vec3d, vec3d1, true);
 		if(RayTraceResult == null)
 		{
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+			return new ActionResult<>(EnumActionResult.PASS, itemstack);
 		}
 		if(RayTraceResult.typeOfHit == Type.BLOCK)
 		{
@@ -65,9 +64,9 @@ public class ItemFlagpole extends Item
 					world.spawnEntity(new EntityFlagpole(world, pos));
 				}
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<>(EnumActionResult.PASS, itemstack);
 	}
 	
 	private boolean isSolid(World world, BlockPos pos)
