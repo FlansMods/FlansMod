@@ -85,8 +85,8 @@ AddMelee mwKnife 0
 // Default loadouts
 DefaultLoadout 1 ak47 m9 m67 mwKnife
 DefaultLoadout 2 rpd ak74 m67 mwKnife
-DefaultLoadout 3 dragunov makarov mwMedicKit mwKnife
-DefaultLoadout 4 g3 p90 mwMedicKit mwKnife
+DefaultLoadout 3 dragunov makarov mwMedKit mwKnife
+DefaultLoadout 4 g3 p90 mwMedKit mwKnife
 DefaultLoadout 5 r870 glock m67 mwKnife
 // Reward boxes
 AddRewardBox modernRegularA
