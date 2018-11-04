@@ -240,9 +240,9 @@ public class FlansMod
 		spawnerItem = new ItemBlockManyNames(spawner);
 		
 		
-		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
-		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, "paintjobTable");
-		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
+		GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation("flansmod:teamsspawner"));
+		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, new ResourceLocation("flansmod:paintjobTable"));
+		GameRegistry.registerTileEntity(TileEntityItemHolder.class, new ResourceLocation("flansmod:itemHolder"));
 		
 		//Read content packs
 		readContentPacks(event);
