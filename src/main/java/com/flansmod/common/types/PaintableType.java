@@ -56,6 +56,8 @@ public abstract class PaintableType extends InfoType
 	@Override
 	public void postRead(TypeFile file)
 	{
+		super.postRead(file);
+		
 		//After all lines have been read, set up the default paintjob
 		defaultPaintjob = new Paintjob(this, 0, "", texture, new ItemStack[0]);
 		//Move to a new list to ensure that the default paintjob is always first

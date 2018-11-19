@@ -39,20 +39,20 @@ public class InfoType
 	 */
 	public static HashMap<Integer, InfoType> infoTypes = new HashMap<>();
 	
-	public String contentPack;
+	public final String contentPack;
 	public Item item;
 	public int colour = 0xffffff;
-	public String iconPath;
 	public String[] recipeLine;
 	public char[][] recipeGrid = new char[3][3];
 	public int recipeOutput = 1;
 	public boolean shapeless;
 	public String smeltableFrom = null;
-	public String name;
-	public String shortName;
-	public String texture;
 	public String modelString = null;
-	public String description;
+	public String name = "";
+	public String shortName = "";
+	public String texture = "";
+	public String description = "";
+	public String iconPath = "";
 	public float modelScale = 1F;
 	/**
 	 * If this is set to false, then this item cannot be dropped
@@ -115,6 +115,15 @@ public class InfoType
 	 */
 	protected void postRead(TypeFile file)
 	{
+		// Check that recommended values were set
+		if(shortName.isEmpty())
+		{
+			FlansMod.log.warn("ShortName not set: " + file.name);
+		}
+		if(name.isEmpty())
+		{
+			FlansMod.log.warn("Name not set: " + file.name);
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
