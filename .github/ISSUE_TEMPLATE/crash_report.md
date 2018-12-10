@@ -1,24 +1,18 @@
 ---
-name: Bug report
+name: Crash report
 about: Create a report to help us improve
 title: ''
-labels: bug
+labels: crash
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
-
 **To Reproduce**
-Steps to reproduce the behavior:
+Steps to reproduce the crash:
 1. 
 2. 
 3. 
 4. 
-
-**Expected behavior**
-A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
@@ -29,4 +23,4 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
-Add a link to a [gist](https://gist.github.com/) of any errors.
+Add a link to a [gist](https://gist.github.com/) of the crash.
