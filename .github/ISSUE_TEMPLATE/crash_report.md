@@ -17,7 +17,7 @@ Steps to reproduce the crash:
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Versions (please complete the following information):**\
+**Versions (please complete the following information):**
  - Forge: 
  - Flan's Mod: 
 
