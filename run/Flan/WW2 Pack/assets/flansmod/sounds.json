@@ -460,5 +460,35 @@
     "sounds": [
       "flansmod:ptboatmove"
     ]
+  },
+  "57mmgun": {
+    "category": "player",
+    "sounds": [
+      "flansmod:57mmgun"
+    ]
+  },
+  "jeepidle": {
+    "category": "player",
+    "sounds": [
+      "flansmod:jeepidle"
+    ]
+  },
+  "jeepmove": {
+    "category": "player",
+    "sounds": [
+      "flansmod:jeepmove"
+    ]
+  },
+  "75mmgun": {
+    "category": "player",
+    "sounds": [
+      "flansmod:75mmgun"
+    ]
+  },
+  "88mmgun": {
+    "category": "player",
+    "sounds": [
+      "flansmod:88mmgun"
+    ]
   }
 }
