@@ -4,7 +4,7 @@ ShortName BF109
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon BF109
 Model ww2.BF109
-Texture SkinBF109
+Texture BF109
 //Third Person Camera Distance
 CameraDistance 10.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat

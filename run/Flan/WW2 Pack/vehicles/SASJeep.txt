@@ -4,7 +4,7 @@ ShortName SASJeep
 //Visuals
 Icon SASJeep
 Model ww2.SASJeep
-Texture SkinSASJeep
+Texture SASJeep
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 5.0

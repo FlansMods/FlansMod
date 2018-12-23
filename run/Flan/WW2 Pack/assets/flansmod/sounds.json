@@ -490,5 +490,29 @@
     "sounds": [
       "flansmod:88mmgun"
     ]
+  },
+  "trenchgunshoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:trenchgunshoot"
+    ]
+  },
+  "trenchgunreload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:trenchgunreload"
+    ]
+  },
+  "turrettraverse1": {
+    "category": "player",
+    "sounds": [
+      "flansmod:turrettraverse1"
+    ]
+  },
+  "turrettraverse2": {
+    "category": "player",
+    "sounds": [
+      "flansmod:turrettraverse2"
+    ]
   }
 }

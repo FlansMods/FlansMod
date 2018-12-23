@@ -4,7 +4,7 @@ ShortName PanzerIIL
 //Visuals
 Icon Luchs
 Model ww2.Luchs
-Texture SkinLuchs
+Texture luchs
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

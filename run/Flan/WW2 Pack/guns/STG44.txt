@@ -24,7 +24,8 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.STG44
-Texture SkinSTG44
+Texture stg44
+ModelScale 0.06
 AllowAttachments ZF4Scope
 AllowBarrelAttachments false
 AllowScopeAttachments true

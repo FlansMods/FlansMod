@@ -4,7 +4,7 @@ ShortName Chaffee
 //Visuals
 Icon Chaffee
 Model ww2.Chaffee
-Texture SkinChaffee
+Texture chaffee
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

@@ -25,4 +25,4 @@ FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
 Model ww2.Binoculars
-Texture SkinBinoculars
+Texture binoculars

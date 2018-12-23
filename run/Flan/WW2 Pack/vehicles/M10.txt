@@ -4,7 +4,7 @@ ShortName M10
 //Visuals
 Icon M10
 Model ww2.M10
-Texture SkinM10
+Texture M10
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

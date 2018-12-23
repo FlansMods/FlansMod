@@ -4,7 +4,7 @@ ShortName Flak88
 //Visuals
 Icon Flak88
 Model ww2.Flak88
-Texture SkinFlak88
+Texture Flak88
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

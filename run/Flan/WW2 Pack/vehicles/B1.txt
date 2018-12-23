@@ -4,7 +4,7 @@ ShortName B1
 //Visuals
 Icon B1
 Model ww2.B1
-Texture SkinB1
+Texture B1
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

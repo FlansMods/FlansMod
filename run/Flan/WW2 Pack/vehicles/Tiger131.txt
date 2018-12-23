@@ -4,7 +4,7 @@ ShortName Tiger131
 //Visuals
 Icon Tiger131
 Model ww2.Tiger131
-Texture Skin131
+Texture 131
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

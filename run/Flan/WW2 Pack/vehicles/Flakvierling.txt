@@ -4,7 +4,7 @@ ShortName flakvierling
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Flakvierling
 Model ww2.Flakvierling
-Texture SkinFlakvierling
+Texture flakvierling
 //Third Person Camera Distance
 CameraDistance 7.5
 // ------------------------------------------------------ Movement ------------------------------------------------------

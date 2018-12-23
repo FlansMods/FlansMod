@@ -4,7 +4,7 @@ ShortName ChiNu
 //Visuals
 Icon Chinu
 Model ww2.ChiNu
-Texture SkinChiNu
+Texture ChiNu
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

@@ -4,7 +4,7 @@ ShortName Mustang
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Mustang
 Model ww2.Mustang
-Texture SkinP51
+Texture P51
 //Third Person Camera Distance
 CameraDistance 10.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat

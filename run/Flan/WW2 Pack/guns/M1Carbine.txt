@@ -2,7 +2,7 @@ Name M1 Carbine
 ShortName m1Carbine
 //The ammo this gun uses (shortName)
 Ammo m1CarbineAmmo
-Icon m1Carbine
+Icon m1carbine
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -24,5 +24,11 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.M1Carbine
-Texture SkinM1Carbine
+Texture m1carbine
+Paintjob m1carbine_acacia m1carbine_acacia orange 2
+Paintjob m1carbine_birch m1carbine_birch black 1 yellow 1
+Paintjob m1carbine_black m1carbine_black black 2
+Paintjob m1carbine_frog m1carbine_frog green 1 brown 1
+Paintjob m1carbine_green m1carbine_green green 2
+Paintjob m1carbine_oak m1carbine_oak brown 2
 ModelScale 0.35

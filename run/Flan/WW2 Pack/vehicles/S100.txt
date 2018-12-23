@@ -4,7 +4,7 @@ ShortName S100
 //Visuals
 Icon S100
 Model ww2.S100
-Texture SkinS100
+Texture S100
 //Third Person Camera Distance
 CameraDistance 25
 //Throttle

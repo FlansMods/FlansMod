@@ -8,7 +8,7 @@ Colour 255 255 255
 StackSize 4
 ////Visuals
 Model ww2.FragGrenade
-Texture Mk2Frag
+Texture mk2frag
 TrailParticles false
 //TrailParticleType <particleType>
 ExplodeParticles 0

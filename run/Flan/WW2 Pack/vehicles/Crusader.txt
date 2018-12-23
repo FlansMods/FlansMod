@@ -4,7 +4,7 @@ ShortName Crusader
 //Visuals
 Icon Crusader
 Model ww2.Crusader
-Texture SkinCrusader
+Texture Crusader
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

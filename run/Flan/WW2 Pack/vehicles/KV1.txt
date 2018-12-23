@@ -4,7 +4,7 @@ ShortName KV1
 //Visuals
 Icon KV1
 Model ww2.KV1
-Texture SkinKV1
+Texture KV1
 ModelScale 1.2
 //Third Person Camera Distance
 CameraDistance 7.5

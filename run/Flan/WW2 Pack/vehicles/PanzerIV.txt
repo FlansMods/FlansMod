@@ -4,7 +4,7 @@ ShortName Panzer
 //Visuals
 Icon Panzer
 Model ww2.Panzer
-Texture SkinPanzer
+Texture Panzer
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5

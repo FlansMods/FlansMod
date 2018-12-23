@@ -2,7 +2,7 @@ Name FG42
 ShortName fg42
 //The ammo this gun uses (shortName)
 Ammo Fg42Ammo
-Icon Fg42
+Icon fg42
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -24,7 +24,13 @@ Scope None
 Deployable false
 DeployedModel None
 Model ww2.Fg42
-Texture Fg42
+Texture fg42
+Paintjob fg42_acacia fg42_acacia orange 2
+Paintjob fg42_birch fg42_birch black 1 yellow 1
+Paintjob fg42_black fg42_black black 2
+Paintjob fg42_green fg42_green green 2
+Paintjob fg42_oak fg42_oak brown 2
+Paintjob fg42_pepper fg42_pepper gray 2
 AllowAttachments ZF4Scope
 AllowBarrelAttachments false
 AllowScopeAttachments true

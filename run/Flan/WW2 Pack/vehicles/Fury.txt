@@ -4,7 +4,7 @@ ShortName Fury
 //Visuals
 Icon Fury
 Model ww2.Fury
-Texture SkinFury
+Texture Fury
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

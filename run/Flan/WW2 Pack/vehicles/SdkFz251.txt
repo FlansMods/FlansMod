@@ -5,7 +5,7 @@ ItemID 23491
 //Visuals
 Icon SdkFz251
 Model ww2.SdkFz251
-Texture SkinSdkFz251
+Texture SdkFz251
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5

@@ -25,5 +25,12 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Luger
-Texture Luger
-ModelScale 1
+Texture luger
+Paintjob luger_acacia luger_acacia orange 2
+Paintjob luger_birch luger_birch black 1 yellow 1
+Paintjob luger_black luger_black black 2
+Paintjob luger_green luger_green green 2
+Paintjob luger_oak luger_oak brown 2
+Paintjob luger_pepper luger_pepper gray 2
+
+ModelScale 0.14

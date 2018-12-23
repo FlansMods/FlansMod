@@ -4,7 +4,7 @@ ShortName M45Quad
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon M45Quad
 Model ww2.M45Quad
-Texture SkinQuadmount
+Texture quadmount
 //Third Person Camera Distance
 CameraDistance 7.5
 // ------------------------------------------------------ Movement ------------------------------------------------------

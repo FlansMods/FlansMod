@@ -4,7 +4,7 @@ ShortName StuG
 //Visuals
 Icon StuG
 Model ww2.StuG
-Texture SkinStuG
+Texture StuG
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

@@ -2,7 +2,7 @@ Name BAR
 ShortName BAR
 //The ammo this gun uses (shortName)
 Ammo BARAmmo
-Icon BAR
+Icon bar
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -24,5 +24,11 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.BAR
-Texture SkinBAR
+Texture bar
+Paintjob bar_acacia bar_acacia orange 2
+Paintjob bar_birch bar_birch black 1 yellow 1
+Paintjob bar_black bar_black black 2
+Paintjob bar_frog bar_frog green 1 brown 1
+Paintjob bar_green bar_green green 2
+Paintjob bar_oak bar_oak brown 2
 ModelScale 0.35

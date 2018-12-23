@@ -2,7 +2,7 @@ Name M3A1GreaseGun
 ShortName M3A1
 //The ammo this gun uses (shortName)
 Ammo M3A1Ammo
-Icon M3A1
+Icon m3a1
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -24,5 +24,7 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.GreaseGun
-Texture SkinGreasegun
+Texture m3a1
+Paintjob m3a1_frog m3a1_frog green 1 brown 1
+Paintjob m3a1_green m3a1_green green 2
 ModelScale 0.85

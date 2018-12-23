@@ -4,7 +4,7 @@ ShortName Pak40
 //Visuals
 Icon Pak40
 Model ww2.Pak40
-Texture SkinPak40
+Texture Pak40
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

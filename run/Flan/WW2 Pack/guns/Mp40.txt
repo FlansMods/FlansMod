@@ -7,7 +7,7 @@ Icon mp40
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 50
-//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, mp40Sniper = 20
 Recoil 3
 //Damage in half hearts
 Damage 4
@@ -24,5 +24,11 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Mp40
-Texture Mp40
+Texture mp40
+Paintjob mp40_acacia mp40_acacia orange 2
+Paintjob mp40_birch mp40_birch black 1 yellow 1
+Paintjob mp40_black mp40_black black 2
+Paintjob mp40_green mp40_green green 2
+Paintjob mp40_oak mp40_oak brown 2
+Paintjob mp40_pepper mp40_pepper gray 2
 ModelScale 0.8

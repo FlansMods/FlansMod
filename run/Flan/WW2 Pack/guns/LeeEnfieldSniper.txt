@@ -2,7 +2,7 @@ Name Lee Enfield Sniper
 ShortName leeEnfieldSniper
 //The ammo this gun uses (shortName)
 Ammo leeEnfieldAmmo
-Icon leeEnfieldSniper
+Icon leeenfieldsniper
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -24,7 +24,7 @@ Scope wwiileeenfieldsniper
 Deployable False
 DeployedModel None
 Model ww2.LeeenfieldS
-Texture LeeEnfield
+Texture leeenfield
 ModelScale 0.7
 ZoomLevel 8.0
 FOVZoomLevel 1.0

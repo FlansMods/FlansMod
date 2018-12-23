@@ -4,7 +4,7 @@ ShortName TigerII
 //Visuals
 Icon TigerII
 Model ww2.TigerII
-Texture SkinTigerII
+Texture TigerII
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

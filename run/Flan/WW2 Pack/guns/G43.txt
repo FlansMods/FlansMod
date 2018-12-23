@@ -2,7 +2,7 @@ Name Gewehr43
 ShortName G43
 //The ammo this gun uses (shortName)
 Ammo G43Ammo
-Icon G43
+Icon g43
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -24,12 +24,18 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.G43
-Texture SkinG43
+Texture g43
+Paintjob g43_acacia g43_acacia orange 2
+Paintjob g43_birch g43_birch black 1 yellow 1
+Paintjob g43_black g43_black black 2
+Paintjob g43_green g43_green green 2
+Paintjob g43_oak g43_oak brown 2
+Paintjob g43_pepper g43_pepper gray 2
 ModelScale 0.6
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
 AllowAttachments ZF4Scope
-AllowBarrelAttachments false
+Allowg43relAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments false

@@ -4,7 +4,7 @@ ShortName bofors
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Bofors
 Model ww2.Bofors
-Texture SkinBofors
+Texture bofors
 //Third Person Camera Distance
 CameraDistance 7.5
 // ------------------------------------------------------ Movement ------------------------------------------------------

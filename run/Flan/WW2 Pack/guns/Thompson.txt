@@ -24,5 +24,11 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Thompson
-Texture SkinThompson
+Texture thompson
+Paintjob thompson_acacia thompson_acacia orange 2
+Paintjob thompson_birch thompson_birch black 1 yellow 1
+Paintjob thompson_black thompson_black black 2
+Paintjob thompson_frog thompson_frog green 1 brown 1
+Paintjob thompson_green thompson_green green 2
+Paintjob thompson_oak thompson_oak brown 2
 ModelScale 0.3

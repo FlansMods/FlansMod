@@ -30,8 +30,8 @@ Deployable False
 DeployedModel None
 //Model settings
 Model ww2.Webley
-Texture Webley
-ModelScale 0.3
+Texture webley
+ModelScale 0.4
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces

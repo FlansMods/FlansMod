@@ -4,7 +4,7 @@ ShortName IS2
 //Visuals
 Icon IS2
 Model ww2.IS2
-Texture SkinIS2
+Texture IS2
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5

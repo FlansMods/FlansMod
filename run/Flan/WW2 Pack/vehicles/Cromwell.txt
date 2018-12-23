@@ -4,7 +4,7 @@ ShortName Cromwell
 //Visuals
 Icon Cromwell
 Model ww2.Cromwell
-Texture SkinCromwell
+Texture Cromwell
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

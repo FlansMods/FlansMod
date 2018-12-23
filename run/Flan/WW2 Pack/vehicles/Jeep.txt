@@ -4,7 +4,7 @@ ShortName Jeep
 //Visuals
 Icon Jeep
 Model ww2.Jeep
-Texture SkinWillys
+Texture jeep
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 5.0

@@ -4,7 +4,7 @@ ShortName SU-1-12
 //Visuals
 Icon SU112
 Model ww2.SU112
-Texture SkinSU112
+Texture SU112
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

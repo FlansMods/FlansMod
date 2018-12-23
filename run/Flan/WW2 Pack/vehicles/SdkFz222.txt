@@ -5,7 +5,7 @@ ItemID 23491
 //Visuals
 Icon SdkFz222
 Model ww2.SdkFz222
-Texture SkinSdkFz222
+Texture SdkFz222
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5

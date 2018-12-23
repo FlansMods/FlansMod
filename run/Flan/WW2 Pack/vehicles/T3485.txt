@@ -4,7 +4,7 @@ ShortName T34
 //Visuals
 Icon T3485
 Model ww2.T3485
-Texture SkinT3485
+Texture T3485
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

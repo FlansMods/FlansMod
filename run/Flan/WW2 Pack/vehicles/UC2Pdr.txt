@@ -4,7 +4,7 @@ ShortName UC2Pdr
 //Visuals
 Icon UC
 Model ww2.UC2Pdr
-Texture SkinUC
+Texture uc
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

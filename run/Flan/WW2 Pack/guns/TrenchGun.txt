@@ -2,7 +2,7 @@ Name Trench Gun
 ShortName trenchgun
 //The ammo this gun uses (shortName)
 Ammo trenchgunAmmo
-Icon Trenchgun
+Icon trenchgun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -17,8 +17,8 @@ Damage 3
 Accuracy 14
 //Time in ticks between rounds
 ShootDelay 15
-ShootSound W1200Shoot
-ReloadSound W1200Reload
+ShootSound TrenchGunShoot
+ReloadSound TrenchGunReload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0
@@ -31,5 +31,11 @@ Deployable False
 DeployedModel None
 //Model settings
 Model ww2.Trenchgun
-Texture SkinTrenchgun
+Texture trenchgun
+Paintjob trenchgun_acacia trenchgun_acacia orange 2
+Paintjob trenchgun_birch trenchgun_birch black 1 yellow 1
+Paintjob trenchgun_black trenchgun_black black 2
+Paintjob trenchgun_frog trenchgun_frog green 1 brown 1
+Paintjob trenchgun_green trenchgun_green green 2
+Paintjob trenchgun_oak trenchgun_oak brown 2
 ModelScale 0.35

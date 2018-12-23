@@ -2,7 +2,7 @@ Name PIAT
 ShortName PIAT
 //The ammo this gun uses (shortName)
 Ammo PIATAmmo
-Icon PIAT
+Icon piat
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -22,7 +22,7 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.PIAT
-Texture PIAT
+Texture piat
 ModelScale 0.7
 //Modifiers
 MoveSpeedModifier 0.6

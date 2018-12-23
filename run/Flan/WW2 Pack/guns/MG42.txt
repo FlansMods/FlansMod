@@ -32,7 +32,7 @@ Deployable True
 //Place the compiled model class in the models folder
 DeployedModel ww2.MG42
 //Place the texture .png in the skins folder
-DeployedTexture SkinMG42
+DeployedTexture mg42
 //The length from the bipod to the trigger of the gun. Deployables only.
 StandBackDistance 1.4
 //Degrees above and below level that the gun can work within. 90 degrees is vertical

@@ -4,7 +4,7 @@ ShortName Tiger
 //Visuals
 Icon Tiger
 Model ww2.Tiger
-Texture SkinTiger
+Texture tiger
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

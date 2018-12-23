@@ -4,7 +4,7 @@ ShortName Sherman
 //Visuals
 Icon Sherman
 Model ww2.Sherman
-Texture SkinSherman
+Texture sherman
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5

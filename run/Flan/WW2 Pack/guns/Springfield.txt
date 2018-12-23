@@ -23,5 +23,11 @@ BulletSpeed 10.0
 Deployable False
 DeployedModel None
 Model ww2.Springfield
-Texture SkinSpringfield
+Texture springfield
+Paintjob springfield_acacia springfield_acacia orange 2
+Paintjob springfield_birch springfield_birch black 1 yellow 1
+Paintjob springfield_black springfield_black black 2
+Paintjob springfield_frog springfield_frog green 1 brown 1
+Paintjob springfield_green springfield_green green 2
+Paintjob springfield_oak springfield_oak brown 2
 ModelScale 0.35

@@ -4,7 +4,7 @@ ShortName Hellcat
 //Visuals
 Icon Hellcat
 Model ww2.Hellcat
-Texture SkinHellcat
+Texture Hellcat
 RotateWheels True
 //Third Person Camera Distance
 CameraDistance 7.5

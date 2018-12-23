@@ -2,7 +2,7 @@ Name M1 Garand
 ShortName m1Garand
 //The ammo this gun uses (shortName)
 Ammo m1GarandAmmo
-Icon m1Garand
+Icon m1garand
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -25,5 +25,11 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.M1Garand
-Texture SkinM1Garand
+Texture m1garand
+Paintjob m1garand_acacia m1garand_acacia orange 2
+Paintjob m1garand_birch m1garand_birch black 1 yellow 1
+Paintjob m1garand_black m1garand_black black 2
+Paintjob m1garand_frog m1garand_frog green 1 brown 1
+Paintjob m1garand_green m1garand_green green 2
+Paintjob m1garand_oak m1garand_oak brown 2
 ModelScale 0.35

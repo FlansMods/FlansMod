@@ -4,7 +4,7 @@ ShortName SdkFz2
 //Visuals
 Icon SdkFz2
 Model ww2.SdkFz2
-Texture SkinSdkFz2
+Texture sdkfz2
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 5.0

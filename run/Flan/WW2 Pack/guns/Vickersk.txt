@@ -2,7 +2,7 @@ Name Vickers K
 ShortName vickersk
 //The ammo this gun uses (shortName)
 Ammo vickerskAmmo100
-Icon Vickersk
+Icon vickersk
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
@@ -32,7 +32,7 @@ Deployable True
 //Place the compiled model class in the models folder
 DeployedModel ww2.vickersk
 //Place the texture .png in the skins folder
-DeployedTexture SkinVickersK
+DeployedTexture vickersk
 //The length from the bipod to the trigger of the gun. Deployables only.
 StandBackDistance 1.5
 //Degrees above and below level that the gun can work within. 90 degrees is vertical

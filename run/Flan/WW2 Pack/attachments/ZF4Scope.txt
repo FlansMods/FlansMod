@@ -20,7 +20,7 @@ FOVZoomLevel 2.0
 ZoomOverlay wwiikar98ksniper
 //Model
 Model ww2.ZF4Scope
-Texture SkinZF-4
+Texture ZF-4
 ModelScale
 //Recipe
 RecipeOutput 1

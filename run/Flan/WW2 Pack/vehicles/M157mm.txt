@@ -4,7 +4,7 @@ ShortName M157mm
 //Visuals
 Icon M157MM
 Model ww2.M157MM
-Texture SkinM157mmGun
+Texture M157mmGun
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle

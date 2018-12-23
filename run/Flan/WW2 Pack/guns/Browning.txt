@@ -32,7 +32,7 @@ Deployable True
 //Place the compiled model class in the models folder
 DeployedModel ww2.Browning
 //Place the texture .png in the skins folder
-DeployedTexture SkinBrowning
+DeployedTexture browning
 //The length from the bipod to the trigger of the gun. Deployables only.
 StandBackDistance 1.0
 //Degrees above and below level that the gun can work within. 90 degrees is vertical

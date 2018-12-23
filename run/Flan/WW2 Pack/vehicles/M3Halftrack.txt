@@ -5,7 +5,7 @@ ItemID 23400
 //Visuals
 Icon M3Halftrack
 Model ww2.M3Halftrack
-Texture SkinM3Halftrack
+Texture M3Halftrack
 RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5
