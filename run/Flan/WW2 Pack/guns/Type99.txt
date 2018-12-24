@@ -30,7 +30,7 @@ Deployable True
 //All the following is for deployables only. Other guns do not need any of this
 //-----------------------------------------------------------------------------
 //Place the compiled model class in the models folder
-DeployedModel ww2.Bren
+DeployedModel ww2.Type99
 //Place the texture .png in the skins folder
 DeployedTexture Type99
 //The length from the bipod to the trigger of the gun. Deployables only.

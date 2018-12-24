@@ -11,7 +11,7 @@ import com.flansmod.client.tmt.Shape2D;
 
 public class ModelLeopard2A6 extends ModelVehicle //Same as Filename
 {
-	int textureX = 2048;
+	int textureX = 4096;
 	int textureY = 4096;
 	
 	public ModelLeopard2A6() //Same as Filename
