@@ -3,10 +3,12 @@ package com.flansmod.common.driveables;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flansmod.common.network.PacketShotData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -26,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -563,6 +566,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		//Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
+		Vector3f globalGunVec = Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null); //Added a separate global gunV	ec, and replaced all mentions of gunVec to globalGunVec
 		Vector3f lookVector = getLookVector(shootPoint);
 		
 		//If its a pilot gun, then it is using a gun type, so do the following
@@ -591,32 +595,48 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			lookVector.z += (float)world.rand.nextGaussian() * spread;
 			
 			lookVector.scale(500.0f);
-			
+
 			// Instant bullets. Do a raytrace
 			if(gunType.bulletSpeed == 0.0f)
 			{
 				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
 				{
-					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0);
+					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, globalGunVec, lookVector, 0);
 					Entity victim = null;
-					Vector3f hitPos = Vector3f.add(gunVec, lookVector, null);
+					//Sound to make sure this runs
+//					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
+					Vector3f hitPos = Vector3f.add(globalGunVec, lookVector, null);
 					BulletHit firstHit = null;
 					if(!hits.isEmpty())
 					{
 						firstHit = hits.get(0);
-						hitPos = Vector3f.add(gunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
+						hitPos = Vector3f.add(globalGunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
+						//debug chat message to get the location of impact
+						Minecraft.getMinecraft().player.sendMessage(new TextComponentString(" X:"+hitPos.x+" Y:"+hitPos.y+" Z:"+hitPos.z));
 						victim = firstHit.GetEntity();
+						if(victim != null){
+							//Name any entity that is hit. Though I get expected results where the entity I aim at is mentioned, they are not affected in game (no damage, no knockback, etc)
+							Minecraft.getMinecraft().player.sendMessage(new TextComponentString(victim.getName()));
+						}
+
+					}else{
+						Minecraft.getMinecraft().player.sendMessage(new TextComponentString("No hits"));
+
 					}
 					
-					if(FlansMod.DEBUG && world.isRemote)
+					if(FlansMod.DEBUG) //Removed &&world.isRemote to ensure the line is run, but I could never get it to work
 					{
-						world.spawnEntity(new EntityDebugDot(world, gunVec, 100, 1.0f, 1.0f, 1.0f));
+						world.spawnEntity(new EntityDebugDot(world, globalGunVec, 100, 1.0f, 1.0f, 1.0f));
+
 					}
 					
 					if(driver != null)
 					{
-						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
-						((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, globalGunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
+						FlansMod.getPacketHandler().sendToServer(new PacketShotData(shotData)); //I tried using this to get shots to register, I haven't noticed if it made any difference
+
+						//There was no gunstack passed in this method before, which would cause a NullPointerException. I guessed with sending shootablestack, I'm not sure if it was right
+						((ItemGun)gunType.item).ServerHandleDrivableShotData(shootableStack, -1, world, this, this.getDriver(), false, shotData);
 					}
 				}
 			}

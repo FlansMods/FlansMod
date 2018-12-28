@@ -566,7 +566,7 @@ public class ItemGun extends Item implements IPaintableItem
 	public void ServerHandleShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
 	{
 		// Get useful things
-		if(!(entity instanceof EntityPlayerMP))
+		if(!(entity instanceof EntityPlayerMP)) //Vehicle entities quickly make the method return nothing, and so the shots are never handled.
 		{
 			return;
 		}
@@ -675,6 +675,111 @@ public class ItemGun extends Item implements IPaintableItem
 					
 					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet, silenced);
 					
+					shotsFiredServer.add(shotData);
+				}
+			}
+		}
+	}
+	// I wanted to make a method specific to handling vehicle weapons, but I don't know enough about flans to hack one up. This whole thing doesn't work, don't expect it to.
+	public void ServerHandleDrivableShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, Entity driver, boolean isOffHand, ShotData shotData)
+	{
+		// Get useful things
+		if(!(driver instanceof EntityPlayerMP))
+		{
+			return;
+		}
+		EntityPlayerMP player = (EntityPlayerMP)driver;
+		PlayerData data = PlayerHandler.getPlayerData(player, Side.SERVER);
+		if(data == null)
+		{
+			return;
+		}
+
+
+		boolean isExtraBullet = shotData instanceof InstantShotData && ((InstantShotData)shotData).isExtraBullet;
+
+		//Go through the bullet stacks in the gun and see if any of them are not null
+		int bulletID = 0;
+		ItemStack bulletStack = ItemStack.EMPTY.copy();
+		for(; bulletID < type.numAmmoItemsInGun; bulletID++)
+		{
+			ItemStack checkingStack = getBulletItemStack(gunstack, bulletID); //Hey
+			if(checkingStack != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+			{
+				bulletStack = checkingStack;
+				break;
+			}
+		}
+
+		// We have no bullet stack. So we need to reload. The player will send us a message requesting we do a reload
+//		if(bulletStack.isEmpty())
+//		{
+//			return;
+//		}
+
+//		if(bulletStack.getItem() instanceof ItemShootable)
+		if(true)
+		{
+//			ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
+//
+//			if(!isExtraBullet)
+//			{
+//				//Damage the bullet item
+//				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+//
+//				//Update the stack in the gun
+//				setBulletItemStack(gunstack, bulletStack, bulletID);
+//
+//			}
+
+			// Spawn an entity, classic style
+			if(shotData instanceof SpawnEntityShotData)
+			{
+				// Play a sound if the previous sound has finished
+				if(soundDelay <= 0 && type.shootSound != null)
+				{
+					AttachmentType barrel = type.getBarrel(gunstack);
+					boolean silenced = barrel != null && barrel.silencer;
+					//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
+					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
+					soundDelay = type.shootSoundLength;
+				}
+
+				//Shoot
+				// Spawn the bullet entities
+				for(int k = 0; k < type.numBullets * bullet.numBullets; k++)
+				{
+					// Actually shoot the bullet
+					((ItemShootable)bulletStack.getItem()).Shoot(world,
+							new Vector3f(player.posX, player.posY + player.getEyeHeight(), player.posZ),
+							new Vector3f(player.getLookVec()),
+							type.getDamage(gunstack),
+							(player.isSneaking() ? 0.7F : 1F) * type.getSpread(gunstack) * bullet.bulletSpread,
+							type.getBulletSpeed(gunstack),
+							type,
+							player);
+				}
+			}
+			// Do a raytrace check on what they've sent us.
+			else if(shotData instanceof InstantShotData)
+			{
+				InstantShotData instantData = (InstantShotData)shotData;
+				//if(stuff)
+				//{
+				//	calculate our own raytrace to verify they're not cheating
+				//}
+				// else
+				{
+					// Take a point halfway along. Then make the radius encapsulate both ends and then some
+					//Vector3f targetPoint = Vector3f.add(instantData.origin, instantData.hitPos, null);
+					//targetPoint.scale(0.5f);
+					//float radius = Vector3f.sub(instantData.origin, instantData.hitPos, null).length();
+					//radius += 50.0f;
+					AttachmentType barrel = type.getBarrel(gunstack);
+					boolean silenced = barrel != null && barrel.silencer;
+
+					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet, silenced);
+
 					shotsFiredServer.add(shotData);
 				}
 			}
