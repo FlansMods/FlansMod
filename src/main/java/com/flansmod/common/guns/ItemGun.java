@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.flansmod.common.driveables.EntitySeat;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Multimap;
@@ -681,7 +682,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	// I wanted to make a method specific to handling vehicle weapons, but I don't know enough about flans to hack one up. This whole thing doesn't work, don't expect it to.
-	public void ServerHandleDrivableShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, Entity driver, boolean isOffHand, ShotData shotData)
+	public void ServerHandleDrivableShotData(ItemStack bulletStack, int gunSlot, World world, Entity driver, boolean isOffHand, ShotData shotData)
 	{
 		// Get useful things
 		if(!(driver instanceof EntityPlayerMP))
@@ -700,37 +701,26 @@ public class ItemGun extends Item implements IPaintableItem
 
 		//Go through the bullet stacks in the gun and see if any of them are not null
 		int bulletID = 0;
-		ItemStack bulletStack = ItemStack.EMPTY.copy();
-		for(; bulletID < type.numAmmoItemsInGun; bulletID++)
-		{
-			ItemStack checkingStack = getBulletItemStack(gunstack, bulletID); //Hey
-			if(checkingStack != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+		if(bulletStack == null /*&& bulletStack.getItemDamage() >= bulletStack.getMaxDamage()*/) //Got a NPE at bulletStack.getItemDamage, so I commented it out. Don't jnow what problems it will cause
 			{
-				bulletStack = checkingStack;
-				break;
+				return;
 			}
-		}
 
 		// We have no bullet stack. So we need to reload. The player will send us a message requesting we do a reload
-//		if(bulletStack.isEmpty())
-//		{
-//			return;
-//		}
-
-//		if(bulletStack.getItem() instanceof ItemShootable)
-		if(true)
+		if(bulletStack.isEmpty())
 		{
-//			ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
-//
-//			if(!isExtraBullet)
-//			{
-//				//Damage the bullet item
-//				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-//
-//				//Update the stack in the gun
-//				setBulletItemStack(gunstack, bulletStack, bulletID);
-//
-//			}
+			return;
+		}
+
+		if(bulletStack.getItem() instanceof ItemShootable)
+		{
+			ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
+
+			if(!isExtraBullet)
+			{
+				//Damage the bullet item
+				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+			}
 
 			// Spawn an entity, classic style
 			if(shotData instanceof SpawnEntityShotData)
@@ -738,10 +728,7 @@ public class ItemGun extends Item implements IPaintableItem
 				// Play a sound if the previous sound has finished
 				if(soundDelay <= 0 && type.shootSound != null)
 				{
-					AttachmentType barrel = type.getBarrel(gunstack);
-					boolean silenced = barrel != null && barrel.silencer;
-					//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
-					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
+					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, false);
 					soundDelay = type.shootSoundLength;
 				}
 
@@ -753,9 +740,9 @@ public class ItemGun extends Item implements IPaintableItem
 					((ItemShootable)bulletStack.getItem()).Shoot(world,
 							new Vector3f(player.posX, player.posY + player.getEyeHeight(), player.posZ),
 							new Vector3f(player.getLookVec()),
-							type.getDamage(gunstack),
-							(player.isSneaking() ? 0.7F : 1F) * type.getSpread(gunstack) * bullet.bulletSpread,
-							type.getBulletSpeed(gunstack),
+							type.damage, //Cant use getter methods because they assume you're holding a gun. Probably better to make new getter methods but I wasn't too sure.
+							type.bulletSpread,
+							type.bulletSpeed,
 							type,
 							player);
 				}
@@ -775,10 +762,8 @@ public class ItemGun extends Item implements IPaintableItem
 					//targetPoint.scale(0.5f);
 					//float radius = Vector3f.sub(instantData.origin, instantData.hitPos, null).length();
 					//radius += 50.0f;
-					AttachmentType barrel = type.getBarrel(gunstack);
-					boolean silenced = barrel != null && barrel.silencer;
 
-					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet, silenced);
+					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.damage, isExtraBullet, false);
 
 					shotsFiredServer.add(shotData);
 				}
@@ -927,8 +912,7 @@ public class ItemGun extends Item implements IPaintableItem
 		{
 			EntityPlayer player = (EntityPlayer)entity;
 			EnumHand hand;
-			if(itemstack == player.getHeldItemMainhand())
-			{
+			if (itemstack == player.getHeldItemMainhand() /*|| player.getRidingEntity() instanceof EntitySeat*/) {
 				hand = EnumHand.MAIN_HAND;
 			}
 			else if(itemstack == player.getHeldItemOffhand())

@@ -604,7 +604,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, globalGunVec, lookVector, 0);
 					Entity victim = null;
 					//Sound to make sure this runs
-//					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
 					Vector3f hitPos = Vector3f.add(globalGunVec, lookVector, null);
 					BulletHit firstHit = null;
 					if(!hits.isEmpty())
@@ -632,11 +632,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					
 					if(driver != null)
 					{
-						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, globalGunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
+						//Fixed the type argument.
+						ShotData shotData = new InstantShotData(-2, EnumHand.MAIN_HAND, gunType, shootableType, driver, globalGunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
 						FlansMod.getPacketHandler().sendToServer(new PacketShotData(shotData)); //I tried using this to get shots to register, I haven't noticed if it made any difference
 
 						//There was no gunstack passed in this method before, which would cause a NullPointerException. I guessed with sending shootablestack, I'm not sure if it was right
-						((ItemGun)gunType.item).ServerHandleDrivableShotData(shootableStack, -1, world, this, this.getDriver(), false, shotData);
+						//Reverted to previous amount of arguments, no need to pass the Driveable Entity
+						((ItemGun)gunType.item).ServerHandleDrivableShotData(shootableStack, -1, world, this.getDriver(), false, shotData);
 					}
 				}
 			}

@@ -3,6 +3,8 @@ package com.flansmod.common.network;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.driveables.VehicleType;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.EntityLivingBase;
@@ -131,6 +133,18 @@ public class PacketShotData extends PacketBase
 				if(entry.shotFrom instanceof GunType)
 				{
 					((ItemGun)entry.shotFrom.item).ServerHandleShotData(null, entry.slot, player.world, player, false, entry);
+				}
+				else if(entry.shotFrom instanceof VehicleType) //Use different ServerHandleShotData method
+				{
+					((ItemGun)entry.shotFrom.item).ServerHandleDrivableShotData(null, entry.slot, player.world, player,false, entry);
+				}
+			}
+			//Is it a vehicle weapon?
+			else if(entry.slot == -2)//I changed the slot for vehicle weapons to -2 so that I can identify them as such, haven't noticed it breaking anything
+			{
+				if(entry.shotFrom instanceof GunType)
+				{
+					((ItemGun)entry.shotFrom.item).ServerHandleDrivableShotData(null, entry.slot, player.world, player,false, entry);
 				}
 			}
 			else if(entry.hand == EnumHand.OFF_HAND)
