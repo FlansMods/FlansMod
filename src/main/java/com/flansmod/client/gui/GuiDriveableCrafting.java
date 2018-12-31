@@ -280,7 +280,13 @@ public class GuiDriveableCrafting extends GuiScreen
 						//If we already have engines of this type, add these ones to the stack
 						if(engines.containsKey(partType))
 						{
-							engines.get(partType).setCount(engines.get(partType).getCount() + stackInSlot.getCount());
+//							engines.get(partType).setCount(engines.get(partType).getCount() + stackInSlot.getCount());
+							int count = engines.get(partType).getCount();
+							count += stackInSlot.getCount();
+							if(count > 4){
+								count = 4;
+							}
+							engines.get(partType).setCount(count);
 						}
 						//Else, make this the first stack
 						else engines.put(partType, stackInSlot);
@@ -330,6 +336,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			super.drawScreen(i, j, f);
 			buttonList.get(0).enabled = true;
 		}
+
 	}
 	
 	/**
