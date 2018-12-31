@@ -68,7 +68,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 									 float pitch, EntityLivingBase shooter, float spread, float damage,
 									 InfoType shotFrom)
 	{
-		return new EntityBullet(world, origin, yaw, pitch, shooter, spread, damage, this.type, 3.0f, shotFrom);
+		return new EntityBullet(world, origin, yaw, pitch, shooter, spread, damage, this.type, 3f, shotFrom);
 	}
 	
 	//Can be overriden to allow new types of bullets to be created, Handheld constructor

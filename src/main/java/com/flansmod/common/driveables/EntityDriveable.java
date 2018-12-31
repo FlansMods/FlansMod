@@ -612,12 +612,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						firstHit = hits.get(0);
 						hitPos = Vector3f.add(globalGunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
 						//debug chat message to get the location of impact
-						Minecraft.getMinecraft().player.sendMessage(new TextComponentString(" X:"+hitPos.x+" Y:"+hitPos.y+" Z:"+hitPos.z));
+						//Minecraft.getMinecraft().player.sendMessage(new TextComponentString(" X:"+hitPos.x+" Y:"+hitPos.y+" Z:"+hitPos.z));
 						victim = firstHit.GetEntity();
-						if(victim != null){
+						/*if(victim != null){
 							//Name any entity that is hit. Though I get expected results where the entity I aim at is mentioned, they are not affected in game (no damage, no knockback, etc)
 							Minecraft.getMinecraft().player.sendMessage(new TextComponentString(victim.getName()));
-						}
+						}*/
 
 					}else{
 						Minecraft.getMinecraft().player.sendMessage(new TextComponentString("No hits"));
@@ -736,7 +736,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						{
 							int spread = 0;
 							int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-							float shellSpeed = 3F;
+							float shellSpeed = 6F;
 							
 							ItemStack bulletStack = driveableData.getStackInSlot(slot);
 							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
