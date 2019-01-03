@@ -115,7 +115,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		posZ = d2;
 		float f = width / 2.0F;
 		float f1 = height;
-		setEntityBoundingBox(new AxisAlignedBB(d - f, (d1 - yOffset) + height, d2 - f, d + f, (d1 - yOffset) + height + f1, d2 + f));
+		setEntityBoundingBox(new AxisAlignedBB(d - f, (d1 - yOffset), d2 - f, d + f, (d1 - yOffset) + f1, d2 + f));
 	}
 	
 	@Override
@@ -568,7 +568,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				entityplayer.startRiding(this);
 			for(int i = 0; i < (type.shareAmmo ? 1 : type.numBarrels); i++)
 			{
-				if(ammo[i] == null && !ammo[i].isEmpty())
+				if(ammo[i] == null  || ammo[i].isEmpty())
 				{
 					int slot = findAmmo(entityplayer);
 					if(slot >= 0)
