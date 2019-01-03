@@ -619,9 +619,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							Minecraft.getMinecraft().player.sendMessage(new TextComponentString(victim.getName()));
 						}*/
 
-					}else{
-						Minecraft.getMinecraft().player.sendMessage(new TextComponentString("No hits"));
-
 					}
 					
 					if(FlansMod.DEBUG) //Removed &&world.isRemote to ensure the line is run, but I could never get it to work
