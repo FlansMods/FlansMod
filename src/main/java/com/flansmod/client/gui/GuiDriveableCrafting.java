@@ -280,7 +280,9 @@ public class GuiDriveableCrafting extends GuiScreen
 						//If we already have engines of this type, add these ones to the stack
 						if(engines.containsKey(partType))
 						{
-							engines.get(partType).setCount(engines.get(partType).getCount() + stackInSlot.getCount());
+							int count = engines.get(partType).getCount()+stackInSlot.getCount();
+							//Bandaid fix to duplication bug. Limits duplication to stack of 4
+							engines.get(partType).setCount(count > 4 ? 4 : count);
 						}
 						//Else, make this the first stack
 						else engines.put(partType, stackInSlot);
