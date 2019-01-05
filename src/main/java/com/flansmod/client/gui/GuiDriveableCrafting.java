@@ -269,9 +269,9 @@ public class GuiDriveableCrafting extends GuiScreen
 			for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)
 			{
 				//Get the stack in each slot
-				ItemStack stackInSlot = temporaryInventory.getStackInSlot(n);
+				ItemStack stackInSlot = temporaryInventory.getStackInSlot(n).copy();
 				//Check to see if its a part
-				if(stackInSlot != null && stackInSlot.getItem() instanceof ItemPart)
+				if(stackInSlot.getItem() instanceof ItemPart)
 				{
 					PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 					//Check its an engine that we can use
