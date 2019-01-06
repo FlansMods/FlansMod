@@ -87,8 +87,9 @@ public class GuiDriveableRepair extends GuiScreen
 		{
 			DriveablePart part = partsToDraw.get(i);
 			GuiButton button = buttonList.get(i);
+			button.visible = part.health <= 0;
 			button.x = guiOriginX + 9;
-			button.y = part.health <= 0 ? guiOriginY + y : -1000;
+			button.y = guiOriginY + y;
 			y += part.health <= 0 ? 40 : 20;
 		}
 	}
@@ -171,9 +172,9 @@ public class GuiDriveableRepair extends GuiScreen
 						for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
 						{
 							//Get the stack in each slot
-							ItemStack stackInSlot = temporaryInventory.getStackInSlot(m);
+							ItemStack stackInSlot = temporaryInventory.getStackInSlot(m).copy();
 							//If the stack is what we want
-							if(stackInSlot != null && stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
+							if(stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
 							{
 								//Work out the amount to take from the stack
 								int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);

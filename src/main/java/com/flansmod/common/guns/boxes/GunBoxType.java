@@ -324,9 +324,9 @@ public class GunBoxType extends BoxType
 				for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
 				{
 					//Get the stack in each slot
-					ItemStack stackInSlot = temporaryInventory.getStackInSlot(m);
+					ItemStack stackInSlot = temporaryInventory.getStackInSlot(m).copy();
 					//If the stack is what we want
-					if(stackInSlot != null && stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
+					if(stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
 					{
 						//Work out the amount to take from the stack
 						int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);
