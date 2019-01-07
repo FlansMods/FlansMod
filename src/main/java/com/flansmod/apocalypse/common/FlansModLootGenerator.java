@@ -6,6 +6,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -279,13 +280,21 @@ public class FlansModLootGenerator
 		if(rand.nextInt(4) == 0)
 		{
 			//Get armour box
-			return ArmourBoxType.boxes.get(new ArrayList<>(ArmourBoxType.boxes.keySet()).get(rand.nextInt(ArmourBoxType.boxes.size()))).block;
+			if(ArmourBoxType.boxes.size() > 0)
+			{
+				return ArmourBoxType.boxes.get(new ArrayList<>(ArmourBoxType.boxes.keySet()).get(rand.nextInt(ArmourBoxType.boxes.size()))).block;
+			}
 		}
 		else
 		{
 			//Get weapon box
-			return GunBoxType.gunBoxMap.get(new ArrayList<>(GunBoxType.gunBoxMap.keySet()).get(rand.nextInt(GunBoxType.gunBoxMap.size()))).block;
+			if(GunBoxType.gunBoxMap.size() > 0)
+			{
+				return GunBoxType.gunBoxMap.get(new ArrayList<>(GunBoxType.gunBoxMap.keySet()).get(rand.nextInt(GunBoxType.gunBoxMap.size()))).block;
+			}
 		}
+		
+		return Blocks.AIR;
 	}
 	
 	public DriveableType getRandomDriveable(Random rand)
