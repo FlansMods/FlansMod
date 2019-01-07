@@ -116,15 +116,17 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean GetMouseHeld(EnumHand hand)
 	{
 		if(FlansMod.shootOnRightClick)
+			return hand == EnumHand.MAIN_HAND ? rightMouseHeld : leftMouseHeld;
+		else
 			return hand == EnumHand.MAIN_HAND ? leftMouseHeld : rightMouseHeld;
-		else return hand == EnumHand.MAIN_HAND ? rightMouseHeld : leftMouseHeld;
 	}
 	
 	private static boolean GetLastMouseHeld(EnumHand hand)
 	{
 		if(FlansMod.shootOnRightClick)
+			return hand == EnumHand.MAIN_HAND ? lastRightMouseHeld : lastLeftMouseHeld;
+		else
 			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld;
-		else return hand == EnumHand.MAIN_HAND ? lastRightMouseHeld : lastLeftMouseHeld;
 	}
 	
 	private static List<ShotData> shotsFiredClient = new ArrayList<>(), shotsFiredServer = new ArrayList<>();
