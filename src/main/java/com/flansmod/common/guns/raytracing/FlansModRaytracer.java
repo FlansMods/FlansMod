@@ -120,6 +120,7 @@ public class FlansModRaytracer
 								if (result != null) {
 									mop = result;
 									entity = part;
+									break;
 								}
 							}
 						}
