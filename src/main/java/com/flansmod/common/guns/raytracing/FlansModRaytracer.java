@@ -108,7 +108,6 @@ public class FlansModRaytracer
 						&& !entity.isDead
 						&& (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade))
 				{
-					entity.getEntityBoundingBox();
 					RayTraceResult mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
 					if(mop != null)
 					{
