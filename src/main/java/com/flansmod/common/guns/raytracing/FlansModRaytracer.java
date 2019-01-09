@@ -114,8 +114,8 @@ public class FlansModRaytracer
 					{
 						Entity[] parts = entity.getParts();
 						Boolean hit = true;
-						//Checking for Parts. If they exist the intecepted part is calculated and used instead of the whole entity.
-						//If no part is intercepted, the entity itself is not intecepted 
+						//Checking for Parts. If they exist, the intecepted part is calculated and used instead of the whole entity.
+						//If no part is intercepted, the entity itself is not hit 
 						if (parts != null) {
 							hit = false;
 							for (Entity part:parts) {
