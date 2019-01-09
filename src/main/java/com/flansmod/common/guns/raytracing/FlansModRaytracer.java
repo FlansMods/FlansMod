@@ -112,19 +112,25 @@ public class FlansModRaytracer
 					RayTraceResult mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
 					if(mop != null)
 					{
-						//Checking for Parts. If they exist the hit part is calculated and used instead of the whole entity
 						Entity[] parts = entity.getParts();
+						Boolean hit = true;
+						//Checking for Parts. If they exist the intecepted part is calculated and used instead of the whole entity.
+						//If no part is intercepted, the entity itself is not intecepted 
 						if (parts != null) {
+							hit = false;
 							for (Entity part:parts) {
 								RayTraceResult result = part.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
 								if (result != null) {
 									mop = result;
 									entity = part;
+									hit = true;
 									break;
 								}
 							}
 						}
 
+						if (hit) {
+							
 						Vector3f hitPoint = new Vector3f(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
 						float hitLambda = 1F;
 						if(motion.x != 0F)
@@ -137,6 +143,7 @@ public class FlansModRaytracer
 							hitLambda = -hitLambda;
 						
 						hits.add(new EntityHit(entity, hitLambda));
+						}
 					}
 				}
 			}
