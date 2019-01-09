@@ -39,7 +39,7 @@ public class FlansModRaytracer
 	{
 		//Create a list for all bullet hits
 		ArrayList<BulletHit> hits = new ArrayList<>();
-
+		
 		float speed = motion.length();
 		
 		//Iterate over all entities
@@ -100,30 +100,53 @@ public class FlansModRaytracer
 					}
 				}
 			}
-
+			
 			if(shouldDoNormalHitDetect)
 			{
 				Entity entity = obj;
 				if(entity != entityToIgnore && entity != playerToIgnore
 						&& !entity.isDead
-						&& (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade)
-						&& entity.getEntityBoundingBox() != null)
+						&& (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade))
 				{
+					entity.getEntityBoundingBox();
 					RayTraceResult mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
 					if(mop != null)
 					{
-						Vector3f hitPoint = new Vector3f(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
-						float hitLambda = 1F;
-						if(motion.x != 0F)
-							hitLambda = hitPoint.x / motion.x;
-						else if(motion.y != 0F)
-							hitLambda = hitPoint.y / motion.y;
-						else if(motion.z != 0F)
-							hitLambda = hitPoint.z / motion.z;
-						if(hitLambda < 0)
-							hitLambda = -hitLambda;
+						Entity[] parts = entity.getParts();
+						boolean hit = true;
+						// If parts exist, the intercepted part is calculated and used instead of the whole entity.
+						// If no part is intercepted, the entity itself is not hit
+						if(parts != null)
+						{
+							hit = false;
+							for(Entity part : parts)
+							{
+								RayTraceResult result = part.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
+								if(result != null)
+								{
+									mop = result;
+									entity = part;
+									hit = true;
+									break;
+								}
+							}
+						}
 						
-						hits.add(new EntityHit(entity, hitLambda));
+						if(hit)
+						{
+							Vector3f hitPoint = new Vector3f(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
+							float hitLambda = 1F;
+							if(motion.x != 0F)
+								hitLambda = hitPoint.x / motion.x;
+							else if(motion.y != 0F)
+								hitLambda = hitPoint.y / motion.y;
+							else if(motion.z != 0F)
+								hitLambda = hitPoint.z / motion.z;
+							if(hitLambda < 0)
+								hitLambda = -hitLambda;
+							
+							hits.add(new EntityHit(entity, hitLambda));
+						}
 					}
 				}
 			}
@@ -171,7 +194,7 @@ public class FlansModRaytracer
 		
 		ItemStack itemstack = hand == EnumHand.OFF_HAND ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
 		
-		if(itemstack != null && itemstack.getItem() instanceof ItemGun)
+		if(itemstack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)itemstack.getItem()).GetType();
 			AttachmentType barrelType = gunType.getBarrel(itemstack);
@@ -181,7 +204,7 @@ public class FlansModRaytracer
 		
 		return new Vector3f(player.getPositionEyes(0.0f));
 	}
-
+	
 	public static abstract class BulletHit implements Comparable<BulletHit>
 	{
 		/**
@@ -193,7 +216,7 @@ public class FlansModRaytracer
 		{
 			intersectTime = f;
 		}
-
+		
 		@Override
 		public int compareTo(BulletHit other)
 		{
@@ -216,7 +239,7 @@ public class FlansModRaytracer
 			super(f);
 			raytraceResult = mop;
 		}
-
+		
 		@Override
 		public Entity GetEntity()
 		{
@@ -292,7 +315,7 @@ public class FlansModRaytracer
 		if(hit instanceof PlayerBulletHit) return 3;
 		return -1;
 	}
-
+	
 	public static void WriteToBuffer(BulletHit hit, ByteBuf buffer)
 	{
 		buffer.writeByte(GetClassType(hit));
@@ -402,5 +425,5 @@ public class FlansModRaytracer
 		
 		return null;
 	}
-
+	
 }
