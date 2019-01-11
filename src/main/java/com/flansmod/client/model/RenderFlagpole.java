@@ -4,13 +4,12 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.common.teams.EntityFlagpole;
 
-public class RenderFlagpole extends Render
+public class RenderFlagpole extends Render<EntityFlagpole>
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "teamsMod/Flagpole.png");
 	
@@ -23,10 +22,9 @@ public class RenderFlagpole extends Render
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
+	public void doRender(EntityFlagpole flagpole, double d, double d1, double d2, float f, float f1)
 	{
-		bindEntityTexture(entity);
-		EntityFlagpole flagpole = (EntityFlagpole)entity;
+		bindEntityTexture(flagpole);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
@@ -39,15 +37,15 @@ public class RenderFlagpole extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityFlagpole entity)
 	{
 		return texture;
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityFlagpole>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityFlagpole> createRenderFor(RenderManager manager)
 		{
 			return new RenderFlagpole(manager);
 		}

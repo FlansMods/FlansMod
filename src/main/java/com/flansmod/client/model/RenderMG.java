@@ -4,14 +4,13 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.guns.EntityMG;
 
-public class RenderMG extends Render
+public class RenderMG extends Render<EntityMG>
 {
 	public RenderMG(RenderManager renderManager)
 	{
@@ -19,7 +18,8 @@ public class RenderMG extends Render
 		shadowSize = 0.5F;
 	}
 	
-	public void render(EntityMG mg, double d, double d1, double d2, float f, float f1)
+	@Override
+	public void doRender(EntityMG mg, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(mg);
 		GL11.glPushMatrix();
@@ -37,21 +37,15 @@ public class RenderMG extends Render
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
-	{
-		render((EntityMG)entity, d, d1, d2, f, f1);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityMG entity)
 	{
 		return FlansModResourceHandler.getDeployableTexture(((EntityMG)entity).type);
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityMG>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityMG> createRenderFor(RenderManager manager)
 		{
 			return new RenderMG(manager);
 		}

@@ -23,7 +23,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.EnumMechaSlotType;
@@ -473,10 +472,10 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 		GL11.glPopMatrix();
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityMecha>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityMecha> createRenderFor(RenderManager manager)
 		{
 			return new RenderMecha(manager);
 		}

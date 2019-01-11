@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 
-public class RenderNukeDrop extends Render
+public class RenderNukeDrop extends Render<EntityNukeDrop>
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmodapocalypse", "textures/entity/NukeDrop.png");
 	private ModelNukeDrop model;
@@ -29,7 +29,7 @@ public class RenderNukeDrop extends Render
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	public void render(Entity entity, double x, double y, double z, float p_76986_8_, float partialTicks)
+	public void render(EntityNukeDrop entity, double x, double y, double z, float p_76986_8_, float partialTicks)
 	{
 		bindEntityTexture(entity);
 		
@@ -79,7 +79,7 @@ public class RenderNukeDrop extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityNukeDrop entity)
 	{
 		return texture;
 	}

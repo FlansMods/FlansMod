@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
@@ -13,7 +12,7 @@ import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.Team;
 
-public class RenderFlag extends Render
+public class RenderFlag extends Render<EntityFlag>
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "teamsMod/Flagpole.png");
 	
@@ -27,10 +26,9 @@ public class RenderFlag extends Render
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
+	public void doRender(EntityFlag flag, double d, double d1, double d2, float f, float f1)
 	{
-		bindEntityTexture(entity);
-		EntityFlag flag = (EntityFlag)entity;
+		bindEntityTexture(flag);
 		int teamID = flag.getTeamID();
 		Team team = FlansModClient.getTeam(teamID);
 		if(team == null)
@@ -75,15 +73,15 @@ public class RenderFlag extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityFlag entity)
 	{
 		return texture;
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityFlag>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityFlag> createRenderFor(RenderManager manager)
 		{
 			return new RenderFlag(manager);
 		}

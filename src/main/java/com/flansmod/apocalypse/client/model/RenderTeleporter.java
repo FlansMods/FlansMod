@@ -1,13 +1,14 @@
 package com.flansmod.apocalypse.client.model;
 
+import com.flansmod.apocalypse.common.entity.EntityTeleporter;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderTeleporter extends Render
+public class RenderTeleporter extends Render<EntityTeleporter>
 {
 	private ModelTeleporter model;
 	private static final ResourceLocation texture = new ResourceLocation("flansmodapocalypse", "textures/entity/Teleporter.png");
@@ -19,7 +20,7 @@ public class RenderTeleporter extends Render
 		model = new ModelTeleporter();
 	}
 	
-	public void doRender(Entity entity, double x, double y, double z, float p_76986_8_, float partialTicks)
+	public void doRender(EntityTeleporter entity, double x, double y, double z, float p_76986_8_, float partialTicks)
 	{
 		bindEntityTexture(entity);
 		
@@ -60,7 +61,7 @@ public class RenderTeleporter extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityTeleporter entity)
 	{
 		return texture;
 	}

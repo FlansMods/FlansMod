@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
@@ -12,7 +11,7 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.guns.EntityAAGun;
 
 
-public class RenderAAGun extends Render
+public class RenderAAGun extends Render<EntityAAGun>
 {
 	public RenderAAGun(RenderManager renderManager)
 	{
@@ -46,21 +45,21 @@ public class RenderAAGun extends Render
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
+	public void doRender(EntityAAGun entity, double d, double d1, double d2, float f, float f1)
 	{
 		render((EntityAAGun)entity, d, d1, d2, f, f1);
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityAAGun entity)
 	{
 		return FlansModResourceHandler.getTexture(((EntityAAGun)entity).type);
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityAAGun>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityAAGun> createRenderFor(RenderManager manager)
 		{
 			return new RenderAAGun(manager);
 		}
