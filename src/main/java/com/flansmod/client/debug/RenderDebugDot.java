@@ -4,13 +4,12 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.common.FlansMod;
 
-public class RenderDebugDot extends Render
+public class RenderDebugDot extends Render<EntityDebugDot>
 {
 	
 	public RenderDebugDot(RenderManager renderManager)
@@ -19,7 +18,7 @@ public class RenderDebugDot extends Render
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1)
+	public void doRender(EntityDebugDot entity, double d0, double d1, double d2, float f, float f1)
 	{
 		if(!FlansMod.DEBUG)
 			return;
@@ -40,15 +39,15 @@ public class RenderDebugDot extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
+	protected ResourceLocation getEntityTexture(EntityDebugDot p_110775_1_)
 	{
 		return null;
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityDebugDot>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityDebugDot> createRenderFor(RenderManager manager)
 		{
 			return new RenderDebugDot(manager);
 		}

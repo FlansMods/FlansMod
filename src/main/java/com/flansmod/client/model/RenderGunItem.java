@@ -43,10 +43,10 @@ public class RenderGunItem extends RenderEntityItem
 		}
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityItem>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityItem> createRenderFor(RenderManager manager)
 		{
 			return new RenderGunItem(manager, Minecraft.getMinecraft().getRenderItem());
 		}

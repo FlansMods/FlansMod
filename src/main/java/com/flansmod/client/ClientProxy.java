@@ -277,8 +277,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag.Factory());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull.Factory());
-		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull.Factory<EntitySeat>());
+		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull.Factory<EntityWheel>());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot.Factory());

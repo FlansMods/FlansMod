@@ -24,14 +24,13 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.guns.Paintjob;
 
-public class RenderVehicle extends Render implements CustomItemRenderer
+public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRenderer
 {
 	public RenderVehicle(RenderManager renderManager)
 	{
@@ -173,16 +172,17 @@ public class RenderVehicle extends Render implements CustomItemRenderer
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
+	public void doRender(EntityVehicle entity, double d, double d1, double d2, float f, float f1)
 	{
 		//render((EntityVehicle)entity, d, d1, d2, f, f1);
+		//The Vehicle is rendered by the renderWorld Method
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityVehicle entity)
 	{
-		DriveableType type = ((EntityDriveable)entity).getDriveableType();
-		Paintjob paintjob = type.getPaintjob(((EntityDriveable)entity).getDriveableData().paintjobID);
+		DriveableType type = entity.getDriveableType();
+		Paintjob paintjob = type.getPaintjob(entity.getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 	
@@ -304,10 +304,10 @@ public class RenderVehicle extends Render implements CustomItemRenderer
 		GL11.glPopMatrix();
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityVehicle>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityVehicle> createRenderFor(RenderManager manager)
 		{
 			return new RenderVehicle(manager);
 		}

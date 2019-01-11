@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +16,7 @@ import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.ItemGrenade;
 
-public class RenderGrenade extends Render implements CustomItemRenderer
+public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRenderer
 {
 	public RenderGrenade(RenderManager renderManager)
 	{
@@ -25,7 +24,8 @@ public class RenderGrenade extends Render implements CustomItemRenderer
 		shadowSize = 0.5F;
 	}
 	
-	public void render(EntityGrenade grenade, double d, double d1, double d2, float f, float f1)
+	@Override
+	public void doRender(EntityGrenade grenade, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(grenade);
 		GL11.glPushMatrix();
@@ -70,17 +70,11 @@ public class RenderGrenade extends Render implements CustomItemRenderer
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
+	protected ResourceLocation getEntityTexture(EntityGrenade entity)
 	{
-		render((EntityGrenade)entity, d, d1, d2, f, f1);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
-	{
-		ResourceLocation texture = FlansModResourceHandler.getTexture(((EntityGrenade)entity).type);
+		ResourceLocation texture = FlansModResourceHandler.getTexture(entity.type);
 		if(texture == null)
-			return FlansModResourceHandler.getIcon(((EntityGrenade)entity).type);
+			return FlansModResourceHandler.getIcon(entity.type);
 		return texture;
 	}
 	
@@ -139,10 +133,10 @@ public class RenderGrenade extends Render implements CustomItemRenderer
 		GL11.glPopMatrix();
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityGrenade>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityGrenade> createRenderFor(RenderManager manager)
 		{
 			return new RenderGrenade(manager);
 		}

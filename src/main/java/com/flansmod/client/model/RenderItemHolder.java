@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -17,14 +16,14 @@ import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.guns.ItemGun;
 
-public class RenderItemHolder extends TileEntitySpecialRenderer
+public class RenderItemHolder extends TileEntitySpecialRenderer<TileEntityItemHolder>
 {
 	public RenderItemHolder()
 	{
 	}
 	
 	@Override
-	public void render(TileEntity te, double posX, double posY, double posZ, float p_180535_8_, int p_180535_9_, float f)
+	public void render(TileEntityItemHolder te, double posX, double posY, double posZ, float p_180535_8_, int p_180535_9_, float f)
 	{
 		TileEntityItemHolder holder = (TileEntityItemHolder)te;
 		if(holder == null || holder.type == null)

@@ -13,7 +13,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntitySeat;
 
-public class RenderNull extends Render
+public class RenderNull<E extends Entity> extends Render<E>
 {
 	private static final ResourceLocation texture = new ResourceLocation("Flan", "null.png");
 	
@@ -23,14 +23,12 @@ public class RenderNull extends Render
 		shadowSize = 0.5F;
 	}
 	
-	public void func_157_a(Entity entity, double d, double d1, double d2,
-						   float f, float f1)
+	public void func_157_a(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2,
-						 float f, float f1)
+	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
 		if(FlansMod.DEBUG)
 		{
@@ -63,12 +61,12 @@ public class RenderNull extends Render
 	
 	protected ModelBase model;
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory<E extends Entity> implements IRenderFactory<E>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<E> createRenderFor(RenderManager manager)
 		{
-			return new RenderNull(manager);
+			return new RenderNull<E>(manager);
 		}
 	}
 }

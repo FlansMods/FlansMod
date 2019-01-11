@@ -4,14 +4,13 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.common.FlansMod;
 
-public class RenderDebugAABB extends Render
+public class RenderDebugAABB extends Render<EntityDebugAABB>
 {
 	public RenderDebugAABB(RenderManager renderManager)
 	{
@@ -19,7 +18,7 @@ public class RenderDebugAABB extends Render
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1)
+	public void doRender(EntityDebugAABB entity, double d0, double d1, double d2, float f, float f1)
 	{
 		if(!FlansMod.DEBUG)
 			return;
@@ -43,15 +42,15 @@ public class RenderDebugAABB extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityDebugAABB entity)
 	{
 		return null;
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityDebugAABB>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityDebugAABB> createRenderFor(RenderManager manager)
 		{
 			return new RenderDebugAABB(manager);
 		}

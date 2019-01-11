@@ -25,14 +25,13 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
 import com.flansmod.common.guns.Paintjob;
 
-public class RenderPlane extends Render implements CustomItemRenderer
+public class RenderPlane extends Render<EntityPlane> implements CustomItemRenderer
 {
 	public RenderPlane(RenderManager renderManager)
 	{
@@ -144,22 +143,22 @@ public class RenderPlane extends Render implements CustomItemRenderer
 	}
 	
 	@Override
-	public boolean shouldRender(Entity entity, ICamera camera, double camX, double camY, double camZ)
+	public boolean shouldRender(EntityPlane entity, ICamera camera, double camX, double camY, double camZ)
 	{
 		return true;
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2,
-						 float f, float f1)
+	public void doRender(EntityPlane entity, double d, double d1, double d2, float f, float f1)
 	{
+		//The plane is rendered by the renderWorld Method
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityPlane entity)
 	{
-		DriveableType type = ((EntityDriveable)entity).getDriveableType();
-		Paintjob paintjob = type.getPaintjob(((EntityDriveable)entity).getDriveableData().paintjobID);
+		DriveableType type = entity.getDriveableType();
+		Paintjob paintjob = type.getPaintjob(entity.getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 	
@@ -284,10 +283,10 @@ public class RenderPlane extends Render implements CustomItemRenderer
 		GL11.glPopMatrix();
 	}
 	
-	public static class Factory implements IRenderFactory
+	public static class Factory implements IRenderFactory<EntityPlane>
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager)
+		public Render<EntityPlane> createRenderFor(RenderManager manager)
 		{
 			return new RenderPlane(manager);
 		}
