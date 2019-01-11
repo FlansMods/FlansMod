@@ -72,9 +72,9 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGrenade entity)
 	{
-		ResourceLocation texture = FlansModResourceHandler.getTexture(((EntityGrenade)entity).type);
+		ResourceLocation texture = FlansModResourceHandler.getTexture(entity.type);
 		if(texture == null)
-			return FlansModResourceHandler.getIcon(((EntityGrenade)entity).type);
+			return FlansModResourceHandler.getIcon(entity.type);
 		return texture;
 	}
 	

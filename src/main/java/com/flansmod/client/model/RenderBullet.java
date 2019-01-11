@@ -38,7 +38,7 @@ public class RenderBullet extends Render<EntityBullet>
 	@Override
 	public void doRender(EntityBullet entity, double d, double d1, double d2, float f, float f1)
 	{
-		render((EntityBullet)entity, d, d1, d2, f, f1);
+		render(entity, d, d1, d2, f, f1);
 	}
 	
 	@Override
