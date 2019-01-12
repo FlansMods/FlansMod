@@ -47,13 +47,13 @@ public class RenderAAGun extends Render<EntityAAGun>
 	@Override
 	public void doRender(EntityAAGun entity, double d, double d1, double d2, float f, float f1)
 	{
-		render((EntityAAGun)entity, d, d1, d2, f, f1);
+		render(entity, d, d1, d2, f, f1);
 	}
 	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAAGun entity)
 	{
-		return FlansModResourceHandler.getTexture(((EntityAAGun)entity).type);
+		return FlansModResourceHandler.getTexture(entity.type);
 	}
 	
 	public static class Factory implements IRenderFactory<EntityAAGun>

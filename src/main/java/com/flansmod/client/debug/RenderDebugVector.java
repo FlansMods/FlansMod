@@ -22,7 +22,7 @@ public class RenderDebugVector extends Render<EntityDebugVector>
 	{
 		if(!FlansMod.DEBUG)
 			return;
-		EntityDebugVector ent = (EntityDebugVector)entity;
+		EntityDebugVector ent = entity;
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);

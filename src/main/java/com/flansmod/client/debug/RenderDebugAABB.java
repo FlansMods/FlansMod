@@ -22,7 +22,7 @@ public class RenderDebugAABB extends Render<EntityDebugAABB>
 	{
 		if(!FlansMod.DEBUG)
 			return;
-		EntityDebugAABB ent = (EntityDebugAABB)entity;
+		EntityDebugAABB ent = entity;
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		//GL11.glDisable(GL11.GL_DEPTH_TEST);

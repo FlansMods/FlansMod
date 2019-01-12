@@ -33,7 +33,7 @@ public class RenderNukeDrop extends Render<EntityNukeDrop>
 	{
 		bindEntityTexture(entity);
 		
-		EntityNukeDrop nuke = (EntityNukeDrop)entity;
+		EntityNukeDrop nuke = entity;
 		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);

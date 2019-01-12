@@ -22,7 +22,7 @@ public class RenderDebugDot extends Render<EntityDebugDot>
 	{
 		if(!FlansMod.DEBUG)
 			return;
-		EntityDebugDot ent = (EntityDebugDot)entity;
+		EntityDebugDot ent = entity;
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);

@@ -39,7 +39,7 @@ public class RenderMG extends Render<EntityMG>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityMG entity)
 	{
-		return FlansModResourceHandler.getDeployableTexture(((EntityMG)entity).type);
+		return FlansModResourceHandler.getDeployableTexture(entity.type);
 	}
 	
 	public static class Factory implements IRenderFactory<EntityMG>
