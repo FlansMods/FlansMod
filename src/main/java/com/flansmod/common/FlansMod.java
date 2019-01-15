@@ -57,6 +57,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
@@ -371,7 +372,7 @@ public class FlansMod
 		log.info("Registering Entities");
 		
 		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole").setRegistryName("Flagpole"));
-		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag").setRegistryName("Flag"));
+		event.getRegistry().register(new EntityEntry(EntityFlag.class, "flag").setRegistryName("flag"));
 		event.getRegistry().register(new EntityEntry(EntityTeamItem.class, "TeamsItem").setRegistryName("TeamsItem"));
 		event.getRegistry().register(new EntityEntry(EntityGunItem.class, "GunItem").setRegistryName("GunItem"));
 		event.getRegistry().register(new EntityEntry(EntityItemCustomRender.class, "CustomItem").setRegistryName("CustomItem"));
@@ -385,13 +386,14 @@ public class FlansMod
 		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade").setRegistryName("Grenade"));
 		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG").setRegistryName("MG"));
 		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun").setRegistryName("AAGun"));
+		event.getRegistry().register(new EntityEntry(EntityDebugVector.class, "DebugVector").setRegistryName("DebugVector"));
 		
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), EntityPlane.class, "Plane", 90, this, 250, 3, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:MG"), EntityMG.class, "MG", 91, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:AAGun"), EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flagpole"), EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flag"), EntityFlag.class, "Flag", 94, this, 40, 5, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:flag"), EntityFlag.class, "flag", 94, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Vehicle"), EntityVehicle.class, "Vehicle", 95, this, 250, 10, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Bullet"), EntityBullet.class, "Bullet", 96, this, 40, 100, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:TeamsItem"), EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
@@ -401,6 +403,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Parachute"), EntityParachute.class, "Parachute", 101, this, 40, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Mecha"), EntityMecha.class, "Mecha", 102, this, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), EntityWheel.class, "Wheel", 103, this, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:DebugVector"), EntityDebugVector.class, "DebugVector", 104, this, 250, 20, false);
 	}
 	
 	@EventHandler
