@@ -57,6 +57,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
@@ -385,6 +386,7 @@ public class FlansMod
 		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade").setRegistryName("Grenade"));
 		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG").setRegistryName("MG"));
 		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun").setRegistryName("AAGun"));
+		event.getRegistry().register(new EntityEntry(EntityDebugVector.class, "DebugVector").setRegistryName("DebugVector"));
 		
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), EntityPlane.class, "Plane", 90, this, 250, 3, false);
@@ -401,6 +403,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Parachute"), EntityParachute.class, "Parachute", 101, this, 40, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Mecha"), EntityMecha.class, "Mecha", 102, this, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), EntityWheel.class, "Wheel", 103, this, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:DebugVector"), EntityDebugVector.class, "DebugVector", 104, this, 250, 20, false);
 	}
 	
 	@EventHandler
