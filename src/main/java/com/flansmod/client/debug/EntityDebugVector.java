@@ -9,14 +9,15 @@ import net.minecraft.world.World;
 import com.flansmod.common.vector.Vector3f;
 
 /**
- * Entity for debugging purposes. On the Client side a line (Vector) between the Position of the Entity and its Pointing Location is rendered
+ * Entity for debugging purposes.
+ * On the client side a line (Vector) between the position of the entity and its pointing location is rendered
  */
 public class EntityDebugVector extends EntityDebugColor
 {
 	
-    private static final DataParameter<Float> POINTING_X = EntityDataManager.<Float>createKey(EntityDebugVector.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> POINTING_Y = EntityDataManager.<Float>createKey(EntityDebugVector.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> POINTING_Z = EntityDataManager.<Float>createKey(EntityDebugVector.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> POINTING_X = EntityDataManager.createKey(EntityDebugVector.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> POINTING_Y = EntityDataManager.createKey(EntityDebugVector.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> POINTING_Z = EntityDataManager.createKey(EntityDebugVector.class, DataSerializers.FLOAT);
 	
 	public int life = 1000;
 	
@@ -31,7 +32,7 @@ public class EntityDebugVector extends EntityDebugColor
 	
 	/**
 	 * Spawns an EntityDebug Vector
-	 * 
+	 *
 	 * @param w World for Entity Constructor
 	 * @param u Position where the Vector starts
 	 * @param v Position where the Vector ends
@@ -99,52 +100,63 @@ public class EntityDebugVector extends EntityDebugColor
 	/**
 	 * @param x The X value of the Position the Vector points to (Relative to Entity Position)
 	 */
-	public void setPointingX(Float x) {
+	public void setPointingX(Float x)
+	{
 		dataManager.set(POINTING_X, x);
 	}
+	
 	/**
 	 * @return The X value of the Position the Vector points to (Relative to Entity Position)
 	 */
-	public Float getPointingX() {
+	public Float getPointingX()
+	{
 		return dataManager.get(POINTING_X);
 	}
 	
 	/**
 	 * @param y The Y value of the Position the Vector points to (Relative to Entity Position)
 	 */
-	public void setPointingY(Float y) {
+	public void setPointingY(Float y)
+	{
 		dataManager.set(POINTING_Y, y);
 	}
+	
 	/**
 	 * @return The Y value of the Position the Vector points to (Relative to Entity Position)
 	 */
-	public Float getPointingY() {
+	public Float getPointingY()
+	{
 		return dataManager.get(POINTING_Y);
 	}
 	
 	/**
 	 * @param z The Z value of the Position the Vector points to (Relative to Entity Position)
 	 */
-	public void setPointingZ(Float z) {
+	public void setPointingZ(Float z)
+	{
 		dataManager.set(POINTING_Z, z);
 	}
+	
 	/**
 	 * @return The Z value of the Position the Vector points to (Relative to Entity Position)
 	 */
-	public Float getPointingZ() {
+	public Float getPointingZ()
+	{
 		return dataManager.get(POINTING_Z);
 	}
 	
 	/**
-	 * All Parameters are relative to the Postion of the Entity.
+	 * All Parameters are relative to the position of the Entity.
 	 * These 3 Parameters describe the location of the Position the Vector points to.
+	 *
 	 * @param x The X Coordinate
 	 * @param y The Y Coordinate
 	 * @param z The Z Coordinate
 	 */
-	public void setPointing(Float x, Float y, Float z) {
+	public void setPointing(Float x, Float y, Float z)
+	{
 		setPointingX(x);
 		setPointingY(y);
 		setPointingZ(z);
-		}
+	}
 }
