@@ -24,9 +24,9 @@ public class EntityDebugDot extends EntityDebugColor
 	/**
 	 * Creates a white dot at the given location
 	 * 
-	 * @param w		World for Entity Constructor
+	 * @param w	World for Entity Constructor
 	 * @param pos	Position of the dot
-	 * @param l		Lifetime given in ticks
+	 * @param l	Lifetime given in ticks
 	 */
 	public EntityDebugDot(World w, Vector3f pos, int l)
 	{
@@ -37,12 +37,12 @@ public class EntityDebugDot extends EntityDebugColor
 	 * Creates a dot
 	 * Color values range from 0 (Nonexistent) to 1 (Fully Visible)
 	 * 
-	 * @param w		World for Entity Constructor
+	 * @param w	World for Entity Constructor
 	 * @param pos	Position of the dot
-	 * @param l		Lifetime given in ticks
-	 * @param r		Red color value
-	 * @param g		Green color value
-	 * @param b		Blue color value
+	 * @param l	Lifetime given in ticks
+	 * @param r	Red color value
+	 * @param g	Green color value
+	 * @param b	Blue color value
 	 */
 	public EntityDebugDot(World w, Vector3f pos, int l, float r, float g, float b)
 	{
