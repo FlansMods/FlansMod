@@ -1,68 +1,53 @@
 package com.flansmod.client.debug;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityDebugDot extends Entity
+/**
+ *	Entity for debugging purposes
+ *	On the client side a dot, in the given color, at the location of the entity is rendered
+ */
+public class EntityDebugDot extends EntityDebugColor
 {
-	public float red = 1F, green = 1F, blue = 1F;
-	public int life = 0;
+	public int life = 1000;
 	
+	/**
+	 * @param w	World for Entity Constructor
+	 */
 	public EntityDebugDot(World w)
 	{
 		super(w);
 	}
 	
+	/**
+	 * Creates a white dot at the given location
+	 * 
+	 * @param w		World for Entity Constructor
+	 * @param pos	Position of the dot
+	 * @param l		Lifetime given in ticks
+	 */
 	public EntityDebugDot(World w, Vector3f pos, int l)
 	{
-		super(w);
-		setPosition(pos.x, pos.y, pos.z);
-		life = l;
+		this(w, pos, l, 1F, 1F, 1F);
 	}
 	
+	/**
+	 * Creates a dot
+	 * Color values range from 0 (Nonexistent) to 1 (Fully Visible)
+	 * 
+	 * @param w		World for Entity Constructor
+	 * @param pos	Position of the dot
+	 * @param l		Lifetime given in ticks
+	 * @param r		Red color value
+	 * @param g		Green color value
+	 * @param b		Blue color value
+	 */
 	public EntityDebugDot(World w, Vector3f pos, int l, float r, float g, float b)
 	{
 		super(w);
 		setPosition(pos.x, pos.y, pos.z);
+		setColor(r, g, b);
 		life = l;
-		red = r;
-		green = g;
-		blue = b;
 	}
-	
-	@Override
-	public void onUpdate()
-	{
-		life--;
-		if(life <= 0)
-			setDead();
-	}
-	
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox()
-	{
-		return null;
-	}
-	
-	@Override
-	protected void entityInit()
-	{
-	}
-	
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_)
-	{
-	
-	}
-	
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_)
-	{
-	
-	}
-	
 }

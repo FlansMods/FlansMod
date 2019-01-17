@@ -22,11 +22,10 @@ public class RenderDebugDot extends Render<EntityDebugDot>
 	{
 		if(!FlansMod.DEBUG)
 			return;
-		EntityDebugDot ent = entity;
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glColor3f(ent.red, ent.green, ent.blue);
+		GL11.glColor3f(entity.getColorRed(), entity.getColorGreen(), entity.getColorBlue());
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 		GL11.glPointSize(10F);
