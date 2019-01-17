@@ -18,6 +18,7 @@ public class EntityDebugDot extends EntityDebugColor
 	public EntityDebugDot(World w)
 	{
 		super(w);
+		setSize(0.25F, 0.25F);
 	}
 	
 	/**
@@ -45,9 +46,17 @@ public class EntityDebugDot extends EntityDebugColor
 	 */
 	public EntityDebugDot(World w, Vector3f pos, int l, float r, float g, float b)
 	{
-		super(w);
+		this(w);
 		setPosition(pos.x, pos.y, pos.z);
 		setColor(r, g, b);
 		life = l;
+	}
+	
+	@Override
+	public void onUpdate()
+	{
+		life--;
+		if(life <= 0)
+			setDead();
 	}
 }
