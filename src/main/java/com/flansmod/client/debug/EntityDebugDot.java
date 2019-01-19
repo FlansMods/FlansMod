@@ -5,8 +5,8 @@ import net.minecraft.world.World;
 import com.flansmod.common.vector.Vector3f;
 
 /**
- *	Entity for debugging purposes
- *	On the client side a dot, in the given color, at the location of the entity is rendered
+ * Entity for debugging purposes
+ * On the client side a dot, in the given color, at the location of the entity is rendered
  */
 public class EntityDebugDot extends EntityDebugColor
 {
@@ -23,7 +23,7 @@ public class EntityDebugDot extends EntityDebugColor
 	
 	/**
 	 * Creates a white dot at the given location
-	 * 
+	 *
 	 * @param w   World for Entity Constructor
 	 * @param pos Position of the dot
 	 * @param l   Lifetime given in ticks
@@ -36,7 +36,7 @@ public class EntityDebugDot extends EntityDebugColor
 	/**
 	 * Creates a dot
 	 * Color values range from 0 (Nonexistent) to 1 (Fully Visible)
-	 * 
+	 *
 	 * @param w   World for Entity Constructor
 	 * @param pos Position of the dot
 	 * @param l   Lifetime given in ticks

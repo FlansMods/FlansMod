@@ -38,7 +38,7 @@ public class RenderDebugDot extends Render<EntityDebugDot>
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityDebugDot p_110775_1_)
+	protected ResourceLocation getEntityTexture(EntityDebugDot entity)
 	{
 		return null;
 	}
