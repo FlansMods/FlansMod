@@ -32,15 +32,15 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
-	public void createMultipleShots(World world, Entity shooter, Integer bulletAmount, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, Boolean silenced)
+	public void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, Boolean silenced)
 	{
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shooter, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection, silenced);
+			createShot(world, shot, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection, silenced);
 		}
 	}
 
-	public void createShot(World world, Entity shooter, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, Boolean silenced)
+	public void createShot(World world, FiredShot shot, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, Boolean silenced)
 	{
 		shootingDirection.x += (float)world.rand.nextGaussian() * bulletspread;
 		shootingDirection.y += (float)world.rand.nextGaussian() * bulletspread;
@@ -48,7 +48,7 @@ public class ShotHandler
 
 				shootingDirection.scale(500.0f);
 				
-				List<BulletHit> hits = FlansModRaytracer.Raytrace(world, shooter, false, null, rayTraceOrigin, shootingDirection, 0);
+				List<BulletHit> hits = FlansModRaytracer.Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
 				Entity victim = null;
 				Vector3f hitPos = Vector3f.add(rayTraceOrigin, shootingDirection, null);
 				BulletHit firstHit = null;
@@ -71,14 +71,14 @@ public class ShotHandler
 				}
 	}
 	
-	public static boolean OnHit(World world, Vector3f hit, Entity shooter, InfoType shotFrom, BulletType bulletType, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
+	public static boolean OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
 		
 		
 		if(bulletHit instanceof DriveableHit)
 		{
 			DriveableHit driveableHit = (DriveableHit)bulletHit;
-			penetratingPower = driveableHit.driveable.bulletHit(bulletType, damage, driveableHit, penetratingPower);
+			penetratingPower = driveableHit.driveable.bulletHit(shot.getBulletType(), damage, driveableHit, penetratingPower);
 			if(FlansMod.DEBUG && world.isRemote)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 			
@@ -86,7 +86,7 @@ public class ShotHandler
 		else if(bulletHit instanceof PlayerBulletHit)
 		{
 			PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
-			penetratingPower = playerHit.hitbox.hitByBullet(shooter, shotFrom, bulletType, damage, penetratingPower);
+			penetratingPower = playerHit.hitbox.hitByBullet(shooter, shotFrom, sh, damage, penetratingPower);
 			if(FlansMod.DEBUG && world.isRemote)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
 		}

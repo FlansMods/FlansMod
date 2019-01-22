@@ -1,6 +1,5 @@
 package com.flansmod.common.guns.raytracing;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -14,13 +13,11 @@ import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityBullet;
-import com.flansmod.common.guns.EntityDamageSourceGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 public class PlayerHitbox
@@ -162,8 +159,9 @@ public class PlayerHitbox
 	 * @param penetratingPower
 	 * @return
 	 */
-	public float hitByBullet(Entity damageOwner, InfoType firedFrom, BulletType bulletType, float damage, float penetratingPower)
+	public float hitByBullet(FiredShot shot, float damage, float penetratingPower)
 	{
+		BulletType bulletType = shot.getBulletType();
 		if(bulletType.setEntitiesOnFire)
 			player.setFire(20);
 		for(PotionEffect effect : bulletType.hitEffects)
@@ -189,10 +187,10 @@ public class PlayerHitbox
 			case BODY: case HEAD: case LEFTARM: case RIGHTARM:
 		{
 			//Calculate the hit damage
-			float hitDamage = damage * bulletType.damageVsLiving * damageModifier;
+			float hitDamage = damage * shot.getBulletType().damageVsLiving * damageModifier;
 			//Create a damage source object
 			//TODO
-			DamageSource damagesource = EntityBullet.getDamageSource(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
+			DamageSource damagesource = shot.getDamageSource();
 			
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
 			if(!player.world.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)
