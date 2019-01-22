@@ -301,6 +301,7 @@ public class ItemGun extends Item implements IPaintableItem
 	@SideOnly(Side.CLIENT)
 	public void onUpdateClient(ItemStack gunstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
+		float millis = System.currentTimeMillis();
 		if(!(entity instanceof EntityPlayer))
 		{
 			return;
@@ -448,7 +449,7 @@ public class ItemGun extends Item implements IPaintableItem
 					// Instant bullets. Do a raytrace
 					if(type.bulletSpeed == 0.0f)
 					{
-						for(int i = 0; i < type.numBullets * shootableType.numBullets; i++)
+						for(int i = 0; i < type.numBullets * shootableType.numBullets +100; i++)
 						{
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
@@ -563,10 +564,15 @@ public class ItemGun extends Item implements IPaintableItem
 		{
 			soundDelay--;
 		}
+		float f = (System.currentTimeMillis()-millis);
+		if (f > 0) {
+		System.out.println("Time: "+f);
+		}
 	}
 	
-	public void ServerHandleShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
+	public void ServerHandleShotData2(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
 	{
+		long millis = System.nanoTime();
 		// Get useful things
 		if(!(entity instanceof EntityPlayerMP))
 		{
@@ -681,6 +687,7 @@ public class ItemGun extends Item implements IPaintableItem
 				}
 			}
 		}
+		System.out.println("Time:"+(System.nanoTime()-millis));
 	}
 	
 	@SideOnly(Side.CLIENT)

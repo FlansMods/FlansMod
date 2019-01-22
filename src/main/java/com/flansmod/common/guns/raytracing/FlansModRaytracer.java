@@ -183,6 +183,7 @@ public class FlansModRaytracer
 			Collections.sort(hits);
 		}
 		
+		
 		return hits;
 	}
 	

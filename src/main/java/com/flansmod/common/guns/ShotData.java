@@ -71,4 +71,8 @@ public class ShotData
 		public boolean isExtraBullet; // For shotgun extra bullets that shouldn't consume ammo
 		public boolean silenced;
 	}
+	
+	public static class PlayerData {
+		
+	}
 }

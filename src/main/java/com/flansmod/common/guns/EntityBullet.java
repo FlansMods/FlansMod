@@ -66,7 +66,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 {
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
 	public EntityLivingBase owner;
-	private int ticksInAir;
+	public int ticksInAir;
 	public BulletType type;
 	/**
 	 * What type of weapon did this come from? For death messages
@@ -272,108 +272,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 	}
 	
-	/**
-	 * Static method so we can handle this without creating a bullet entity. Just pass in a null bullet
-	 */
-	public static boolean OnHit(World world, Vector3f origin, Vector3f hit, Entity shooter, InfoType shotFrom, ShootableType shootableType, EntityBullet bullet, float damage, BulletHit bulletHit)
-	{
-		if(!(shootableType instanceof BulletType))
-		{
-			FlansMod.log.warn("Tried to fire grenade instantly");
-			return true;
-		}
-		if(world == null || origin == null || hit == null || shooter == null || shotFrom == null || shootableType == null)
-		{
-			//FlansMod.log("Something was null");
-			return true;
-		}
-		
-		BulletType bulletType = (BulletType)shootableType;
-		
-		float penetratingPower = bullet == null ? bulletType.penetratingPower : bullet.penetratingPower;
-		
-		DamageSource source = bullet == null ? GetBulletDamage(shotFrom, bulletType, shooter, false) : bullet.getBulletDamage(false);
-		
-		if(bulletHit instanceof DriveableHit)
-		{
-			DriveableHit driveableHit = (DriveableHit)bulletHit;
-			penetratingPower = driveableHit.driveable.bulletHit(bulletType, damage, driveableHit, penetratingPower);
-			if(FlansMod.DEBUG && world.isRemote)
-				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
-			
-		}
-		else if(bulletHit instanceof PlayerBulletHit)
-		{
-			PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
-			penetratingPower = playerHit.hitbox.hitByBullet(source, shooter, shotFrom, bulletType, damage, penetratingPower);
-			if(FlansMod.DEBUG && world.isRemote)
-				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
-		}
-		else if(bulletHit instanceof EntityHit)
-		{
-			EntityHit entityHit = (EntityHit)bulletHit;
-			
-			if(entityHit.entity != null)
-			{
-				if(entityHit.entity.attackEntityFrom(source, damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
-				{
-					EntityLivingBase living = (EntityLivingBase)entityHit.entity;
-					for(PotionEffect effect : bulletType.hitEffects)
-					{
-						living.addPotionEffect(new PotionEffect(effect));
-					}
-					//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
-					living.hurtResistantTime = 0;
-				}
-				if(bulletType.setEntitiesOnFire)
-					entityHit.entity.setFire(20);
-				penetratingPower -= 1F;
-				if(FlansMod.DEBUG && world.isRemote)
-					world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
-			}
-		}
-		else if(bulletHit instanceof BlockHit)
-		{
-			BlockHit blockHit = (BlockHit)bulletHit;
-			RayTraceResult raytraceResult = blockHit.raytraceResult;
-			//If the hit wasn't an entity hit, then it must've been a block hit
-			BlockPos pos = raytraceResult.getBlockPos();
-			if(FlansMod.DEBUG && world.isRemote)
-				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
-			
-			Block block = world.getBlockState(pos).getBlock();
-			Material mat = world.getBlockState(pos).getMaterial();
-			//If the bullet breaks glass, and can do so according to FlansMod, do so.
-			if(bulletType.breaksGlass && mat == Material.GLASS && !world.isRemote)
-			{
-				if(TeamsManager.canBreakGlass)
-				{
-					WorldServer worldServer = (WorldServer)world;
-					destroyBlock(worldServer, pos, shooter, false);
-				}
-			}
-			
-			//penetratingPower -= block.getBlockHardness(world, zTile, zTile, zTile);
-			if(bullet != null)
-				bullet.setPosition(blockHit.raytraceResult.hitVec.x, blockHit.raytraceResult.hitVec.y, blockHit.raytraceResult.hitVec.z);
-			//play sound when bullet hits block
-			if(!world.isRemote && shooter != null && bulletType.hitSound != null)
-				PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, shooter.dimension, bulletType.hitSound, true);
-			if(bullet != null) bullet.penetratingPower = penetratingPower;
-			return true;
-		}
-		if(penetratingPower <= 0F || (bulletType.explodeOnImpact && (bullet == null || bullet.ticksInAir > 1)))
-		{
-			if(bullet != null)
-			{
-				bullet.setPosition(hit.x, hit.y, hit.z);
-				bullet.penetratingPower = penetratingPower;
-			}
-			return true;
-		}
-		return false;
-	}
-	
 	@Override
 	public void onUpdate()
 	{
@@ -540,6 +438,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 	}
 	
+	@Deprecated
 	public DamageSource getBulletDamage(boolean headshot)
 	{
 		if(owner instanceof EntityPlayer)
@@ -549,13 +448,17 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 	
-	public static DamageSource GetBulletDamage(InfoType firedFrom, BulletType type, Entity owner, boolean headshot)
+	public static DamageSource getDamageSource(InfoType firedFrom, BulletType type, Entity owner, boolean headshot)
 	{
+		if (owner == null) {
+			throw new NullPointerException("Owner cannot be null");
+		}
 		if(owner instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, owner, (EntityPlayer)owner, firedFrom, headshot))
-					.setProjectile();
-		else
-			return (new EntityDamageSourceIndirect(type.shortName, owner, owner)).setProjectile();
+		{
+			return (new EntityDamageSourceGun(type.shortName, owner, (EntityPlayer)owner, firedFrom, headshot)).setProjectile();
+		}
+		
+		return (new EntityDamageSourceIndirect(type.shortName, owner, owner)).setProjectile();
 	}
 	
 	private boolean isPartOfOwner(Entity entity)

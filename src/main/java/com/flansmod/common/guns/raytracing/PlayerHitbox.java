@@ -15,6 +15,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EntityDamageSourceGun;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
@@ -153,7 +154,15 @@ public class PlayerHitbox
 		return null;
 	}
 
-	public float hitByBullet(DamageSource source, Entity damageOwner, InfoType firedFrom, BulletType bulletType, float damage, float penetratingPower)
+	/**
+	 * @param damageOwner
+	 * @param firedFrom
+	 * @param bulletType
+	 * @param damage
+	 * @param penetratingPower
+	 * @return
+	 */
+	public float hitByBullet(Entity damageOwner, InfoType firedFrom, BulletType bulletType, float damage, float penetratingPower)
 	{
 		if(bulletType.setEntitiesOnFire)
 			player.setFire(20);
@@ -182,9 +191,9 @@ public class PlayerHitbox
 			//Calculate the hit damage
 			float hitDamage = damage * bulletType.damageVsLiving * damageModifier;
 			//Create a damage source object
-			DamageSource damagesource = damageOwner == null ? DamageSource.GENERIC
-					: EntityBullet.GetBulletDamage(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
-
+			//TODO
+			DamageSource damagesource = EntityBullet.getDamageSource(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
+			
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
 			if(!player.world.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)
 				TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)player, damagesource);
