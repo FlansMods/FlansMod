@@ -8,6 +8,12 @@ public class FireableGun{
 	private InfoType gun;
 	private Float damage;
 	
+	public FireableGun(InfoType gun,Float damage,Float spread) {
+		this.gun = gun;
+		this.damage = damage;
+		this.spread = spread;
+	}
+	
 	public Float getGunSpread() {
 		return spread;
 	}

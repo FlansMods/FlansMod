@@ -27,15 +27,16 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
-	public void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
+		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
 			createShot(world, shot, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection);
 		}
 	}
 
-	public void createShot(World world, FiredShot shot, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		shootingDirection.x += (float)world.rand.nextGaussian() * bulletspread;
 		shootingDirection.y += (float)world.rand.nextGaussian() * bulletspread;
@@ -44,14 +45,12 @@ public class ShotHandler
 				shootingDirection.scale(500.0f);
 				
 				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
-				Entity victim = null;
 				Vector3f hitPos = Vector3f.add(rayTraceOrigin, shootingDirection, null);
 				BulletHit firstHit = null;
 				if(!hits.isEmpty())
 				{
 					firstHit = hits.get(0);
 					hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)shootingDirection.scale(firstHit.intersectTime), null);
-					victim = firstHit.GetEntity();
 				}
 				
 				if(FlansMod.DEBUG)

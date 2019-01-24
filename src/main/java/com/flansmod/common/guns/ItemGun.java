@@ -70,6 +70,7 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
+import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.network.PacketShotData;
@@ -301,10 +302,343 @@ public class ItemGun extends Item implements IPaintableItem
 	@SideOnly(Side.CLIENT)
 	public void onUpdateClient(ItemStack gunstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
+		IScope currentScope = type.getCurrentScope(gunstack);
+		if(!hasOffHand)
+		{
+			switch(hand)
+			{
+				case MAIN_HAND:
+				{
+					if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND)
+							&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
+					{
+						FlansModClient.SetScope(currentScope);
+					}
+					break;
+				}
+				case OFF_HAND:
+				{
+					if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND)
+							&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
+					{
+						FlansModClient.SetScope(currentScope);
+					}
+					break;
+				}
+			}
+		}
+		
+		Minecraft mc = Minecraft.getMinecraft();
+		
+		Boolean hold = GetMouseHeld(hand);
+		
+		// Do not shoot ammo bags, flags or dropped gun items
+		if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
+			hold = false;
+	
+		if (!GetMouseHeld(hand) && GetMouseHeld(hand)==GetLastMouseHeld(hand))
+			return;
+		FlansMod.getPacketHandler().sendToServer(new PacketGunFire(hold, GetLastMouseHeld(hand), hand));
+	}
+	
+	public void shootServer(Boolean held,Boolean lastheld,EnumHand hand,EntityPlayerMP player, ItemStack gunstack)
+		{
+			
+			int gunSlot = player.inventory.currentItem;
+			World world = player.getEntityWorld();
+		
+			float millis = System.currentTimeMillis();
+
+			// Get useful objects
+			Minecraft mc = Minecraft.getMinecraft();
+			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
+			
+			// Play idle sounds
+			if(soundDelay <= 0 && type.idleSound != null)
+			{
+				PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.idleSound, false);
+				soundDelay = type.idleSoundLength;
+			}
+			
+			// This code is not for deployables
+			if(type.deployable)
+				return;
+			
+			// Do not shoot ammo bags, flags or dropped gun items
+			if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
+				return;
+			
+			ItemStack main = player.getHeldItemMainhand();
+			ItemStack off = player.getHeldItemOffhand();
+			boolean hasOffHand = !main.isEmpty() && !off.isEmpty();
+			if(hasOffHand && !type.oneHanded)
+				return;
+			
+			if(type.usableByPlayers)
+			{
+				
+				
+				boolean needsToReload = needsToReload(gunstack);
+				boolean shouldShootThisTick = false;
+				switch(type.getFireMode(gunstack))
+				{
+					case BURST:
+					{
+						if(data.GetBurstRoundsRemaining(hand) > 0)
+						{
+							shouldShootThisTick = true;
+						}
+						// Fallthrough to semi auto
+					}
+					case SEMIAUTO:
+					{
+						if(GetMouseHeld(hand) && !GetLastMouseHeld(hand))
+						{
+							shouldShootThisTick = true;
+						}
+						else needsToReload = false;
+						break;
+					}
+					case MINIGUN:
+					{
+						if(needsToReload)
+						{
+							needsToReload = GetMouseHeld(hand);
+							break;
+						}
+						if(GetMouseHeld(hand))
+						{
+							data.minigunSpeed += 2.0f;
+							data.minigunSpeed *= 0.9f;
+							// TODO : Re-add looping sounds
+							if(data.minigunSpeed < type.minigunStartSpeed)
+							{
+								if(type.useLoopingSounds)
+								{
+									data.shouldPlayWarmupSound = true;
+								}
+								break;
+							}
+						}
+						else if(data.minigunSpeed > 0.0f)
+						{
+							data.shouldPlayCooldownSound = true;
+						}
+						
+						//else fallthrough to full auto
+					}
+					case FULLAUTO:
+					{
+						shouldShootThisTick = GetMouseHeld(hand);
+						if(!shouldShootThisTick)
+						{
+							needsToReload = false;
+						}
+						break;
+					}
+					default:
+						needsToReload = false;
+						break;
+				}
+				
+				// Do reload if we pressed fire.
+				if(needsToReload)
+				{
+					if(Reload(gunstack, world, player, player.inventory, hand, hasOffHand, false, player.capabilities.isCreativeMode))
+					{
+						//Set player shoot delay to be the reload delay
+						//Set both gun delays to avoid reloading two guns at once
+						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(gunstack);
+						
+						GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
+						
+						int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
+						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
+						animations.doReload(type.reloadTime, pumpDelay, pumpTime);
+						
+						if(hand == EnumHand.OFF_HAND)
+						{
+							data.reloadingLeft = true;
+							data.burstRoundsRemainingLeft = 0;
+						}
+						else
+						{
+							data.reloadingRight = true;
+							data.burstRoundsRemainingRight = 0;
+						}
+						//Send reload packet to server
+						FlansMod.getPacketHandler().sendToServer(new PacketReload(hand, false));
+					}
+				}
+				// Fire!
+				else if(shouldShootThisTick)
+				{
+					GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
+					animations.lookAt = LookAtState.NONE;
+					
+					float shootTime = data.GetShootTime(hand);
+					
+					// For each 
+					while(shootTime <= 0.0f)
+					{
+						// Add the delay for this shot and shoot it!
+						shootTime += type.GetShootDelay(gunstack);
+						
+						ItemStack shootableStack = getBestNonEmptyShootableStack(gunstack);
+						if(shootableStack == null || shootableStack.isEmpty())
+						{
+							continue;
+						}
+
+						
+						ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
+						ShootableType shootableType = shootableItem.type;
+						// Instant bullets. Do a raytrace
+						if(type.bulletSpeed == 0.0f)
+						{
+							/*
+							for(int i = 0; i < type.numBullets * shootableType.numBullets +100; i++)
+							{
+								Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
+								Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
+								
+								float spread = 0.0025f * type.getSpread(gunstack) * shootableType.bulletSpread;
+								
+								rayTraceDirection.x += (float)world.rand.nextGaussian() * spread;
+								rayTraceDirection.y += (float)world.rand.nextGaussian() * spread;
+								rayTraceDirection.z += (float)world.rand.nextGaussian() * spread;
+								
+								rayTraceDirection.scale(500.0f);
+								
+								List<BulletHit> hits = FlansModRaytracer.Raytrace(world, player, false, null, rayTraceOrigin, rayTraceDirection, 0);
+								Vector3f hitPos = Vector3f.add(rayTraceOrigin, rayTraceDirection, null);
+								BulletHit firstHit = null;
+								if(!hits.isEmpty())
+								{
+									firstHit = hits.get(0);
+									hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)rayTraceDirection.scale(firstHit.intersectTime), null);
+								}
+								
+								Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
+								
+								//TODO debug
+								if(FlansMod.DEBUG || true)
+								{
+									world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+								}
+								
+								boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
+								//ShotData shotData = new InstantShotData(gunSlot, hand, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1, silenced);
+								//shotsFiredClient.add(shotData);
+								ShotHandler.createMultipleShots(world, new , bulletAmount, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection);
+							}
+							*/
+							Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
+							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
+							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
+							//TODO unchecked cast
+							ShotHandler.createMultipleShots(world, new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType), type.numBullets, gunOrigin, rayTraceOrigin, rayTraceDirection);
+						}
+						// Else, spawn an entity
+						else
+						{
+							ShotData shotData = new SpawnEntityShotData(gunSlot, hand, type, shootableType, player, new Vector3f(player.getLookVec()));
+							shotsFiredClient.add(shotData);
+						}
+						
+						
+						
+						// Now do client side things					
+						int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
+						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
+						animations.doShoot(pumpDelay, pumpTime);
+						FlansModClient.playerRecoil += type.getRecoil(gunstack);
+						animations.recoil += type.getRecoil(gunstack);
+						if(type.consumeGunUponUse)
+							player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
+						
+						// Update burst fire
+						if(type.getFireMode(gunstack) == EnumFireMode.BURST)
+						{
+							int burstRoundsRemaining = data.GetBurstRoundsRemaining(hand);
+							
+							if(burstRoundsRemaining > 0)
+								burstRoundsRemaining--;
+							else burstRoundsRemaining = type.numBurstRounds;
+							
+							data.SetBurstRoundsRemaining(hand, burstRoundsRemaining);
+						}
+					}
+					
+					//TODO used?
+					data.SetShootTime(hand, shootTime);
+				}
+				
+				Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
+				
+				if(FlansMod.DEBUG)
+				{
+					world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+				}
+				
+				/*
+				
+				// Now send shooting data to the server
+				if(!shotsFiredClient.isEmpty() && player.ticksExisted % CLIENT_TO_SERVER_UPDATE_INTERVAL == 0)
+				{
+					FlansMod.getPacketHandler().sendToServer(new PacketShotData(shotsFiredClient));
+					shotsFiredClient.clear();
+				}
+				*/
+				// Check for scoping in / out
+				IScope currentScope = type.getCurrentScope(gunstack);
+				if(!hasOffHand)
+				{
+					switch(hand)
+					{
+						case MAIN_HAND:
+						{
+							if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND)
+									&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
+							{
+								FlansModClient.SetScope(currentScope);
+							}
+							break;
+						}
+						case OFF_HAND:
+						{
+							if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND)
+									&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
+							{
+								FlansModClient.SetScope(currentScope);
+							}
+							break;
+						}
+					}
+				}
+			}
+			
+			// And finally do sounds
+			if(soundDelay > 0)
+			{
+				soundDelay--;
+			}
+			float f = (System.currentTimeMillis()-millis);
+			if (f > 0) {
+			System.out.println("Time: "+f);
+			}
+		
+	}
+	
+	@Deprecated
+	@SideOnly(Side.CLIENT)
+	public void onUpdateClientOld(ItemStack gunstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
+	{
 		float millis = System.currentTimeMillis();
 		if(!(entity instanceof EntityPlayer))
 		{
-			return;
+			//TODO the method should NOT check for a specific subtype if the method accepts the generic supertype
+			throw new NullPointerException("This is bad coding practice");
 		}
 		// Get useful objects
 		Minecraft mc = Minecraft.getMinecraft();
@@ -578,7 +912,8 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
-	public void ServerHandleShotData2(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
+	@Deprecated
+	public void ServerHandleShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
 	{
 		long millis = System.nanoTime();
 		// Get useful things

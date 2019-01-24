@@ -3,6 +3,7 @@ package com.flansmod.common.eventhandlers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -70,5 +71,13 @@ public class PlayerDeathEventListener
 						event.getEntityLiving().dimension);
 			}
 		}
+	}
+	
+	//TODO Debug
+	@EventHandler
+	@SubscribeEvent
+	public void test(PlayerInteractEvent event)
+	{
+		System.out.println("Interact:"+event.getHand());
 	}
 }
