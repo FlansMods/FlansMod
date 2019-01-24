@@ -5,6 +5,7 @@ import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 
 import java.util.List;
 import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
@@ -53,9 +54,11 @@ public class ShotHandler
 					hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)shootingDirection.scale(firstHit.intersectTime), null);
 				}
 				
-				if(FlansMod.DEBUG)
+				//TODO
+				if(FlansMod.DEBUG || true)
 				{
 					world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+					world.spawnEntity(new EntityDebugVector(world, gunOrigin, hitPos, 10000, 1f, 1f, 0f));
 				}
 				
 				if(OnHit(world, hitPos, shot, null, firstHit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage()))
@@ -114,7 +117,8 @@ public class ShotHandler
 			RayTraceResult raytraceResult = blockHit.raytraceResult;
 			//If the hit wasn't an entity hit, then it must've been a block hit
 			BlockPos pos = raytraceResult.getBlockPos();
-			if(FlansMod.DEBUG && world.isRemote)
+			//TODO debug
+			if(FlansMod.DEBUG && world.isRemote || true)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
 			
 			Block block = world.getBlockState(pos).getBlock();

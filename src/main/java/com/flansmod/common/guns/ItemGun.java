@@ -338,6 +338,7 @@ public class ItemGun extends Item implements IPaintableItem
 	
 		if (!GetMouseHeld(hand) && GetMouseHeld(hand)==GetLastMouseHeld(hand))
 			return;
+		System.out.println("Hold: "+hold+" Last:"+GetLastMouseHeld(hand)+" Hand:"+hand);
 		FlansMod.getPacketHandler().sendToServer(new PacketGunFire(hold, GetLastMouseHeld(hand), hand));
 	}
 	

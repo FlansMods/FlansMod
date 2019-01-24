@@ -19,6 +19,10 @@ public class PacketGunFire extends PacketBase
 	private boolean lastheld;
 	private EnumHand hand;
 	
+	public PacketGunFire() {
+		
+	}
+	
 	public PacketGunFire(Boolean held, Boolean lastheld,EnumHand hand)
 	{
 		this.held = held;
@@ -52,14 +56,16 @@ public class PacketGunFire extends PacketBase
 		ItemStack itemstack = playerEntity.getHeldItem(hand);
 		//TODO can itemstack be null?
 		Item item = itemstack.getItem();
-		if (!(item instanceof ItemGun)) {
-
+		if (item instanceof ItemGun) {
+			System.out.println("FIRE");
 			ItemGun gun = (ItemGun) item;
 			gun.shootServer(held, lastheld, hand, playerEntity, itemstack);
 			
 		} else {
 			//TODO debug
 			System.out.println("Invalid Item");
+			System.out.println("Item:"+itemstack);
+			System.out.println("Item:"+item);
 		}
 	}
 	

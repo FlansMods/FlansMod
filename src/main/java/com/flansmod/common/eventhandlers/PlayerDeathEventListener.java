@@ -72,12 +72,4 @@ public class PlayerDeathEventListener
 			}
 		}
 	}
-	
-	//TODO Debug
-	@EventHandler
-	@SubscribeEvent
-	public void test(PlayerInteractEvent event)
-	{
-		System.out.println("Interact:"+event.getHand());
-	}
 }
