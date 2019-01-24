@@ -1,29 +1,24 @@
 package com.flansmod.common.guns;
 
 import static com.flansmod.common.util.BlockUtil.destroyBlock;
+import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 
 import java.util.List;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
-import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -32,15 +27,15 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
-	public void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, Boolean silenced)
+	public void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shot, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection, silenced);
+			createShot(world, shot, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection);
 		}
 	}
 
-	public void createShot(World world, FiredShot shot, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, Boolean silenced)
+	public void createShot(World world, FiredShot shot, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		shootingDirection.x += (float)world.rand.nextGaussian() * bulletspread;
 		shootingDirection.y += (float)world.rand.nextGaussian() * bulletspread;
@@ -48,7 +43,7 @@ public class ShotHandler
 
 				shootingDirection.scale(500.0f);
 				
-				List<BulletHit> hits = FlansModRaytracer.Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
+				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
 				Entity victim = null;
 				Vector3f hitPos = Vector3f.add(rayTraceOrigin, shootingDirection, null);
 				BulletHit firstHit = null;
@@ -64,21 +59,22 @@ public class ShotHandler
 					world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
 				}
 				
-				if(OnHit(world, firstHit, shooter, shotFrom, bulletType, bullet, bulletHit, penetratingPower, damage))
+				if(OnHit(world, hitPos, shot, null, firstHit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage()))
 				{
-					EntityBullet fakeBullet = new EntityBullet(world, hit.toVec3(), 0f, 0f, shooter, 0f, 0f, shotType, 0f, shotFrom);
-					EntityBullet.OnDetonate(world, hit, shooter, fakeBullet, shotFrom, shotType);
+					//TODO seperate EntityBulletStuff
+					//EntityBullet fakeBullet = new EntityBullet(world, hit.toVec3(), 0f, 0f, shooter, 0f, 0f, shotType, 0f, shotFrom);
+					//EntityBullet.OnDetonate(world, hit, shooter, fakeBullet, shotFrom, shotType);
 				}
 	}
 	
 	public static boolean OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
 		
-		
+		BulletType bulletType = shot.getBulletType();
 		if(bulletHit instanceof DriveableHit)
 		{
 			DriveableHit driveableHit = (DriveableHit)bulletHit;
-			penetratingPower = driveableHit.driveable.bulletHit(shot.getBulletType(), damage, driveableHit, penetratingPower);
+			penetratingPower = driveableHit.driveable.bulletHit(bulletType, damage, driveableHit, penetratingPower);
 			if(FlansMod.DEBUG && world.isRemote)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 			
@@ -86,7 +82,7 @@ public class ShotHandler
 		else if(bulletHit instanceof PlayerBulletHit)
 		{
 			PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
-			penetratingPower = playerHit.hitbox.hitByBullet(shooter, shotFrom, sh, damage, penetratingPower);
+			penetratingPower = playerHit.hitbox.hitByBullet(shot, damage, penetratingPower);
 			if(FlansMod.DEBUG && world.isRemote)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
 		}
@@ -96,7 +92,7 @@ public class ShotHandler
 			
 			if(entityHit.entity != null)
 			{
-				if(entityHit.entity.attackEntityFrom(EntityBullet.getDamageSource(shotFrom, bulletType, shooter, false), damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
+				if(entityHit.entity.attackEntityFrom(shot.getDamageSource(), damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
 				{
 					EntityLivingBase living = (EntityLivingBase)entityHit.entity;
 					for(PotionEffect effect : bulletType.hitEffects)
@@ -130,7 +126,7 @@ public class ShotHandler
 				if(TeamsManager.canBreakGlass)
 				{
 					WorldServer worldServer = (WorldServer)world;
-					destroyBlock(worldServer, pos, shooter, false);
+					destroyBlock(worldServer, pos, shot.getPlayerOrNull(), false);
 				}
 			}
 			
@@ -138,11 +134,13 @@ public class ShotHandler
 			if(bullet != null)
 				bullet.setPosition(blockHit.raytraceResult.hitVec.x, blockHit.raytraceResult.hitVec.y, blockHit.raytraceResult.hitVec.z);
 			//play sound when bullet hits block
-			if(!world.isRemote && shooter != null && bulletType.hitSound != null)
-				PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, shooter.dimension, bulletType.hitSound, true);
+			//if(!world.isRemote && shooter != null && bulletType.hitSound != null)
+				//PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, world, bulletType.hitSound, true);
+				//TODO Now always server sided
 			if(bullet != null) bullet.penetratingPower = penetratingPower;
 			return true;
 		}
+		//TODO seperate EntityBullet stuff
 		if(penetratingPower <= 0F || (bulletType.explodeOnImpact && (bullet == null || bullet.ticksInAir > 1)))
 		{
 			if(bullet != null)

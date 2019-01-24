@@ -17,7 +17,7 @@ public class FiredShot {
 		this.player = Optional.empty();
 	}
 	
-	public FireableGun getInfoType() {
+	public FireableGun getFireableGun() {
 		return this.weapon;
 	}
 	
@@ -31,7 +31,7 @@ public class FiredShot {
 	
 	public DamageSource getDamageSource(Boolean headshot) {
 		if (player.isPresent()) {
-			return new EntityDamageSourceGun(weapon.shortName, player.get(), player.get(), weapon, headshot);
+			return new EntityDamageSourceGun(weapon.getShortName(), player.get(), player.get(), weapon.getInfoType(), headshot);
 		}
 		return DamageSource.GENERIC;
 	}

@@ -316,7 +316,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 							origin.y + motion.y * bulletHit.intersectTime,
 							origin.z + motion.z * bulletHit.intersectTime);
 					
-					if(EntityBullet.OnHit(world, origin, hitPos, owner, firedFrom, type, this, damage, bulletHit))
+					//TODO Entity Bullet Hit Stuff
+					//if(EntityBullet.OnHit(world, origin, hitPos, owner, firedFrom, type, this, damage, bulletHit))
 					{
 						setDead();
 						break;

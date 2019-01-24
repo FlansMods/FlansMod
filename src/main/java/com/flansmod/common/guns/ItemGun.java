@@ -431,6 +431,7 @@ public class ItemGun extends Item implements IPaintableItem
 			{
 				GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
 				animations.lookAt = LookAtState.NONE;
+				
 				float shootTime = data.GetShootTime(hand);
 				
 				// For each 
@@ -444,6 +445,8 @@ public class ItemGun extends Item implements IPaintableItem
 					{
 						continue;
 					}
+
+					
 					ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 					ShootableType shootableType = shootableItem.type;
 					// Instant bullets. Do a raytrace
@@ -492,6 +495,8 @@ public class ItemGun extends Item implements IPaintableItem
 						shotsFiredClient.add(shotData);
 					}
 					
+					
+					
 					// Now do client side things					
 					int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 					int pumpTime = type.model == null ? 1 : type.model.pumpTime;
@@ -514,7 +519,8 @@ public class ItemGun extends Item implements IPaintableItem
 					}
 				}
 				
-				data.SetShootTime(hand, shootTime);
+			//TODO Used?
+				//data.SetShootTime(hand, shootTime);
 			}
 			
 			Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
@@ -524,13 +530,15 @@ public class ItemGun extends Item implements IPaintableItem
 				world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
 			}
 			
+			/*
+			
 			// Now send shooting data to the server
 			if(!shotsFiredClient.isEmpty() && player.ticksExisted % CLIENT_TO_SERVER_UPDATE_INTERVAL == 0)
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketShotData(shotsFiredClient));
 				shotsFiredClient.clear();
 			}
-			
+			*/
 			// Check for scoping in / out
 			IScope currentScope = type.getCurrentScope(gunstack);
 			if(!hasOffHand)
@@ -700,10 +708,10 @@ public class ItemGun extends Item implements IPaintableItem
 						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F),
 						x, y, z));
 	}
-	
+	@Deprecated
 	public void DoInstantShot(World world, EntityLivingBase shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
 	{
-		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
+		//if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
 		{
 			EntityBullet fakeBullet = new EntityBullet(world, hit.toVec3(), 0f, 0f, shooter, 0f, 0f, shotType, 0f, shotFrom);
 			EntityBullet.OnDetonate(world, hit, shooter, fakeBullet, shotFrom, shotType);
@@ -815,7 +823,7 @@ public class ItemGun extends Item implements IPaintableItem
 		
 		if(!shotsFiredServer.isEmpty())// && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
 		{
-			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFiredServer), player.dimension);
+			//FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFiredServer), player.dimension);
 			shotsFiredServer.clear();
 		}
 	}
