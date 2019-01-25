@@ -17,6 +17,12 @@ public class FiredShot {
 		this.player = Optional.empty();
 	}
 	
+	public FiredShot(FireableGun weapon, BulletType bullet, EntityPlayer player)
+	{
+		this(weapon,bullet);
+		this.player = Optional.of(player);
+	}
+	
 	public FireableGun getFireableGun() {
 		return this.weapon;
 	}

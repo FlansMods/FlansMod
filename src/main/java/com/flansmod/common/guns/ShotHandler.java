@@ -55,10 +55,10 @@ public class ShotHandler
 				}
 				
 				//TODO
-				if(FlansMod.DEBUG || true)
+				if(FlansMod.DEBUG)
 				{
 					world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
-					world.spawnEntity(new EntityDebugVector(world, gunOrigin, hitPos, 10000, 1f, 1f, 0f));
+					world.spawnEntity(new EntityDebugVector(world, gunOrigin, Vector3f.sub(hitPos, gunOrigin, null), 1000, 0.5f, 0.5f, 1.0f));
 				}
 				
 				if(OnHit(world, hitPos, shot, null, firstHit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage()))
@@ -71,6 +71,8 @@ public class ShotHandler
 	
 	public static boolean OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
+		
+		//TODO correct penetraion stuff
 		
 		BulletType bulletType = shot.getBulletType();
 		if(bulletHit instanceof DriveableHit)
@@ -132,6 +134,7 @@ public class ShotHandler
 					destroyBlock(worldServer, pos, shot.getPlayerOrNull(), false);
 				}
 			}
+			
 			
 			//penetratingPower -= block.getBlockHardness(world, zTile, zTile, zTile);
 			if(bullet != null)
