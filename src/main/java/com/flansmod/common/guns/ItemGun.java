@@ -370,7 +370,7 @@ public class ItemGun extends Item implements IPaintableItem
 			if(type.usableByPlayers)
 			{
 				
-				
+				Float minigunspeedgain = 0F;
 				boolean needsToReload = needsToReload(gunstack);
 				boolean shouldShootThisTick = false;
 				switch(type.getFireMode(gunstack))
@@ -404,6 +404,7 @@ public class ItemGun extends Item implements IPaintableItem
 							if (data.minigunSpeed < type.minigunMaxSpeed)
 							{
 								data.minigunSpeed += 2.0f;
+								minigunspeedgain = 2.0f;
 							}
 							// TODO : Re-add looping sounds
 							if(data.minigunSpeed < type.minigunStartSpeed)
@@ -508,11 +509,12 @@ public class ItemGun extends Item implements IPaintableItem
 						//TODO stuff
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
-						//animations.doShoot(pumpDelay, pumpTime);
-						FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, pumpDelay, pumpTime), player);
-						//TODO Recoil
-						//FlansModClient.playerRecoil += type.getRecoil(gunstack);
-						//animations.recoil += type.getRecoil(gunstack);
+						if (minigunspeedgain == 0) {
+							FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, pumpDelay, pumpTime, type.getRecoil(gunstack)), player);
+						} else {
+							FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, pumpDelay, pumpTime, type.getRecoil(gunstack), minigunspeedgain), player);
+							minigunspeedgain = 0f;
+						}
 						
 						int gunSlot = player.inventory.currentItem;
 						if(type.consumeGunUponUse)
@@ -533,6 +535,10 @@ public class ItemGun extends Item implements IPaintableItem
 					
 					//TODO used?
 					data.SetShootTime(hand, shootTime);
+				}
+				
+				if (minigunspeedgain != 0f) {
+					FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, minigunspeedgain), player);
 				}
 				
 				Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);

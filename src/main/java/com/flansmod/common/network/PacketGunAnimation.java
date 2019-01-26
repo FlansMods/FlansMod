@@ -6,11 +6,9 @@ import com.flansmod.client.model.GunAnimations.LookAtState;
 import com.flansmod.common.FlansMod;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 
 public class PacketGunAnimation extends PacketBase
 {
@@ -20,6 +18,7 @@ public class PacketGunAnimation extends PacketBase
 	private Float minigunRotationAddSpeed;
 	private Integer pumpdelay;
 	private Integer pumptime;
+	private Float recoil;
 	private EnumHand hand;
 	
 	public PacketGunAnimation()
@@ -27,16 +26,18 @@ public class PacketGunAnimation extends PacketBase
 		
 	}
 	
-	public PacketGunAnimation(EnumHand hand, Integer pumpdelay, Integer pumptime)
+	public PacketGunAnimation(EnumHand hand, Integer pumpdelay, Integer pumptime, Float recoil)
 	{
 		this.type = AnimationType.SHOOT;
 		this.pumpdelay = pumpdelay;
 		this.pumptime = pumptime;
+		this.recoil = recoil;
+		this.hand = hand;
 	}
 	
-	public PacketGunAnimation(EnumHand hand, Integer pumpdelay, Integer pumptime, Float minigunAddSpeed)
+	public PacketGunAnimation(EnumHand hand, Integer pumpdelay, Integer pumptime, Float recoil, Float minigunAddSpeed)
 	{
-		this(hand,pumpdelay,pumptime);
+		this(hand,pumpdelay,pumptime,recoil);
 		this.type2 = AnimationType.ROTATION;
 		this.minigunRotationAddSpeed = minigunAddSpeed;
 	}
@@ -44,6 +45,7 @@ public class PacketGunAnimation extends PacketBase
 	public PacketGunAnimation(EnumHand hand, Float minigunAddSpeed)
 	{
 		this.type = AnimationType.ROTATION;
+		this.hand = hand;
 		this.minigunRotationAddSpeed = minigunAddSpeed;
 	}
 	
@@ -53,7 +55,7 @@ public class PacketGunAnimation extends PacketBase
 		data.writeInt(encode(type));
 		data.writeInt(encode(type2));
 		//TODO proper enum encoding
-		data.writeInt(hand==EnumHand.MAIN_HAND?0:1);
+		data.writeInt(hand.equals(EnumHand.MAIN_HAND)?0:1);
 		encodeInto(ctx, data, type);
 		encodeInto(ctx, data, type2);
 	}
@@ -72,6 +74,7 @@ public class PacketGunAnimation extends PacketBase
 			case SHOOT:
 				data.writeInt(pumpdelay);
 				data.writeInt(pumptime);
+				data.writeFloat(recoil);
 				break;
 				
 			case RELOAD:
@@ -104,6 +107,7 @@ public class PacketGunAnimation extends PacketBase
 			case SHOOT:
 				pumpdelay = data.readInt();
 				pumptime = data.readInt();
+				recoil = data.readFloat();
 				break;
 				
 			case RELOAD:
@@ -121,10 +125,8 @@ public class PacketGunAnimation extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-		System.out.println("Hello?");
-		System.out.println("Player1:"+clientPlayer+" Player2:"+Minecraft.getMinecraft().player);
 		GunAnimations animations = FlansModClient.getGunAnimations(clientPlayer, hand);
-		System.out.println("Type:"+type+" pumpde:"+pumpdelay+" pumptime:"+pumptime+ "Hand:"+hand);
+
 		handleAnimation(animations, type);
 		handleAnimation(animations, type2);
 	}
@@ -144,6 +146,8 @@ public class PacketGunAnimation extends PacketBase
 				//TODO lookatstate
 				animations.lookAt = LookAtState.NONE;
 				animations.doShoot(pumpdelay, pumptime);
+				FlansModClient.playerRecoil += recoil;
+				animations.recoil += recoil;
 				break;
 			
 			case ROTATION:
@@ -167,7 +171,7 @@ public class PacketGunAnimation extends PacketBase
 		throw new NullPointerException("Integer not kown");
 	}
 	
-	//TODO proper enum decoding
+	//TODO proper enum encoding
 	private static Integer encode(AnimationType a)
 	{
 		if (a == AnimationType.NONE) {
@@ -184,7 +188,7 @@ public class PacketGunAnimation extends PacketBase
 	
 	public static enum AnimationType
 	{
-		SHOOT,RELOAD,ROTATION,NONE,PLAYER_RECOIL
+		SHOOT,RELOAD,ROTATION,NONE
 	}
 	
 }
