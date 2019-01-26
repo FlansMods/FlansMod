@@ -70,6 +70,7 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
+import com.flansmod.common.network.PacketGunAnimation;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
@@ -342,11 +343,11 @@ public class ItemGun extends Item implements IPaintableItem
 		FlansMod.getPacketHandler().sendToServer(new PacketGunFire(hold, GetLastMouseHeld(hand), hand));
 	}
 	
-	public void shootServer(Boolean held,Boolean lastheld,EnumHand hand,EntityPlayerMP player, ItemStack gunstack)
+	public void shootServer(Boolean held, Boolean lastheld, EnumHand hand, EntityPlayerMP player, ItemStack gunstack)
 		{
 
 			// Get useful objects
-			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
+			PlayerData data = PlayerHandler.getPlayerData(player, Side.SERVER);
 			World world = player.getServerWorld();
 			
 			// Play idle sounds
@@ -400,7 +401,10 @@ public class ItemGun extends Item implements IPaintableItem
 						}
 						if(held)
 						{
-							data.minigunSpeed += 2.0f;
+							if (data.minigunSpeed < type.minigunMaxSpeed)
+							{
+								data.minigunSpeed += 2.0f;
+							}
 							// TODO : Re-add looping sounds
 							if(data.minigunSpeed < type.minigunStartSpeed)
 							{
@@ -410,10 +414,6 @@ public class ItemGun extends Item implements IPaintableItem
 								}
 								break;
 							}
-						}
-						else if(data.minigunSpeed > 0.0f)
-						{
-							data.shouldPlayCooldownSound = true;
 						}
 						
 						//else fallthrough to full auto
@@ -505,14 +505,14 @@ public class ItemGun extends Item implements IPaintableItem
 						}
 						
 						// Now do client side things
-						GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
-						animations.lookAt = LookAtState.NONE;
 						//TODO stuff
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
-						animations.doShoot(pumpDelay, pumpTime);
-						FlansModClient.playerRecoil += type.getRecoil(gunstack);
-						animations.recoil += type.getRecoil(gunstack);
+						//animations.doShoot(pumpDelay, pumpTime);
+						FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, pumpDelay, pumpTime), player);
+						//TODO Recoil
+						//FlansModClient.playerRecoil += type.getRecoil(gunstack);
+						//animations.recoil += type.getRecoil(gunstack);
 						
 						int gunSlot = player.inventory.currentItem;
 						if(type.consumeGunUponUse)
@@ -1070,8 +1070,10 @@ public class ItemGun extends Item implements IPaintableItem
 		PlayerData data = PlayerHandler.getPlayerData(player);
 		if(data == null)
 			return;
-		
+//		if (data.minigunSpeed > 0) {
 		data.minigunSpeed *= 0.9f;
+//		}
+		
 		
 		if(player.inventory.getCurrentItem() != itemstack)
 		{

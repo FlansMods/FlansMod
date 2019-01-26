@@ -1,0 +1,190 @@
+package com.flansmod.common.network;
+
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.model.GunAnimations;
+import com.flansmod.client.model.GunAnimations.LookAtState;
+import com.flansmod.common.FlansMod;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumHand;
+import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
+
+public class PacketGunAnimation extends PacketBase
+{
+
+	private AnimationType type;
+	private AnimationType type2 = AnimationType.NONE;
+	private Float minigunRotationAddSpeed;
+	private Integer pumpdelay;
+	private Integer pumptime;
+	private EnumHand hand;
+	
+	public PacketGunAnimation()
+	{
+		
+	}
+	
+	public PacketGunAnimation(EnumHand hand, Integer pumpdelay, Integer pumptime)
+	{
+		this.type = AnimationType.SHOOT;
+		this.pumpdelay = pumpdelay;
+		this.pumptime = pumptime;
+	}
+	
+	public PacketGunAnimation(EnumHand hand, Integer pumpdelay, Integer pumptime, Float minigunAddSpeed)
+	{
+		this(hand,pumpdelay,pumptime);
+		this.type2 = AnimationType.ROTATION;
+		this.minigunRotationAddSpeed = minigunAddSpeed;
+	}
+	
+	public PacketGunAnimation(EnumHand hand, Float minigunAddSpeed)
+	{
+		this.type = AnimationType.ROTATION;
+		this.minigunRotationAddSpeed = minigunAddSpeed;
+	}
+	
+	@Override
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
+	{
+		data.writeInt(encode(type));
+		data.writeInt(encode(type2));
+		//TODO proper enum encoding
+		data.writeInt(hand==EnumHand.MAIN_HAND?0:1);
+		encodeInto(ctx, data, type);
+		encodeInto(ctx, data, type2);
+	}
+
+	private void encodeInto(ChannelHandlerContext ctx, ByteBuf data,AnimationType type)
+	{
+		switch (type)
+		{
+			case NONE:
+				break;
+				
+			case ROTATION:
+				data.writeFloat(minigunRotationAddSpeed);
+				break;
+				
+			case SHOOT:
+				data.writeInt(pumpdelay);
+				data.writeInt(pumptime);
+				break;
+				
+			case RELOAD:
+				//TODO
+				break;
+		}
+	}
+	
+	@Override
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) {
+		this.type = decode(data.readInt());
+		this.type2 = decode(data.readInt());
+		//TODO proper enum decoding
+		this.hand = data.readInt()==0?EnumHand.MAIN_HAND:EnumHand.OFF_HAND;
+		decodeInto(ctx, data, type);
+		decodeInto(ctx, data, type2);
+	}
+
+	private void decodeInto(ChannelHandlerContext ctx, ByteBuf data,AnimationType type)
+	{
+		switch (type)
+		{
+			case NONE:
+				break;
+				
+			case ROTATION:
+				this.minigunRotationAddSpeed = data.readFloat();
+				break;
+				
+			case SHOOT:
+				pumpdelay = data.readInt();
+				pumptime = data.readInt();
+				break;
+				
+			case RELOAD:
+				//TODO
+				break;
+		}
+	}
+	
+	@Override
+	public void handleServerSide(EntityPlayerMP playerEntity)
+	{
+		FlansMod.log.warn("Server Side should not receive this Packet");
+	}
+
+	@Override
+	public void handleClientSide(EntityPlayer clientPlayer)
+	{
+		System.out.println("Hello?");
+		System.out.println("Player1:"+clientPlayer+" Player2:"+Minecraft.getMinecraft().player);
+		GunAnimations animations = FlansModClient.getGunAnimations(clientPlayer, hand);
+		System.out.println("Type:"+type+" pumpde:"+pumpdelay+" pumptime:"+pumptime+ "Hand:"+hand);
+		handleAnimation(animations, type);
+		handleAnimation(animations, type2);
+	}
+
+	private void handleAnimation(GunAnimations animations, AnimationType type)
+	{
+		switch (type)
+		{
+			case NONE:
+				break;
+			
+			case RELOAD:
+				//TODO
+				break;
+				
+			case SHOOT:
+				//TODO lookatstate
+				animations.lookAt = LookAtState.NONE;
+				animations.doShoot(pumpdelay, pumptime);
+				break;
+			
+			case ROTATION:
+				animations.addMinigunBarrelRotationSpeed(minigunRotationAddSpeed);
+				break;
+		}
+	}
+	
+	//TODO proper enum decoding
+	private static AnimationType decode(Integer i)
+	{
+		if (i == 0) {
+			return AnimationType.NONE;
+		} else if (i == 1) {
+			return AnimationType.RELOAD;
+		} else if (i == 2) {
+			return AnimationType.SHOOT;
+		} else if (i == 3) {
+			return AnimationType.ROTATION;
+		}
+		throw new NullPointerException("Integer not kown");
+	}
+	
+	//TODO proper enum decoding
+	private static Integer encode(AnimationType a)
+	{
+		if (a == AnimationType.NONE) {
+			return 0;
+		} else if (a == AnimationType.RELOAD) {
+			return 1;
+		} else if (a == AnimationType.SHOOT) {
+			return 2;
+		} else if (a == AnimationType.ROTATION) {
+			return 3;
+		}
+		throw new NullPointerException("Animation not kown");
+	}
+	
+	public static enum AnimationType
+	{
+		SHOOT,RELOAD,ROTATION,NONE,PLAYER_RECOIL
+	}
+	
+}
