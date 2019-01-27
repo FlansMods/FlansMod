@@ -17,6 +17,7 @@ import com.flansmod.common.guns.ItemGun;
 
 //When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
 //When the server receives one, it is interpreted as a forced reload
+@Deprecated
 public class PacketReload extends PacketBase
 {
 	public boolean isOffHand;

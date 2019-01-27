@@ -53,6 +53,7 @@ public class PacketGunAnimation extends PacketBase
 	public PacketGunAnimation(EnumHand hand, Integer reloadtime, Integer pumpdelay, Integer pumptime)
 	{
 		this.type = AnimationType.RELOAD;
+		this.hand = hand;
 		this.pumpdelay = pumpdelay;
 		this.pumptime = pumptime;
 		this.reloadtime = reloadtime;
@@ -139,7 +140,7 @@ public class PacketGunAnimation extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		GunAnimations animations = FlansModClient.getGunAnimations(clientPlayer, hand);
-
+		
 		handleAnimation(animations, type);
 		handleAnimation(animations, type2);
 	}

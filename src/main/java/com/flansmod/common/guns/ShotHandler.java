@@ -17,7 +17,6 @@ import com.flansmod.common.vector.Vector3f;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
@@ -28,12 +27,13 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
-	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
 			createShot(world, shot, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection);
+			handler.shooting(i < bulletAmount - 1);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class ShotHandler
 				
 				if(OnHit(world, hitPos, shot, null, firstHit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage()))
 				{
-					//TODO seperate EntityBulletStuff
+					//TODO separate EntityBulletStuff
 					//EntityBullet fakeBullet = new EntityBullet(world, hit.toVec3(), 0f, 0f, shooter, 0f, 0f, shotType, 0f, shotFrom);
 					//EntityBullet.OnDetonate(world, hit, shooter, fakeBullet, shotFrom, shotType);
 				}
@@ -72,7 +72,7 @@ public class ShotHandler
 	public static boolean OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
 		
-		//TODO correct penetraion stuff
+		//TODO correct penetration stuff
 		
 		BulletType bulletType = shot.getBulletType();
 		if(bulletHit instanceof DriveableHit)

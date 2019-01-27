@@ -460,8 +460,14 @@ public class ItemGun extends Item implements IPaintableItem
 							data.reloadingRight = true;
 							data.burstRoundsRemainingRight = 0;
 						}
-						//Send reload packet to server
-						FlansMod.getPacketHandler().sendToServer(new PacketReload(hand, false));
+							
+							
+								//Set the reload delay
+								data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
+								//Play reload sound
+								if(type.reloadSound != null)
+									PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.reloadSound, false);
+						
 					}
 				}
 				// Fire!
@@ -473,14 +479,29 @@ public class ItemGun extends Item implements IPaintableItem
 					// For each 
 					while(shootTime <= 0.0f)
 					{
+						
 						// Add the delay for this shot and shoot it!
 						shootTime += type.GetShootDelay(gunstack);
 						
-						ItemStack shootableStack = getBestNonEmptyShootableStack(gunstack);
-						if(shootableStack == null || shootableStack.isEmpty())
+						int bulletID = 0;
+						ItemStack bulletStack = ItemStack.EMPTY.copy();
+						for(; bulletID < type.numAmmoItemsInGun; bulletID++)
+						{
+							ItemStack checkingStack = getBulletItemStack(gunstack, bulletID);
+							if(checkingStack != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+							{
+								bulletStack = checkingStack;
+								break;
+							}
+						}
+						
+						if(bulletStack.isEmpty())
 						{
 							continue;
 						}
+						
+						final ItemStack bullet = bulletStack;
+						final Integer bulletid = bulletID;
 						
 						Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
 						
@@ -488,27 +509,57 @@ public class ItemGun extends Item implements IPaintableItem
 						// Play shot sounds
 						playShootSound(world, gunOrigin, false);
 						
-						ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
+						//TODO unchecked cast
+						ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
 						ShootableType shootableType = shootableItem.type;
 						// Instant bullets. Do a raytrace
 						if(type.bulletSpeed == 0.0f)
 						{
+							ShootBulletHandler handler = (Boolean isExtraBullet) -> {
+								
+									if(!isExtraBullet)
+									{
+										// Drop item on shooting if bullet requires it
+										if(shootableType.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
+											dropItem(world, player, shootableType.dropItemOnShoot);
+										// Drop item on shooting if gun requires it
+										if(type.dropItemOnShoot != null)// && !entityplayer.capabilities.isCreativeMode)
+											dropItem(world, player, type.dropItemOnShoot);
+										
+										if(type.knockback > 0)
+										{
+											//TODO : Apply knockback		
+										}
+										
+										//Damage the bullet item
+										bullet.setItemDamage(bullet.getItemDamage() + 1);
+										
+										//Update the stack in the gun
+										setBulletItemStack(gunstack, bullet, bulletid);
+										
+										int gunSlot = player.inventory.currentItem;
+										
+										if(type.consumeGunUponUse && gunSlot != -1)
+											player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
+									}
+							};
+							
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							//TODO unchecked cast
-							ShotHandler.createMultipleShots(world, new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType, player), type.numBullets, gunOrigin, rayTraceOrigin, rayTraceDirection);
+							ShotHandler.createMultipleShots(world, new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType, player), type.numBullets*shootableType.numBullets, gunOrigin, rayTraceOrigin, rayTraceDirection, handler);
 						}
 						// Else, spawn an entity
 						else
 						{
-							//TODO stuff
+							//TODO EntityBullet
 							int gunSlot = player.inventory.currentItem;
 							ShotData shotData = new SpawnEntityShotData(gunSlot, hand, type, shootableType, player, new Vector3f(player.getLookVec()));
 							shotsFiredClient.add(shotData);
 						}
 						
 						// Now do client side things
-						//TODO stuff
+						//TODO type.model can be null
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 						if (minigunspeedgain == 0) {
