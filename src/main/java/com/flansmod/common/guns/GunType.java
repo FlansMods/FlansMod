@@ -82,7 +82,7 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * The maximum speed a minigun mode gun can reach
 	 */
-	public float minigunMaxSpeed = 20F;
+	public float minigunMaxSpeed = 30F;
 	/**
 	 * Whether this gun can be used underwater
 	 */

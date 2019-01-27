@@ -442,11 +442,13 @@ public class ItemGun extends Item implements IPaintableItem
 						//Set both gun delays to avoid reloading two guns at once
 						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(gunstack);
 						
-						GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
-						
+						//GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
+						//TODO type.model can be null
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
-						animations.doReload(type.reloadTime, pumpDelay, pumpTime);
+						//animations.doReload(type.reloadTime, pumpDelay, pumpTime);
+						
+						FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, type.reloadTime, pumpDelay, pumpTime), player);
 						
 						if(hand == EnumHand.OFF_HAND)
 						{

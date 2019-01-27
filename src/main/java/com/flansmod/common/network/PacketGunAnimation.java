@@ -19,6 +19,7 @@ public class PacketGunAnimation extends PacketBase
 	private Integer pumpdelay;
 	private Integer pumptime;
 	private Float recoil;
+	private Integer reloadtime;
 	private EnumHand hand;
 	
 	public PacketGunAnimation()
@@ -47,6 +48,14 @@ public class PacketGunAnimation extends PacketBase
 		this.type = AnimationType.ROTATION;
 		this.hand = hand;
 		this.minigunRotationAddSpeed = minigunAddSpeed;
+	}
+	
+	public PacketGunAnimation(EnumHand hand, Integer reloadtime, Integer pumpdelay, Integer pumptime)
+	{
+		this.type = AnimationType.RELOAD;
+		this.pumpdelay = pumpdelay;
+		this.pumptime = pumptime;
+		this.reloadtime = reloadtime;
 	}
 	
 	@Override
@@ -78,7 +87,9 @@ public class PacketGunAnimation extends PacketBase
 				break;
 				
 			case RELOAD:
-				//TODO
+				data.writeInt(pumpdelay);
+				data.writeInt(pumptime);
+				data.writeInt(reloadtime);
 				break;
 		}
 	}
@@ -111,7 +122,9 @@ public class PacketGunAnimation extends PacketBase
 				break;
 				
 			case RELOAD:
-				//TODO
+				pumpdelay = data.readInt();
+				pumptime = data.readInt();
+				reloadtime = data.readInt();
 				break;
 		}
 	}
@@ -139,11 +152,11 @@ public class PacketGunAnimation extends PacketBase
 				break;
 			
 			case RELOAD:
-				//TODO
+				animations.doReload(reloadtime, pumpdelay, pumptime);
 				break;
 				
 			case SHOOT:
-				//TODO lookatstate
+				//TODO lookatstate not send by Server, may cause problems in future
 				animations.lookAt = LookAtState.NONE;
 				animations.doShoot(pumpdelay, pumptime);
 				FlansModClient.playerRecoil += recoil;
