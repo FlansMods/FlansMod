@@ -47,17 +47,24 @@ public class ShotHandler
 				
 				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
 				
-				for (BulletHit hit:hits) {
-					Vector3f hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)shootingDirection.scale(hit.intersectTime), null);
+				Float penetrationPower = shot.getBulletType().penetratingPower;
+				Vector3f previousHitPos = gunOrigin;
+				
+				for (int i = 0;i<hits.size();i++) {
+					BulletHit hit = hits.get(i);
+					Vector3f shotVector = (Vector3f) new Vector3f(shootingDirection).scale(hit.intersectTime);
+					Vector3f hitPos = Vector3f.add(rayTraceOrigin, shotVector, null);
 					
 					//TODO
 					if(FlansMod.DEBUG)
 					{
-						world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
-						world.spawnEntity(new EntityDebugVector(world, gunOrigin, Vector3f.sub(hitPos, gunOrigin, null), 1000, 0.5f, 0.5f, 1.0f));
+						world.spawnEntity(new EntityDebugDot(world, previousHitPos, 100, 1.0f, 1.0f, 1.0f));
+						world.spawnEntity(new EntityDebugVector(world, previousHitPos, Vector3f.sub(hitPos, previousHitPos, null), 1000, 0.5f, 0.5f, ((float)i/hits.size())));
 					}
+					previousHitPos = hitPos;
 					
-					if (OnHit(world, hitPos, shot, null, hit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage())) {
+					penetrationPower = OnHit(world, hitPos, shot, null, hit, penetrationPower, shot.getFireableGun().getDamage());
+					if (penetrationPower <= 0f) {
 						//TODO separate EntityBulletStuff
 						//TODO fakebullet entity
 						//TODO owner entity is null
@@ -72,7 +79,7 @@ public class ShotHandler
 				
 	}
 	
-	public static boolean OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
+	public static Float OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
 		
 		//TODO correct penetration stuff
@@ -148,8 +155,9 @@ public class ShotHandler
 			//if(!world.isRemote && shooter != null && bulletType.hitSound != null)
 				//PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, world, bulletType.hitSound, true);
 				//TODO Now always server sided
+			//TODO EntityBullet
 			if(bullet != null) bullet.penetratingPower = penetratingPower;
-			return true;
+			return -1F;
 		}
 		if(penetratingPower <= 0F || (bulletType.explodeOnImpact
 				//&& (bullet == null || bullet.ticksInAir > 1)
@@ -161,8 +169,8 @@ public class ShotHandler
 				bullet.setPosition(hit.x, hit.y, hit.z);
 				bullet.penetratingPower = penetratingPower;
 			}
-			return true;
+			return -1f;
 		}
-		return false;
+		return penetratingPower;
 	}
 }
