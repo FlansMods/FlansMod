@@ -515,39 +515,41 @@ public class ItemGun extends Item implements IPaintableItem
 						// Instant bullets. Do a raytrace
 						if(type.bulletSpeed == 0.0f)
 						{
-							ShootBulletHandler handler = (Boolean isExtraBullet) -> {
-								
-									if(!isExtraBullet)
+							ShootBulletHandler handler = (Boolean isExtraBullet) ->
+							{
+								if(!isExtraBullet)
+								{
+									// Drop item on shooting if bullet requires it
+									if(shootableType.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
+										dropItem(world, player, shootableType.dropItemOnShoot);
+									// Drop item on shooting if gun requires it
+									if(type.dropItemOnShoot != null)// && !entityplayer.capabilities.isCreativeMode)
+										dropItem(world, player, type.dropItemOnShoot);
+									
+									if(type.knockback > 0)
 									{
-										// Drop item on shooting if bullet requires it
-										if(shootableType.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
-											dropItem(world, player, shootableType.dropItemOnShoot);
-										// Drop item on shooting if gun requires it
-										if(type.dropItemOnShoot != null)// && !entityplayer.capabilities.isCreativeMode)
-											dropItem(world, player, type.dropItemOnShoot);
-										
-										if(type.knockback > 0)
-										{
-											//TODO : Apply knockback		
-										}
-										
-										//Damage the bullet item
-										bullet.setItemDamage(bullet.getItemDamage() + 1);
-										
-										//Update the stack in the gun
-										setBulletItemStack(gunstack, bullet, bulletid);
-										
-										int gunSlot = player.inventory.currentItem;
-										
-										if(type.consumeGunUponUse && gunSlot != -1)
-											player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
+									//TODO : Apply knockback		
+									}
+									
+									//Damage the bullet item
+									bullet.setItemDamage(bullet.getItemDamage() + 1);
+									
+									//Update the stack in the gun
+									setBulletItemStack(gunstack, bullet, bulletid);
+									
+									int gunSlot = player.inventory.currentItem;
+									
+									if(type.consumeGunUponUse && gunSlot != -1)
+										player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
 									}
 							};
 							
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							//TODO unchecked cast
-							ShotHandler.createMultipleShots(world, new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType, player), type.numBullets*shootableType.numBullets, gunOrigin, rayTraceOrigin, rayTraceDirection, handler);
+							FiredShot shot = new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType, player);
+							
+							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, gunOrigin, rayTraceOrigin, rayTraceDirection, handler);
 						}
 						// Else, spawn an entity
 						else

@@ -15,8 +15,8 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
@@ -46,33 +46,37 @@ public class ShotHandler
 				shootingDirection.scale(500.0f);
 				
 				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
-				Vector3f hitPos = Vector3f.add(rayTraceOrigin, shootingDirection, null);
-				BulletHit firstHit = null;
-				if(!hits.isEmpty())
-				{
-					firstHit = hits.get(0);
-					hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)shootingDirection.scale(firstHit.intersectTime), null);
+				
+				for (BulletHit hit:hits) {
+					Vector3f hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)shootingDirection.scale(hit.intersectTime), null);
+					
+					//TODO
+					if(FlansMod.DEBUG)
+					{
+						world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+						world.spawnEntity(new EntityDebugVector(world, gunOrigin, Vector3f.sub(hitPos, gunOrigin, null), 1000, 0.5f, 0.5f, 1.0f));
+					}
+					
+					if (OnHit(world, hitPos, shot, null, hit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage())) {
+						//TODO separate EntityBulletStuff
+						//TODO fakebullet entity
+						//TODO owner entity is null
+						EntityBullet fakeBullet = new EntityBullet(world, hitPos.toVec3(), 0f, 0f, null, 0f, 0f, shot.getBulletType(), 0f, shot.getFireableGun().getInfoType());
+						//TODO shooter is null
+						EntityBullet.OnDetonate(world, hitPos, null, fakeBullet, shot.getFireableGun().getInfoType(), shot.getBulletType());
+					
+						break;
+					}
 				}
 				
-				//TODO
-				if(FlansMod.DEBUG)
-				{
-					world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
-					world.spawnEntity(new EntityDebugVector(world, gunOrigin, Vector3f.sub(hitPos, gunOrigin, null), 1000, 0.5f, 0.5f, 1.0f));
-				}
 				
-				if(OnHit(world, hitPos, shot, null, firstHit, shot.getBulletType().penetratingPower, shot.getFireableGun().getDamage()))
-				{
-					//TODO separate EntityBulletStuff
-					//EntityBullet fakeBullet = new EntityBullet(world, hit.toVec3(), 0f, 0f, shooter, 0f, 0f, shotType, 0f, shotFrom);
-					//EntityBullet.OnDetonate(world, hit, shooter, fakeBullet, shotFrom, shotType);
-				}
 	}
 	
 	public static boolean OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
 		
 		//TODO correct penetration stuff
+		System.out.println("Penetration:"+penetratingPower);
 		
 		BulletType bulletType = shot.getBulletType();
 		if(bulletHit instanceof DriveableHit)
@@ -123,7 +127,6 @@ public class ShotHandler
 			if(FlansMod.DEBUG && world.isRemote || true)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
 			
-			Block block = world.getBlockState(pos).getBlock();
 			Material mat = world.getBlockState(pos).getMaterial();
 			//If the bullet breaks glass, and can do so according to FlansMod, do so.
 			if(bulletType.breaksGlass && mat == Material.GLASS && !world.isRemote)
@@ -135,8 +138,10 @@ public class ShotHandler
 				}
 			}
 			
+			IBlockState state = world.getBlockState(pos);
+			System.out.println("Block Hardness:"+state.getBlockHardness(world, pos));
+			penetratingPower -= state.getBlockHardness(world, pos);
 			
-			//penetratingPower -= block.getBlockHardness(world, zTile, zTile, zTile);
 			if(bullet != null)
 				bullet.setPosition(blockHit.raytraceResult.hitVec.x, blockHit.raytraceResult.hitVec.y, blockHit.raytraceResult.hitVec.z);
 			//play sound when bullet hits block
@@ -146,9 +151,11 @@ public class ShotHandler
 			if(bullet != null) bullet.penetratingPower = penetratingPower;
 			return true;
 		}
-		//TODO seperate EntityBullet stuff
-		if(penetratingPower <= 0F || (bulletType.explodeOnImpact && (bullet == null || bullet.ticksInAir > 1)))
+		if(penetratingPower <= 0F || (bulletType.explodeOnImpact
+				//&& (bullet == null || bullet.ticksInAir > 1)
+				))
 		{
+			//TODO seperate EntityBullet stuff
 			if(bullet != null)
 			{
 				bullet.setPosition(hit.x, hit.y, hit.z);
