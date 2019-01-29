@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -133,9 +135,13 @@ public class FlansModRaytracer
 						
 						if(hit)
 						{
-							Vector3f hitPoint = new Vector3f(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
+							Vec3d hitPoint = new Vec3d(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
+							//TODO Debug
+							world.spawnEntity(new EntityDebugDot(world, new Vector3f(mop.hitVec), 1000, 1.0f, 0f, 0f));
+							System.out.println("NextMotion:"+new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
+							System.out.println("HitPos:"+hitPoint);
 							float hitLambda = 1F;
-							if(motion.x != 0F)
+							/*if(motion.x != 0F)
 								hitLambda = hitPoint.x / motion.x;
 							else if(motion.y != 0F)
 								hitLambda = hitPoint.y / motion.y;
@@ -143,25 +149,55 @@ public class FlansModRaytracer
 								hitLambda = hitPoint.z / motion.z;
 							if(hitLambda < 0)
 								hitLambda = -hitLambda;
-							
+							*/
+							hitLambda = (float) hitPoint.lengthSquared();
+							System.out.println("EntityLambda:"+hitLambda);
 							hits.add(new EntityHit(entity, hitLambda));
+							//raytraceBlock(world, mop.hitVec, motion, hits);
 						}
 					}
 				}
 			}
 		}
 		
+		Vec3d mot = new Vector3f(motion).toVec3();
+		mot = mot.normalize();
+		mot = mot.scale(0.5d);
+		raytraceBlock(world, origin.toVec3(), new Vec3d(0, 0, 0), motion, mot, hits, 0);
+		
+		//We hit something
+		if(!hits.isEmpty())
+		{
+			//Sort the hits according to the intercept position
+			Collections.sort(hits);
+		}
+		
+		
+		return hits;
+	}
+	
+	private static void raytraceBlock(World world, Vec3d posVec, Vec3d previoushot, Vector3f motion,Vec3d normalized_motion, List<BulletHit> hits, Integer tries) {
+		tries++;
 		//Ray trace the bullet by comparing its next position to its current position
-		Vec3d posVec = origin.toVec3();
-		Vec3d nextPosVec = motion.toVec3().add(posVec);
+		Vec3d nextPosVec = new Vec3d(posVec.x + motion.x, posVec.y + motion.y, posVec.z + motion.z); 
+		if (tries==4) {
+			world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(nextPosVec), 1000, 1f, 0f, 0f));
+		}
+		//TODO Debug
+		System.out.println("PosVec:"+posVec+" Next posVec:"+nextPosVec);
 		RayTraceResult hit = world.rayTraceBlocks(posVec, nextPosVec, false, true, true);
 		
-		posVec = origin.toVec3();
+		//posVec = origin.toVec3();
 		
 		if(hit != null)
 		{
 			//Calculate the lambda value of the intercept
-			Vec3d hitVec = posVec.subtract(hit.hitVec);
+			Vec3d hitVec = hit.hitVec.subtract(posVec);
+			//TODO Debug
+			world.spawnEntity(new EntityDebugDot(world, new Vector3f(hit.hitVec), 1000, 1.0f, 0f, 0.5f));
+			System.out.println("HitVec:"+hitVec);
+			hitVec = hitVec.add(previoushot);
+			System.out.println("HitVec2:"+hitVec);
 			float lambda = 1;
 			//Try each co-ordinate one at a time.
 			if(motion.x != 0)
@@ -173,18 +209,16 @@ public class FlansModRaytracer
 			
 			if(lambda < 0)
 				lambda = -lambda;
+			lambda = (float) hitVec.lengthSquared();
+			System.out.println("Lambda:"+lambda);
 			hits.add(new BlockHit(hit, lambda));
+			if (tries<5) {
+				
+			//world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(hitVec), 1000, 1f, 0f, 0f));
+			System.out.println("Normalized motion:"+normalized_motion);
+			raytraceBlock(world, hit.hitVec.add(normalized_motion), hitVec.add(normalized_motion), motion, normalized_motion, hits, tries);
+			}
 		}
-		
-		//We hit something
-		if(!hits.isEmpty())
-		{
-			//Sort the hits according to the intercept position
-			Collections.sort(hits);
-		}
-		
-		
-		return hits;
 	}
 	
 	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player, EnumHand hand)

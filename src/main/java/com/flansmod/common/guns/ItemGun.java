@@ -549,7 +549,8 @@ public class ItemGun extends Item implements IPaintableItem
 							//TODO unchecked cast
 							FiredShot shot = new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType, player);
 							
-							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, gunOrigin, rayTraceOrigin, rayTraceDirection, handler);
+							//TODO gunOrigin?
+							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler);
 						}
 						// Else, spawn an entity
 						else
@@ -742,7 +743,7 @@ public class ItemGun extends Item implements IPaintableItem
 						data.reloadingRight = true;
 						data.burstRoundsRemainingRight = 0;
 					}
-					//Send reload packet to server
+					//Send reload packet to serverhit
 					FlansMod.getPacketHandler().sendToServer(new PacketReload(hand, false));
 				}
 			}

@@ -27,17 +27,17 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
-	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shot, bulletspread, gunOrigin, rayTraceOrigin, shootingDirection);
+			createShot(world, shot, bulletspread, rayTraceOrigin, shootingDirection);
 			handler.shooting(i < bulletAmount - 1);
 		}
 	}
 
-	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f gunOrigin, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		shootingDirection.x += (float)world.rand.nextGaussian() * bulletspread;
 		shootingDirection.y += (float)world.rand.nextGaussian() * bulletspread;
@@ -48,7 +48,7 @@ public class ShotHandler
 				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
 				
 				Float penetrationPower = shot.getBulletType().penetratingPower;
-				Vector3f previousHitPos = gunOrigin;
+				Vector3f previousHitPos = rayTraceOrigin;
 				
 				for (int i = 0;i<hits.size();i++) {
 					BulletHit hit = hits.get(i);
@@ -58,7 +58,11 @@ public class ShotHandler
 					//TODO
 					if(FlansMod.DEBUG)
 					{
-						world.spawnEntity(new EntityDebugDot(world, previousHitPos, 100, 1.0f, 1.0f, 1.0f));
+						if (hit instanceof BlockHit) {
+							world.spawnEntity(new EntityDebugDot(world, hitPos, 1000, 1.0f, 0f, 1.0f));
+						} else {
+						world.spawnEntity(new EntityDebugDot(world, hitPos, 1000, 1.0f, 1.0f, 1.0f));
+						}
 						world.spawnEntity(new EntityDebugVector(world, previousHitPos, Vector3f.sub(hitPos, previousHitPos, null), 1000, 0.5f, 0.5f, ((float)i/hits.size())));
 					}
 					previousHitPos = hitPos;
@@ -157,7 +161,7 @@ public class ShotHandler
 				//TODO Now always server sided
 			//TODO EntityBullet
 			if(bullet != null) bullet.penetratingPower = penetratingPower;
-			return -1F;
+			//return -1F;
 		}
 		if(penetratingPower <= 0F || (bulletType.explodeOnImpact
 				//&& (bullet == null || bullet.ticksInAir > 1)
