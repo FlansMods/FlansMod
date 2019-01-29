@@ -786,7 +786,7 @@ public class ItemGun extends Item implements IPaintableItem
 							
 							rayTraceDirection.scale(500.0f);
 							
-							List<BulletHit> hits = FlansModRaytracer.Raytrace(world, player, false, null, rayTraceOrigin, rayTraceDirection, 0);
+							List<BulletHit> hits = FlansModRaytracer.Raytrace(world, player, false, null, rayTraceOrigin, rayTraceDirection, 0, 0f);
 							Entity victim = null;
 							Vector3f hitPos = Vector3f.add(rayTraceOrigin, rayTraceDirection, null);
 							BulletHit firstHit = null;
@@ -1060,10 +1060,10 @@ public class ItemGun extends Item implements IPaintableItem
 			{
 				BlockHit blockHit = (BlockHit)hitData;
 				
-				BlockPos blockPos = blockHit.raytraceResult.getBlockPos();
-				IBlockState blockState = world.getBlockState(blockHit.raytraceResult.getBlockPos());
+				BlockPos blockPos = blockHit.getRayTraceResult().getBlockPos();
+				IBlockState blockState = world.getBlockState(blockHit.getRayTraceResult().getBlockPos());
 				
-				Vec3i normal = blockHit.raytraceResult.sideHit.getDirectionVec();
+				Vec3i normal = blockHit.getRayTraceResult().sideHit.getDirectionVec();
 				Vector3f bulletDir = Vector3f.sub(hit, origin, null);
 				bulletDir.normalise();
 				bulletDir.scale(0.5f);

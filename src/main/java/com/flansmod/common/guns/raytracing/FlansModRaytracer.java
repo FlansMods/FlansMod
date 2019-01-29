@@ -4,24 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-
 import com.flansmod.client.debug.EntityDebugDot;
-import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -31,13 +24,14 @@ import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.vector.Vector3f;
 
 public class FlansModRaytracer
 {
 	
-	public static List<BulletHit> Raytrace(World world, Entity playerToIgnore, boolean canHitSelf, Entity entityToIgnore, Vector3f origin, Vector3f motion, int pingOfShooter)
+	public static List<BulletHit> Raytrace(World world, Entity playerToIgnore, boolean canHitSelf, Entity entityToIgnore, Vector3f origin, Vector3f motion, int pingOfShooter, Float gunPenetration)
 	{
 		//Create a list for all bullet hits
 		ArrayList<BulletHit> hits = new ArrayList<>();
@@ -141,16 +135,16 @@ public class FlansModRaytracer
 							System.out.println("NextMotion:"+new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
 							System.out.println("HitPos:"+hitPoint);
 							float hitLambda = 1F;
-							/*if(motion.x != 0F)
-								hitLambda = hitPoint.x / motion.x;
+							if(motion.x != 0F)
+								hitLambda = (float) (hitPoint.x / motion.x);
 							else if(motion.y != 0F)
-								hitLambda = hitPoint.y / motion.y;
+								hitLambda = (float) (hitPoint.y / motion.y);
 							else if(motion.z != 0F)
-								hitLambda = hitPoint.z / motion.z;
+								hitLambda = (float) (hitPoint.z / motion.z);
 							if(hitLambda < 0)
 								hitLambda = -hitLambda;
-							*/
-							hitLambda = (float) hitPoint.lengthSquared();
+							
+							
 							System.out.println("EntityLambda:"+hitLambda);
 							hits.add(new EntityHit(entity, hitLambda));
 							//raytraceBlock(world, mop.hitVec, motion, hits);
@@ -163,7 +157,7 @@ public class FlansModRaytracer
 		Vec3d mot = new Vector3f(motion).toVec3();
 		mot = mot.normalize();
 		mot = mot.scale(0.5d);
-		raytraceBlock(world, origin.toVec3(), new Vec3d(0, 0, 0), motion, mot, hits, 0);
+		raytraceBlock(world, origin.toVec3(), new Vec3d(0, 0, 0), motion, mot, hits, gunPenetration, null);
 		
 		//We hit something
 		if(!hits.isEmpty())
@@ -176,47 +170,53 @@ public class FlansModRaytracer
 		return hits;
 	}
 	
-	private static void raytraceBlock(World world, Vec3d posVec, Vec3d previoushot, Vector3f motion,Vec3d normalized_motion, List<BulletHit> hits, Integer tries) {
-		tries++;
+	private static void raytraceBlock(World world, Vec3d posVec, Vec3d previoushot, Vector3f motion,Vec3d normalized_motion, List<BulletHit> hits, Float penetration, BlockPos oldPos)
+	{
 		//Ray trace the bullet by comparing its next position to its current position
 		Vec3d nextPosVec = new Vec3d(posVec.x + motion.x, posVec.y + motion.y, posVec.z + motion.z); 
-		if (tries==4) {
-			world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(nextPosVec), 1000, 1f, 0f, 0f));
-		}
+
 		//TODO Debug
 		System.out.println("PosVec:"+posVec+" Next posVec:"+nextPosVec);
 		RayTraceResult hit = world.rayTraceBlocks(posVec, nextPosVec, false, true, true);
 		
-		//posVec = origin.toVec3();
-		
 		if(hit != null)
 		{
-			//Calculate the lambda value of the intercept
-			Vec3d hitVec = hit.hitVec.subtract(posVec);
-			//TODO Debug
-			world.spawnEntity(new EntityDebugDot(world, new Vector3f(hit.hitVec), 1000, 1.0f, 0f, 0.5f));
-			System.out.println("HitVec:"+hitVec);
-			hitVec = hitVec.add(previoushot);
-			System.out.println("HitVec2:"+hitVec);
-			float lambda = 1;
-			//Try each co-ordinate one at a time.
-			if(motion.x != 0)
-				lambda = (float)(hitVec.x / motion.x);
-			else if(motion.y != 0)
-				lambda = (float)(hitVec.y / motion.y);
-			else if(motion.z != 0)
-				lambda = (float)(hitVec.z / motion.z);
+			//TODO some effect at hit.hitPos
 			
-			if(lambda < 0)
-				lambda = -lambda;
-			lambda = (float) hitVec.lengthSquared();
+			Vec3d hitVec = hit.hitVec.subtract(posVec);
+			hitVec = hitVec.add(previoushot);
+			
+			BlockPos pos = hit.getBlockPos();
+			IBlockState blockstate = world.getBlockState(hit.getBlockPos());
+			
+			if (!pos.equals(oldPos))
+			{
+				//Calculate the lambda value of the intercept
+				//TODO Debug
+				world.spawnEntity(new EntityDebugDot(world, new Vector3f(hit.hitVec), 1000, 1.0f, 0f, 0.5f));
+				System.out.println("HitVec:"+hitVec);
+				System.out.println("HitVec2:"+hitVec);
+				float lambda = 1;
+				//Try each co-ordinate one at a time.
+				if(motion.x != 0)
+					lambda = (float)(hitVec.x / motion.x);
+				else if(motion.y != 0)
+					lambda = (float)(hitVec.y / motion.y);
+				else if(motion.z != 0)
+					lambda = (float)(hitVec.z / motion.z);
+			
+				if(lambda < 0)
+					lambda = -lambda;
+			
 			System.out.println("Lambda:"+lambda);
-			hits.add(new BlockHit(hit, lambda));
-			if (tries<5) {
-				
-			//world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(hitVec), 1000, 1f, 0f, 0f));
-			System.out.println("Normalized motion:"+normalized_motion);
-			raytraceBlock(world, hit.hitVec.add(normalized_motion), hitVec.add(normalized_motion), motion, normalized_motion, hits, tries);
+			hits.add(new BlockHit(hit, lambda, blockstate));
+			penetration -= ShotHandler.getBlockPenetrationDecrease(blockstate, pos, world);
+			}
+			
+			if (penetration > 0)
+			{
+				System.out.println("Normalized motion:"+normalized_motion);
+				raytraceBlock(world, hit.hitVec.add(normalized_motion), hitVec.add(normalized_motion), motion, normalized_motion, hits, penetration, pos);
 			}
 		}
 	}
@@ -224,7 +224,6 @@ public class FlansModRaytracer
 	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player, EnumHand hand)
 	{
 		PlayerSnapshot snapshot = new PlayerSnapshot(player);
-		PlayerData data = PlayerHandler.getPlayerData(player);
 		
 		ItemStack itemstack = hand == EnumHand.OFF_HAND ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
 		
@@ -266,18 +265,30 @@ public class FlansModRaytracer
 	
 	public static class BlockHit extends BulletHit
 	{
-		public RayTraceResult raytraceResult;
+		private RayTraceResult raytraceResult;
+		private IBlockState blockstate;
 		
-		public BlockHit(RayTraceResult mop, float f)
+		public BlockHit(RayTraceResult mop, Float f, IBlockState blockstate)
 		{
 			super(f);
 			raytraceResult = mop;
+			this.blockstate = blockstate;
 		}
 		
 		@Override
 		public Entity GetEntity()
 		{
 			return null;
+		}
+		
+		public IBlockState getIBlockState()
+		{
+			return blockstate;
+		}
+		
+		public RayTraceResult getRayTraceResult()
+		{
+			return raytraceResult;
 		}
 	}
 	
@@ -339,125 +350,6 @@ public class FlansModRaytracer
 		{
 			return hitbox.player;
 		}
-	}
-	
-	private static byte GetClassType(BulletHit hit)
-	{
-		if(hit instanceof BlockHit) return 0;
-		if(hit instanceof EntityHit) return 1;
-		if(hit instanceof DriveableHit) return 2;
-		if(hit instanceof PlayerBulletHit) return 3;
-		return -1;
-	}
-	
-	public static void WriteToBuffer(BulletHit hit, ByteBuf buffer)
-	{
-		buffer.writeByte(GetClassType(hit));
-		if(hit != null)
-		{
-			buffer.writeFloat(hit.intersectTime);
-			if(hit instanceof BlockHit)
-			{
-				BlockHit blockHit = (BlockHit)hit;
-				buffer.writeByte(blockHit.raytraceResult.sideHit.ordinal());
-				buffer.writeInt(blockHit.raytraceResult.getBlockPos().getX());
-				buffer.writeInt(blockHit.raytraceResult.getBlockPos().getY());
-				buffer.writeInt(blockHit.raytraceResult.getBlockPos().getZ());
-			}
-			if(hit instanceof EntityHit)
-			{
-				EntityHit entityHit = (EntityHit)hit;
-				buffer.writeInt(entityHit.entity.getEntityId());
-			}
-			if(hit instanceof DriveableHit)
-			{
-				DriveableHit driveableHit = (DriveableHit)hit;
-				buffer.writeInt(driveableHit.driveable.getEntityId());
-				buffer.writeByte(driveableHit.part.ordinal());
-			}
-			if(hit instanceof PlayerBulletHit)
-			{
-				PlayerBulletHit playerBulletHit = (PlayerBulletHit)hit;
-				buffer.writeInt(playerBulletHit.hitbox.player.getEntityId());
-				buffer.writeByte(playerBulletHit.hitbox.type.ordinal());
-			}
-		}
-	}
-	
-	public static BulletHit ReadFromBuffer(ByteBuf buffer)
-	{
-		byte type = buffer.readByte();
-		
-		switch(type)
-		{
-			default:
-			case -1: // No hit
-			{
-				return null;
-			}
-			case 0: // BlockHit
-			{
-				float intersectTime = buffer.readFloat();
-				EnumFacing facing = EnumFacing.VALUES[buffer.readByte()];
-				BlockPos blockPos = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
-				return new BlockHit(new RayTraceResult(new Vec3d(0d, 0d, 0d), facing, blockPos), intersectTime);
-			}
-			case 1: // EntityHit
-			{
-				float intersectTime = buffer.readFloat();
-				Entity entity = GetEntityByID(buffer.readInt());
-				return new EntityHit(entity, intersectTime);
-			}
-			case 2: // DriveableHit
-			{
-				float intersectTime = buffer.readFloat();
-				Entity entity = GetEntityByID(buffer.readInt());
-				if(entity instanceof EntityDriveable)
-				{
-					return new DriveableHit((EntityDriveable)entity, EnumDriveablePart.values()[buffer.readByte()], intersectTime);
-				}
-				else
-				{
-					FlansMod.log.warn("Entity was not a driveable");
-					return null;
-				}
-			}
-			case 3: // PlayerBulletHit
-			{
-				float intersectTime = buffer.readFloat();
-				Entity entity = GetEntityByID(buffer.readInt());
-				if(entity instanceof EntityPlayer)
-				{
-					EntityPlayer player = (EntityPlayer)entity;
-					PlayerSnapshot snapshot = new PlayerSnapshot(player);
-					return new PlayerBulletHit(snapshot.GetHitbox(EnumHitboxType.values()[buffer.readByte()]), intersectTime);
-				}
-				else
-				{
-					FlansMod.log.warn("Entity was not a player");
-					return null;
-				}
-			}
-		}
-	}
-	
-	public static Entity GetEntityByID(int id)
-	{
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
-		{
-			for(World world : FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
-			{
-				Entity entity = world.getEntityByID(id);
-				if(entity != null)
-					return entity;
-			}
-		}
-		else
-		{
-			return Minecraft.getMinecraft().world.getEntityByID(id);
-		}
-		
-		return null;
 	}
 	
 }

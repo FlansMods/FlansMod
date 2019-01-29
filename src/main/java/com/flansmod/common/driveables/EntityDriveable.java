@@ -597,7 +597,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
 				{
-					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0);
+					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0, 0f);
 					Entity victim = null;
 					Vector3f hitPos = Vector3f.add(gunVec, lookVector, null);
 					BulletHit firstHit = null;

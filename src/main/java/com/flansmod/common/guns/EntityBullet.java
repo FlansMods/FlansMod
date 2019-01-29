@@ -304,8 +304,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		if(!world.isRemote)
 		{
-			List<BulletHit> hits = FlansModRaytracer.Raytrace(world, owner, ticksInAir > 20, this, origin, motion,
-					pingOfShooter);
+			List<BulletHit> hits = FlansModRaytracer.Raytrace(world, owner, ticksInAir > 20, this, origin, motion, pingOfShooter, 0f);
 			
 			// We hit something
 			if(!hits.isEmpty())

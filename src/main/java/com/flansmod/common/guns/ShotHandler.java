@@ -21,6 +21,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -44,10 +45,10 @@ public class ShotHandler
 		shootingDirection.z += (float)world.rand.nextGaussian() * bulletspread;
 
 				shootingDirection.scale(500.0f);
-				
-				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0);
-				
 				Float penetrationPower = shot.getBulletType().penetratingPower;
+				
+				List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0, penetrationPower);
+				
 				Vector3f previousHitPos = rayTraceOrigin;
 				
 				for (int i = 0;i<hits.size();i++) {
@@ -131,14 +132,14 @@ public class ShotHandler
 		else if(bulletHit instanceof BlockHit)
 		{
 			BlockHit blockHit = (BlockHit)bulletHit;
-			RayTraceResult raytraceResult = blockHit.raytraceResult;
+			RayTraceResult raytraceResult = blockHit.getRayTraceResult();
 			//If the hit wasn't an entity hit, then it must've been a block hit
 			BlockPos pos = raytraceResult.getBlockPos();
 			//TODO debug
 			if(FlansMod.DEBUG && world.isRemote || true)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
 			
-			Material mat = world.getBlockState(pos).getMaterial();
+			Material mat = blockHit.getIBlockState().getMaterial();
 			//If the bullet breaks glass, and can do so according to FlansMod, do so.
 			if(bulletType.breaksGlass && mat == Material.GLASS && !world.isRemote)
 			{
@@ -148,13 +149,16 @@ public class ShotHandler
 					destroyBlock(worldServer, pos, shot.getPlayerOrNull(), false);
 				}
 			}
-			
+			//TODO Debug
 			IBlockState state = world.getBlockState(pos);
 			System.out.println("Block Hardness:"+state.getBlockHardness(world, pos));
-			penetratingPower -= state.getBlockHardness(world, pos);
+			penetratingPower -= getBlockPenetrationDecrease(blockHit.getIBlockState(), pos, world);
 			
 			if(bullet != null)
-				bullet.setPosition(blockHit.raytraceResult.hitVec.x, blockHit.raytraceResult.hitVec.y, blockHit.raytraceResult.hitVec.z);
+			{
+				Vec3d hitVec = blockHit.getRayTraceResult().hitVec;
+				bullet.setPosition(hitVec.x, hitVec.y, hitVec.z);
+			}
 			//play sound when bullet hits block
 			//if(!world.isRemote && shooter != null && bulletType.hitSound != null)
 				//PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, world, bulletType.hitSound, true);
@@ -176,5 +180,10 @@ public class ShotHandler
 			return -1f;
 		}
 		return penetratingPower;
+	}
+	
+	public static Float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)
+	{
+		return blockstate.getBlockHardness(world, pos)*2;
 	}
 }
