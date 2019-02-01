@@ -13,7 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -1059,9 +1059,8 @@ public class ItemGun extends Item implements IPaintableItem
 			if(hitData instanceof BlockHit)
 			{
 				BlockHit blockHit = (BlockHit)hitData;
-				
 				BlockPos blockPos = blockHit.getRayTraceResult().getBlockPos();
-				IBlockState blockState = world.getBlockState(blockHit.getRayTraceResult().getBlockPos());
+				IBlockState blockState = world.getBlockState(blockPos).getActualState(world, blockPos);
 				
 				Vec3i normal = blockHit.getRayTraceResult().sideHit.getDirectionVec();
 				Vector3f bulletDir = Vector3f.sub(hit, origin, null);
@@ -1081,9 +1080,16 @@ public class ItemGun extends Item implements IPaintableItem
 					motionY += bulletDir.y;
 					motionZ += bulletDir.z;
 					
-					Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-							EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ,
+					ParticleDigging fx = (ParticleDigging)Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+							EnumParticleTypes.BLOCK_CRACK.getParticleID(),
+							hit.x, hit.y, hit.z, motionX, motionY, motionZ,
 							Block.getIdFromBlock(blockState.getBlock()));
+					
+					if(fx != null)
+					{
+						fx.setParticleTexture(Minecraft.getMinecraft().getBlockRendererDispatcher()
+								.getModelForState(blockState).getParticleTexture());
+					}
 				}
 				
 				double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
@@ -1091,7 +1097,8 @@ public class ItemGun extends Item implements IPaintableItem
 				double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
 				double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 				
-				Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
+				Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+						EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
 			}
 			
 			if(shooter == Minecraft.getMinecraft().player)
