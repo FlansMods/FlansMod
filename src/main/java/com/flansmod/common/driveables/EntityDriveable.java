@@ -47,13 +47,17 @@ import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.FireableGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootBulletHandler;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.guns.ShotData;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.guns.ShotData.InstantShotData;
 import com.flansmod.common.guns.ShotData.SpawnEntityShotData;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
@@ -572,7 +576,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
-			EntityPlayer driver = getDriver();
+//			EntityPlayer driver = getDriver();
 			
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
@@ -583,7 +587,28 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			// For each 
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
+			//TODO unchecked cast
+			FiredShot shot = new FiredShot(new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed), (BulletType) shootableType);
 			
+			ShootBulletHandler handler = (Boolean isExtraBullet) ->
+			{
+				if (shootableStack.getItem() instanceof ItemShootable)
+				{
+					shootableStack.setItemDamage(shootableStack.getItemDamage() + 1);
+					if(shootableStack.getItemDamage() >= shootableStack.getMaxDamage())
+					{
+						shootableStack.setItemDamage(0);
+						shootableStack.setCount(shootableStack.getCount() - 1);
+						if(shootableStack.getCount() <= 0)
+						
+						driveableData.ammo[getDriveableType().numPassengerGunners + currentGun] = ItemStack.EMPTY.copy();
+					}
+				}
+			};
+			
+			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null), lookVector, handler);
+			
+			/*
 			float spread = 0.005f * gunType.bulletSpread * shootableType.bulletSpread;
 			
 			lookVector.x += (float)world.rand.nextGaussian() * spread;
@@ -591,7 +616,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			lookVector.z += (float)world.rand.nextGaussian() * spread;
 			
 			lookVector.scale(500.0f);
-			
+			*/
+			/*
 			// Instant bullets. Do a raytrace
 			if(gunType.bulletSpeed == 0.0f)
 			{
@@ -631,6 +657,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					//TODO Shoot
 				}
 			}
+			*/
+			
+			
 			
 			//Reset the shoot delay
 			setShootDelay(type.shootDelay(secondary), secondary);
@@ -655,9 +684,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							int spread = 0;
 							int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-							float shellSpeed = 0F;
 							
 							ItemStack bulletStack = driveableData.getStackInSlot(slot);
 							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
@@ -768,6 +795,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		//Rotate the gun vector to global axes
 		Vector3f localGunVec = new Vector3f(dp.position);
+		
+		//TODO debug
+		System.out.println("localGunVec:"+dp.position);
 		
 		if(dp.part == EnumDriveablePart.turret)
 		{

@@ -1,31 +1,44 @@
 package com.flansmod.common.guns;
 
-import com.flansmod.common.types.InfoType;
-
-public class FireableGun{
+public class FireableGun
+{
 
 	private Float spread;
-	private InfoType gun;
+	private Float bulletSpeed;
+	private GunType gun;
 	private Float damage;
 	
-	public FireableGun(InfoType gun,Float damage,Float spread) {
+	public FireableGun(GunType gun, Float damage, Float spread, Float bulletSpeed)
+	{
 		this.gun = gun;
 		this.damage = damage;
 		this.spread = spread;
+		this.bulletSpeed = bulletSpeed;
 	}
 	
-	public Float getGunSpread() {
+	public Float getGunSpread()
+	{
 		return spread;
 	}
 	
-	public String getShortName() {
+	public String getShortName()
+	{
 		return gun.shortName;
 	}
 	
-	public InfoType getInfoType() {
+	public GunType getGunType()
+	{
 		return gun;
 	}
-	public Float getDamage() {
+	
+	public Float getDamage()
+	{
 		return damage;
 	}
+	
+	public Float getBulletSpeed()
+	{
+		return this.bulletSpeed;
+	}
+	
 }

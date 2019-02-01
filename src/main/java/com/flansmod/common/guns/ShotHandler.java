@@ -28,6 +28,19 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
+	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+	{
+		if (shot.getFireableGun().getBulletSpeed() <= 0f)
+		{
+			//Raytrace
+			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler);
+		}
+		else
+		{
+			//TODO Entity Bullet
+		}
+	}
+	
 	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
@@ -71,11 +84,11 @@ public class ShotHandler
 					penetrationPower = OnHit(world, hitPos, shot, null, hit, penetrationPower, shot.getFireableGun().getDamage());
 					if (penetrationPower <= 0f) {
 						//TODO separate EntityBulletStuff
-						//TODO fakebullet entity
+						//TODO remove fakebullet entity
 						//TODO owner entity is null
-						EntityBullet fakeBullet = new EntityBullet(world, hitPos.toVec3(), 0f, 0f, null, 0f, 0f, shot.getBulletType(), 0f, shot.getFireableGun().getInfoType());
+						EntityBullet fakeBullet = new EntityBullet(world, hitPos.toVec3(), 0f, 0f, null, 0f, 0f, shot.getBulletType(), 0f, shot.getFireableGun().getGunType());
 						//TODO shooter is null
-						EntityBullet.OnDetonate(world, hitPos, null, fakeBullet, shot.getFireableGun().getInfoType(), shot.getBulletType());
+						EntityBullet.OnDetonate(world, hitPos, null, fakeBullet, shot.getFireableGun().getGunType(), shot.getBulletType());
 					
 						break;
 					}

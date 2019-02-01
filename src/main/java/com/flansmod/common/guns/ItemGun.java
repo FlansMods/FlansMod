@@ -74,7 +74,6 @@ import com.flansmod.common.network.PacketGunAnimation;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
-import com.flansmod.common.network.PacketShotData;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.EntityGunItem;
@@ -86,8 +85,6 @@ import com.flansmod.common.vector.Vector3f;
 
 public class ItemGun extends Item implements IPaintableItem
 {
-	private static final int CLIENT_TO_SERVER_UPDATE_INTERVAL = 1;
-	private static final int SERVER_TO_CLIENT_UPDATE_INTERVAL = 2;
 	
 	private GunType type;
 	
@@ -339,7 +336,7 @@ public class ItemGun extends Item implements IPaintableItem
 	
 		if (!GetMouseHeld(hand) && GetMouseHeld(hand)==GetLastMouseHeld(hand))
 			return;
-		System.out.println("Hold: "+hold+" Last:"+GetLastMouseHeld(hand)+" Hand:"+hand);
+
 		FlansMod.getPacketHandler().sendToServer(new PacketGunFire(hold, GetLastMouseHeld(hand), hand));
 	}
 	
@@ -505,7 +502,7 @@ public class ItemGun extends Item implements IPaintableItem
 						
 						Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
 						
-						//TODO silenced
+						//TODO support silenced sound
 						// Play shot sounds
 						playShootSound(world, gunOrigin, false);
 						
@@ -513,6 +510,7 @@ public class ItemGun extends Item implements IPaintableItem
 						ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
 						ShootableType shootableType = shootableItem.type;
 						// Instant bullets. Do a raytrace
+						//TODO use fireGun() Method
 						if(type.bulletSpeed == 0.0f)
 						{
 							ShootBulletHandler handler = (Boolean isExtraBullet) ->
@@ -541,13 +539,14 @@ public class ItemGun extends Item implements IPaintableItem
 									
 									if(type.consumeGunUponUse && gunSlot != -1)
 										player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
+									
 									}
 							};
 							
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							//TODO unchecked cast
-							FiredShot shot = new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack)), (BulletType)shootableType, player);
+							FiredShot shot = new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed), (BulletType)shootableType, player);
 							
 							//TODO gunOrigin?
 							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler);

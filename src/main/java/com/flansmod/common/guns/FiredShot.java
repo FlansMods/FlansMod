@@ -37,7 +37,7 @@ public class FiredShot {
 	
 	public DamageSource getDamageSource(Boolean headshot) {
 		if (player.isPresent()) {
-			return new EntityDamageSourceGun(weapon.getShortName(), player.get(), player.get(), weapon.getInfoType(), headshot);
+			return new EntityDamageSourceGun(weapon.getShortName(), player.get(), player.get(), weapon.getGunType(), headshot);
 		}
 		return DamageSource.GENERIC;
 	}
