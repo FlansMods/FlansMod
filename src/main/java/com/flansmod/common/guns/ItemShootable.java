@@ -39,7 +39,7 @@ public abstract class ItemShootable extends Item
 											  float bulletSpread, float damage, float bulletSpeed, boolean b,
 											  InfoType shotFrom);
 	
-	public abstract void Shoot(World world,
+	public abstract void shoot(World world,
 							   Vector3f origin,
 							   Vector3f direction,
 							   float damageModifier,

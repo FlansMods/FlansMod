@@ -156,7 +156,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		}
 	}
 	
-	public void Shoot(World world,
+	public void shoot(World world,
 					  Vector3f origin,
 					  Vector3f direction,
 					  float damageModifier,

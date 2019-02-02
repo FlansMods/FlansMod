@@ -62,6 +62,7 @@ import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.guns.ShotData.InstantShotData;
 import com.flansmod.common.guns.ShotData.SpawnEntityShotData;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
@@ -139,6 +140,10 @@ public class ItemGun extends Item implements IPaintableItem
 		setMaxDamage(0);
 		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
+	}
+	
+	public List<ShotData> getShotsFiredServer() {
+		return shotsFiredServer;
 	}
 	
 	/**
@@ -565,34 +570,95 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
-	public void ServerHandleShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
+	public void handleDriveableShotData(ItemStack shootableStack, int gunSlot, World world, EntityDriveable driveable,
+										boolean isOffHand, ShotData shotData)
 	{
-		// Get useful things
-		if(!(entity instanceof EntityPlayerMP))
-		{
-			return;
-		}
-		EntityPlayerMP player = (EntityPlayerMP)entity;
-		PlayerData data = PlayerHandler.getPlayerData(player, Side.SERVER);
-		if(data == null)
+		boolean isExtraBullet = shotData instanceof InstantShotData && ((InstantShotData)shotData).isExtraBullet;
+		
+		// We have no bullet stack. So we need to reload. The player will send us a message requesting we do a reload
+		if(shootableStack.isEmpty())
 		{
 			return;
 		}
 		
-		
+		if(shootableStack.getItem() instanceof ItemShootable)
+		{
+			ShootableType bullet = ((ItemShootable)shootableStack.getItem()).type;
+			
+			if(!isExtraBullet)
+			{
+				//Damage the bullet item
+				shootableStack.setItemDamage(shootableStack.getItemDamage() + 1);
+				
+				if(type.consumeGunUponUse && gunSlot != -1)
+					driveable.getDriveableData().ammo[gunSlot] = ItemStack.EMPTY.copy();
+			}
+			
+			// Spawn an entity, classic style
+			if(shotData instanceof SpawnEntityShotData)
+			{
+				// Play a sound if the previous sound has finished
+				if(soundDelay <= 0 && type.shootSound != null)
+				{
+					PacketPlaySound.sendSoundPacket(driveable.posX, driveable.posY, driveable.posZ, FlansMod.soundRange,
+							driveable.dimension, type.shootSound, type.distortSound, false);
+					soundDelay = type.shootSoundLength;
+				}
+				
+				// Shoot
+				// Spawn the bullet entities
+				for(int k = 0; k < type.numBullets * bullet.numBullets; k++)
+				{
+					// Actually shoot the bullet
+					((ItemShootable)shootableStack.getItem()).shoot(world,
+							new Vector3f(driveable.posX, driveable.posY + driveable.getEyeHeight(), driveable.posZ),
+							new Vector3f(driveable.getLookVec()),
+							1,
+							1,
+							1,
+							type,
+							driveable.getDriver());
+				}
+			}
+			// Do a raytrace check on what they've sent us.
+			else if(shotData instanceof InstantShotData)
+			{
+				// Play a sound if the previous sound has finished
+				if(soundDelay <= 0 && type.shootSound != null)
+				{
+					PacketPlaySound.sendSoundPacket(driveable.posX, driveable.posY, driveable.posZ, FlansMod.soundRange,
+							driveable.dimension, type.shootSound, type.distortSound, false);
+					soundDelay = type.shootSoundLength;
+				}
+				
+				InstantShotData instantData = (InstantShotData)shotData;
+				doInstantShot(world, driveable.getDriver(), type, (BulletType)bullet,
+						instantData.origin, instantData.hitPos, instantData.hitData,
+						type.damage, isExtraBullet, false);
+				shotsFiredServer.add(shotData);
+				
+			}
+		}
+	}
+	
+	public void handlePlayerShotData(ItemStack gunStack, int gunSlot, World world, EntityPlayerMP player,
+									 boolean isOffHand, ShotData shotData)
+	{
 		boolean isExtraBullet = shotData instanceof InstantShotData && ((InstantShotData)shotData).isExtraBullet;
 		
 		//Go through the bullet stacks in the gun and see if any of them are not null
 		int bulletID = 0;
 		ItemStack bulletStack = ItemStack.EMPTY.copy();
-		for(; bulletID < type.numAmmoItemsInGun; bulletID++)
+		while(bulletID < type.numAmmoItemsInGun)
 		{
-			ItemStack checkingStack = getBulletItemStack(gunstack, bulletID);
+			ItemStack checkingStack = getBulletItemStack(gunStack, bulletID);
 			if(checkingStack != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
 			{
 				bulletStack = checkingStack;
 				break;
 			}
+			
+			bulletID++;
 		}
 		
 		// We have no bullet stack. So we need to reload. The player will send us a message requesting we do a reload
@@ -623,7 +689,7 @@ public class ItemGun extends Item implements IPaintableItem
 				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 				
 				//Update the stack in the gun
-				setBulletItemStack(gunstack, bulletStack, bulletID);
+				setBulletItemStack(gunStack, bulletStack, bulletID);
 				
 				if(type.consumeGunUponUse && gunSlot != -1)
 					player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
@@ -635,24 +701,24 @@ public class ItemGun extends Item implements IPaintableItem
 				// Play a sound if the previous sound has finished
 				if(soundDelay <= 0 && type.shootSound != null)
 				{
-					AttachmentType barrel = type.getBarrel(gunstack);
+					AttachmentType barrel = type.getBarrel(gunStack);
 					boolean silenced = barrel != null && barrel.silencer;
 					//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
 					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
 					soundDelay = type.shootSoundLength;
 				}
 				
-				//Shoot
+				//shoot
 				// Spawn the bullet entities
 				for(int k = 0; k < type.numBullets * bullet.numBullets; k++)
 				{
 					// Actually shoot the bullet
-					((ItemShootable)bulletStack.getItem()).Shoot(world,
+					((ItemShootable)bulletStack.getItem()).shoot(world,
 							new Vector3f(player.posX, player.posY + player.getEyeHeight(), player.posZ),
 							new Vector3f(player.getLookVec()),
-							type.getDamage(gunstack),
-							(player.isSneaking() ? 0.7F : 1F) * type.getSpread(gunstack) * bullet.bulletSpread,
-							type.getBulletSpeed(gunstack),
+							type.getDamage(gunStack),
+							(player.isSneaking() ? 0.7F : 1F) * type.getSpread(gunStack) * bullet.bulletSpread,
+							type.getBulletSpeed(gunStack),
 							type,
 							player);
 				}
@@ -672,10 +738,10 @@ public class ItemGun extends Item implements IPaintableItem
 					//targetPoint.scale(0.5f);
 					//float radius = Vector3f.sub(instantData.origin, instantData.hitPos, null).length();
 					//radius += 50.0f;
-					AttachmentType barrel = type.getBarrel(gunstack);
+					AttachmentType barrel = type.getBarrel(gunStack);
 					boolean silenced = barrel != null && barrel.silencer;
 					
-					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet, silenced);
+					doInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunStack), isExtraBullet, silenced);
 					
 					shotsFiredServer.add(shotData);
 				}
@@ -684,7 +750,7 @@ public class ItemGun extends Item implements IPaintableItem
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private void PlayShotSound(World world, boolean silenced, float x, float y, float z)
+	private void playShotSound(World world, boolean silenced, float x, float y, float z)
 	{
 		FMLClientHandler.instance().getClient().getSoundHandler().playSound(
 				new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent(type.shootSound),
@@ -694,7 +760,7 @@ public class ItemGun extends Item implements IPaintableItem
 						x, y, z));
 	}
 	
-	public void DoInstantShot(World world, EntityLivingBase shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
+	public void doInstantShot(World world, EntityLivingBase shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
 	{
 		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
 		{
@@ -707,7 +773,7 @@ public class ItemGun extends Item implements IPaintableItem
 			// Play a sound if the previous sound has finished
 			if(!isExtraBullet && soundDelay <= 0 && type.shootSound != null && shooter != null)
 			{
-				PlayShotSound(world, silenced, (float)shooter.posX, (float)shooter.posY, (float)shooter.posZ);
+				playShotSound(world, silenced, (float)shooter.posX, (float)shooter.posY, (float)shooter.posZ);
 				
 				soundDelay = type.shootSoundLength;
 			}

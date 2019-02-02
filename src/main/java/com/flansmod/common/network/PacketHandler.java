@@ -153,6 +153,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public void handleClientPackets()
 	{
 		for(PacketBase packet = receivedPacketsClient.poll(); packet != null; packet = receivedPacketsClient.poll())

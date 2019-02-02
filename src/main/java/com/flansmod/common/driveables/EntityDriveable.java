@@ -510,9 +510,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		switch(key)
 		{
-			case 9: leftMouseHeld = held;
+			case 9:
+				leftMouseHeld = held;
 				break;
-			case 8: rightMouseHeld = held;
+			case 8:
+				rightMouseHeld = held;
 				break;
 		}
 	}
@@ -553,7 +555,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		if(driver != null)
 		{
 			return driver.capabilities.isCreativeMode;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -564,7 +568,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			return ((EntityPlayer)seats[0].getControllingPassenger());
 		}
-		else {
+		else
+		{
 			return null;
 		}
 	}
@@ -573,6 +578,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		//Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
+		Vector3f globalGunVec = Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null);
 		Vector3f lookVector = getLookVector(shootPoint);
 		
 		//If its a pilot gun, then it is using a gun type, so do the following
@@ -607,26 +613,28 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
 				{
-					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0);
+					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, globalGunVec, lookVector, 0);
 					Entity victim = null;
-					Vector3f hitPos = Vector3f.add(gunVec, lookVector, null);
+					Vector3f hitPos = Vector3f.add(globalGunVec, lookVector, null);
 					BulletHit firstHit = null;
 					if(!hits.isEmpty())
 					{
 						firstHit = hits.get(0);
-						hitPos = Vector3f.add(gunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
+						hitPos = Vector3f.add(globalGunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
 						victim = firstHit.GetEntity();
 					}
 					
 					if(FlansMod.DEBUG && world.isRemote)
 					{
-						world.spawnEntity(new EntityDebugDot(world, gunVec, 100, 1.0f, 1.0f, 1.0f));
+						world.spawnEntity(new EntityDebugDot(world, globalGunVec, 100, 1.0f, 1.0f, 1.0f));
 					}
 					
 					if(driver != null)
 					{
-						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
-						((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver,
+								globalGunVec, firstHit, hitPos, gunType.damage,
+								i < gunType.numBullets * shootableType.numBullets - 1, false);
+						((ItemGun)gunType.item).handleDriveableShotData(shootableStack, -1, world, this, false, shotData);
 					}
 				}
 			}
@@ -636,7 +644,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				if(driver != null)
 				{
 					ShotData shotData = new SpawnEntityShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, lookVector);
-					((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+					((ItemGun)gunType.item).handleDriveableShotData(shootableStack, -1, world, this, false, shotData);
 				}
 			}
 			
@@ -670,7 +678,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							ItemStack bulletStack = driveableData.getStackInSlot(slot);
 							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
 							EntityShootable bulletEntity = bulletItem.getEntity(world,
-									new Vec3d(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z),
+									new Vec3d(globalGunVec.x, globalGunVec.y, globalGunVec.z),
 									axes.getYaw(),
 									axes.getPitch(),
 									motionX,
@@ -729,7 +737,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							ItemStack bulletStack = driveableData.getStackInSlot(slot);
 							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
 							EntityShootable bulletEntity = bulletItem.getEntity(world,
-									Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null),
+									globalGunVec,
 									lookVector,
 									(EntityLivingBase)seats[0].getControllingPassenger(),
 									spread,
@@ -904,7 +912,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						{
 							int eventOutcome = ForgeHooks.onBlockBreakEvent(world,
 									driverIsCreative() ? GameType.CREATIVE : getDriver().capabilities.allowEdit
-													? GameType.SURVIVAL : GameType.ADVENTURE,
+											? GameType.SURVIVAL : GameType.ADVENTURE,
 									(EntityPlayerMP)getDriver(), new BlockPos(blockX, blockY, blockZ));
 							cancelled = eventOutcome == -1;
 						}
