@@ -553,14 +553,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	private boolean driverIsCreative()
 	{
-		return seats != null && seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer && ((EntityPlayer)seats[0].getControllingPassenger()).capabilities.isCreativeMode;
+		EntityPlayer driver = getDriver();
+		if(driver != null)
+		{
+			return driver.capabilities.isCreativeMode;
+		} else {
+			return false;
+		}
 	}
 	
-	private EntityPlayer getDriver()
+	public EntityPlayer getDriver()
 	{
 		if(seats != null && seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer)
+		{
 			return ((EntityPlayer)seats[0].getControllingPassenger());
-		else return null;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
@@ -922,11 +932,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						IBlockState block = world.getBlockState(new BlockPos(blockX, blockY, blockZ));
 						
 						boolean cancelled = false;
-						if(seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayerMP)
+						if(getDriver() != null)
 						{
 							int eventOutcome = ForgeHooks.onBlockBreakEvent(world,
-									((EntityPlayerMP)seats[0].getControllingPassenger()).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)seats[0].getControllingPassenger()).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE,
-									(EntityPlayerMP)seats[0].getControllingPassenger(), new BlockPos(blockX, blockY, blockZ));
+									driverIsCreative() ? GameType.CREATIVE : getDriver().capabilities.allowEdit
+													? GameType.SURVIVAL : GameType.ADVENTURE,
+									(EntityPlayerMP)getDriver(), new BlockPos(blockX, blockY, blockZ));
 							cancelled = eventOutcome == -1;
 						}
 						if(!cancelled)
@@ -1064,12 +1075,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		boolean canThrust = driverIsCreative() || driveableData.fuelInTank > 0;
 		
 		//If there's no player in the driveable or it cannot thrust, slow the plane and turn off mouse held actions
-		if((seats[0] != null && seats[0].getControllingPassenger() == null) || !canThrust && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
+		if((getDriver() == null) || !canThrust && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
 		{
 			throttle *= 0.98F;
 			rightMouseHeld = leftMouseHeld = false;
 		}
-		else if(seats[0] != null && seats[0].getControllingPassenger() != null && seats[0].getControllingPassenger() == getControllingPassenger())
+		else if(getDriver() != null && getDriver() == getControllingPassenger())
 		{
 			ReportVehicleError();
 		}
@@ -1379,14 +1390,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public boolean hasFuel()
 	{
-		if(seats == null || seats[0] == null || seats[0].getControllingPassenger() == null)
+		if(getDriver() == null)
 			return false;
 		return driverIsCreative() || driveableData.fuelInTank > 0;
 	}
 	
 	public boolean hasEnoughFuel()
 	{
-		if(seats == null || seats[0] == null || seats[0].getControllingPassenger() == null)
+		if(getDriver() == null)
 			return false;
 		return driverIsCreative() || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
 		
