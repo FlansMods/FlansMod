@@ -245,6 +245,13 @@ public class GuiGunBox extends GuiContainer
 		mc.fontRenderer.drawString(type.name, originX + xSize / 2 - stringWidth / 2 + 1, originY + 7, 0xffffffff);
 	}
 	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderHoveredToolTip(mouseX, mouseY);
+	}
+	
 	private void renderInfoType(InfoType type, int x, int y)
 	{
 		if(type == null)
