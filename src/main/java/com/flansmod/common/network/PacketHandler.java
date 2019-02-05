@@ -216,6 +216,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketOpenRewardBox.class);
 		registerPacket(PacketAddSingleRewardBoxInstance.class);
 		registerPacket(PacketGunAnimation.class);
+		registerPacket(PacketBulletTrail.class);
 	}
 	
 	/**

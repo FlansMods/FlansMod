@@ -27,7 +27,7 @@ public class FlansModResourceHandler
 {
 	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<>();
 	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<>();
-	private static HashMap<InfoType, ResourceLocation> trailTextureMap = new HashMap<>();
+	private static HashMap<String, ResourceLocation> trailTextureMap = new HashMap<>();
 	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<>();
 	private static HashMap<Paintjob, ResourceLocation> paintjobIconMap = new HashMap<>();
 	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<>();
@@ -133,14 +133,14 @@ public class FlansModResourceHandler
 		return resLoc;
 	}
 	
-	public static ResourceLocation getTrailTexture(BulletType bulletType)
+	public static ResourceLocation getTrailTexture(String trailTexture)
 	{
-		if(trailTextureMap.containsKey(bulletType))
+		if(trailTextureMap.containsKey(trailTexture))
 		{
-			return trailTextureMap.get(bulletType);
+			return trailTextureMap.get(trailTexture);
 		}
-		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + bulletType.trailTexture + ".png");
-		trailTextureMap.put(bulletType, resLoc);
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + trailTexture + ".png");
+		trailTextureMap.put(trailTexture, resLoc);
 		return resLoc;
 	}
 	

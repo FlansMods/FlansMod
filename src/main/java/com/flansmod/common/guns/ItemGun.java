@@ -1053,7 +1053,7 @@ public class ItemGun extends Item implements IPaintableItem
 				world.spawnEntity(new EntityDebugVector(world, origin, Vector3f.sub(hit, origin, null), 100, 0.5f, 0.5f, 1.0f));
 			}
 			
-			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, shotType));
+//			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, shotType));
 			
 			if(hitData instanceof BlockHit)
 			{

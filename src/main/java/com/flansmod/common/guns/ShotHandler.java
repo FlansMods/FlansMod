@@ -8,12 +8,15 @@ import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
+import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
+import com.flansmod.common.network.PacketBulletTrail;
+import com.flansmod.common.network.PacketHandler;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
@@ -104,8 +107,10 @@ public class ShotHandler
 			finalhit = Vector3f.add(rayTraceOrigin, shootingDirection, null);
 		}
 		//Animation
-		//TODO PACKET
-		InstantBulletRenderer.AddTrail(new InstantShotTrail(gunOrigin, finalhit, shot.getBulletType()));
+		//InstantBulletRenderer.AddTrail(new InstantShotTrail(gunOrigin, finalhit, shot.getBulletType()));
+		//TODO should this be send to all Players?
+		//TODO hardcoded values
+		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(gunOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), gunOrigin.x, gunOrigin.y, gunOrigin.z, 500f, world.provider.getDimension());
 	}
 	
 	public static Float OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
@@ -183,8 +188,10 @@ public class ShotHandler
 				bullet.setPosition(hitVec.x, hitVec.y, hitVec.z);
 			}
 			//play sound when bullet hits block
+			//TODO effect?
 			PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, world.provider.getDimension(), bulletType.hitSound, false);
-				
+			//FlansMod.proxy.playBlockBreakSound(pos.getX(), pos.getY(), pos.getZ(), blockHit.getIBlockState().getBlock());
+			
 			//TODO EntityBullet
 			if(bullet != null) bullet.penetratingPower = penetratingPower;
 			//return -1F;
