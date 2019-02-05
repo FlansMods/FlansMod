@@ -535,21 +535,21 @@ public class ItemGun extends Item implements IPaintableItem
 									//Update the stack in the gun
 									setBulletItemStack(gunstack, bullet, bulletid);
 									
-									int gunSlot = player.inventory.currentItem;
-									
-									if(type.consumeGunUponUse && gunSlot != -1)
-										player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
-									
+									if(type.consumeGunUponUse)
+									{
+										player.setHeldItem(hand, ItemStack.EMPTY.copy());
 									}
+								}
 							};
 							
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
+							
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							//TODO unchecked cast
 							FiredShot shot = new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed), (BulletType)shootableType, player);
 							
 							//TODO gunOrigin?
-							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler);
+							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
 						}
 						// Else, spawn an entity
 						else

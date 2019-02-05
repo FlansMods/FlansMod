@@ -29,6 +29,7 @@ public class InstantBulletRenderer
 	
 	public static void RenderAllTrails(float partialTicks)
 	{
+		//TODO Crash because comodification?
 		for(InstantShotTrail trail : trails)
 		{
 			trail.Render(partialTicks);
@@ -77,10 +78,17 @@ public class InstantBulletRenderer
 			}
 		}
 		
+		//TODO debug
+		int i = 0;
+		
 		// Return true if this needs deleting
 		public boolean Update()
 		{
-			ticksExisted++;
+			if (i > 40) {
+				ticksExisted++;
+				i = 0;
+			}
+			i++;
 			return (ticksExisted) * bulletSpeed >= distanceToTarget - length;
 		}
 		

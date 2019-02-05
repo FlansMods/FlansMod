@@ -6,6 +6,8 @@ import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 import java.util.List;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
+import com.flansmod.client.model.InstantBulletRenderer;
+import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
@@ -29,12 +31,12 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
-	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler, Vector3f gunOrigin)
 	{
 		if (shot.getFireableGun().getBulletSpeed() <= 0f)
 		{
 			//Raytrace
-			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler);
+			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler, gunOrigin);
 		}
 		else
 		{
@@ -42,17 +44,17 @@ public class ShotHandler
 		}
 	}
 	
-	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler, Vector3f gunOrigin)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shot, bulletspread, rayTraceOrigin, shootingDirection);
+			createShot(world, shot, bulletspread, rayTraceOrigin, shootingDirection, gunOrigin);
 			handler.shooting(i < bulletAmount - 1);
 		}
 	}
 
-	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection, Vector3f gunOrigin)
 	{
 		shootingDirection.x += (float)world.rand.nextGaussian() * bulletspread;
 		shootingDirection.y += (float)world.rand.nextGaussian() * bulletspread;
@@ -62,7 +64,8 @@ public class ShotHandler
 		Float penetrationPower = shot.getBulletType().penetratingPower;
 		List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0, penetrationPower);
 		Vector3f previousHitPos = rayTraceOrigin;
-				
+		Vector3f finalhit = null;
+		
 		for (int i = 0;i<hits.size();i++)
 		{
 			BulletHit hit = hits.get(i);
@@ -91,16 +94,18 @@ public class ShotHandler
 				EntityBullet fakeBullet = new EntityBullet(world, hitPos.toVec3(), 0f, 0f, null, 0f, 0f, shot.getBulletType(), 0f, shot.getFireableGun().getGunType());
 				//TODO shooter is null
 				EntityBullet.OnDetonate(world, hitPos, null, fakeBullet, shot.getFireableGun().getGunType(), shot.getBulletType());
-				//Animation
-				
+				finalhit = hitPos;
 				break;
 			}
 		}
 		
-		if (penetrationPower > 0)
+		if (finalhit == null)
 		{
-			//Animation
+			finalhit = Vector3f.add(rayTraceOrigin, shootingDirection, null);
 		}
+		//Animation
+		//TODO PACKET
+		InstantBulletRenderer.AddTrail(new InstantShotTrail(gunOrigin, finalhit, shot.getBulletType()));
 	}
 	
 	public static Float OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
@@ -114,7 +119,7 @@ public class ShotHandler
 		{
 			DriveableHit driveableHit = (DriveableHit)bulletHit;
 			penetratingPower = driveableHit.driveable.bulletHit(bulletType, damage, driveableHit, penetratingPower);
-			if(FlansMod.DEBUG && world.isRemote)
+			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 			
 		}
@@ -122,7 +127,7 @@ public class ShotHandler
 		{
 			PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
 			penetratingPower = playerHit.hitbox.hitByBullet(shot, damage, penetratingPower);
-			if(FlansMod.DEBUG && world.isRemote)
+			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
 		}
 		else if(bulletHit instanceof EntityHit)
@@ -144,7 +149,7 @@ public class ShotHandler
 				if(bulletType.setEntitiesOnFire)
 					entityHit.entity.setFire(20);
 				penetratingPower -= 1F;
-				if(FlansMod.DEBUG && world.isRemote)
+				if(FlansMod.DEBUG)
 					world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
 			}
 		}
@@ -159,7 +164,7 @@ public class ShotHandler
 			
 			Material mat = blockHit.getIBlockState().getMaterial();
 			//If the bullet breaks glass, and can do so according to FlansMod, do so.
-			if(bulletType.breaksGlass && mat == Material.GLASS && !world.isRemote)
+			if(bulletType.breaksGlass && mat == Material.GLASS)
 			{
 				if(TeamsManager.canBreakGlass)
 				{

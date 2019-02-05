@@ -616,7 +616,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 			};
 			
-			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null), lookVector, handler);
+			Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
+			
+			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, gunVector, lookVector, handler,gunVector);
 			
 			/*
 			float spread = 0.005f * gunType.bulletSpread * shootableType.bulletSpread;
