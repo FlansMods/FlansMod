@@ -227,6 +227,13 @@ public class GuiGunModTable extends GuiContainer
 	}
 	
 	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderHoveredToolTip(mouseX, mouseY);
+	}
+	
+	@Override
 	public void handleMouseInput() throws IOException
 	{
 		super.handleMouseInput();

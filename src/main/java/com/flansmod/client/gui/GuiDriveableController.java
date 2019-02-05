@@ -83,6 +83,8 @@ public class GuiDriveableController extends GuiScreen
 			rightMouseHeld = false;
 			plane.updateKeyHeldState(8, false);
 		}
+		
+		MinecraftForge.EVENT_BUS.post(new InputEvent.MouseInputEvent());
 	}
 	
 	@Override

@@ -1,8 +1,6 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -39,7 +36,6 @@ import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
 import com.flansmod.client.EntityCamera;
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
@@ -52,15 +48,10 @@ import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootBulletHandler;
 import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.guns.ShotData;
 import com.flansmod.common.guns.ShotHandler;
-import com.flansmod.common.guns.ShotData.InstantShotData;
-import com.flansmod.common.guns.ShotData.SpawnEntityShotData;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
@@ -636,6 +627,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
 				{
 					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0, 0f);
+					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, globalGunVec, lookVector, 0);
 					Entity victim = null;
 					Vector3f hitPos = Vector3f.add(gunVec, lookVector, null);
 					BulletHit firstHit = null;

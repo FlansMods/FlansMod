@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -95,10 +96,17 @@ public class GuiDriveableInventory extends GuiContainer
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 	
-	private void drawStack(ItemStack itemstack, int i, int j)
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
-		itemRender.renderItemIntoGUI(itemstack, i, j);
-		itemRender.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderHoveredToolTip(mouseX, mouseY);
+	}
+	
+	private void drawStack(ItemStack itemstack, int x, int y)
+	{
+		itemRender.renderItemIntoGUI(itemstack, x, y);
+		itemRender.renderItemOverlayIntoGUI(fontRenderer, itemstack, x, y, null);
 	}
 
 	

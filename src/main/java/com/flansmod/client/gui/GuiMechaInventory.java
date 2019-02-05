@@ -54,11 +54,10 @@ public class GuiMechaInventory extends GuiContainer
 	}
 	
 	@Override
-	public void drawScreen(int i, int j, float f)
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
-		super.drawScreen(i, j, f);
-		
-		
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderHoveredToolTip(mouseX, mouseY);
 	}
 	
 	@Override

@@ -506,6 +506,13 @@ public class GuiPaintjobTable extends GuiContainer
 		GlStateManager.enableDepth();
 	}
 	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderHoveredToolTip(mouseX, mouseY);
+	}
+	
 	public static void copyImageToTexture()
 	{
 		dynamicTexture.updateDynamicTexture();

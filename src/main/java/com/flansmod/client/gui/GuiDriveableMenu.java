@@ -120,6 +120,13 @@ public class GuiDriveableMenu extends GuiContainer
 	}
 	
 	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		renderHoveredToolTip(mouseX, mouseY);
+	}
+	
+	@Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;

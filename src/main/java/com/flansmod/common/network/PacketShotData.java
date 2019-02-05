@@ -134,25 +134,25 @@ public class PacketShotData extends PacketBase
 			{
 				if(entry.shotFrom instanceof GunType)
 				{
-					((ItemGun)entry.shotFrom.item).ServerHandleShotData(null, entry.slot, player.world, player, false, entry);
+					((ItemGun)entry.shotFrom.item).handlePlayerShotData(null, entry.slot, player.world, player, false, entry);
 				}
 			}
 			else if(entry.hand == EnumHand.OFF_HAND)
 			{
 				ItemStack gunStack = player.getHeldItemOffhand();
-				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+				if(gunStack.getItem() instanceof ItemGun)
 				{
 					ItemGun gunItem = (ItemGun)gunStack.getItem();
-					gunItem.ServerHandleShotData(gunStack, entry.slot, player.world, player, true, entry);
+					gunItem.handlePlayerShotData(gunStack, entry.slot, player.world, player, true, entry);
 				}
 			}
 			else
 			{
 				ItemStack gunStack = player.inventory.getStackInSlot(entry.slot);
-				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+				if(gunStack.getItem() instanceof ItemGun)
 				{
 					ItemGun gunItem = (ItemGun)gunStack.getItem();
-					gunItem.ServerHandleShotData(gunStack, entry.slot, player.world, player, false, entry);
+					gunItem.handlePlayerShotData(gunStack, entry.slot, player.world, player, false, entry);
 				}
 			}
 		}
@@ -171,7 +171,7 @@ public class PacketShotData extends PacketBase
 				{
 					ItemGun gunItem = (ItemGun)entry.shotFrom.getItem();
 					
-					gunItem.DoInstantShot(clientPlayer.world,
+					gunItem.doInstantShot(clientPlayer.world,
 							(EntityLivingBase)FlansModRaytracer.GetEntityByID(instantData.shooterID),
 							instantData.shotFrom, (BulletType)instantData.shotType,
 							instantData.origin, instantData.hitPos,

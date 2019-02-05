@@ -16,6 +16,8 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.RenderFlag;
@@ -52,6 +54,7 @@ public class ClientEventHandler
 	}
 	
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void clientTick(TickEvent.ClientTickEvent event)
 	{
 		switch(event.phase)
