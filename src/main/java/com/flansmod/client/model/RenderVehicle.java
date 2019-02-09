@@ -36,7 +36,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	{
 		super(renderManager);
 		shadowSize = 0.5F;
-		MinecraftForge.EVENT_BUS.register(this);
+		//MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
@@ -174,8 +174,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	@Override
 	public void doRender(EntityVehicle entity, double d, double d1, double d2, float f, float f1)
 	{
-		//render((EntityVehicle)entity, d, d1, d2, f, f1);
-		//The Vehicle is rendered by the renderWorld Method
+		render(entity, d, d1, d2, f, f1);
 	}
 	
 	@Override
@@ -246,7 +245,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		GL11.glPopMatrix();
 	}
 	
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
 		//Get the world
@@ -302,7 +301,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		GL11.glDisable(GL11.GL_LIGHTING);
 		//Pop
 		GL11.glPopMatrix();
-	}
+	}*/
 	
 	public static class Factory implements IRenderFactory<EntityVehicle>
 	{
