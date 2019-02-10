@@ -151,6 +151,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 	@Override
 	public void doRender(EntityPlane entity, double d, double d1, double d2, float f, float f1)
 	{
+		render(entity, d, d1, d2, f, f1);
 		//The plane is rendered by the renderWorld Method
 	}
 	
@@ -161,7 +162,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		Paintjob paintjob = type.getPaintjob(entity.getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
-	
+	/*
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
@@ -219,6 +220,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		//Pop
 		GL11.glPopMatrix();
 	}
+	*/
 	
 	@Override
 	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data)
