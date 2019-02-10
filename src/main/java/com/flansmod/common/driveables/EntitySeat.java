@@ -42,9 +42,6 @@ import static com.flansmod.common.PlayerHandler.floatingTickCount;
 
 public class EntitySeat extends Entity implements IControllable, IEntityAdditionalSpawnData
 {
-	///** Set this to true when the client has found the parent driveable and connected them */
-	//@SideOnly(Side.CLIENT)
-	//public boolean foundDriveable;
 	private int driveableID;
 	private int seatID;
 	public EntityDriveable driveable;
@@ -60,7 +57,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	 */
 	public RotatedAxes looking;
 	/**
-	 * For smooth renderering
+	 * For smooth rendering
 	 */
 	public RotatedAxes prevLooking;
 	/**
@@ -126,22 +123,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		playerPosZ = prevPlayerPosZ = posZ;
 		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		prevLooking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
-		//updatePosition();
-	}
-	
-	@Override
-	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int i, boolean b)
-	{
-		//setPosition(x, y, z);
 	}
 	
 	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
-		//prevPosX = posX;
-		//prevPosY = posY;
-		//prevPosZ = posZ;
 		
 		if(driveable == null)
 		{
@@ -153,37 +140,16 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return;
 		}
 		
-		//If on the client and the driveable parent has yet to be found, search for it
-		/*
-		if(world.isRemote && !foundDriveable)
-		{
-			driveable = (EntityDriveable)world.getEntityByID(driveableID);
-			if(driveable == null)
-				return;
-			foundDriveable = true;
-			driveable.seats[seatID] = this;
-			startRiding(driveable);
-			seatInfo = driveable.getDriveableType().seats[seatID];
-			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
-			prevLooking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
-			playerPosX = prevPlayerPosX = posX = driveable.posX;
-			playerPosY = prevPlayerPosY = posY = driveable.posY;
-			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
-			setPosition(posX, posY, posZ);
-		}		
-		*/
-		//Update gun delay ticker
+		// Update gun delay ticker
 		if(gunDelay > 0)
 			gunDelay--;
-		//Update sound delay ticker
+		// Update sound delay ticker
 		if(soundDelay > 0)
 			soundDelay--;
 		if(yawSoundDelay > 0)
 			yawSoundDelay--;
 		if(pitchSoundDelay > 0)
 			pitchSoundDelay--;
-		
-		//updatePosition();
 		
 		if(playYawSound && yawSoundDelay == 0 && seatInfo.traverseSounds)
 		{
@@ -201,7 +167,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		boolean isThePlayer =
 				entityInThisSeat instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)entityInThisSeat);
 		
-		//Reset traverse sounds if player exits the vehicle
+		// Reset traverse sounds if player exits the vehicle
 		
 		if(isThePlayer)
 		{
@@ -211,7 +177,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			pitchSoundDelay = 0;
 		}
 		
-		//If on the client
+		// If on the client
 		if(world.isRemote)
 		{
 			if(driver && isThePlayer && FlansMod.proxy.mouseControlEnabled() && driveable.hasMouseControlMode())
@@ -241,7 +207,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		minigunSpeed *= 0.95F;
 		minigunAngle += minigunSpeed;
-		//prevLooking = looking.clone();
 	}
 	
 	/**
@@ -249,10 +214,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	 */
 	public void updatePosition()
 	{
-		//If we haven't found our driveable, give up
-		//if(world.isRemote && !foundDriveable)
-		//	return;
-		
 		if(driveable == null)
 		{
 			if(getRidingEntity() instanceof EntityDriveable)
@@ -276,10 +237,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevPlayerPitch = playerPitch;
 		prevPlayerRoll = playerRoll;
 		
-		//Get the position of this seat on the driveable axes
+		// Get the position of this seat on the driveable axes
 		Vector3f localPosition = new Vector3f(seatInfo.x / 16F, seatInfo.y / 16F, seatInfo.z / 16F);
 		
-		//Rotate the offset vector by the turret yaw
+		// Rotate the offset vector by the turret yaw
 		if(driveable != null && driveable.getSeat(0) != null && driveable.getSeat(0).looking != null)
 		{
 			RotatedAxes yawOnlyLooking = new RotatedAxes(driveable.getSeat(0).looking.getYaw(), 0F, 0F);
@@ -287,12 +248,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
 		}
 		
-		//If this seat is connected to the turret, then its position vector on the driveable axes needs an extra rotation in it
-		//if(driveable.rotateWithTurret(seatInfo) && driveable.seats[0] != null)
-		//localPosition = driveable.seats[0].looking.findLocalVectorGlobally(localPosition);
-		//Get the position of this seat globally, but positionally relative to the driveable
+		// Get the position of this seat globally, but positionally relative to the driveable
 		Vector3f relativePosition = driveable.axes.findLocalVectorGlobally(localPosition);
-		//Set the absol
+		// Set the absol
 		setPosition(driveable.posX + relativePosition.x, driveable.posY + relativePosition.y,
 				driveable.posZ + relativePosition.z);
 		
@@ -304,7 +262,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			Vec3d yOffset =
 					driveable.axes.findLocalVectorGlobally(new Vector3f(0, entityInThisSeat.getEyeHeight() * 3 / 4, 0))
 							.toVec3().subtract(0, entityInThisSeat.getEyeHeight(), 0);
-			//driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
+			// driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
 			
 			playerPosX = posX + yOffset.x;
 			playerPosY = posY + yOffset.y;
@@ -315,9 +273,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			entityInThisSeat.lastTickPosZ = getControllingPassenger().prevPosZ = prevPlayerPosZ;
 			entityInThisSeat.setPosition(playerPosX, playerPosY, playerPosZ);
 			
-			//Calculate the local look axes globally
+			// Calculate the local look axes globally
 			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(playerLooking);
-			//Set the player's rotation based on this
+			// Set the player's rotation based on this
 			playerYaw = -90F + globalLookAxes.getYaw();
 			playerPitch = globalLookAxes.getPitch();
 			
@@ -336,7 +294,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				entityInThisSeat.rotationPitch = playerPitch;
 			}
 			
-			//If the entity is a player, roll its view accordingly
+			// If the entity is a player, roll its view accordingly
 			if(world.isRemote)
 			{
 				playerRoll = -globalLookAxes.getRoll();
@@ -403,24 +361,22 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(driveable == null)
 			return;
 		
-		Entity entityInThisSeat = getControllingPassenger();
-		
 		prevLooking = looking.clone();
 		prevPlayerLooking = playerLooking.clone();
 		
-		//Driver seat should pass input to driveable
+		// Driver seat should pass input to driveable
 		if(driver)
 		{
 			driveable.onMouseMoved(deltaX, deltaY);
 		}
-		//Other seats should look around, but also the driver seat if mouse control mode is disabled
+		// Other seats should look around, but also the driver seat if mouse control mode is disabled
 		if(!driver || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 		{
 			float lookSpeed = 4F;
 			
-			//Angle stuff for the player
+			// Angle stuff for the player
 			
-			//Calculate the new pitch and consider pitch limiters
+			// Calculate the new pitch and consider pitch limiters
 			float newPlayerPitch = playerLooking.getPitch() -
 					deltaY / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
 			if(newPlayerPitch > -seatInfo.minPitch)
@@ -428,10 +384,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			if(newPlayerPitch < -seatInfo.maxPitch)
 				newPlayerPitch = -seatInfo.maxPitch;
 			
-			//Calculate new yaw and consider yaw limiters
+			// Calculate new yaw and consider yaw limiters
 			float newPlayerYaw = playerLooking.getYaw() +
 					deltaX / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
-			//Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
+			// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
 			float otherNewPlayerYaw = newPlayerYaw - 360F;
 			if(newPlayerYaw < 0)
 				otherNewPlayerYaw = newPlayerYaw + 360F;
@@ -446,7 +402,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 						Math.min(Math.abs(newPlayerYaw - seatInfo.minYaw), Math.abs(newPlayerYaw - seatInfo.maxYaw));
 				float otherPlayerNewYawDistFromRange = Math.min(Math.abs(otherNewPlayerYaw - seatInfo.minYaw),
 						Math.abs(otherNewPlayerYaw - seatInfo.maxYaw));
-				//If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
+				// If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
 				if(newPlayerYawDistFromRange <= otherPlayerNewYawDistFromRange)
 				{
 					if(newPlayerYaw > seatInfo.maxYaw)
@@ -454,7 +410,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					if(newPlayerYaw < seatInfo.minYaw)
 						newPlayerYaw = seatInfo.minYaw;
 				}
-				//Else, the otherNewYaw is closer, so move it in
+				// Else, the otherNewYaw is closer, so move it in
 				else
 				{
 					if(otherNewPlayerYaw > seatInfo.maxYaw)
@@ -467,24 +423,26 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					else newPlayerYaw = otherNewPlayerYaw + 360F;
 				}
 			}
-			//Now set the new angles
+			// Now set the new angles
 			playerLooking.setAngles(newPlayerYaw, newPlayerPitch, 0F);
 			
 			
-			//Move the seat accordingly
+			// Move the seat accordingly
 			
 			
-			//Consider new Yaw and Yaw limiters
+			// Consider new Yaw and Yaw limiters
 			
 			
 			float targetX = playerLooking.getYaw();
 			
 			float yawToMove = (targetX - looking.getYaw());
-			for(; yawToMove > 180F; yawToMove -= 360F)
+			while(yawToMove > 180F)
 			{
+				yawToMove -= 360F;
 			}
-			for(; yawToMove <= -180F; yawToMove += 360F)
+			while(yawToMove <= -180F)
 			{
+				yawToMove += 360F;
 			}
 			
 			float signDeltaX = 0;
@@ -501,7 +459,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				signDeltaX = 0;
 			}
 			
-			//Calculate new yaw and consider yaw limiters
+			// Calculate new yaw and consider yaw limiters
 			float newYaw = 0f;
 			
 			if(seatInfo.legacyAiming || (signDeltaX == 0 && deltaX == 0))
@@ -512,7 +470,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			{
 				newYaw = looking.getYaw() + signDeltaX * seatInfo.aimingSpeed.x;
 			}
-			//Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
+			// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
 			float otherNewYaw = newYaw - 360F;
 			if(newYaw < 0)
 				otherNewYaw = newYaw + 360F;
@@ -523,7 +481,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 						Math.min(Math.abs(newYaw - seatInfo.minYaw), Math.abs(newYaw - seatInfo.maxYaw));
 				float otherNewYawDistFromRange =
 						Math.min(Math.abs(otherNewYaw - seatInfo.minYaw), Math.abs(otherNewYaw - seatInfo.maxYaw));
-				//If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
+				// If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
 				if(newYawDistFromRange <= otherNewYawDistFromRange)
 				{
 					if(newYaw > seatInfo.maxYaw)
@@ -531,29 +489,31 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					if(newYaw < seatInfo.minYaw)
 						newYaw = seatInfo.minYaw;
 				}
-				//Else, the otherNewYaw is closer, so move it in
+				// Else, the otherNewYaw is closer, so move it in
 				else
 				{
 					if(otherNewYaw > seatInfo.maxYaw)
 						otherNewYaw = seatInfo.maxYaw;
 					if(otherNewYaw < seatInfo.minYaw)
 						otherNewYaw = seatInfo.minYaw;
-					//Then match up the newYaw with the otherNewYaw
+					// Then match up the newYaw with the otherNewYaw
 					if(newYaw < 0)
 						newYaw = otherNewYaw - 360F;
 					else newYaw = otherNewYaw + 360F;
 				}
 			}
 			
-			//Calculate the new pitch and consider pitch limiters
+			// Calculate the new pitch and consider pitch limiters
 			float targetY = playerLooking.getPitch();
 			
 			float pitchToMove = (targetY - looking.getPitch());
-			for(; pitchToMove > 180F; pitchToMove -= 360F)
+			while(pitchToMove > 180F)
 			{
+				pitchToMove -= 360F;
 			}
-			for(; pitchToMove <= -180F; pitchToMove += 360F)
+			while(pitchToMove <= -180F)
 			{
+				pitchToMove += 360F;
 			}
 			
 			float signDeltaY = 0;
@@ -573,7 +533,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			float newPitch = 0f;
 			
 			
-			//Pitches the gun at the last possible moment in order to reach target pitch at the same time as target yaw.
+			// Pitches the gun at the last possible moment in order to reach target pitch at the same time as target yaw.
 			float minYawToMove = 0f;
 			
 			float currentYawToMove = 0f;
@@ -617,7 +577,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			if(newPitch < -seatInfo.maxPitch)
 				newPitch = -seatInfo.maxPitch;
 			
-			//Now set the new angles
+			// Now set the new angles
 			looking.setAngles(newYaw, newPitch, 0F);
 			
 			FlansMod.getPacketHandler().sendToServer(new PacketSeatUpdates(this));
@@ -653,7 +613,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public boolean pressKey(int key, EntityPlayer player)
 	{
-		//Driver seat should pass input to driveable
+		// Driver seat should pass input to driveable
 		if(driver && driveable != null)
 		{
 			return driveable.pressKey(key, player);
@@ -675,7 +635,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return false;
 		}
 		
-		//Exit key pressed
+		// Exit key pressed
 		if(key == 6 && getControllingPassenger() != null)
 		{
 			removePassengers();
@@ -683,7 +643,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		if(key == 9) //Shoot
 		{
-			//Get the gun from the plane type and the ammo from the data
+			// Get the gun from the plane type and the ammo from the data
 			GunType gun = seatInfo.gunType;
 			
 			minigunSpeed += 0.1F;
@@ -695,23 +655,23 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				{
 					
 					ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];
-					//Check that neither is null and that the bullet item is actually a bullet
+					// Check that neither is null and that the bullet item is actually a bullet
 					if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemShootable)
 					{
 						ShootableType bullet = ((ItemShootable)bulletItemStack.getItem()).type;
 						if(gun.isAmmo(bullet))
 						{
-							//Gun origin
+							// Gun origin
 							Vector3f gunOrigin =
 									Vector3f.add(driveable.axes.findLocalVectorGlobally(seatInfo.gunOrigin),
 											new Vector3f(driveable.posX, driveable.posY, driveable.posZ), null);
-							//Calculate the look axes globally
+							// Calculate the look axes globally
 							RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
 							Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
-							//Calculate the origin of the bullets
+							// Calculate the origin of the bullets
 							Vector3f yOffset = driveable.axes
 									.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
-							//Spawn a new bullet item
+							// Spawn a new bullet item
 							world.spawnEntity(((ItemShootable)bulletItemStack.getItem()).getEntity(world,
 									Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null),
 									shootVec,
@@ -721,17 +681,17 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 									gun.bulletSpeed <= 0.0f ? 5.0f : gun.bulletSpeed, // TODO : Fix nasty hack 
 									driveable.getDriveableType()));
 							
-							//Play the shoot sound
+							// Play the shoot sound
 							if(soundDelay <= 0)
 							{
 								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
 										gun.shootSound, false);
 								soundDelay = gun.shootSoundLength;
 							}
-							//Get the bullet item damage and increment it
+							// Get the bullet item damage and increment it
 							int damage = bulletItemStack.getItemDamage();
 							bulletItemStack.setItemDamage(damage + 1);
-							//If the bullet item is completely damaged (empty)
+							// If the bullet item is completely damaged (empty)
 							if(damage + 1 == bulletItemStack.getMaxDamage())
 							{
 								//Set the damage to 0 and consume one ammo item (unless in creative)
@@ -739,7 +699,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 								if(!((EntityPlayer)getControllingPassenger()).capabilities.isCreativeMode)
 									driveable.getDriveableData().decrStackSize(3 + seatID, 1);
 							}
-							//Reset the shoot delay
+							// Reset the shoot delay
 							gunDelay = gun.shootDelay;
 						}
 					}
@@ -759,7 +719,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return false;
 		if(driveable == null)
 			return false;
-		//If they are using a repair tool, don't put them in
+		// If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
 		if(currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
@@ -795,7 +755,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}
 			return true;
 		}
-		//Put them in the seat
+		// Put them in the seat
 		if(getControllingPassenger() == null && !driveable.getDriveableData().engine.isAIChip)
 		{
 			if(!entityplayer.startRiding(this))
