@@ -49,7 +49,8 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	
 	public void initPosition()
 	{
-		Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(vehicle.getDriveableType().wheelPositions[ID].position);
+		Vector3f wheelVector =
+				vehicle.axes.findLocalVectorGlobally(vehicle.getDriveableType().wheelPositions[ID].position);
 		setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
 		stepHeight = vehicle.getDriveableType().wheelStepHeight;
 		
@@ -82,22 +83,25 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		if(type == null)
 		{
 			FlansMod.log.warn("Killing wheel due to invalid type tag");
-			setDead();
+			reallySetDead();
 			return;
 		}
 		
 		if(getRidingEntity() instanceof EntityDriveable)
 		{
-			EntityDriveable driveable = (EntityDriveable)getRidingEntity();
-			driveable.registerWheel(this);
+			vehicle = (EntityDriveable)getRidingEntity();
+			vehicle.registerWheel(this);
 		}
 	}
 	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
-		tags.setString("DriveableType", vehicle == null ? "" : vehicle.getDriveableType().shortName);
-		tags.setInteger("Index", ID);
+		if(vehicle != null)
+		{
+			tags.setString("DriveableType", vehicle.getDriveableType().shortName);
+			tags.setInteger("Index", ID);
+		}
 	}
 	
 	@Override
@@ -110,7 +114,14 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//prevPosZ = posZ;
 		
 		if(vehicle == null)
+		{
+			if(getRidingEntity() instanceof EntityDriveable)
+			{
+				vehicle = (EntityDriveable)getRidingEntity();
+				vehicle.registerWheel(this);
+			}
 			return;
+		}
 		
 		//If on the client and the vehicle parent has yet to be found, search for it
 		/*
@@ -229,14 +240,12 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void updateRidden()
 	{
-		Entity entity = getRidingEntity();
-		
 		if(!updateBlocked)
 			onUpdate();
 		
 		if(isRiding())
 		{
-			entity.updatePassenger(this);
+			getRidingEntity().updatePassenger(this);
 		}
 	}
 }
