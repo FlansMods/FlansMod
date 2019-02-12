@@ -690,6 +690,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 							//Calculate the origin of the bullets
 							Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
 							//Spawn a new bullet item
+							//TODO shoot
+							/*
 							world.spawnEntity(((ItemShootable)bulletItemStack.getItem()).getEntity(world,
 									Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null),
 									shootVec,
@@ -698,7 +700,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 									gun.damage,
 									gun.bulletSpeed <= 0.0f ? 5.0f : gun.bulletSpeed, // TODO : Fix nasty hack 
 									driveable.getDriveableType()));
-							
+							*/
 							//Play the shoot sound
 							if(soundDelay <= 0)
 							{

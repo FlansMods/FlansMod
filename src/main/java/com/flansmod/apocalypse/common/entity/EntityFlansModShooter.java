@@ -279,6 +279,8 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				Vector3f origin = new Vector3f(posX, posY + getEyeHeight(), posZ);
 				Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
 				Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
+				//TODO shoot
+				/*
 				ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
 				shootableItem.Shoot(world,
 						origin,
@@ -288,6 +290,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 						gunType.getBulletSpeed(stack),
 						gunType,
 						this);
+					*/
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)

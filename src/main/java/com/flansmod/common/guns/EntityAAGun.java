@@ -32,6 +32,7 @@ import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
@@ -365,9 +366,57 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 		
+		//TODO aa are accepting any ammo for any weapon
 		
 		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
+			Boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
+			
+			if (target != null || shootPlayer)
+			{
+				EntityPlayerMP player = shootPlayer ? (EntityPlayerMP)getControllingPassenger() : null;
+				
+				for(int j = 0; j < type.numBarrels; j++)
+				{
+					if(type.shareAmmo)
+						j = 0;
+					if(shootDelay <= 0 && ammo[j] != null && !ammo[j].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+					{
+						// Fire
+						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
+						if(!shootPlayer)
+						{
+							if(!player.capabilities.isCreativeMode)
+								ammo[j].damageItem(1, player);
+						} else
+						{
+							ammo[j].setItemDamage(ammo[j].getItemDamage() + 1);
+						}
+						shootDelay = type.shootDelay;
+						barrelRecoil[j] = type.recoil;
+						
+						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
+								type.barrelY[currentBarrel] / 16D,
+								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
+						
+						Double radianYaw = Math.toRadians(gunYaw + 90F);
+						Double radianPitch = Math.toRadians(gunPitch);
+						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
+						
+						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage);
+						FiredShot shot = new FiredShot(weapon, bullet, this, player);
+						//TODO use Vec3d
+						ShotHandler.createShot(world, shot, bullet.bulletSpread, new Vector3f(origin), shootingDirection, new Vector3f(origin));
+						
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
+					}
+				}
+				currentBarrel = (currentBarrel + 1) % type.numBarrels;
+				
+			}
+				
+			/*
+			
 			if(mouseHeld && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer)
 			{
 				EntityPlayer player = (EntityPlayer)getControllingPassenger();
@@ -386,8 +435,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 								type.barrelY[currentBarrel] / 16D,
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
 						
-						world.spawnEntity(((ItemBullet)ammo[j].getItem()).getEntity(world,
-								origin, gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, type));
+						//TODO shoot
+						//world.spawnEntity(((ItemBullet)ammo[j].getItem()).getEntity(world,
+						//		origin, gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, type));
 						
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 					}
@@ -413,13 +463,15 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 								type.barrelY[currentBarrel] / 16D,
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY + 1.5F, posZ);
 						
-						world.spawnEntity(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(world,
-								origin, gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, type));
+						//TODO shoot
+						//world.spawnEntity(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(world,
+						//		origin, gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, type));
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 					}
 				}
 				currentBarrel = (currentBarrel + 1) % type.numBarrels;
 			}
+			*/
 		}
 		if(!world.isRemote)
 		{

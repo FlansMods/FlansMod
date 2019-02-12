@@ -458,6 +458,8 @@ public class EntityMecha extends EntityDriveable
 				float speed = gunType.getBulletSpeed(stack);
 				if(speed <= 0.0f)
 					speed = 5.0f;
+				//TODO shoot
+				/*
 				world.spawnEntity(((ItemShootable)bulletStack.getItem()).getEntity(world,
 						bulletOrigin,
 						armVector,
@@ -466,6 +468,7 @@ public class EntityMecha extends EntityDriveable
 						gunType.getDamage(stack),
 						speed,
 						mechaType));
+						*/
 			}
 		
 		if(left)

@@ -20,6 +20,8 @@ public abstract class ItemShootable extends Item
 		setMaxDamage(type.roundsPerItem);
 	}
 	
+	/*
+	
 	//Can be overriden to allow new types of bullets to be created, for planes
 	public abstract EntityShootable getEntity(World world, Vec3d origin, float yaw,
 											  float pitch, double motionX, double motionY, double motionZ,
@@ -47,4 +49,8 @@ public abstract class ItemShootable extends Item
 							   float speedModifier,
 							   InfoType shotFrom,
 							   EntityLivingBase shooter);
+							   
+	*/
+	
+	//public abstract EntityShootable getEntity(World world, FiredShot shot);
 }

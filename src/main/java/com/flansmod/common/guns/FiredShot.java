@@ -6,13 +6,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 
 public class FiredShot {
 
 	private FireableGun weapon;
 	private BulletType bullet;
-	private Optional<EntityPlayer> player;
+	private Optional<EntityPlayerMP> player;
 	private Optional<? extends Entity> shooter;
 	
 	public FiredShot(FireableGun weapon, BulletType bullet) {
@@ -22,7 +23,7 @@ public class FiredShot {
 		this.shooter = this.player;
 	}
 	
-	public FiredShot(FireableGun weapon, BulletType bullet, EntityPlayer player)
+	public FiredShot(FireableGun weapon, BulletType bullet, EntityPlayerMP player)
 	{
 		this(weapon,bullet, player, player);
 	}
@@ -32,7 +33,7 @@ public class FiredShot {
 		this(weapon, bullet, shooter, null);
 	}
 	
-	public FiredShot(FireableGun weapon, BulletType bullet, Entity shooter, @Nullable EntityPlayer player)
+	public FiredShot(FireableGun weapon, BulletType bullet, Entity shooter, @Nullable EntityPlayerMP player)
 	{
 		this.weapon = weapon;
 		this.bullet = bullet;
@@ -54,7 +55,7 @@ public class FiredShot {
 	
 	public DamageSource getDamageSource(Boolean headshot) {
 		if (player.isPresent()) {
-			return new EntityDamageSourceGun(weapon.getShortName(), player.get(), player.get(), weapon.getGunType(), headshot);
+			return new EntityDamageSourceGun(weapon.getShortName(), player.get(), player.get(), weapon.getInfoType(), headshot);
 		}
 		return DamageSource.GENERIC;
 	}
@@ -64,7 +65,7 @@ public class FiredShot {
 		return player.orElse(null);
 	}
 	
-	public Optional<EntityPlayer> getPlayerOptional()
+	public Optional<EntityPlayerMP> getPlayerOptional()
 	{
 		return this.player;
 	}

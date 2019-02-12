@@ -103,6 +103,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	{
 		return type;
 	}
+	/*
 	
 	@Override
 	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
@@ -136,6 +137,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	{
 		return getGrenade(world, player);
 	}
+	*/
 	
 	public EntityGrenade getGrenade(World world, EntityLivingBase thrower)
 	{

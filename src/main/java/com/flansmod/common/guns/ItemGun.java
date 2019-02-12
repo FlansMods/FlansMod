@@ -546,7 +546,8 @@ public class ItemGun extends Item implements IPaintableItem
 							
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							//TODO unchecked cast
-							FiredShot shot = new FiredShot(new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed), (BulletType)shootableType, player);
+							FireableGun fireableGun = new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed);
+							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, player);
 							
 							//TODO gunOrigin?
 							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
@@ -898,6 +899,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
+	/*
 	@Deprecated
 	public void ServerHandleShotData(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, ShotData shotData)
 	{
@@ -1018,7 +1020,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 		System.out.println("Time:"+(System.nanoTime()-millis));
 	}
-	
+	*/
 	@SideOnly(Side.CLIENT)
 	private void PlayShotSound(World world, boolean silenced, float x, float y, float z)
 	{
@@ -1029,6 +1031,7 @@ public class ItemGun extends Item implements IPaintableItem
 						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F),
 						x, y, z));
 	}
+	/*
 	@Deprecated
 	public void DoInstantShot(World world, EntityLivingBase shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
 	{
@@ -1127,6 +1130,7 @@ public class ItemGun extends Item implements IPaintableItem
 			}
 		}
 	}
+	*/
 	
 	public void onUpdateServer(ItemStack itemstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{

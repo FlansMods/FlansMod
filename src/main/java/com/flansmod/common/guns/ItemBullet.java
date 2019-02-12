@@ -45,6 +45,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 		}
 	}
 	
+	/*
 	//Can be overriden to allow new types of bullets to be created, for planes
 	@Override
 	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
@@ -74,10 +75,12 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 	//Can be overriden to allow new types of bullets to be created, Handheld constructor
 	@Override
 	public EntityShootable getEntity(World world, EntityLivingBase player,
-									 float bulletSpread, float damage, float bulletSpeed, boolean isShotgun, InfoType shotFrom)
+									 float bulletSpread, float damage, float bulletSpeed, InfoType shotFrom)
 	{
-		return new EntityBullet(world, player, bulletSpread, damage, this.type, bulletSpeed, isShotgun, shotFrom);
+		return new EntityBullet(world, player, bulletSpread, damage, this.type, bulletSpeed, shotFrom);
 	}
+	
+	*/
 	
 	@Override
 	public InfoType getInfoType()
@@ -85,9 +88,11 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 		return type;
 	}
 	
+	/*
 	@Override
 	public void Shoot(World world, Vector3f origin, Vector3f direction, float damageModifier, float spreadModifier, float speedModifier, InfoType shotFrom, EntityLivingBase shooter)
 	{
 		world.spawnEntity(getEntity(world, shooter, spreadModifier, damageModifier, speedModifier, false, shotFrom));
 	}
+	*/
 }

@@ -4,6 +4,9 @@ import static com.flansmod.common.util.BlockUtil.destroyBlock;
 import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 
 import java.util.List;
+import java.util.Optional;
+
+import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -15,7 +18,9 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.network.PacketBulletTrail;
 import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketHitMarker;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -28,6 +33,7 @@ import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -52,6 +58,11 @@ public class ShotHandler
 		else
 		{
 			//TODO Entity Bullet
+			System.out.println("Bullet");
+			for(int i = 0; i < bulletAmount; i++)
+			{
+				world.spawnEntity(new EntityBullet(world, shot, rayTraceOrigin.toVec3(), shootingDirection.toVec3()));
+			}
 		}
 	}
 	
@@ -60,16 +71,14 @@ public class ShotHandler
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shot, bulletspread, rayTraceOrigin, shootingDirection, gunOrigin);
+			createShot(world, shot, bulletspread, rayTraceOrigin, new Vector3f(shootingDirection), gunOrigin);
 			handler.shooting(i < bulletAmount - 1);
 		}
 	}
 
 	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection, Vector3f gunOrigin)
 	{
-		shootingDirection.x += (float)world.rand.nextGaussian() * bulletspread;
-		shootingDirection.y += (float)world.rand.nextGaussian() * bulletspread;
-		shootingDirection.z += (float)world.rand.nextGaussian() * bulletspread;
+		randomizeVectorDirection(world, shootingDirection, bulletspread);
 		shootingDirection.scale(500.0f);
 		
 		Float penetrationPower = shot.getBulletType().penetratingPower;
@@ -100,7 +109,7 @@ public class ShotHandler
 			}
 			previousHitPos = hitPos;
 			
-			penetrationPower = OnHit(world, hitPos, shootingDirection, shot, null, hit, penetrationPower, shot.getFireableGun().getDamage());
+			penetrationPower = OnHit(world, hitPos, shootingDirection, shot, hit, penetrationPower);
 			if (penetrationPower <= 0f) {
 				//TODO separate EntityBulletStuff
 				onDetonate(world, shot, hitPos);
@@ -119,9 +128,9 @@ public class ShotHandler
 		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(gunOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), gunOrigin.x, gunOrigin.y, gunOrigin.z, 500f, world.provider.getDimension());
 	}
 	
-	public static Float OnHit(World world, Vector3f hit, Vector3f shootingDirection, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
+	public static Float OnHit(World world, Vector3f hit, Vector3f shootingDirection, FiredShot shot, BulletHit bulletHit, Float penetratingPower)
 	{
-		
+		Float damage = shot.getFireableGun().getDamage();
 		//TODO correct penetration stuff
 		System.out.println("Penetration:"+penetratingPower);
 		
@@ -133,6 +142,12 @@ public class ShotHandler
 			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 			
+			//Send hit marker, if player is present
+			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) ->
+			{
+				//TODO possible packet spam
+				FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+			});
 		}
 		else if(bulletHit instanceof PlayerBulletHit)
 		{
@@ -140,6 +155,23 @@ public class ShotHandler
 			penetratingPower = playerHit.hitbox.hitByBullet(shot, damage, penetratingPower);
 			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
+			Optional<EntityPlayerMP> optionalPlayer = shot.getPlayerOptional();
+			// Check teams
+			if(optionalPlayer.isPresent() && FlansModClient.teamInfo != null)
+			{
+				EntityPlayerMP player = optionalPlayer.get();
+				Team shooterTeam = FlansModClient.teamInfo.getTeam(player);
+				Team victimTeam = FlansModClient.teamInfo.getTeam(playerHit.hitbox.player);
+				if(shooterTeam == null || shooterTeam != victimTeam)
+				{
+					//TODO possible packet spam
+					FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+				}
+			}
+			else // No teams mod, just add marker
+			{
+				FlansModClient.AddHitMarker();
+			}
 		}
 		else if(bulletHit instanceof EntityHit)
 		{
@@ -163,6 +195,15 @@ public class ShotHandler
 				if(FlansMod.DEBUG)
 					world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
 			}
+			
+			//Send hit marker, if player is present
+			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) ->
+			{
+				//TODO possible packet spam
+				FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+			});
+			
+			
 		}
 		else if(bulletHit instanceof BlockHit)
 		{
@@ -228,31 +269,15 @@ public class ShotHandler
 			Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
 					EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
 			
-			//TODO seperate entitybulletstuff
-			if(bullet != null)
-			{
-				Vec3d hitVec = blockHit.getRayTraceResult().hitVec;
-				bullet.setPosition(hitVec.x, hitVec.y, hitVec.z);
-			}
 			//play sound when bullet hits block
 			//TODO effect?
 			PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, world.provider.getDimension(), bulletType.hitSound, false);
 			//FlansMod.proxy.playBlockBreakSound(pos.getX(), pos.getY(), pos.getZ(), blockHit.getIBlockState().getBlock());
-			
-			//TODO EntityBullet
-			if(bullet != null) bullet.penetratingPower = penetratingPower;
-			//return -1F;
 		}
 		if(penetratingPower <= 0F || (bulletType.explodeOnImpact
 				//&& (bullet == null || bullet.ticksInAir > 1)
 		))
 		{
-			//TODO seperate EntityBullet stuff
-			if(bullet != null)
-			{
-				bullet.setPosition(hit.x, hit.y, hit.z);
-				bullet.penetratingPower = penetratingPower;
-			}
 			return -1f;
 		}
 		return penetratingPower;
@@ -309,6 +334,13 @@ public class ShotHandler
 			}
 		}
 
+	}
+	
+	public static void randomizeVectorDirection(World world, Vector3f vector, Float spread)
+	{
+		vector.x += (float)world.rand.nextGaussian() * spread;
+		vector.y += (float)world.rand.nextGaussian() * spread;
+		vector.z += (float)world.rand.nextGaussian() * spread;
 	}
 	
 	public static Float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)

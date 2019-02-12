@@ -1,6 +1,9 @@
 package com.flansmod.common.guns;
 
 import java.util.List;
+import java.util.Random;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -9,9 +12,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,6 +27,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,7 +38,9 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
@@ -38,42 +49,122 @@ import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityBullet extends EntityShootable
-//implements IEntityAdditionalSpawnData
+public class EntityBulletOld extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
+	public EntityLivingBase owner;
 	public int ticksInAir;
 	
-	private FiredShot shot;
+	public BulletType type;
+	/**
+	 * What type of weapon did this come from? For death messages
+	 */
+	public InfoType firedFrom;
+	/**
+	 * The amount of damage the gun imparted upon the bullet. Multiplied by the
+	 * bullet damage to get total damage
+	 */
+	public float damage;
+	/**
+	 * If this is non-zero, then the player raytrace code will look back in time
+	 * to when the player thinks their bullet should have hit
+	 */
+	public int pingOfShooter = 0;
+	/**
+	 * Avoids the fact that using the entity random to calculate spread
+	 * direction always results in the same direction
+	 */
+	public static Random bulletRandom = new Random();
 	/**
 	 * For homing missiles
 	 */
 	public Entity lockedOnTo;
 	
-	public float currentPenetratingPower;
+	public float penetratingPower;
 	
 	private float yOffset;
 	
 	@SideOnly(Side.CLIENT)
 	private boolean playedFlybySound;
 	
-
-	public EntityBullet(World world, FiredShot shot, Vec3d origin, Vec3d direction)
+	public EntityBulletOld(World world)
 	{
 		super(world);
 		ticksInAir = 0;
 		setSize(0.5F, 0.5F);
-		this.shot = shot;
-		
+	}
+	
+	/**
+	 * Private partial constructor to avoid repeated code. All constructors go
+	 * through this one
+	 */
+	private EntityBulletOld(World world, EntityLivingBase shooter, float gunDamage, BulletType bulletType, InfoType shotFrom)
+	{
+		this(world);
+		owner = shooter;
+		if(shooter instanceof EntityPlayerMP)
+			pingOfShooter = ((EntityPlayerMP)shooter).ping;
+		type = bulletType;
+		firedFrom = shotFrom;
+		damage = gunDamage;
+		penetratingPower = type.penetratingPower;
+	}
+	
+	/**
+	 * Method called by ItemGun for creating bullets from a hand held weapon
+	 */
+	public EntityBulletOld(World world, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
+	{
+		this(world, new Vec3d(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw,
+				shooter.rotationPitch, shooter, spread, gunDamage, type1, speed, shotFrom);
+	}
+	
+	/**
+	 * More generalised bullet constructor
+	 */
+	public EntityBulletOld(World world, Vec3d origin, float yaw, float pitch, EntityLivingBase shooter, float spread,
+						float gunDamage, BulletType type1, float speed, InfoType shotFrom)
+	{
+		this(world, shooter, gunDamage, type1, shotFrom);
+		setLocationAndAngles(origin.x, origin.y, origin.z, yaw, pitch);
+		setPosition(posX, posY, posZ);
+		yOffset = 0.0F;
+		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.14159265F)
+				* MathHelper.cos((rotationPitch / 180F) * 3.14159265F);
+		motionZ = MathHelper.cos((rotationYaw / 180F) * 3.14159265F)
+				* MathHelper.cos((rotationPitch / 180F) * 3.14159265F);
+		motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F);
+		setArrowHeading(motionX, motionY, motionZ, spread / 2F, speed);
+	}
+	
+	/**  */
+	public EntityBulletOld(World world, Vector3f origin, Vector3f direction, EntityLivingBase shooter, float spread,
+						float gunDamage, BulletType type1, float speed, InfoType shotFrom)
+	{
+		this(world, shooter, gunDamage, type1, shotFrom);
+		damage = gunDamage;
 		setPosition(origin.x, origin.y, origin.z);
 		motionX = direction.x;
 		motionY = direction.y;
 		motionZ = direction.z;
-		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
-		
-		currentPenetratingPower = shot.getBulletType().penetratingPower;
+		setArrowHeading(motionX, motionY, motionZ, spread, speed);
 	}
-
+	
+	/**
+	 * Bomb constructor. Inherits the motion and rotation of the plane
+	 */
+	public EntityBulletOld(World world, Vec3d origin, float yaw, float pitch, double motX, double motY, double motZ,
+						EntityLivingBase shooter, float gunDamage, BulletType type1, InfoType shotFrom)
+	{
+		this(world, shooter, gunDamage, type1, shotFrom);
+		setLocationAndAngles(origin.x, origin.y, origin.z, yaw, pitch);
+		setPosition(posX, posY, posZ);
+		yOffset = 0.0F;
+		motionX = motX;
+		motionY = motY;
+		motionZ = motZ;
+	}
+	
 	@Override
 	protected void entityInit()
 	{
@@ -119,8 +210,6 @@ public class EntityBullet extends EntityShootable
 	 */
 	private void getLockOnTarget()
 	{
-		BulletType type = shot.getBulletType();
-		
 		if(type.lockOnToPlanes || type.lockOnToVehicles || type.lockOnToMechas || type.lockOnToLivings
 				|| type.lockOnToPlayers)
 		{
@@ -172,8 +261,6 @@ public class EntityBullet extends EntityShootable
 	{
 		super.onUpdate();
 		
-		BulletType type = shot.getBulletType();
-		
 		if(FlansMod.DEBUG && world.isRemote)
 			world.spawnEntity(new EntityDebugVector(world, new Vector3f(posX, posY, posZ),
 					new Vector3f(motionX, motionY, motionZ), 20));
@@ -201,12 +288,7 @@ public class EntityBullet extends EntityShootable
 		
 		if(!world.isRemote)
 		{
-			Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
-			Integer ping = 0;
-			if (shot.getPlayerOptional().isPresent())
-				ping = shot.getPlayerOptional().get().ping;
-			
-			List<BulletHit> hits = FlansModRaytracer.Raytrace(world, ignore, ticksInAir > 20, this, origin, motion, ping, 0f);
+			List<BulletHit> hits = FlansModRaytracer.Raytrace(world, owner, ticksInAir > 20, this, origin, motion, pingOfShooter, 0f);
 			
 			// We hit something
 			if(!hits.isEmpty())
@@ -216,11 +298,10 @@ public class EntityBullet extends EntityShootable
 					Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime,
 							origin.y + motion.y * bulletHit.intersectTime,
 							origin.z + motion.z * bulletHit.intersectTime);
-
-					currentPenetratingPower = ShotHandler.OnHit(world, hitPos, motion, shot, bulletHit, currentPenetratingPower);
-					if (currentPenetratingPower <= 0f)
+					
+					//TODO Entity Bullet Hit Stuff
+					//if(EntityBullet.OnHit(world, origin, hitPos, owner, firedFrom, type, this, damage, bulletHit))
 					{
-						ShotHandler.onDetonate(world, shot, hitPos);
 						setDead();
 						break;
 					}
@@ -330,7 +411,7 @@ public class EntityBullet extends EntityShootable
 		float spread = 0.1F;
 		for(int i = 0; i < 10; i++)
 		{
-			Particle particle = FlansModClient.getParticle(shot.getBulletType().trailParticleType, world,
+			Particle particle = FlansModClient.getParticle(type.trailParticleType, world,
 					prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread,
 					prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			// TODO: [1.12] once again, render distance
@@ -341,8 +422,6 @@ public class EntityBullet extends EntityShootable
 		}
 	}
 	
-	//Not used
-	/*
 	@Deprecated
 	public DamageSource getBulletDamage(boolean headshot)
 	{
@@ -352,9 +431,7 @@ public class EntityBullet extends EntityShootable
 		else
 			return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
-	//Not used
-	/*
-	@Deprecated
+	
 	public static DamageSource getDamageSource(InfoType firedFrom, BulletType type, Entity owner, boolean headshot)
 	{
 		if (owner == null) {
@@ -368,8 +445,6 @@ public class EntityBullet extends EntityShootable
 		return (new EntityDamageSourceIndirect(type.shortName, owner, owner)).setProjectile();
 	}
 	
-	//Not used
-	/*
 	private boolean isPartOfOwner(Entity entity)
 	{
 		if(owner == null)
@@ -391,7 +466,6 @@ public class EntityBullet extends EntityShootable
 		return owner.getRidingEntity() instanceof EntitySeat && (((EntitySeat)owner.getRidingEntity()).driveable == null
 				|| ((EntitySeat)owner.getRidingEntity()).driveable.isPartOfThis(entity));
 	}
-	*/
 	
 	@Override
 	public void setDead()
@@ -400,11 +474,11 @@ public class EntityBullet extends EntityShootable
 			return;
 		super.setDead();
 		
-		ShotHandler.onDetonate(world, shot, new Vector3f(posX, posY, posZ));
+		OnDetonate(world, new Vector3f(posX, posY, posZ), owner, this, firedFrom, type);
 	}
 	
 	@Deprecated
-	public static void OnDetonate(World world, Vector3f detonatePos, EntityLivingBase owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
+	public static void OnDetonate(World world, Vector3f detonatePos, EntityLivingBase owner, EntityBulletOld bullet, InfoType shotFrom, BulletType bulletType)
 	{
 		if(world.isRemote)
 			return;
@@ -458,21 +532,17 @@ public class EntityBullet extends EntityShootable
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
-		//bullets should not be saved, while it is theoretically possible it would create an huge amount of problems
-		/*
 		tag.setString("type", type.shortName);
 		if(owner == null)
 			tag.setString("owner", "null");
 		else
 			tag.setString("owner", owner.getName());
-			*/
 	}
 	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag)
 	{
-		//bullets should not be saved
-		/*
+		
 		
 		String typeString = tag.getString("type");
 		String ownerName = tag.getString("owner");
@@ -482,12 +552,11 @@ public class EntityBullet extends EntityShootable
 		
 		if(ownerName != null && !ownerName.equals("null"))
 			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(ownerName);
-			*/
 	}
 	
 	public int getBrightnessForRender(float par1)
 	{
-		if(shot.getBulletType().hasLight)
+		if(type.hasLight)
 		{
 			return 15728880;
 		}
@@ -508,8 +577,7 @@ public class EntityBullet extends EntityShootable
 			}
 		}
 	}
-	//There is no need to save/store this data
-	/*
+	
 	@Override
 	public void writeSpawnData(ByteBuf data)
 	{
@@ -554,7 +622,7 @@ public class EntityBullet extends EntityShootable
 			FlansMod.log.throwing(e);
 		}
 	}
-	*/	
+	
 	@Override
 	public boolean isBurning()
 	{
@@ -568,8 +636,5 @@ public class EntityBullet extends EntityShootable
 		return false;
 	}
 	
-	public FiredShot getFiredShot()
-	{
-		return shot;
-	}
+	
 }

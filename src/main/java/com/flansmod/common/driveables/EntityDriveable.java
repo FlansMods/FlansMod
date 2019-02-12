@@ -590,7 +590,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			ShootableType shootableType = shootableItem.type;
 			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
 			//TODO unchecked cast
-			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, getDriver());
+			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, (EntityPlayerMP) getDriver());
 			
 			ShootBulletHandler handler = (Boolean isExtraBullet) ->
 			{
@@ -689,6 +689,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
+							//TODO shoot
+							/*
 							int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
 							
 							ItemStack bulletStack = driveableData.getStackInSlot(slot);
@@ -721,6 +723,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 								driveableData.setInventorySlotContents(slot, bulletStack);
 							}
 							setShootDelay(type.shootDelay(secondary), secondary);
+							*/
 						}
 						else
 						{
@@ -746,6 +749,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
+							//TODO shoot
+							/*
 							int spread = 0;
 							int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
 							float shellSpeed = 3F;
@@ -778,6 +783,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 								driveableData.setInventorySlotContents(slot, bulletStack);
 							}
 							setShootDelay(type.shootDelay(secondary), secondary);
+							*/
 						}
 						else
 						{

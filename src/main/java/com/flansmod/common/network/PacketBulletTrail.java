@@ -77,6 +77,7 @@ public class PacketBulletTrail extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
+		//TODO trails not visible when trail origin position and player camera position are to close. the can only be seen with an slight angle
 		InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hitPos, width, length, bulletSpeed, trailTexture));
 	}
 

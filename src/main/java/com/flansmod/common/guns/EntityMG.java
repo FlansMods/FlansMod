@@ -8,9 +8,8 @@ import org.lwjgl.input.Mouse;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +17,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -35,6 +33,7 @@ import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 {
@@ -176,32 +175,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		}
 		if(!world.isRemote && isShooting)
 		{
-			if(gunner == null || gunner.isDead)
-				isShooting = false;
-			// Check for ammo / reloading
-			if(ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
-			{
-				return;
-			}
-			// Fire
-			BulletType bullet = BulletType.getBullet(ammo.getItem());
-			if(gunner != null && !gunner.capabilities.isCreativeMode)
-				ammo.damageItem(1, gunner);
-			shootDelay = type.shootDelay;
-			world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world,
-					new Vec3d(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D),
-					(direction * 90F + rotationYaw),
-					rotationPitch,
-					gunner,
-					bullet.bulletSpread * type.bulletSpread,
-					type.damage,
-					type));
-			
-			if(soundDelay <= 0)
-			{
-				soundDelay = type.shootSoundLength;
-				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
-			}
+			fire();
 		}
 		if(soundDelay > 0)
 			soundDelay--;
@@ -228,6 +202,45 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		isShooting = held;
 	}
 	
+	private void fire()
+	{
+		if(gunner == null || gunner.isDead)
+			isShooting = false;
+		System.out.println("hey");
+		// Check for ammo / reloading
+		if(ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
+		{
+			return;
+		}
+		System.out.println("actually shooting");
+		// Fire
+		BulletType bullet = BulletType.getBullet(ammo.getItem());
+		ShootBulletHandler handler = (Boolean isExtraBullet) ->
+		{
+			if(gunner != null && !gunner.capabilities.isCreativeMode)
+				ammo.damageItem(1, gunner);
+		};
+		shootDelay = type.shootDelay;
+		ItemShootable shootableItem = (ItemShootable)ammo.getItem();
+		ShootableType shootableType = shootableItem.type;
+		Vector3f position = new Vector3f(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D);
+		FireableGun gun = new FireableGun(type, type.damage, type.bulletSpread, type.bulletSpeed);
+		//TODO unchecked cast
+		FiredShot shot = new FiredShot(gun, bullet, this, (EntityPlayerMP) gunner);
+
+		Double radianYaw = Math.toRadians(direction * 90F + rotationYaw);
+		Double radianPitch = Math.toRadians(rotationPitch);
+		Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
+		//TODO save actual position
+		ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler, position);
+		
+		if(soundDelay <= 0)
+		{
+			soundDelay = type.shootSoundLength;
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
+		}
+	}
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
@@ -239,34 +252,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				// Player left clicked on the gun
 				if(type.mode == EnumFireMode.FULLAUTO)
 					return true;
-				// Check for ammo / reloading
-				if(ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
-				{
-					return true;
-				}
-				// Fire
-				BulletType bullet = BulletType.getBullet(ammo.getItem());
-				if(gunner != null && !gunner.capabilities.isCreativeMode)
-					ammo.damageItem(1, (EntityLiving)player);
-				shootDelay = type.shootDelay;
-				if(!world.isRemote)
-				{
-					world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world,
-							(EntityLivingBase)player,
-							bullet.bulletSpread * type.bulletSpread,
-							type.damage,
-							type.bulletSpeed,
-							false,
-							type));
-				}
-				if(soundDelay <= 0)
-				{
-					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
-					//world.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
-					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
-					
-					soundDelay = type.shootSoundLength;
-				}
+				
+				fire();
 			}
 			else if(gunner != null)
 			{
