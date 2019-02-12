@@ -493,6 +493,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		OnDetonate(world, new Vector3f(posX, posY, posZ), owner, this, firedFrom, type);
 	}
 	
+	@Deprecated
 	public static void OnDetonate(World world, Vector3f detonatePos, EntityLivingBase owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
 	{
 		if(world.isRemote)

@@ -2,6 +2,9 @@ package com.flansmod.common.guns;
 
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
@@ -10,17 +13,31 @@ public class FiredShot {
 	private FireableGun weapon;
 	private BulletType bullet;
 	private Optional<EntityPlayer> player;
+	private Optional<? extends Entity> shooter;
 	
 	public FiredShot(FireableGun weapon, BulletType bullet) {
 		this.weapon = weapon;
 		this.bullet = bullet;
 		this.player = Optional.empty();
+		this.shooter = this.player;
 	}
 	
 	public FiredShot(FireableGun weapon, BulletType bullet, EntityPlayer player)
 	{
-		this(weapon,bullet);
-		this.player = Optional.of(player);
+		this(weapon,bullet, player, player);
+	}
+	
+	public FiredShot(FireableGun weapon, BulletType bullet, Entity shooter)
+	{
+		this(weapon, bullet, shooter, null);
+	}
+	
+	public FiredShot(FireableGun weapon, BulletType bullet, Entity shooter, @Nullable EntityPlayer player)
+	{
+		this.weapon = weapon;
+		this.bullet = bullet;
+		this.player = Optional.ofNullable(player);
+		this.shooter = Optional.of(shooter);
 	}
 	
 	public FireableGun getFireableGun() {
@@ -42,7 +59,18 @@ public class FiredShot {
 		return DamageSource.GENERIC;
 	}
 	
+	@Deprecated
 	public EntityPlayer getPlayerOrNull() {
 		return player.orElse(null);
+	}
+	
+	public Optional<EntityPlayer> getPlayerOptional()
+	{
+		return this.player;
+	}
+	
+	public Optional<? extends Entity> getShooterOptional()
+	{
+		return this.shooter;
 	}
 }

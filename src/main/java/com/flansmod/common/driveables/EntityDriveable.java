@@ -588,8 +588,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			// For each 
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
+			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
 			//TODO unchecked cast
-			FiredShot shot = new FiredShot(new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed), (BulletType) shootableType);
+			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, getDriver());
 			
 			ShootBulletHandler handler = (Boolean isExtraBullet) ->
 			{

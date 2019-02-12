@@ -6,28 +6,36 @@ import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 import java.util.List;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.client.model.InstantBulletRenderer;
-import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
-import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.network.PacketBulletTrail;
-import com.flansmod.common.network.PacketHandler;
+import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleDigging;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -65,7 +73,10 @@ public class ShotHandler
 		shootingDirection.scale(500.0f);
 		
 		Float penetrationPower = shot.getBulletType().penetratingPower;
-		List<BulletHit> hits = Raytrace(world, shot.getPlayerOrNull(), false, null, rayTraceOrigin, shootingDirection, 0, penetrationPower);
+		//first tries to get the player because the players vehicle is also ignored, or get the player independent shooter or null
+		Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
+		
+		List<BulletHit> hits = Raytrace(world, ignore, false, null, rayTraceOrigin, shootingDirection, 0, penetrationPower);
 		Vector3f previousHitPos = rayTraceOrigin;
 		Vector3f finalhit = null;
 		
@@ -89,14 +100,10 @@ public class ShotHandler
 			}
 			previousHitPos = hitPos;
 			
-			penetrationPower = OnHit(world, hitPos, shot, null, hit, penetrationPower, shot.getFireableGun().getDamage());
+			penetrationPower = OnHit(world, hitPos, shootingDirection, shot, null, hit, penetrationPower, shot.getFireableGun().getDamage());
 			if (penetrationPower <= 0f) {
 				//TODO separate EntityBulletStuff
-				//TODO remove fakebullet entity
-				//TODO owner entity is null
-				EntityBullet fakeBullet = new EntityBullet(world, hitPos.toVec3(), 0f, 0f, null, 0f, 0f, shot.getBulletType(), 0f, shot.getFireableGun().getGunType());
-				//TODO shooter is null
-				EntityBullet.OnDetonate(world, hitPos, null, fakeBullet, shot.getFireableGun().getGunType(), shot.getBulletType());
+				onDetonate(world, shot, hitPos);
 				finalhit = hitPos;
 				break;
 			}
@@ -107,13 +114,12 @@ public class ShotHandler
 			finalhit = Vector3f.add(rayTraceOrigin, shootingDirection, null);
 		}
 		//Animation
-		//InstantBulletRenderer.AddTrail(new InstantShotTrail(gunOrigin, finalhit, shot.getBulletType()));
 		//TODO should this be send to all Players?
 		//TODO hardcoded values
 		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(gunOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), gunOrigin.x, gunOrigin.y, gunOrigin.z, 500f, world.provider.getDimension());
 	}
 	
-	public static Float OnHit(World world, Vector3f hit, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
+	public static Float OnHit(World world, Vector3f hit, Vector3f shootingDirection, FiredShot shot, EntityBullet bullet, BulletHit bulletHit, Float penetratingPower, Float damage)
 	{
 		
 		//TODO correct penetration stuff
@@ -174,14 +180,55 @@ public class ShotHandler
 				if(TeamsManager.canBreakGlass)
 				{
 					WorldServer worldServer = (WorldServer)world;
-					destroyBlock(worldServer, pos, shot.getPlayerOrNull(), false);
+					destroyBlock(worldServer, pos, shot.getPlayerOptional().orElse(null), false);
 				}
 			}
+			IBlockState state = blockHit.getIBlockState().getActualState(world, pos);;
+
 			//TODO Debug
-			IBlockState state = world.getBlockState(pos);
 			System.out.println("Block Hardness:"+state.getBlockHardness(world, pos));
-			penetratingPower -= getBlockPenetrationDecrease(blockHit.getIBlockState(), pos, world);
 			
+			penetratingPower -= getBlockPenetrationDecrease(state, pos, world);
+			
+			Vec3i normal = blockHit.getRayTraceResult().sideHit.getDirectionVec();
+			Vector3f bulletDir = new Vector3f(shootingDirection);
+			bulletDir.normalise();
+			bulletDir.scale(0.5f);
+			
+			for(int i = 0; i < 2; i++)
+			{
+				// TODO: [1.12] Check why this isn't moving right
+				float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
+				
+				double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+				double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+				double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+				
+				motionX += bulletDir.x;
+				motionY += bulletDir.y;
+				motionZ += bulletDir.z;
+				
+				ParticleDigging fx = (ParticleDigging)Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+						EnumParticleTypes.BLOCK_CRACK.getParticleID(),
+						hit.x, hit.y, hit.z, motionX, motionY, motionZ,
+						Block.getIdFromBlock(state.getBlock()));
+				
+				if(fx != null)
+				{
+					fx.setParticleTexture(Minecraft.getMinecraft().getBlockRendererDispatcher()
+							.getModelForState(state).getParticleTexture());
+				}
+			}
+			
+			double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
+			double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+			double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+			double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+			
+			Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+					EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
+			
+			//TODO seperate entitybulletstuff
 			if(bullet != null)
 			{
 				Vec3d hitVec = blockHit.getRayTraceResult().hitVec;
@@ -209,6 +256,59 @@ public class ShotHandler
 			return -1f;
 		}
 		return penetratingPower;
+	}
+	
+	public static void onDetonate(World world, FiredShot shot, Vector3f detonatePos)
+	{
+		BulletType bulletType = shot.getBulletType();
+		
+		if(bulletType.explosionRadius > 0)
+		{
+			new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional().orElse(null), bulletType,
+					detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
+		}
+		if(bulletType.fireRadius > 0)
+		{
+			for(float i = -bulletType.fireRadius; i < bulletType.fireRadius; i++)
+			{
+				for(float k = -bulletType.fireRadius; k < bulletType.fireRadius; k++)
+				{
+					for(int j = -1; j < 1; j++)
+					{
+						if(world.getBlockState(new BlockPos((int)(detonatePos.x + i), (int)(detonatePos.y + j), (int)(detonatePos.z + k))).getMaterial() == Material.AIR)
+						{
+							world.setBlockState(new BlockPos((int)(detonatePos.x + i), (int)(detonatePos.y + j), (int)(detonatePos.z + k)), Blocks.FIRE.getDefaultState(), 2);
+						}
+					}
+				}
+			}
+		}
+		// Send flak packet
+		if(bulletType.flak > 0)
+		{
+			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(detonatePos.x, detonatePos.y, detonatePos.z, bulletType.flak, bulletType.flakParticles), detonatePos.x, detonatePos.y, detonatePos.z, 200, world.provider.getDimension());
+		}
+		// Drop item on hitting if bullet requires it
+		if(bulletType.dropItemOnHit != null)
+		{
+			//TODO save itemstack on load?
+			String itemName = bulletType.dropItemOnHit;
+			int damage = 0;
+			if(itemName.contains("."))
+			{
+				damage = Integer.parseInt(itemName.split("\\.")[1]);
+				itemName = itemName.split("\\.")[0];
+			}
+			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
+			
+			if(dropStack != null && !dropStack.isEmpty())
+			{
+				EntityItem entityitem = new EntityItem(world, detonatePos.x, detonatePos.y, detonatePos.z, dropStack);
+				entityitem.setDefaultPickupDelay();
+				world.spawnEntity(entityitem);
+			}
+		}
+
 	}
 	
 	public static Float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)
