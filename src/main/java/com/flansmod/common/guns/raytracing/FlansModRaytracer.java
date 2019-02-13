@@ -175,8 +175,6 @@ public class FlansModRaytracer
 		//Ray trace the bullet by comparing its next position to its current position
 		Vec3d nextPosVec = new Vec3d(posVec.x + motion.x, posVec.y + motion.y, posVec.z + motion.z); 
 
-		//TODO Debug
-		System.out.println("PosVec:"+posVec+" Next posVec:"+nextPosVec);
 		RayTraceResult hit = world.rayTraceBlocks(posVec, nextPosVec, false, true, true);
 		
 		if(hit != null)
@@ -192,10 +190,6 @@ public class FlansModRaytracer
 			if (!pos.equals(oldPos))
 			{
 				//Calculate the lambda value of the intercept
-				//TODO Debug
-				world.spawnEntity(new EntityDebugDot(world, new Vector3f(hit.hitVec), 1000, 1.0f, 0f, 0.5f));
-				System.out.println("HitVec:"+hitVec);
-				System.out.println("HitVec2:"+hitVec);
 				float lambda = 1;
 				//Try each co-ordinate one at a time.
 				if(motion.x != 0)
@@ -208,14 +202,12 @@ public class FlansModRaytracer
 				if(lambda < 0)
 					lambda = -lambda;
 			
-			System.out.println("Lambda:"+lambda);
 			hits.add(new BlockHit(hit, lambda, blockstate));
 			penetration -= ShotHandler.getBlockPenetrationDecrease(blockstate, pos, world);
 			}
 			
 			if (penetration > 0)
 			{
-				System.out.println("Normalized motion:"+normalized_motion);
 				raytraceBlock(world, hit.hitVec.add(normalized_motion), hitVec.add(normalized_motion), motion, normalized_motion, hits, penetration, pos);
 			}
 		}

@@ -384,7 +384,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					{
 						// Fire
 						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
-						if(!shootPlayer)
+						if(shootPlayer)
 						{
 							if(!player.capabilities.isCreativeMode)
 								ammo[j].damageItem(1, player);
@@ -406,7 +406,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage);
 						FiredShot shot = new FiredShot(weapon, bullet, this, player);
 						//TODO use Vec3d
-						ShotHandler.createShot(world, shot, bullet.bulletSpread, new Vector3f(origin), shootingDirection, new Vector3f(origin));
+						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin), shootingDirection);
 						
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 					}

@@ -232,7 +232,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		Double radianPitch = Math.toRadians(rotationPitch);
 		Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
 		//TODO save actual position
-		ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler, position);
+		ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler, position);
 		
 		if(soundDelay <= 0)
 		{

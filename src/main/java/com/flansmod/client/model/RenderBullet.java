@@ -29,7 +29,6 @@ public class RenderBullet extends Render<EntityBullet>
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(90F - bullet.prevRotationPitch - (bullet.rotationPitch - bullet.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
-		//TODO data not transfered
 		ModelBase model = bullet.getFiredShot().getBulletType().model;
 		if(model != null)
 			model.render(bullet, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
@@ -45,7 +44,6 @@ public class RenderBullet extends Render<EntityBullet>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityBullet entity)
 	{
-		//TODO data not transfered
 		return FlansModResourceHandler.getTexture(entity.getFiredShot().getBulletType());
 	}
 	

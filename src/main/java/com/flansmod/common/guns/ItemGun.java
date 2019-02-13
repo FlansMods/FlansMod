@@ -511,8 +511,8 @@ public class ItemGun extends Item implements IPaintableItem
 						ShootableType shootableType = shootableItem.type;
 						// Instant bullets. Do a raytrace
 						//TODO use fireGun() Method
-						if(type.bulletSpeed == 0.0f)
-						{
+						//if(type.bulletSpeed == 0.0f)
+						//{
 							ShootBulletHandler handler = (Boolean isExtraBullet) ->
 							{
 								if(!isExtraBullet)
@@ -550,17 +550,18 @@ public class ItemGun extends Item implements IPaintableItem
 							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, player);
 							
 							//TODO gunOrigin?
-							ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
-						}
+							//ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
+							ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
+						//}
 						// Else, spawn an entity
-						else
+						/*else
 						{
 							//TODO EntityBullet
 							int gunSlot = player.inventory.currentItem;
 							ShotData shotData = new SpawnEntityShotData(gunSlot, hand, type, shootableType, player, new Vector3f(player.getLookVec()));
 							shotsFiredClient.add(shotData);
 						}
-						
+						*/
 						// Now do client side things
 						//TODO type.model can be null
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;

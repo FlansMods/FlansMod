@@ -40,7 +40,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -48,9 +47,14 @@ import net.minecraft.world.WorldServer;
 public class ShotHandler
 {
 
+	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	{
+		fireGun(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, ShootBulletHandler.instance, rayTraceOrigin);
+	}
+	
 	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler, Vector3f gunOrigin)
 	{
-		if (shot.getFireableGun().getBulletSpeed() <= 0f)
+		if (shot.getFireableGun().getBulletSpeed() == 0f)
 		{
 			//Raytrace
 			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler, gunOrigin);
@@ -62,6 +66,7 @@ public class ShotHandler
 			for(int i = 0; i < bulletAmount; i++)
 			{
 				world.spawnEntity(new EntityBullet(world, shot, rayTraceOrigin.toVec3(), shootingDirection.toVec3()));
+				handler.shooting(i < bulletAmount - 1);
 			}
 		}
 	}

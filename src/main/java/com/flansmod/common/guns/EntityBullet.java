@@ -21,6 +21,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,8 +40,9 @@ import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityBullet extends EntityShootable
-//implements IEntityAdditionalSpawnData
+import io.netty.buffer.ByteBuf;
+
+public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
 	public int ticksInAir;
@@ -50,19 +53,23 @@ public class EntityBullet extends EntityShootable
 	 */
 	public Entity lockedOnTo;
 	
-	public float currentPenetratingPower;
+	private float currentPenetratingPower;
 	
 	private float yOffset;
 	
 	@SideOnly(Side.CLIENT)
 	private boolean playedFlybySound;
-	
 
-	public EntityBullet(World world, FiredShot shot, Vec3d origin, Vec3d direction)
+	public EntityBullet(World world)
 	{
 		super(world);
 		ticksInAir = 0;
 		setSize(0.5F, 0.5F);
+	}
+	
+	public EntityBullet(World world, FiredShot shot, Vec3d origin, Vec3d direction)
+	{
+		this(world);
 		this.shot = shot;
 		
 		setPosition(origin.x, origin.y, origin.z);
@@ -172,145 +179,157 @@ public class EntityBullet extends EntityShootable
 	{
 		super.onUpdate();
 		
-		BulletType type = shot.getBulletType();
-		
-		if(FlansMod.DEBUG && world.isRemote)
-			world.spawnEntity(new EntityDebugVector(world, new Vector3f(posX, posY, posZ),
-					new Vector3f(motionX, motionY, motionZ), 20));
-		
-		// Check the fuse to see if the bullet should explode
-		ticksInAir++;
-		if(ticksInAir > type.fuse && type.fuse > 0 && !isDead)
+		try
 		{
-			setDead();
-		}
-		
-		if(ticksExisted > bulletLife)
-		{
-			setDead();
-		}
-		
-		if(isDead)
-			return;
-		
-		if(world.isRemote)
-			onUpdateClient();
-		
-		Vector3f origin = new Vector3f(posX, posY, posZ);
-		Vector3f motion = new Vector3f(motionX, motionY, motionZ);
-		
-		if(!world.isRemote)
-		{
-			Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
-			Integer ping = 0;
-			if (shot.getPlayerOptional().isPresent())
-				ping = shot.getPlayerOptional().get().ping;
-			
-			List<BulletHit> hits = FlansModRaytracer.Raytrace(world, ignore, ticksInAir > 20, this, origin, motion, ping, 0f);
-			
-			// We hit something
-			if(!hits.isEmpty())
+			if(world.isRemote)
 			{
-				for(BulletHit bulletHit : hits)
+				onUpdateClient();
+				return;
+			}
+			
+			BulletType type = shot.getBulletType();
+			
+			if(FlansMod.DEBUG)
+				world.spawnEntity(new EntityDebugVector(world, new Vector3f(posX, posY, posZ),
+						new Vector3f(motionX, motionY, motionZ), 20));
+			
+			// Check the fuse to see if the bullet should explode
+			ticksInAir++;
+			if(ticksInAir > type.fuse && type.fuse > 0 && !isDead)
+			{
+				setDead();
+			}
+			
+			if(ticksExisted > bulletLife)
+			{
+				setDead();
+			}
+			
+			if(isDead)
+				return;
+			
+			Vector3f origin = new Vector3f(posX, posY, posZ);
+			Vector3f motion = new Vector3f(motionX, motionY, motionZ);
+			
+			if(!world.isRemote)
+			{
+				Entity ignore = shot.getPlayerOptional().isPresent() ? shot.getPlayerOptional().get() : shot.getShooterOptional().orElse(null);
+				Integer ping = 0;
+				if (shot.getPlayerOptional().isPresent())
+					ping = shot.getPlayerOptional().get().ping;
+				
+				List<BulletHit> hits = FlansModRaytracer.Raytrace(world, ignore, ticksInAir > 20, this, origin, motion, ping, 0f);
+				
+				// We hit something
+				if(!hits.isEmpty())
 				{
-					Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime,
-							origin.y + motion.y * bulletHit.intersectTime,
-							origin.z + motion.z * bulletHit.intersectTime);
-
-					currentPenetratingPower = ShotHandler.OnHit(world, hitPos, motion, shot, bulletHit, currentPenetratingPower);
-					if (currentPenetratingPower <= 0f)
+					for(BulletHit bulletHit : hits)
 					{
-						ShotHandler.onDetonate(world, shot, hitPos);
-						setDead();
-						break;
+						Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime,
+								origin.y + motion.y * bulletHit.intersectTime,
+								origin.z + motion.z * bulletHit.intersectTime);
+
+						currentPenetratingPower = ShotHandler.OnHit(world, hitPos, motion, shot, bulletHit, currentPenetratingPower);
+						if (currentPenetratingPower <= 0f)
+						{
+							ShotHandler.onDetonate(world, shot, hitPos);
+							setDead();
+							break;
+						}
 					}
 				}
 			}
-		}
-		
-		// Movement dampening variables
-		float drag = 0.99F;
-		float gravity = 0.02F;
-		// If the bullet is in water, spawn particles and increase the drag
-		if(isInWater())
-		{
-			for(int i = 0; i < 4; i++)
+			
+			// Movement dampening variables
+			float drag = 0.99F;
+			float gravity = 0.02F;
+			// If the bullet is in water, spawn particles and increase the drag
+			if(isInWater())
 			{
-				float bubbleMotion = 0.25F;
-				world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * bubbleMotion,
-						posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
+				for(int i = 0; i < 4; i++)
+				{
+					float bubbleMotion = 0.25F;
+					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * bubbleMotion,
+							posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
+				}
+				drag = 0.8F;
 			}
-			drag = 0.8F;
-		}
-		motionX *= drag;
-		motionY *= drag;
-		motionZ *= drag;
-		motionY -= gravity * type.fallSpeed;
-		
-		// Apply homing action
-		if(lockedOnTo != null)
-		{
-			double dX = lockedOnTo.posX - posX;
-			double dY = lockedOnTo.posY - posY;
-			double dZ = lockedOnTo.posZ - posZ;
-			double dXYZ = dX * dX + dY * dY + dZ * dZ;
+			motionX *= drag;
+			motionY *= drag;
+			motionZ *= drag;
+			motionY -= gravity * type.fallSpeed;
 			
-			Vector3f relPosVec = new Vector3f(dX, dY, dZ);
-			float angle = Math.abs(Vector3f.angle(motion, relPosVec));
+			// Apply homing action
+			if(lockedOnTo != null)
+			{
+				double dX = lockedOnTo.posX - posX;
+				double dY = lockedOnTo.posY - posY;
+				double dZ = lockedOnTo.posZ - posZ;
+				double dXYZ = dX * dX + dY * dY + dZ * dZ;
+				
+				Vector3f relPosVec = new Vector3f(dX, dY, dZ);
+				float angle = Math.abs(Vector3f.angle(motion, relPosVec));
+				
+				double lockOnPull = (angle) * type.lockOnForce;
+				
+				lockOnPull = lockOnPull * lockOnPull;
+				
+				motionX *= 0.95f;
+				motionY *= 0.95f;
+				motionZ *= 0.95f;
+				
+				motionX += lockOnPull * dX / dXYZ;
+				motionY += lockOnPull * dY / dXYZ;
+				motionZ += lockOnPull * dZ / dXYZ;
+			}
 			
-			double lockOnPull = (angle) * type.lockOnForce;
+			// Apply motion
+			posX += motionX;
+			posY += motionY;
+			posZ += motionZ;
+			setPosition(posX, posY, posZ);
 			
-			lockOnPull = lockOnPull * lockOnPull;
+			// Recalculate the angles from the new motion
+			float motionXZ = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+			rotationYaw = (float)((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
+			rotationPitch = (float)((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
+			// Reset the range of the angles
+			for(; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F)
+			{
+			}
+			for(; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F)
+			{
+			}
+			for(; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F)
+			{
+			}
+			for(; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F)
+			{
+			}
+			rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
+			rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 			
-			motionX *= 0.95f;
-			motionY *= 0.95f;
-			motionZ *= 0.95f;
+			// Temporary fire glitch fix
+			if(world.isRemote)
+				extinguish();
 			
-			motionX += lockOnPull * dX / dXYZ;
-			motionY += lockOnPull * dY / dXYZ;
-			motionZ += lockOnPull * dZ / dXYZ;
 		}
-		
-		// Apply motion
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-		setPosition(posX, posY, posZ);
-		
-		// Recalculate the angles from the new motion
-		float motionXZ = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-		rotationYaw = (float)((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-		rotationPitch = (float)((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
-		// Reset the range of the angles
-		for(; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F)
+		catch (Exception ex)
 		{
+			ex.printStackTrace();
+			super.setDead();
 		}
-		for(; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F)
-		{
-		}
-		for(; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F)
-		{
-		}
-		for(; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F)
-		{
-		}
-		rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
-		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
-		
-		// Particles
-		if(type.trailParticles && world.isRemote && ticksInAir > 1)
-		{
-			spawnParticles();
-		}
-		
-		// Temporary fire glitch fix
-		if(world.isRemote)
-			extinguish();
 	}
 	
 	@SideOnly(Side.CLIENT)
 	private void onUpdateClient()
 	{
+		// Particles
+		if(shot.getBulletType().trailParticles)
+		{
+			spawnParticles();
+		}
+		
 		if(getDistanceSq(Minecraft.getMinecraft().player) < 5 && !playedFlybySound)
 		{
 			playedFlybySound = true;
@@ -399,10 +418,8 @@ public class EntityBullet extends EntityShootable
 		if(isDead)
 			return;
 		super.setDead();
-		
-		ShotHandler.onDetonate(world, shot, new Vector3f(posX, posY, posZ));
 	}
-	
+	/*
 	@Deprecated
 	public static void OnDetonate(World world, Vector3f detonatePos, EntityLivingBase owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
 	{
@@ -454,10 +471,12 @@ public class EntityBullet extends EntityShootable
 			}
 		}
 	}
+	*/
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
+		tag.setString("type", shot.getBulletType().shortName);
 		//bullets should not be saved, while it is theoretically possible it would create an huge amount of problems
 		/*
 		tag.setString("type", type.shortName);
@@ -471,6 +490,7 @@ public class EntityBullet extends EntityShootable
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag)
 	{
+		shot = new FiredShot(null, BulletType.getBullet(tag.getString("type")));
 		//bullets should not be saved
 		/*
 		
@@ -485,6 +505,8 @@ public class EntityBullet extends EntityShootable
 			*/
 	}
 	
+	/*
+	@Deprecated
 	public int getBrightnessForRender(float par1)
 	{
 		if(shot.getBulletType().hasLight)
@@ -508,6 +530,63 @@ public class EntityBullet extends EntityShootable
 			}
 		}
 	}
+	*/
+	@Override
+	public void writeSpawnData(ByteBuf data)
+	{
+		ByteBufUtils.writeUTF8String(data, shot.getBulletType().shortName);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf data)
+	{
+		try
+		{
+			//Transferring only the bullet type for the client to mimic the real behavior of the bullet
+			shot = new FiredShot(null, BulletType.getBullet(ByteBufUtils.readUTF8String(data)));
+		}
+		catch(Exception e)
+		{
+			FlansMod.log.error("Failed to read bullet owner from server.");
+			super.setDead();
+			FlansMod.log.throwing(e);
+		}
+	}
+	/*
+	//TODO sync motion and remove lockedOnTo & bullettype
+	@Override
+	public void writeSpawnData(ByteBuf data)
+	{
+		data.writeDouble(motionX);
+		data.writeDouble(motionY);
+		data.writeDouble(motionZ);
+		data.writeInt(lockedOnTo == null ? -1 : lockedOnTo.getEntityId());
+		ByteBufUtils.writeUTF8String(data, shot.getBulletType().shortName);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf data)
+	{
+		try
+		{
+			motionX = data.readDouble();
+			motionY = data.readDouble();
+			motionZ = data.readDouble();
+			int lockedOnToID = data.readInt();
+			if(lockedOnToID != -1)
+				lockedOnTo = world.getEntityByID(lockedOnToID);
+			//TODO sync other attributes to remove the need for this one
+			//Transferring only the bullet type for the client to mimic the real behavior of the bullet
+			shot = new FiredShot(null, BulletType.getBullet(ByteBufUtils.readUTF8String(data)));
+		}
+		catch(Exception e)
+		{
+			FlansMod.log.error("Failed to read bullet owner from server.");
+			super.setDead();
+			FlansMod.log.throwing(e);
+		}
+	}
+	
 	//There is no need to save/store this data
 	/*
 	@Override

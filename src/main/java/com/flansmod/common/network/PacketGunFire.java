@@ -57,7 +57,6 @@ public class PacketGunFire extends PacketBase
 		//TODO can itemstack be null?
 		Item item = itemstack.getItem();
 		if (item instanceof ItemGun) {
-			System.out.println("FIRE");
 			ItemGun gun = (ItemGun) item;
 			gun.shootServer(held, lastheld, hand, playerEntity, itemstack);
 			

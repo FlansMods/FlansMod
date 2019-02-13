@@ -28,7 +28,6 @@ public class InstantBulletRenderer
 	
 	public static void RenderAllTrails(float partialTicks)
 	{
-		//TODO Crash because comodification?
 		for(InstantShotTrail trail : trails)
 		{
 			trail.Render(partialTicks);
@@ -77,28 +76,6 @@ public class InstantBulletRenderer
 				distanceToTarget = 300.0f;
 			}
 		}
-		
-		//TODO remove
-		/*
-		public InstantShotTrail(Vector3f origin, Vector3f hitPos, BulletType type)
-		{
-			this.ticksExisted = 0;
-			this.bulletSpeed = 10.0f;
-			this.origin = origin;
-			this.hitPos = hitPos;
-			this.width = 0.05f; // type.trailWidth
-			this.length = 10.0f;
-			this.texture = FlansModResourceHandler.getTrailTexture(type);
-			
-			Vector3f dPos = Vector3f.sub(hitPos, origin, null);
-			this.distanceToTarget = dPos.length();
-			
-			if(Math.abs(distanceToTarget) > 300.0f)
-			{
-				distanceToTarget = 300.0f;
-			}
-		}
-		*/
 		
 		// Return true if this needs deleting
 		public boolean Update()
