@@ -1,28 +1,22 @@
 package com.flansmod.common.guns;
 
 import java.util.List;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,20 +24,18 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
-import com.flansmod.common.network.PacketFlak;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import io.netty.buffer.ByteBuf;
-
-public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
+public class EntityBullet extends EntityShootable
+//implements IEntityAdditionalSpawnData
 {
+	private static final DataParameter<String> BULLET_TYPE = EntityDataManager.createKey(EntityBullet.class, DataSerializers.STRING);
+	
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
 	public int ticksInAir;
 	
@@ -54,23 +46,22 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public Entity lockedOnTo;
 	
 	private float currentPenetratingPower;
-	
-	private float yOffset;
-	
+
 	@SideOnly(Side.CLIENT)
 	private boolean playedFlybySound;
 
 	public EntityBullet(World world)
 	{
 		super(world);
-		ticksInAir = 0;
 		setSize(0.5F, 0.5F);
 	}
 	
 	public EntityBullet(World world, FiredShot shot, Vec3d origin, Vec3d direction)
 	{
 		this(world);
+		ticksInAir = 0;
 		this.shot = shot;
+		this.dataManager.set(BULLET_TYPE, shot.getBulletType().shortName);
 		
 		setPosition(origin.x, origin.y, origin.z);
 		motionX = direction.x;
@@ -84,19 +75,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	@Override
 	protected void entityInit()
 	{
+		this.dataManager.register(BULLET_TYPE, null);
 	}
-	
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox()
-	{
-		return getEntityBoundingBox();
-	}
-	
-	//@Override
-	//public AxisAlignedBB getCollisionBox(Entity entity) 
-	//{
-	//	return null;
-	//}
 	
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed)
 	{
@@ -127,9 +107,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private void getLockOnTarget()
 	{
 		BulletType type = shot.getBulletType();
-		
-		if(type.lockOnToPlanes || type.lockOnToVehicles || type.lockOnToMechas || type.lockOnToLivings
-				|| type.lockOnToPlayers)
+		//TODO lockonto
+		if(type.lockOnToPlanes || type.lockOnToVehicles || type.lockOnToMechas || type.lockOnToLivings || type.lockOnToPlayers)
 		{
 			Vector3f motionVec = new Vector3f(motionX, motionY, motionZ);
 			Entity closestEntity = null;
@@ -181,13 +160,61 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		try
 		{
+			BulletType type = shot.getBulletType();
+			
+			// Movement dampening variables
+			float drag = 0.99F;
+			float gravity = 0.02F;
+			// If the bullet is in water, spawn particles and increase the drag
+			if(isInWater())
+			{
+				if (world.isRemote)
+				{
+					for(int i = 0; i < 4; i++)
+					{
+						float bubbleMotion = 0.25F;
+						world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * bubbleMotion,
+							posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
+					}
+				}
+				drag = 0.8F;
+			}
+			
+			motionX *= drag;
+			motionY *= drag;
+			motionZ *= drag;
+			motionY -= gravity * type.fallSpeed;
+			
+			// Apply motion
+			this.setPosition(posX + motionX, posY + motionY, posZ + motionZ);
+			
+			// Recalculate the angles from the new motion
+			float motionXZ = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+			rotationYaw = (float)((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
+			rotationPitch = (float)((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
+			// Reset the range of the angles
+			for(; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F)
+			{
+			}
+			for(; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F)
+			{
+			}
+			for(; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F)
+			{
+			}
+			for(; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F)
+			{
+			}
+			rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
+			rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
+			
+			
 			if(world.isRemote)
 			{
 				onUpdateClient();
 				return;
 			}
 			
-			BulletType type = shot.getBulletType();
 			
 			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugVector(world, new Vector3f(posX, posY, posZ),
@@ -239,26 +266,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					}
 				}
 			}
-			
-			// Movement dampening variables
-			float drag = 0.99F;
-			float gravity = 0.02F;
-			// If the bullet is in water, spawn particles and increase the drag
-			if(isInWater())
-			{
-				for(int i = 0; i < 4; i++)
-				{
-					float bubbleMotion = 0.25F;
-					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * bubbleMotion,
-							posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
-				}
-				drag = 0.8F;
-			}
-			motionX *= drag;
-			motionY *= drag;
-			motionZ *= drag;
-			motionY -= gravity * type.fallSpeed;
-			
+			//TODO Client homing fix
 			// Apply homing action
 			if(lockedOnTo != null)
 			{
@@ -282,36 +290,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				motionY += lockOnPull * dY / dXYZ;
 				motionZ += lockOnPull * dZ / dXYZ;
 			}
-			
-			// Apply motion
-			posX += motionX;
-			posY += motionY;
-			posZ += motionZ;
-			setPosition(posX, posY, posZ);
-			
-			// Recalculate the angles from the new motion
-			float motionXZ = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-			rotationYaw = (float)((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-			rotationPitch = (float)((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
-			// Reset the range of the angles
-			for(; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F)
-			{
-			}
-			for(; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F)
-			{
-			}
-			for(; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F)
-			{
-			}
-			for(; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F)
-			{
-			}
-			rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
-			rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
-			
-			// Temporary fire glitch fix
-			if(world.isRemote)
-				extinguish();
 			
 		}
 		catch (Exception ex)
@@ -490,7 +468,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag)
 	{
+		//TODO this may cause problems, because of data loss
 		shot = new FiredShot(null, BulletType.getBullet(tag.getString("type")));
+		this.dataManager.set(BULLET_TYPE, shot.getBulletType().shortName);
 		//bullets should not be saved
 		/*
 		
@@ -531,6 +511,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 	}
 	*/
+	/*
 	@Override
 	public void writeSpawnData(ByteBuf data)
 	{
@@ -552,6 +533,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			FlansMod.log.throwing(e);
 		}
 	}
+	*/
 	/*
 	//TODO sync motion and remove lockedOnTo & bullettype
 	@Override
@@ -637,7 +619,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	@Override
 	public boolean isBurning()
 	{
-		
 		return false;
 	}
 	
@@ -649,6 +630,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	
 	public FiredShot getFiredShot()
 	{
+		if (shot == null)
+		{
+			//we dont have this object, therefore we are on the client side and need to construct it
+			shot = new FiredShot(null, BulletType.getBullet(this.dataManager.get(BULLET_TYPE)));
+		}
 		return shot;
 	}
 }

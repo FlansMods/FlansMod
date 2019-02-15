@@ -52,7 +52,6 @@ public class PacketGunFire extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		//FlansMod.log.warn("Depreceated message!");
-		//ItemGun.shootServer(held, lastheld, hand);
 		ItemStack itemstack = playerEntity.getHeldItem(hand);
 		//TODO can itemstack be null?
 		Item item = itemstack.getItem();
