@@ -3,21 +3,13 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
@@ -36,7 +28,6 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	{
 		super(renderManager);
 		shadowSize = 0.5F;
-		//MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
@@ -47,25 +38,31 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		{
 			GL11.glTranslatef((float)d, (float)d1, (float)d2);
 			float dYaw = (vehicle.axes.getYaw() - vehicle.prevRotationYaw);
-			for(; dYaw > 180F; dYaw -= 360F)
+			while(dYaw > 180F)
 			{
+				dYaw -= 360F;
 			}
-			for(; dYaw <= -180F; dYaw += 360F)
+			while(dYaw <= -180F)
 			{
+				dYaw += 360F;
 			}
 			float dPitch = (vehicle.axes.getPitch() - vehicle.prevRotationPitch);
-			for(; dPitch > 180F; dPitch -= 360F)
+			while(dPitch > 180F)
 			{
+				dPitch -= 360F;
 			}
-			for(; dPitch <= -180F; dPitch += 360F)
+			while(dPitch <= -180F)
 			{
+				dPitch += 360F;
 			}
 			float dRoll = (vehicle.axes.getRoll() - vehicle.prevRotationRoll);
-			for(; dRoll > 180F; dRoll -= 360F)
+			while(dRoll > 180F)
 			{
+				dRoll -= 360F;
 			}
-			for(; dRoll <= -180F; dRoll += 360F)
+			while(dRoll <= -180F)
 			{
+				dRoll += 360F;
 			}
 			GL11.glRotatef(180F - vehicle.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(vehicle.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
@@ -81,14 +78,17 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					modVehicle.render(vehicle, f1);
 				
 				GL11.glPushMatrix();
-				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.getSeat(0) != null)
+				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) &&
+						vehicle.getSeat(0) != null)
 				{
 					dYaw = (vehicle.getSeat(0).looking.getYaw() - vehicle.getSeat(0).prevLooking.getYaw());
-					for(; dYaw > 180F; dYaw -= 360F)
+					while(dYaw > 180F)
 					{
+						dYaw -= 360F;
 					}
-					for(; dYaw <= -180F; dYaw += 360F)
+					while(dYaw <= -180F)
 					{
+						dYaw += 360F;
 					}
 					float yaw = vehicle.getSeat(0).prevLooking.getYaw() + dYaw * f1;
 					
@@ -109,12 +109,16 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 						GL11.glColor4f(0F, 0F, 1F, 0.3F);
 						for(DriveablePosition point : type.shootPointsPrimary)
 							if(point.part == EnumDriveablePart.turret)
-								renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+								renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F,
+										point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F,
+										point.position.z + 0.25F), 0, 0, 0);
 						
 						GL11.glColor4f(0F, 1F, 0F, 0.3F);
 						for(DriveablePosition point : type.shootPointsSecondary)
 							if(point.part == EnumDriveablePart.turret)
-								renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+								renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F,
+										point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F,
+										point.position.z + 0.25F), 0, 0, 0);
 					}
 				}
 				GL11.glPopMatrix();
@@ -122,9 +126,11 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				{
 					GL11.glPushMatrix();
 					
-					GL11.glTranslatef(modVehicle.drillHeadOrigin.x, modVehicle.drillHeadOrigin.y, modVehicle.drillHeadOrigin.z);
+					GL11.glTranslatef(modVehicle.drillHeadOrigin.x, modVehicle.drillHeadOrigin.y,
+							modVehicle.drillHeadOrigin.z);
 					GL11.glRotatef(vehicle.harvesterAngle * 50F, 1.0F, 0.0F, 0.0F);
-					GL11.glTranslatef(-modVehicle.drillHeadOrigin.x, -modVehicle.drillHeadOrigin.y, -modVehicle.drillHeadOrigin.z);
+					GL11.glTranslatef(-modVehicle.drillHeadOrigin.x, -modVehicle.drillHeadOrigin.y,
+							-modVehicle.drillHeadOrigin.z);
 					modVehicle.renderDrillBit(vehicle, f1);
 					
 					GL11.glPopMatrix();
@@ -144,22 +150,24 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					if(part.box == null)
 						continue;
 					
-					renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
+					renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
+							(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 				}
-				//GL11.glColor4f(0F, 1F, 0F, 0.3F);
-				//if(type.barrelPosition != null)
-				//	renderAABB(AxisAlignedBB.getBoundingBox(type.barrelPosition.x - 0.25F, type.barrelPosition.y - 0.25F, type.barrelPosition.z - 0.25F, type.barrelPosition.x + 0.25F, type.barrelPosition.y + 0.25F, type.barrelPosition.z + 0.25F));
 				
-				//Render shoot points
+				// Render shoot points
 				GL11.glColor4f(0F, 0F, 1F, 0.3F);
 				for(DriveablePosition point : type.shootPointsPrimary)
 					if(point.part != EnumDriveablePart.turret)
-						renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+						renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F,
+								point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F,
+								point.position.z + 0.25F), 0, 0, 0);
 				
 				GL11.glColor4f(0F, 1F, 0F, 0.3F);
 				for(DriveablePosition point : type.shootPointsSecondary)
 					if(point.part != EnumDriveablePart.turret)
-						renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+						renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F,
+								point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F,
+								point.position.z + 0.25F), 0, 0, 0);
 				
 				
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -200,7 +208,6 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					case ENTITY:
 					{
 						scale = 1.5F;
-						//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
 						break;
 					}
 					case INVENTORY:
@@ -233,10 +240,12 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 						
 						break;
 					}
-					default: break;
+					default:
+						break;
 				}
 				
-				GL11.glScalef(scale / vehicleType.cameraDistance, scale / vehicleType.cameraDistance, scale / vehicleType.cameraDistance);
+				GL11.glScalef(scale / vehicleType.cameraDistance, scale / vehicleType.cameraDistance,
+						scale / vehicleType.cameraDistance);
 				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(vehicleType));
 				ModelDriveable model = vehicleType.model;
 				model.render(vehicleType);
@@ -244,64 +253,6 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		}
 		GL11.glPopMatrix();
 	}
-	
-	/*@SubscribeEvent
-	public void renderWorld(RenderWorldLastEvent event)
-	{
-		//Get the world
-		World world = Minecraft.getMinecraft().world;
-		if(world == null)
-			return;
-		
-		//Get the camera frustrum for clipping
-		Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-		double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
-		double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
-		double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
-		
-		//Frustum frustrum = new Frustum();
-		//frustrum.setPosition(x, y, z);
-		
-		//Push
-		GL11.glPushMatrix();
-		//Setup lighting
-		Minecraft.getMinecraft().entityRenderer.enableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
-		
-		RenderHelper.enableStandardItemLighting();
-		
-		GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
-		for(Object entity : world.loadedEntityList)
-		{
-			if(entity instanceof EntityVehicle)
-			{
-				EntityVehicle vehicle = (EntityVehicle)entity;
-				int i = vehicle.getBrightnessForRender();
-				
-				if(vehicle.isBurning())
-				{
-					i = 15728880;
-				}
-				
-				int j = i % 65536;
-				int k = i / 65536;
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				render(vehicle, vehicle.prevPosX + (vehicle.posX - vehicle.prevPosX) * event.getPartialTicks(),
-						vehicle.prevPosY + (vehicle.posY - vehicle.prevPosY) * event.getPartialTicks(),
-						vehicle.prevPosZ + (vehicle.posZ - vehicle.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
-			}
-		}
-		
-		//Reset Lighting
-		Minecraft.getMinecraft().entityRenderer.disableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		//Pop
-		GL11.glPopMatrix();
-	}*/
 	
 	public static class Factory implements IRenderFactory<EntityVehicle>
 	{
