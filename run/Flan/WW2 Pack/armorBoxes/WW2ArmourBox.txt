@@ -48,7 +48,7 @@ americanSnowHelmet cloth.0 5
 americanSnowCoat cloth.0 8
 americanSnowPants cloth.0 7
 americanSnowBoots cloth.0 4
-AddArmour germanDesert German Snow
+AddArmour germanSnow German Snow
 germanSnowHelmet cloth.0 5
 germanSnowCoat cloth.0 8
 germanSnowPants cloth.0 7
