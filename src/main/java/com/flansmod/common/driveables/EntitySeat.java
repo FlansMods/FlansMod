@@ -671,6 +671,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 							// Calculate the origin of the bullets
 							Vector3f yOffset = driveable.axes
 									.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
+							
+							
 							// Spawn a new bullet item
 							//TODO shoot
 							/*

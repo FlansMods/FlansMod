@@ -45,13 +45,17 @@ import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.FireableGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
@@ -455,10 +459,13 @@ public class EntityMecha extends EntityDriveable
 			{
 				
 				// TODO: Do mechas properly. No hacks
-				float speed = gunType.getBulletSpeed(stack);
-				if(speed <= 0.0f)
-					speed = 5.0f;
-				//TODO shoot
+				//float speed = gunType.getBulletSpeed(stack);
+				//if(speed <= 0.0f)
+				//	speed = 5.0f;
+				ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
+				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+				FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
+				ShotHandler.fireGun(world, shot, gunType.numBullets*shootableType.numBullets, bulletOrigin, armVector);
 				/*
 				world.spawnEntity(((ItemShootable)bulletStack.getItem()).getEntity(world,
 						bulletOrigin,

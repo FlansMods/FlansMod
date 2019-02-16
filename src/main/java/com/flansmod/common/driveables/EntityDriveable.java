@@ -568,7 +568,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			// Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
-//			EntityPlayer driver = getDriver();
 			
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
@@ -577,6 +576,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 			
 			// For each 
+
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
 			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
@@ -585,6 +585,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			ShootBulletHandler handler = (Boolean isExtraBullet) ->
 			{
+				if (driverIsCreative())
+					return;
 				if (shootableStack.getItem() instanceof ItemShootable)
 				{
 					shootableStack.setItemDamage(shootableStack.getItemDamage() + 1);
@@ -601,66 +603,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
 			
-			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, gunVector, lookVector, handler,gunVector);
+			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, gunVector, lookVector, handler, gunVector);
 			
-			/*
-			float spread = 0.005f * gunType.bulletSpread * shootableType.bulletSpread;
-			
-			lookVector.x += (float)world.rand.nextGaussian() * spread;
-			lookVector.y += (float)world.rand.nextGaussian() * spread;
-			lookVector.z += (float)world.rand.nextGaussian() * spread;
-			
-			lookVector.scale(500.0f);
-			*/
-			/*
-			// Instant bullets. Do a raytrace
-			if(gunType.bulletSpeed == 0.0f)
+			if (type.shootSound(secondary) != null)
 			{
-				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
-				{
-					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0, 0f);
-					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, globalGunVec,
-							lookVector, 0);
-					Vector3f hitPos = Vector3f.add(globalGunVec, lookVector, null);
-					BulletHit firstHit = null;
-					if(!hits.isEmpty())
-					{
-						firstHit = hits.get(0);
-						hitPos = Vector3f.add(globalGunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
-					}
-					
-					if(FlansMod.DEBUG && world.isRemote)
-					{
-						world.spawnEntity(new EntityDebugDot(world, globalGunVec, 100, 1.0f, 1.0f, 1.0f));
-					}
-					
-					if(driver != null)
-					{
-						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
-						//((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
-						//TODO Shoot
-						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver,
-								globalGunVec, firstHit, hitPos, gunType.damage,
-								i < gunType.numBullets * shootableType.numBullets - 1, false);
-						((ItemGun)gunType.item).handleDriveableShotData(shootableStack, -1, world, this, false,
-								shotData);
-					}
-				}
+				//TODO proper general sound implementation
+				PacketPlaySound.sendSoundPacket(gunVector.x, gunVector.y, gunVector.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound(secondary), false);
 			}
-			else // Spawn an entity
-			{
-				if(driver != null)
-				{
-					ShotData shotData = new SpawnEntityShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver,
-							lookVector);
-					//((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
-					//TODO Shoot
-				}
-			}
-			*/
-			
-			
-			
+
 			// Reset the shoot delay
 			setShootDelay(type.shootDelay(secondary), secondary);
 		}
@@ -686,42 +636,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							//TODO shoot
-							/*
-							int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-							
-							ItemStack bulletStack = driveableData.getStackInSlot(slot);
-							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-							EntityShootable bulletEntity = bulletItem.getEntity(world,
-									new Vec3d(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z),
-									axes.getYaw(),
-									axes.getPitch(),
-									motionX,
-									motionY,
-									motionZ,
-									(EntityLivingBase)seats[0].getControllingPassenger(),
-									damageMultiplier,
-									type);
-							
-							world.spawnEntity(bulletEntity);
-							
-							if(type.shootSound(secondary) != null)
-								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
-										type.shootSound(secondary), false);
-							if(!driverIsCreative())
-							{
-								bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-								if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
-								{
-									bulletStack.setItemDamage(0);
-									bulletStack.setCount(bulletStack.getCount() - 1);
-									if(bulletStack.getCount() == 0)
-										bulletStack = ItemStack.EMPTY.copy();
-								}
-								driveableData.setInventorySlotContents(slot, bulletStack);
-							}
-							setShootDelay(type.shootDelay(secondary), secondary);
-							*/
+							shootProjectile(slot, gunVec, lookVector, type, secondary);
 						}
 						else
 						{
@@ -749,43 +664,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							//TODO shoot
-							/*
-							int spread = 0;
-							int damageMultiplier =
-									secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-							float shellSpeed = 3F;
-							
-							ItemStack bulletStack = driveableData.getStackInSlot(slot);
-							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-							EntityShootable bulletEntity = bulletItem.getEntity(world,
-									Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null),
-									lookVector,
-									(EntityLivingBase)seats[0].getControllingPassenger(),
-									spread,
-									damageMultiplier,
-									shellSpeed,
-									type);
-							
-							world.spawnEntity(bulletEntity);
-							
-							if(type.shootSound(secondary) != null)
-								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
-										type.shootSound(secondary), false);
-							if(!driverIsCreative())
-							{
-								bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-								if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
-								{
-									bulletStack.setItemDamage(0);
-									bulletStack.setCount(bulletStack.getCount() - 1);
-									if(bulletStack.getCount() == 0)
-										bulletStack = ItemStack.EMPTY.copy();
-								}
-								driveableData.setInventorySlotContents(slot, bulletStack);
-							}
-							setShootDelay(type.shootDelay(secondary), secondary);
-							*/
+							shootProjectile(slot, gunVec, lookVector, type, secondary);
 						}
 						else
 						{
@@ -809,9 +688,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		// Rotate the gun vector to global axes
 		Vector3f localGunVec = new Vector3f(dp.position);
 		
-		//TODO debug
-		System.out.println("localGunVec:"+dp.position);
-		
 		if(dp.part == EnumDriveablePart.turret)
 		{
 			// Untranslate by the turret origin, to get the rotation about the right point
@@ -828,6 +704,47 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public Vector3f getLookVector(DriveablePosition dp)
 	{
 		return axes.getXAxis();
+	}
+	
+	private void shootProjectile(final Integer slot, Vector3f gunVec, Vector3f lookVector, DriveableType type, Boolean secondary)
+	{
+		ItemStack bullet = driveableData.getStackInSlot(slot);
+		ItemBullet bulletItem = (ItemBullet)bullet.getItem();
+		int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
+		//TODO damage vs living & damage vs driveable
+		//TODO speed?
+		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.bulletSpread, 3f);
+		//TODO unchecked cast
+		FiredShot shot = new FiredShot(fireableGun, (BulletType) bulletItem.type, this, (EntityPlayerMP) getDriver());
+		
+		ShootBulletHandler handler = (Boolean isExtraBullet) ->
+		{
+			if(!driverIsCreative())
+			{
+				ItemStack bulletStack = driveableData.getStackInSlot(slot);
+				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+				if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
+				{
+					bulletStack.setItemDamage(0);
+					bulletStack.setCount(bulletStack.getCount() - 1);
+					if(bulletStack.getCount() == 0)
+						bulletStack = ItemStack.EMPTY.copy();
+				}
+				driveableData.setInventorySlotContents(slot, bulletStack);
+			}
+		};
+		
+		Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
+		
+		ShotHandler.fireGun(world, shot, bulletItem.type.numBullets, gunVector, lookVector, handler, gunVector);
+		
+		if (type.shootSound(secondary) != null)
+		{
+			//TODO proper general sound implementation
+			PacketPlaySound.sendSoundPacket(gunVector.x, gunVector.y, gunVector.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound(secondary), false);
+		}
+		// Reset the shoot delay
+		setShootDelay(type.shootDelay(secondary), secondary);
 	}
 	
 	@Override

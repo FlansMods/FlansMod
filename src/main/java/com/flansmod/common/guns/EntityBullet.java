@@ -17,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,8 +32,9 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityBullet extends EntityShootable
-//implements IEntityAdditionalSpawnData
+import io.netty.buffer.ByteBuf;
+
+public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	private static final DataParameter<String> BULLET_TYPE = EntityDataManager.createKey(EntityBullet.class, DataSerializers.STRING);
 	
@@ -67,7 +69,7 @@ public class EntityBullet extends EntityShootable
 		motionX = direction.x;
 		motionY = direction.y;
 		motionZ = direction.z;
-		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
+		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed()*0 + 1);
 		
 		currentPenetratingPower = shot.getBulletType().penetratingPower;
 	}
@@ -160,10 +162,10 @@ public class EntityBullet extends EntityShootable
 		
 		try
 		{
-			BulletType type = shot.getBulletType();
+			BulletType type = this.getFiredShot().getBulletType();
 			
 			// Movement dampening variables
-			float drag = 0.99F;
+			float drag = 0.999F;
 			float gravity = 0.02F;
 			// If the bullet is in water, spawn particles and increase the drag
 			if(isInWater())
@@ -483,6 +485,31 @@ public class EntityBullet extends EntityShootable
 		if(ownerName != null && !ownerName.equals("null"))
 			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(ownerName);
 			*/
+	}
+	
+	@Override
+	public void writeSpawnData(ByteBuf data)
+	{
+		data.writeDouble(motionX);
+		data.writeDouble(motionY);
+		data.writeDouble(motionZ);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf data)
+	{
+		try
+		{
+			motionX = data.readDouble();
+			motionY = data.readDouble();
+			motionZ = data.readDouble();
+		}
+		catch(Exception e)
+		{
+			FlansMod.log.error("Failed to read bullet owner from server.");
+			super.setDead();
+			FlansMod.log.throwing(e);
+		}
 	}
 	
 	/*
