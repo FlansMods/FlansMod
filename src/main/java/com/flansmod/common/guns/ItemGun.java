@@ -510,7 +510,6 @@ public class ItemGun extends Item implements IPaintableItem
 						ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
 						ShootableType shootableType = shootableItem.type;
 						// Instant bullets. Do a raytrace
-						//TODO use fireGun() Method
 						//if(type.bulletSpeed == 0.0f)
 						//{
 							ShootBulletHandler handler = (Boolean isExtraBullet) ->
@@ -545,24 +544,23 @@ public class ItemGun extends Item implements IPaintableItem
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
-							//TODO unchecked cast
-							FireableGun fireableGun = new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed);
-							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, player);
 							
-							//TODO gunOrigin?
-							//ShotHandler.createMultipleShots(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
-							ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
-						//}
-						// Else, spawn an entity
-						/*else
-						{
-							//TODO EntityBullet
-							int gunSlot = player.inventory.currentItem;
-							ShotData shotData = new SpawnEntityShotData(gunSlot, hand, type, shootableType, player, new Vector3f(player.getLookVec()));
-							shotsFiredClient.add(shotData);
-						}
-						*/
-						// Now do client side things
+							if (shootableType instanceof BulletType)
+							{
+								//Fire gun
+								FireableGun fireableGun = new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed);
+								FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, player);
+								//TODO gunOrigin?
+								ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler, gunOrigin);
+							}
+							else if (shootableType instanceof GrenadeType)
+							{
+								//throw grenade
+								ItemGrenade grenade = (ItemGrenade) shootableItem;
+								grenade.throwGrenade(world, player);
+								handler.shooting(true);
+							}
+							
 						//TODO type.model can be null
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;

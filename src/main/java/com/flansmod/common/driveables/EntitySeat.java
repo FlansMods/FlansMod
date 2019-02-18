@@ -26,10 +26,14 @@ import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.FireableGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
@@ -666,15 +670,19 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 									Vector3f.add(driveable.axes.findLocalVectorGlobally(seatInfo.gunOrigin),
 											new Vector3f(driveable.posX, driveable.posY, driveable.posZ), null);
 							// Calculate the look axes globally
-							RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
+							//TODO used? works?
+							//RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
 							Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
 							// Calculate the origin of the bullets
 							Vector3f yOffset = driveable.axes
 									.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
 							
-							
+							FireableGun fireableGun = new FireableGun(gun, gun.damage, gun.bulletSpread, gun.bulletSpeed);
+							//TODO unchecked cast, grenade throwing seats?
+							FiredShot shot = new FiredShot(fireableGun, (BulletType) bullet, this, (EntityPlayerMP)getControllingPassenger());
+							ShotHandler.fireGun(world, shot, gun.numBullets*bullet.numBullets, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec);
 							// Spawn a new bullet item
-							//TODO shoot
+							//TODO cleanup
 							/*
 							world.spawnEntity(((ItemShootable)bulletItemStack.getItem()).getEntity(world,
 									Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null),

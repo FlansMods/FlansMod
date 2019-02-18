@@ -165,7 +165,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			BulletType type = this.getFiredShot().getBulletType();
 			
 			// Movement dampening variables
-			float drag = 0.999F;
+			float drag = 0.99F;
 			float gravity = 0.02F;
 			// If the bullet is in water, spawn particles and increase the drag
 			if(isInWater())

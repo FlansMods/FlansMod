@@ -284,7 +284,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
 				
 				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-				//TODO unchecked cast
+				//TODO unchecked cast, throw grenades
 				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
 				
 				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
@@ -302,10 +302,10 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)
-				item.dropItem(world, this, bullet.dropItemOnShoot);
+				ItemGun.dropItem(world, this, bullet.dropItemOnShoot);
 			// Drop item on shooting if gun requires it
 			if(gunType.dropItemOnShoot != null)
-				item.dropItem(world, this, gunType.dropItemOnShoot);
+				ItemGun.dropItem(world, this, gunType.dropItemOnShoot);
 		}
 		shootDelay = gunType.GetShootDelay(stack);
 	}

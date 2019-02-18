@@ -366,8 +366,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 		
-		//TODO aa are accepting any ammo for any weapon
-		
 		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
 			Boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
@@ -638,6 +636,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		return true;
 	}
 	
+	//TODO aa are accepting any ammo for any weapon
 	public int findAmmo(EntityPlayer player)
 	{
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++)

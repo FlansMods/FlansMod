@@ -580,7 +580,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
 			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
-			//TODO unchecked cast
+			//TODO unchecked cast, throw grenades
 			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, (EntityPlayerMP) getDriver());
 			
 			ShootBulletHandler handler = (Boolean isExtraBullet) ->
@@ -714,7 +714,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//TODO damage vs living & damage vs driveable
 		//TODO speed?
 		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.bulletSpread, 3f);
-		//TODO unchecked cast
+		//TODO unchecked cast, throw grenades
 		FiredShot shot = new FiredShot(fireableGun, (BulletType) bulletItem.type, this, (EntityPlayerMP) getDriver());
 		
 		ShootBulletHandler handler = (Boolean isExtraBullet) ->
