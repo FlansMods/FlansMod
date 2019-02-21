@@ -617,18 +617,29 @@ public class ClientRenderHooks
 	{
 		if(mc.player.getRidingEntity() instanceof IControllable)
 		{
-			// Stops the player's hand/head jerking about
-			if(mc.mouseHelper != constantMouseHelper)
+			if(FlansMod.proxy.mouseControlEnabled())
 			{
-				Minecraft.getMinecraft().mouseHelper = constantMouseHelper;
+				if(mc.mouseHelper != constantMouseHelper)
+				{
+					// Stops the player's hand/head jerking about by setting mouseHelper deltas to constant 0
+					Minecraft.getMinecraft().mouseHelper = constantMouseHelper;
+				}
+			}
+			else
+			{
+				if(mc.mouseHelper.equals(constantMouseHelper))
+				{
+					Minecraft.getMinecraft().mouseHelper = new MouseHelper();
+				}
 			}
 			
 			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
-			if(seat != null)
+			if(seat != null && seat.driver && FlansMod.proxy.mouseControlEnabled())
 			{
 				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(),
 						(float)event.getRenderPartialTicks());
-				//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
+				// If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle
+				// is disorientating at best, so we disable the roll component for these vehicles
 				if(seat.driveable != null && seat.driveable.getDriveableType().canRoll)
 				{
 					roll = 0F;
@@ -638,11 +649,6 @@ public class ClientRenderHooks
 				event.setYaw(seat.driveable.axes.getYaw() + 90);
 				event.setPitch(seat.driveable.axes.getPitch());
 			}
-			else
-			{
-				FlansMod.log.warn("Null seat in roll event");
-			}
-			
 		}
 		else
 		{
