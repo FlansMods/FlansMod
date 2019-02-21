@@ -1,7 +1,6 @@
 package com.flansmod.client.handlers;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +14,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,7 +28,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemGun;
 
 /**
- * All handled events for the client should go through here and be passed on. Makes it easier to see which events are being handled by the mod
+ * All handled events for the client should go through here and be passed on. Makes it easier to see which events are
+ * being handled by the mod
  */
 public class ClientEventHandler
 {
@@ -103,15 +101,16 @@ public class ClientEventHandler
 		if(player.getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
 			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded &&
-					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.getDwheel()) > 0)
+					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) &&
+					Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
 	}
 	
 	@SubscribeEvent
-	public void CheckKeyInput(KeyInputEvent event)
+	public void checkKeyInput(KeyInputEvent event)
 	{
-		keyInputHandler.CheckKeyInput(event);
+		keyInputHandler.checkKeyInput(event);
 	}
 	
 	@SubscribeEvent

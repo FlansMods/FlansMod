@@ -16,7 +16,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.ModuloHelper;

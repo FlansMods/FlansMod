@@ -48,7 +48,7 @@ public class EntityCamera extends EntityLivingBase
 		
 		setPosition(posX + dX * lerpAmount, posY + dY * lerpAmount, posZ + dZ * lerpAmount);
 		
-		rotationYaw = driveable.axes.getYaw() - 90F;
+		rotationYaw = driveable.axes.getYaw();
 		rotationPitch = driveable.axes.getPitch();
 		
 		for(; rotationYaw - prevRotationYaw >= 180F; rotationYaw -= 360F) ;

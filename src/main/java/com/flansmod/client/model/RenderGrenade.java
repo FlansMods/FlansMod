@@ -11,7 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.ItemGrenade;

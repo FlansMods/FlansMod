@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;

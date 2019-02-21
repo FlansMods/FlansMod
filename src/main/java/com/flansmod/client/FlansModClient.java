@@ -28,7 +28,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.client.util.WorldRenderer;
@@ -145,8 +144,8 @@ public class FlansModClient extends FlansMod
 		if(minecraft.player == null || minecraft.world == null)
 			return;
 		
-		if(minecraft.player.getRidingEntity() instanceof IControllable && minecraft.currentScreen == null)
-			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.player.getRidingEntity()));
+/*		if(minecraft.player.getRidingEntity() instanceof IControllable && minecraft.currentScreen == null)
+			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.player.getRidingEntity()));*/
 		
 		if(teamInfo != null && teamInfo.timeLeft > 0)
 			teamInfo.timeLeft--;
@@ -314,7 +313,7 @@ public class FlansModClient extends FlansMod
 		if(controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
-		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().player.getRidingEntity()) : null);
+//		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().player.getRidingEntity()) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}

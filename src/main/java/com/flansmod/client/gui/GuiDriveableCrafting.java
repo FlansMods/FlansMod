@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.mechas.MechaType;

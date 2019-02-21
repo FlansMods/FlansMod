@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;

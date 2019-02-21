@@ -33,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -45,9 +46,11 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.teams.GuiTeamScores;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.model.CustomItemRenderType;
 import com.flansmod.client.model.CustomItemRenderer;
 import com.flansmod.client.model.ModelGun;
@@ -73,6 +76,7 @@ import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 
+@SideOnly(Side.CLIENT)
 public class ClientRenderHooks
 {
 	public static final ResourceLocation offHand = new ResourceLocation("flansmod", "gui/offHand.png");
@@ -83,6 +87,15 @@ public class ClientRenderHooks
 	private ItemStack itemToRender = ItemStack.EMPTY.copy();
 	private int equippedItemSlot;
 	private float partialTicks;
+	private MouseHelper constantMouseHelper = new MouseHelper()
+	{
+		@Override
+		public void mouseXYChange()
+		{
+			deltaX = 0;
+			deltaY = 0;
+		}
+	};
 	
 	private static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private static List<KillMessage> killMessages = new ArrayList<>();
@@ -129,7 +142,8 @@ public class ClientRenderHooks
 	}
 	
 	/**
-	 * When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too.
+	 * When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun
+	 * too.
 	 */
 	public void renderHeldItem(RenderSpecificHandEvent event)
 	{
@@ -157,7 +171,8 @@ public class ClientRenderHooks
 				
 				float separation = 0.07F;
 				
-				Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
+				Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight,
+						0.05F, farPlaneDistance * 2.0F);
 				GlStateManager.matrixMode(5888);
 				GlStateManager.loadIdentity();
 				
@@ -167,16 +182,20 @@ public class ClientRenderHooks
 				if(mc.gameSettings.viewBobbing)
 					setupViewBobbing(partialTicks);
 				
-				boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
+				boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase &&
+						((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
 				
-				if(mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator())
+				if(mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI &&
+						!mc.playerController.isSpectator())
 				{
 					renderer.enableLightmap();
 					float f1 = 1.0F - (prevEquippedProgress + (equippedProgress - prevEquippedProgress) * partialTicks);
 					EntityPlayerSP entityplayersp = this.mc.player;
 					float f2 = entityplayersp.getSwingProgress(partialTicks);
-					float f3 = entityplayersp.prevRotationPitch + (entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
-					float f4 = entityplayersp.prevRotationYaw + (entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
+					float f3 = entityplayersp.prevRotationPitch +
+							(entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
+					float f4 = entityplayersp.prevRotationYaw +
+							(entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
 					
 					//Setup lighting
 					GlStateManager.disableLighting();
@@ -187,12 +206,16 @@ public class ClientRenderHooks
 					GlStateManager.popMatrix();
 					
 					//Do lighting
-					int i = this.mc.world.getCombinedLight(new BlockPos(entityplayersp.posX, entityplayersp.posY + (double)entityplayersp.getEyeHeight(), entityplayersp.posZ), 0);
-					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(i & 65535), (float)(i >> 16));
+					int i = this.mc.world.getCombinedLight(new BlockPos(entityplayersp.posX,
+							entityplayersp.posY + (double)entityplayersp.getEyeHeight(), entityplayersp.posZ), 0);
+					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(i & 65535),
+							(float)(i >> 16));
 					
 					//Do hand rotations
-					float f5 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
-					float f6 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
+					float f5 = entityplayersp.prevRenderArmPitch +
+							(entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
+					float f6 = entityplayersp.prevRenderArmYaw +
+							(entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
 					GlStateManager.rotate((entityplayersp.rotationPitch - f5) * 0.1F, 1.0F, 0.0F, 0.0F);
 					GlStateManager.rotate((entityplayersp.rotationYaw - f6) * 0.1F, 0.0F, 1.0F, 0.0F);
 					
@@ -216,7 +239,9 @@ public class ClientRenderHooks
 					GlStateManager.scale(0.4F, 0.4F, 0.4F);
 					
 					//ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
-					customRenderers[typeType.ordinal()].renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, event.getHand(), stack, mc.world, mc.player);
+					customRenderers[typeType.ordinal()]
+							.renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, event.getHand(), stack, mc.world,
+									mc.player);
 					
 					GlStateManager.popMatrix();
 					GlStateManager.disableRescaleNormal();
@@ -275,9 +300,12 @@ public class ClientRenderHooks
 			EntityPlayer entityplayer = (EntityPlayer)this.mc.getRenderViewEntity();
 			float f1 = entityplayer.distanceWalkedModified - entityplayer.prevDistanceWalkedModified;
 			float f2 = -(entityplayer.distanceWalkedModified + f1 * partialTicks);
-			float f3 = entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * partialTicks;
-			float f4 = entityplayer.prevCameraPitch + (entityplayer.cameraPitch - entityplayer.prevCameraPitch) * partialTicks;
-			GlStateManager.translate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 0.5F, -Math.abs(MathHelper.cos(f2 * (float)Math.PI) * f3), 0.0F);
+			float f3 =
+					entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * partialTicks;
+			float f4 = entityplayer.prevCameraPitch +
+					(entityplayer.cameraPitch - entityplayer.prevCameraPitch) * partialTicks;
+			GlStateManager.translate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 0.5F,
+					-Math.abs(MathHelper.cos(f2 * (float)Math.PI) * f3), 0.0F);
 			GlStateManager.rotate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 3.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.rotate(Math.abs(MathHelper.cos(f2 * (float)Math.PI - 0.2F) * f3) * 5.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(f4, 1.0F, 0.0F, 0.0F);
@@ -343,7 +371,8 @@ public class ClientRenderHooks
 			{
 				if(!ItemStack.areItemsEqual(itemToRender, itemstack))
 				{
-					if(!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack, equippedItemSlot != player.inventory.currentItem))
+					if(!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack,
+							equippedItemSlot != player.inventory.currentItem))
 					{
 						itemToRender = itemstack;
 						equippedItemSlot = player.inventory.currentItem;
@@ -395,7 +424,8 @@ public class ClientRenderHooks
 		for(int i = 0; i < 2; i++)
 		{
 			EnumHand hand = EnumHand.values()[i];
-			if(entity.getHeldItem(hand) != null && entity.getHeldItem(hand).getItem() instanceof ItemGun && mainModel instanceof ModelBiped)
+			if(entity.getHeldItem(hand) != null && entity.getHeldItem(hand).getItem() instanceof ItemGun &&
+					mainModel instanceof ModelBiped)
 			{
 				ModelBiped biped = (ModelBiped)mainModel;
 				ItemStack stack = entity.getHeldItem(hand);
@@ -427,7 +457,8 @@ public class ClientRenderHooks
 				if(entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
 				{
 					EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
-					f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
+					f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset,
+							entitylivingbase1.renderYawOffset, partialTicks);
 					f4 = f3 - f2;
 					f5 = MathHelper.wrapDegrees(f4);
 					
@@ -462,7 +493,8 @@ public class ClientRenderHooks
 				//this.preRenderCallback(entity, partialTicks);
 				float f6 = 0.0625F;
 				GlStateManager.translate(0.0F, -1.5078125F, 0.0F);
-				float f7 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
+				float f7 = entity.prevLimbSwingAmount +
+						(entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
 				float f8 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
 				
 				if(entity.isChild())
@@ -489,7 +521,8 @@ public class ClientRenderHooks
 					{
 						biped.bipedRightArm.postRender(0.0625F);
 						GlStateManager.translate(-0.05F, 0.4F, 0.05F);
-						ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
+						ClientProxy.gunRenderer
+								.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
 					}
 					else
 					{
@@ -534,7 +567,8 @@ public class ClientRenderHooks
 		
 		RenderLivingBase.NAME_TAG_RANGE = 64F;
 		RenderLivingBase.NAME_TAG_RANGE_SNEAK = 32F;
-		if(event.getEntity() instanceof EntityPlayer && FlansModClient.teamInfo != null && FlansModClient.teamInfo.gametype != null && !"No Gametype".equals(FlansModClient.teamInfo.gametype))
+		if(event.getEntity() instanceof EntityPlayer && FlansModClient.teamInfo != null &&
+				FlansModClient.teamInfo.gametype != null && !"No Gametype".equals(FlansModClient.teamInfo.gametype))
 		{
 			PlayerScoreData rendering = FlansModClient.teamInfo.getPlayerScoreData(event.getEntity().getName());
 			PlayerScoreData player = FlansModClient.teamInfo.getPlayerScoreData(mc.player.getName());
@@ -549,7 +583,8 @@ public class ClientRenderHooks
 			//Only once we have the stored skin may we override
 			if(data.skin != null)
 			{
-				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
+				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null :
+						FlansModResourceHandler.getTexture(rendering.playerClass);
 				//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
 			}
 			
@@ -582,10 +617,17 @@ public class ClientRenderHooks
 	{
 		if(mc.player.getRidingEntity() instanceof IControllable)
 		{
+			// Stops the player's hand/head jerking about
+			if(mc.mouseHelper != constantMouseHelper)
+			{
+				Minecraft.getMinecraft().mouseHelper = constantMouseHelper;
+			}
+			
 			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
 			if(seat != null)
 			{
-				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(), (float)event.getRenderPartialTicks());
+				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(),
+						(float)event.getRenderPartialTicks());
 				//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
 				if(seat.driveable != null && seat.driveable.getDriveableType().canRoll)
 				{
@@ -593,12 +635,22 @@ public class ClientRenderHooks
 				}
 				
 				event.setRoll(roll);
+				event.setYaw(seat.driveable.axes.getYaw() + 90);
+				event.setPitch(seat.driveable.axes.getPitch());
 			}
 			else
 			{
 				FlansMod.log.warn("Null seat in roll event");
 			}
 			
+		}
+		else
+		{
+			// Unlock the player's mouse
+			if(mc.mouseHelper.equals(constantMouseHelper))
+			{
+				mc.mouseHelper = new MouseHelper();
+			}
 		}
 	}
 	
@@ -607,7 +659,8 @@ public class ClientRenderHooks
 		Minecraft mc = Minecraft.getMinecraft();
 		
 		//Remove crosshairs if looking down the sights of a gun
-		if(event.getType() == ElementType.CROSSHAIRS //&& mc.player.getHeldItemMainhand() != null && mc.player.getHeldItemMainhand().getItem() instanceof ItemGun)
+		if(event.getType() == ElementType.CROSSHAIRS
+				//&& mc.player.getHeldItemMainhand() != null && mc.player.getHeldItemMainhand().getItem() instanceof ItemGun)
 				&& FlansModClient.currentScope != null)
 		{
 			event.setCanceled(true);
@@ -644,7 +697,8 @@ public class ClientRenderHooks
 	{
 		//Scopes and helmet overlays
 		String overlayTexture = null;
-		if(FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
+		if(FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() &&
+				FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
 		{
 			overlayTexture = FlansModClient.currentScope.getZoomOverlay();
 		}
@@ -663,7 +717,9 @@ public class ClientRenderHooks
 			
 			GlStateManager.disableDepth();
 			GlStateManager.depthMask(false);
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+					GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+					GlStateManager.DestFactor.ZERO);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.disableAlpha();
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
@@ -690,7 +746,8 @@ public class ClientRenderHooks
 			
 			GlStateManager.enableAlpha();
 			GlStateManager.enableBlend();
-			GlStateManager.color(1.0f, 1.0f, 1.0f, Math.max(((float)FlansModClient.hitMarkerTime - 10.0f + partialTicks) / 10.0f, 0.0f));
+			GlStateManager.color(1.0f, 1.0f, 1.0f,
+					Math.max(((float)FlansModClient.hitMarkerTime - 10.0f + partialTicks) / 10.0f, 0.0f));
 			
 			
 			ItemStack currentStack = mc.player.inventory.getCurrentItem();
@@ -752,7 +809,8 @@ public class ClientRenderHooks
 						for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
 						{
 							ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
-							if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+							if(bulletStack != null && !bulletStack.isEmpty() &&
+									bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 							{
 								RenderHelper.enableGUIStandardItemLighting();
 								GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -761,7 +819,8 @@ public class ClientRenderHooks
 								drawSlotInventory(mc.fontRenderer, bulletStack, xPos, j - 65);
 								GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 								RenderHelper.disableStandardItemLighting();
-								String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+								String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" +
+										bulletStack.getMaxDamage();
 								if(bulletStack.getMaxDamage() == 1)
 									s = "";
 								
@@ -781,7 +840,9 @@ public class ClientRenderHooks
 	{
 		PacketTeamInfo teamInfo = FlansModClient.teamInfo;
 		
-		if(teamInfo != null && FlansModClient.minecraft.player != null && (teamInfo.numTeams > 0 || !teamInfo.sortedByTeam) && teamInfo.getPlayerScoreData(FlansModClient.minecraft.player.getName()) != null)
+		if(teamInfo != null && FlansModClient.minecraft.player != null &&
+				(teamInfo.numTeams > 0 || !teamInfo.sortedByTeam) &&
+				teamInfo.getPlayerScoreData(FlansModClient.minecraft.player.getName()) != null)
 		{
 			GL11.glEnable(3042 /* GL_BLEND */);
 			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
@@ -804,7 +865,8 @@ public class ClientRenderHooks
 			
 			if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
 			{
-				if(teamInfo.teamData == null || teamInfo.teamData[0] == null || teamInfo.teamData[0].team == null || teamInfo.teamData[1] == null || teamInfo.teamData[1].team == null)
+				if(teamInfo.teamData == null || teamInfo.teamData[0] == null || teamInfo.teamData[0].team == null ||
+						teamInfo.teamData[1] == null || teamInfo.teamData[1].team == null)
 				{
 					FlansMod.Assert(false, "Failure in team data overlay");
 					return;
@@ -812,7 +874,8 @@ public class ClientRenderHooks
 				
 				//Draw team 1 colour bit
 				int colour = teamInfo.teamData[0].team.teamColour;
-				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
+				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F,
+						1.0F);
 				worldrenderer.startDrawingQuads();
 				worldrenderer.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
 				worldrenderer.addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
@@ -821,7 +884,8 @@ public class ClientRenderHooks
 				worldrenderer.draw();
 				//Draw team 2 colour bit
 				colour = teamInfo.teamData[1].team.teamColour;
-				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
+				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F,
+						1.0F);
 				worldrenderer.startDrawingQuads();
 				worldrenderer.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
 				worldrenderer.addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
@@ -839,22 +903,29 @@ public class ClientRenderHooks
 				{
 					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
 					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
-					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
-					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
+					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "",
+							i / 2 + 35 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
+					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "",
+							i / 2 + 34 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
 				}
 			}
 			
 			
 			mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
 			mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
-			mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 9, 0x000000);
-			mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 8, 0xffffff);
+			mc.fontRenderer
+					.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 9,
+							0x000000);
+			mc.fontRenderer
+					.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 8,
+							0xffffff);
 			
 			int secondsLeft = teamInfo.timeLeft / 20;
 			int minutesLeft = secondsLeft / 60;
 			secondsLeft = secondsLeft % 60;
 			String timeLeft = minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft);
-			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
+			mc.fontRenderer
+					.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
 			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
 			
 			
@@ -878,7 +949,9 @@ public class ClientRenderHooks
 	{
 		for(KillMessage killMessage : killMessages)
 		{
-			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
+			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName,
+					i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6,
+					j - 32 - killMessage.line * 16, 0xffffff);
 		}
 		
 		//Draw icons indicated weapons used
@@ -889,7 +962,9 @@ public class ClientRenderHooks
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		for(KillMessage killMessage : killMessages)
 		{
-			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item, 1, killMessage.paint), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
+			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item, 1, killMessage.paint),
+					i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12,
+					j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
 		RenderHelper.disableStandardItemLighting();

@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.flansmod.client.ClientProxy;
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.model.CustomItemRenderType;
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.model.ModelDriveable;
