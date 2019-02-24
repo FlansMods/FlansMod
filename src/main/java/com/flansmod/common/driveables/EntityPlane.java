@@ -169,6 +169,7 @@ public class EntityPlane extends EntityDriveable
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		PlaneType type = this.getPlaneType();
+		System.out.println(world.isRemote+" key: "+key);
 		//Send keys which require server side updates to the server
 		if(world.isRemote && (key == 6 || key == 8 || key == 9))
 		{

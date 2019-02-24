@@ -1,8 +1,6 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +40,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.FireableGun;
 import com.flansmod.common.guns.FiredShot;
@@ -473,6 +470,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
 	public boolean pressKey(int key, EntityPlayer player)
 	{
+		System.out.println("DrivableKey: "+key+" "+world.isRemote);
 		if(!world.isRemote && key == 9 && getDriveableType().modePrimary == EnumFireMode.SEMIAUTO) // Primary
 		{
 			shoot(false);
@@ -507,6 +505,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	 */
 	public void shoot(boolean secondary)
 	{
+		System.out.println("Shoot Driveable");
+		new NullPointerException().printStackTrace();
 		DriveableType type = getDriveableType();
 		if(seats[0] == null || !(seats[0].getControllingPassenger() instanceof EntityLivingBase))
 			return;
@@ -554,8 +554,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
-	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary,
-						   EnumWeaponType weaponType)
+	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
 	{
 		// Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
@@ -569,6 +568,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
 			
+			System.out.println("Stack:"+shootableStack+" "+getDriveableType().numPassengerGunners+" "+currentGun);
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
 				shootDelayPrimary = shootDelaySecondary = 1;
@@ -579,8 +579,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
+			
+			if (!gunType.isAmmo(shootableType))
+				return;
+			
 			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
-			//TODO unchecked cast, throw grenades
+			//TODO unchecked cast, grenades will cause a crash (currently no vehicle with this feature exists)
 			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, (EntityPlayerMP) getDriver());
 			
 			ShootBulletHandler handler = (Boolean isExtraBullet) ->
@@ -595,8 +599,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						shootableStack.setItemDamage(0);
 						shootableStack.setCount(shootableStack.getCount() - 1);
 						if(shootableStack.getCount() <= 0)
-						
-						driveableData.ammo[getDriveableType().numPassengerGunners + currentGun] = ItemStack.EMPTY.copy();
+							driveableData.ammo[getDriveableType().numPassengerGunners + currentGun] = ItemStack.EMPTY.copy();
 					}
 				}
 			};
@@ -714,7 +717,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//TODO damage vs living & damage vs driveable
 		//TODO speed?
 		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.bulletSpread, 3f);
-		//TODO unchecked cast, throw grenades
+		//TODO unchecked cast, grenades will cause a crash (currently no vehicle with this feature exists)
 		FiredShot shot = new FiredShot(fireableGun, (BulletType) bulletItem.type, this, (EntityPlayerMP) getDriver());
 		
 		ShootBulletHandler handler = (Boolean isExtraBullet) ->

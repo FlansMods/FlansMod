@@ -1,24 +1,18 @@
+
 package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
@@ -47,25 +41,31 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		float dYaw = (entityPlane.axes.getYaw() - entityPlane.prevRotationYaw);
-		for(; dYaw > 180F; dYaw -= 360F)
+		while(dYaw > 180F)
 		{
+			dYaw -= 360F;
 		}
-		for(; dYaw <= -180F; dYaw += 360F)
+		while(dYaw <= -180F)
 		{
+			dYaw += 360F;
 		}
 		float dPitch = (entityPlane.axes.getPitch() - entityPlane.prevRotationPitch);
-		for(; dPitch > 180F; dPitch -= 360F)
+		while(dPitch > 180F)
 		{
+			dPitch -= 360F;
 		}
-		for(; dPitch <= -180F; dPitch += 360F)
+		while(dPitch <= -180F)
 		{
+			dPitch += 360F;
 		}
 		float dRoll = (entityPlane.axes.getRoll() - entityPlane.prevRotationRoll);
-		for(; dRoll > 180F; dRoll -= 360F)
+		while(dRoll > 180F)
 		{
+			dRoll -= 360F;
 		}
-		for(; dRoll <= -180F; dRoll += 360F)
+		while(dRoll <= -180F)
 		{
+			dRoll += 360F;
 		}
 		GL11.glRotatef(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
@@ -77,23 +77,30 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		if(model != null)
 		{
 			model.render(entityPlane, f1);
-			//Render heli main rotors
+			// Render helicopter main rotors
 			for(int i = 0; i < model.heliMainRotorModels.length; i++)
 			{
 				GL11.glPushMatrix();
-				GL11.glTranslatef(model.heliMainRotorOrigins[i].x, model.heliMainRotorOrigins[i].y, model.heliMainRotorOrigins[i].z);
-				GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * model.heliRotorSpeeds[i] * 1440F / 3.14159265F, 0.0F, 1.0F, 0.0F);
-				GL11.glTranslatef(-model.heliMainRotorOrigins[i].x, -model.heliMainRotorOrigins[i].y, -model.heliMainRotorOrigins[i].z);
+				GL11.glTranslatef(model.heliMainRotorOrigins[i].x, model.heliMainRotorOrigins[i].y,
+						model.heliMainRotorOrigins[i].z);
+				GL11.glRotatef(
+						(entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * model.heliRotorSpeeds[i] * 1440F /
+								3.14159265F, 0.0F, 1.0F, 0.0F);
+				GL11.glTranslatef(-model.heliMainRotorOrigins[i].x, -model.heliMainRotorOrigins[i].y,
+						-model.heliMainRotorOrigins[i].z);
 				model.renderRotor(entityPlane, 0.0625F, i);
 				GL11.glPopMatrix();
 			}
-			//Render heli tail rotors
+			// Render helicopter tail rotors
 			for(int i = 0; i < model.heliTailRotorModels.length; i++)
 			{
 				GL11.glPushMatrix();
-				GL11.glTranslatef(model.heliTailRotorOrigins[i].x, model.heliTailRotorOrigins[i].y, model.heliTailRotorOrigins[i].z);
-				GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 0.0F, 1.0F);
-				GL11.glTranslatef(-model.heliTailRotorOrigins[i].x, -model.heliTailRotorOrigins[i].y, -model.heliTailRotorOrigins[i].z);
+				GL11.glTranslatef(model.heliTailRotorOrigins[i].x, model.heliTailRotorOrigins[i].y,
+						model.heliTailRotorOrigins[i].z);
+				GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F,
+						0.0F, 1.0F);
+				GL11.glTranslatef(-model.heliTailRotorOrigins[i].x, -model.heliTailRotorOrigins[i].y,
+						-model.heliTailRotorOrigins[i].z);
 				model.renderTailRotor(entityPlane, 0.0625F, i);
 				GL11.glPopMatrix();
 			}
@@ -113,26 +120,33 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 				
 				GL11.glColor4f(1F, entityPlane.isPartIntact(part.type) ? 1F : 0F, 0F, 0.3F);
 				
-				renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
+				renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
+						(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 			}
 			GL11.glColor4f(1F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
 			{
-				renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F), 0, 0, 0);
+				renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F,
+						prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F), 0, 0, 0);
 			}
 			
-			//Render shoot points
+			// Render shoot points
 			GL11.glColor4f(1F, 0F, 1F, 0.3F);
 			for(DriveablePosition point : type.shootPointsPrimary)
-				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+			{
+				renderOffsetAABB(
+						new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F,
+								point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+			}
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			for(DriveablePosition point : type.shootPointsSecondary)
-				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+			{
+				renderOffsetAABB(
+						new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F,
+								point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+			}
 			
-			//GL11.glColor4f(0F, 0F, 0F, 0.3F);	
-			//if(type.bombPosition != null)
-			//	renderAABB(AxisAlignedBB.getBoundingBox(type.bombPosition.x - 0.25F, type.bombPosition.y - 0.25F, type.bombPosition.z - 0.25F, type.bombPosition.x + 0.25F, type.bombPosition.y + 0.25F, type.bombPosition.z + 0.25F));
 			
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -151,7 +165,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 	@Override
 	public void doRender(EntityPlane entity, double d, double d1, double d2, float f, float f1)
 	{
-		//The plane is rendered by the renderWorld Method
+		render(entity, d, d1, d2, f, f1);
 	}
 	
 	@Override
@@ -160,64 +174,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		DriveableType type = entity.getDriveableType();
 		Paintjob paintjob = type.getPaintjob(entity.getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
-	}
-	
-	@SubscribeEvent
-	public void renderWorld(RenderWorldLastEvent event)
-	{
-		//Get the world
-		World world = Minecraft.getMinecraft().world;
-		if(world == null)
-			return;
-		
-		//Get the camera frustrum for clipping
-		Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-		double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
-		double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
-		double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
-		
-		//Frustum frustrum = new Frustum();
-		//frustrum.setPosition(x, y, z);
-		
-		//Push
-		GL11.glPushMatrix();
-		//Setup lighting
-		Minecraft.getMinecraft().entityRenderer.enableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
-		
-		RenderHelper.enableStandardItemLighting();
-		
-		GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
-		for(Object entity : world.loadedEntityList)
-		{
-			if(entity instanceof EntityPlane)
-			{
-				EntityPlane plane = (EntityPlane)entity;
-				int i = plane.getBrightnessForRender();
-				
-				if(plane.isBurning())
-				{
-					i = 15728880;
-				}
-				
-				int j = i % 65536;
-				int k = i / 65536;
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(),
-						plane.prevPosY + (plane.posY - plane.prevPosY) * event.getPartialTicks(),
-						plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
-			}
-		}
-		
-		//Reset Lighting
-		Minecraft.getMinecraft().entityRenderer.disableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		//Pop
-		GL11.glPopMatrix();
 	}
 	
 	@Override
@@ -241,7 +197,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 					case ENTITY:
 					{
 						scale = 1.5F;
-						//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
 						break;
 					}
 					case EQUIPPED:
@@ -255,7 +210,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 					}
 					case EQUIPPED_FIRST_PERSON:
 					{
-						//GL11.glRotatef(25F, 0F, 0F, 1F);
 						if(hand == EnumHand.MAIN_HAND)
 						{
 							GL11.glRotatef(45F, 0F, 1F, 0F);
@@ -271,10 +225,12 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 						scale = 1F;
 						break;
 					}
-					default: break;
+					default:
+						break;
 				}
 				
-				GL11.glScalef(scale / planeType.cameraDistance, scale / planeType.cameraDistance, scale / planeType.cameraDistance);
+				GL11.glScalef(scale / planeType.cameraDistance, scale / planeType.cameraDistance,
+						scale / planeType.cameraDistance);
 				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(planeType));
 				ModelDriveable model = planeType.model;
 				model.render(planeType);

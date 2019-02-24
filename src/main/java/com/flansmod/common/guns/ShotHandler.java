@@ -44,14 +44,37 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+/**
+ * Class containing a bunch of shooting related functions
+ */
 public class ShotHandler
 {
-
+	
+	/**
+	 * For any kind of shooting this method should be used. It handles everything including the differentiation between spawning a EntityBullet and performing a raytrace
+	 * 
+	 * @param world             World where the shot is fired
+	 * @param shot              FiredShot object, created using the guidelines
+	 * @param bulletAmount      Number how many bullets should be fired
+	 * @param rayTraceOrigin    Origin of the bullet
+	 * @param shootingDirection Direction where the bullet will travel
+	 */	
 	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		fireGun(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, ShootBulletHandler.instance, rayTraceOrigin);
 	}
 	
+	/**
+	 * For any kind of shooting this method should be used. It handles everything including the differentiation between spawning a EntityBullet and performing a raytrace
+	 * 
+	 * @param world             World where the shot is fired
+	 * @param shot              FiredShot object, created using the guidelines
+	 * @param bulletAmount      Number how many bullets should be fired
+	 * @param rayTraceOrigin    Origin of the bullet
+	 * @param shootingDirection Direction where the bullet will travel
+	 * @param handler           ShootBulletHandler which is called every time a shot is fired (bulletAmount times)
+	 * @param gunOrigin         Origin of the animation
+	 */
 	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler, Vector3f gunOrigin)
 	{
 		if (shot.getFireableGun().getBulletSpeed() == 0f)
@@ -61,8 +84,7 @@ public class ShotHandler
 		}
 		else
 		{
-			//TODO Entity Bullet
-			System.out.println("Bullet");
+			//Spawn EntityBullet
 			for(int i = 0; i < bulletAmount; i++)
 			{
 				world.spawnEntity(new EntityBullet(world, shot, rayTraceOrigin.toVec3(), shootingDirection.toVec3()));

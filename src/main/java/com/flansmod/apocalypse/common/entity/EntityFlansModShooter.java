@@ -261,7 +261,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	 */
 	private void shoot(ItemStack stack, GunType gunType, World world, ItemStack bulletStack, Entity entity, boolean left, EntityLivingBase target)
 	{
-		ItemGun item = (ItemGun)gunType.item;
+		//ItemGun item = (ItemGun)gunType.item;
 		ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 		// Play a sound if the previous sound has finished
 		if(soundDelay <= 0 && gunType.shootSound != null)
@@ -284,21 +284,10 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
 				
 				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-				//TODO unchecked cast, throw grenades
+				//TODO unchecked cast, grenades will cause a crash
 				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
 				
 				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
-				/*
-				ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
-				shootableItem.Shoot(world,
-						origin,
-						direction,
-						gunType.getDamage(stack),
-						gunType.getSpread(stack),
-						gunType.getBulletSpeed(stack),
-						gunType,
-						this);
-					*/
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)

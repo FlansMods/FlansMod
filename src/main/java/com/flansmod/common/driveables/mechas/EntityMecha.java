@@ -59,6 +59,7 @@ import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
+import com.flansmod.common.network.PacketGunAnimation;
 import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
@@ -407,11 +408,16 @@ public class EntityMecha extends EntityDriveable
 						shoot(heldStack, gunType, bulletStack, creative(), left);
 						
 						//Apply animations to 3D modelled guns
-						//TODO : Move to client side and sync
 						if(world.isRemote)
 						{
-							int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
-							int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
+							//TODO debug
+							new NullPointerException("Should not happen on client side").printStackTrace();
+						}
+						int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
+						int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
+						FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(left?EnumHand.MAIN_HAND:EnumHand.OFF_HAND, pumpDelay, pumpTime, 0), (EntityPlayerMP)this.getDriver());
+						//TODO cleanup
+						/*
 							if(left)
 							{
 								leftAnimations.doShoot(pumpDelay, pumpTime);
@@ -421,6 +427,8 @@ public class EntityMecha extends EntityDriveable
 								rightAnimations.doShoot(pumpDelay, pumpTime);
 							}
 						}
+						*/
+						
 						//Damage the bullet item
 						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 						
@@ -457,25 +465,11 @@ public class EntityMecha extends EntityDriveable
 		if(!world.isRemote)
 			for(int k = 0; k < gunType.numBullets * bulletType.numBullets; k++)
 			{
-				
-				// TODO: Do mechas properly. No hacks
-				//float speed = gunType.getBulletSpeed(stack);
-				//if(speed <= 0.0f)
-				//	speed = 5.0f;
 				ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
 				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+				//TODO unchecked
 				FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
 				ShotHandler.fireGun(world, shot, gunType.numBullets*shootableType.numBullets, bulletOrigin, armVector);
-				/*
-				world.spawnEntity(((ItemShootable)bulletStack.getItem()).getEntity(world,
-						bulletOrigin,
-						armVector,
-						(EntityLivingBase)(getSeat(0).getControllingPassenger()),
-						gunType.getSpread(stack) / 2F,
-						gunType.getDamage(stack),
-						speed,
-						mechaType));
-						*/
 			}
 		
 		if(left)
