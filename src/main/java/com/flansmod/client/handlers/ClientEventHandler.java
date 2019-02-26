@@ -45,7 +45,7 @@ public class ClientEventHandler
 			case START:
 			{
 				RenderGun.smoothing = event.renderTickTime;
-				FlansModClient.UpdateCameraZoom(event.renderTickTime);
+				FlansModClient.updateCameraZoom(event.renderTickTime);
 				renderHooks.SetPartialTick(event.renderTickTime);
 				break;
 			}
@@ -67,7 +67,7 @@ public class ClientEventHandler
 			{
 				//Handle all packets received since last tick
 				FlansMod.getPacketHandler().handleClientPackets();
-				FlansModClient.UpdateFlashlights(Minecraft.getMinecraft());
+				FlansModClient.updateFlashlights(Minecraft.getMinecraft());
 				break;
 			}
 			case END:
