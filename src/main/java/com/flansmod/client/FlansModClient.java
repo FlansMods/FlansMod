@@ -146,10 +146,10 @@ public class FlansModClient extends FlansMod
 		
 		ClientTeamsData.Tick();
 		
-		// Force crash if too many vehicles break to prevent save data corruption
+		// Force shutdown if too many vehicles break to prevent save data corruption
 		if(numVehicleExceptions > 2)
 		{
-			FlansMod.log.error("Too many vehicle exceptions, shutting down.");
+			log.error("Too many vehicle exceptions, shutting down.");
 			minecraft.shutdown();
 		}
 		

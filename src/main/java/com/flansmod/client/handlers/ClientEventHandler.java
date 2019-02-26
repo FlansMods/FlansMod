@@ -27,8 +27,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemGun;
 
 /**
- * All handled events for the client should go through here and be passed on. Makes it easier to see which events are
- * being handled by the mod
+ * All handled events for the client should go through here and be passed on,
+ * this makes it easier to see which events are being handled by the mod
  */
 @SideOnly(Side.CLIENT)
 public class ClientEventHandler
@@ -46,7 +46,7 @@ public class ClientEventHandler
 			{
 				RenderGun.smoothing = event.renderTickTime;
 				FlansModClient.updateCameraZoom(event.renderTickTime);
-				renderHooks.SetPartialTick(event.renderTickTime);
+				renderHooks.setPartialTick(event.renderTickTime);
 				break;
 			}
 			case END:
@@ -149,6 +149,6 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void ModifyHUD(RenderGameOverlayEvent event)
 	{
-		renderHooks.ModifyHUD(event);
+		renderHooks.modifyHUD(event);
 	}
 }
