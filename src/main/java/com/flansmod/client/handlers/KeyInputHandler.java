@@ -73,7 +73,7 @@ public class KeyInputHandler
 		mc = Minecraft.getMinecraft();
 	}
 	
-	public void checkKeyInput(KeyInputEvent event)
+	public void checkKeyInput()
 	{
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
 			return;

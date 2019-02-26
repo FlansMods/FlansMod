@@ -14,7 +14,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,6 +30,7 @@ import com.flansmod.common.guns.ItemGun;
  * All handled events for the client should go through here and be passed on. Makes it easier to see which events are
  * being handled by the mod
  */
+@SideOnly(Side.CLIENT)
 public class ClientEventHandler
 {
 	private KeyInputHandler keyInputHandler = new KeyInputHandler();
@@ -76,7 +76,7 @@ public class ClientEventHandler
 				renderHooks.update();
 				RenderFlag.angle += 2F;
 				FlansModClient.tick();
-				
+				keyInputHandler.checkKeyInput();
 				break;
 			}
 		}
@@ -105,12 +105,6 @@ public class ClientEventHandler
 					Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
-	}
-	
-	@SubscribeEvent
-	public void checkKeyInput(KeyInputEvent event)
-	{
-		keyInputHandler.checkKeyInput(event);
 	}
 	
 	@SubscribeEvent
