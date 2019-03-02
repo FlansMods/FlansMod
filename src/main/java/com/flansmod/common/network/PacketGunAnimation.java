@@ -4,6 +4,9 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.GunAnimations.LookAtState;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -141,11 +144,11 @@ public class PacketGunAnimation extends PacketBase
 	{
 		GunAnimations animations = FlansModClient.getGunAnimations(clientPlayer, hand);
 		
-		handleAnimation(animations, type);
-		handleAnimation(animations, type2);
+		handleAnimation(animations, type, clientPlayer);
+		handleAnimation(animations, type2, clientPlayer);
 	}
 
-	private void handleAnimation(GunAnimations animations, AnimationType type)
+	private void handleAnimation(GunAnimations animations, AnimationType type, EntityPlayer player)
 	{
 		switch (type)
 		{
@@ -154,6 +157,8 @@ public class PacketGunAnimation extends PacketBase
 			
 			case RELOAD:
 				animations.doReload(reloadtime, pumpdelay, pumptime);
+				PlayerData data = PlayerHandler.getPlayerData(player);
+				data.shootTimeRight = data.shootTimeLeft = reloadtime;
 				break;
 				
 			case SHOOT:

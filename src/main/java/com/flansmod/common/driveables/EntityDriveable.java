@@ -606,7 +606,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
 			
-			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, gunVector, lookVector, handler, gunVector);
+			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, gunVector, lookVector, handler);
 			
 			if (type.shootSound(secondary) != null)
 			{
@@ -739,7 +739,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		
 		Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
 		
-		ShotHandler.fireGun(world, shot, bulletItem.type.numBullets, gunVector, lookVector, handler, gunVector);
+		ShotHandler.fireGun(world, shot, bulletItem.type.numBullets, gunVector, lookVector, handler);
 		
 		if (type.shootSound(secondary) != null)
 		{

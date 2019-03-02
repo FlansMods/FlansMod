@@ -132,8 +132,7 @@ public class FlansModRaytracer
 							Vec3d hitPoint = new Vec3d(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
 							//TODO Debug
 							world.spawnEntity(new EntityDebugDot(world, new Vector3f(mop.hitVec), 1000, 1.0f, 0f, 0f));
-							System.out.println("NextMotion:"+new Vec3d(origin.x + motion.x, origin.y + motion.y, origin.z + motion.z));
-							System.out.println("HitPos:"+hitPoint);
+							
 							float hitLambda = 1F;
 							if(motion.x != 0F)
 								hitLambda = (float) (hitPoint.x / motion.x);
@@ -144,8 +143,6 @@ public class FlansModRaytracer
 							if(hitLambda < 0)
 								hitLambda = -hitLambda;
 							
-							
-							System.out.println("EntityLambda:"+hitLambda);
 							hits.add(new EntityHit(entity, hitLambda));
 							//raytraceBlock(world, mop.hitVec, motion, hits);
 						}

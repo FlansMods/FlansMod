@@ -15,19 +15,20 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 
-//TODO description totally outdated
 //When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
 //When the server receives one, it is interpreted as a forced reload
-public class PacketReload extends PacketBase
+//TODO CLEANUP
+@Deprecated
+public class PacketReloadOldCLEANUP extends PacketBase
 {
 	public boolean isOffHand;
 	public boolean isForced;
 	
-	public PacketReload()
+	public PacketReloadOldCLEANUP()
 	{
 	}
 	
-	public PacketReload(EnumHand hand, boolean isForced)
+	public PacketReloadOldCLEANUP(EnumHand hand, boolean isForced)
 	{
 		this.isOffHand = hand == EnumHand.OFF_HAND;
 		this.isForced = isForced;
@@ -50,7 +51,6 @@ public class PacketReload extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
-		EnumHand hand = isOffHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
 		ItemStack main = playerEntity.getHeldItemMainhand();
 		ItemStack off = playerEntity.getHeldItemOffhand();
@@ -60,9 +60,8 @@ public class PacketReload extends PacketBase
 		{
 			GunType type = ((ItemGun)stack.getItem()).GetType();
 			
-			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, hand, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
+			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, isOffHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
 			{
-				//TODO move this into the 
 				//Set the reload delay
 				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
 				if(isOffHand)
@@ -71,9 +70,6 @@ public class PacketReload extends PacketBase
 				//Play reload sound
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
-			
-				//TODO burst rounds remaining is not set to 0;
-				FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, type.reloadTime, type.getPumpDelayAfterReload(), type.getPumpTime()), playerEntity);
 			}
 		}
 	}

@@ -37,6 +37,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -61,7 +62,7 @@ public class ShotHandler
 	 */	
 	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
-		fireGun(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, ShootBulletHandler.instance, rayTraceOrigin);
+		fireGun(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, ShootBulletHandler.instance);
 	}
 	
 	/**
@@ -73,14 +74,13 @@ public class ShotHandler
 	 * @param rayTraceOrigin    Origin of the bullet
 	 * @param shootingDirection Direction where the bullet will travel
 	 * @param handler           ShootBulletHandler which is called every time a shot is fired (bulletAmount times)
-	 * @param gunOrigin         Origin of the animation
 	 */
-	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler, Vector3f gunOrigin)
+	public static void fireGun(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
 		if (shot.getFireableGun().getBulletSpeed() == 0f)
 		{
 			//Raytrace
-			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler, gunOrigin);
+			createMultipleShots(world, shot, bulletAmount, rayTraceOrigin, shootingDirection, handler);
 		}
 		else
 		{
@@ -93,17 +93,17 @@ public class ShotHandler
 		}
 	}
 	
-	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler, Vector3f gunOrigin)
+	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
 		{
-			createShot(world, shot, bulletspread, rayTraceOrigin, new Vector3f(shootingDirection), gunOrigin);
+			createShot(world, shot, bulletspread, rayTraceOrigin, new Vector3f(shootingDirection));
 			handler.shooting(i < bulletAmount - 1);
 		}
 	}
 
-	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection, Vector3f gunOrigin)
+	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		randomizeVectorDirection(world, shootingDirection, bulletspread);
 		shootingDirection.scale(500.0f);
@@ -152,14 +152,12 @@ public class ShotHandler
 		//Animation
 		//TODO should this be send to all Players?
 		//TODO hardcoded values
-		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(gunOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), gunOrigin.x, gunOrigin.y, gunOrigin.z, 500f, world.provider.getDimension());
+		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(rayTraceOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), rayTraceOrigin.x, rayTraceOrigin.y, rayTraceOrigin.z, 500f, world.provider.getDimension());
 	}
 	
 	public static Float OnHit(World world, Vector3f hit, Vector3f shootingDirection, FiredShot shot, BulletHit bulletHit, Float penetratingPower)
 	{
 		Float damage = shot.getFireableGun().getDamage();
-		//TODO correct penetration stuff
-		System.out.println("Penetration:"+penetratingPower);
 		
 		BulletType bulletType = shot.getBulletType();
 		if(bulletHit instanceof DriveableHit)
@@ -252,9 +250,6 @@ public class ShotHandler
 				}
 			}
 			IBlockState state = blockHit.getIBlockState().getActualState(world, pos);;
-
-			//TODO Debug
-			System.out.println("Block Hardness:"+state.getBlockHardness(world, pos));
 			
 			penetratingPower -= getBlockPenetrationDecrease(state, pos, world);
 			
@@ -266,6 +261,7 @@ public class ShotHandler
 			for(int i = 0; i < 2; i++)
 			{
 				// TODO: [1.12] Check why this isn't moving right
+				//TODO cleanup
 				float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
 				
 				double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
@@ -276,6 +272,8 @@ public class ShotHandler
 				motionY += bulletDir.y;
 				motionZ += bulletDir.z;
 				
+				//TODO particle
+				/*
 				ParticleDigging fx = (ParticleDigging)Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
 						EnumParticleTypes.BLOCK_CRACK.getParticleID(),
 						hit.x, hit.y, hit.z, motionX, motionY, motionZ,
@@ -286,6 +284,12 @@ public class ShotHandler
 					fx.setParticleTexture(Minecraft.getMinecraft().getBlockRendererDispatcher()
 							.getModelForState(state).getParticleTexture());
 				}
+				*/
+				
+		        if (state.getRenderType() != EnumBlockRenderType.INVISIBLE)
+		        {
+		            world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, hit.x, hit.y, hit.z, motionX, motionY, motionZ, Block.getStateId(state));
+		        }
 			}
 			
 			double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
@@ -293,8 +297,9 @@ public class ShotHandler
 			double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
 			double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 			
-			Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-					EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
+			//TODO effect?
+			//Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+			//		EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
 			
 			//play sound when bullet hits block
 			//TODO effect?

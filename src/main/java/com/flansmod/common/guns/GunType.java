@@ -247,7 +247,8 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * For guns with 3D models
 	 */
-	@SideOnly(Side.CLIENT)
+	//TODO properly separate the data
+	//@SideOnly(Side.CLIENT)
 	public ModelGun model;
 	
 	//Attachment settings
@@ -826,5 +827,41 @@ public class GunType extends PaintableType implements IScope
 	public float GetRecommendedScale()
 	{
 		return 60.0f;
+	}
+	
+	//TODO find out what the value PumpDelayAfterReload really does and add a better description
+	/**
+	 * @return Returns the pumpDelayAfterReload if a model exits, otherwise 0
+	 */
+	public Integer getPumpDelayAfterReload()
+	{
+		if (model != null)
+			return model.pumpDelayAfterReload;
+		
+		return 0;
+	}
+	
+	//TODO find out what the value PumpDelay really does and add a better description
+	/**
+	 * @return Returns the pumpDelay if a model exits, otherwise 0
+	 */
+	public Integer getPumpDelay()
+	{
+		if (model != null)
+			return model.pumpDelay;
+		
+		return 0;
+	}
+	
+	//TODO find out what the value pumpTime really does and add a better description
+	/**
+	 * @return the pump time if a model exits, otherwise 1
+	 */
+	public Integer getPumpTime()
+	{
+		if (model != null)
+			return model.pumpTime;
+		
+		return 0;
 	}
 }

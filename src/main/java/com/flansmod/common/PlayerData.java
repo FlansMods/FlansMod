@@ -1,8 +1,12 @@
 package com.flansmod.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -151,10 +155,18 @@ public class PlayerData
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation skin;
 	
+	//TODO make this Side.SERVER only
+	private Map<EnumHand, Integer> delayedshoots;
+	
 	public PlayerData(String name)
 	{
 		username = name;
 		snapshots = new PlayerSnapshot[FlansMod.numPlayerSnapshots];
+		
+		//TODO investigate if this solution is efficient
+		delayedshoots = new HashMap<>();
+		delayedshoots.put(EnumHand.MAIN_HAND, 0);
+		delayedshoots.put(EnumHand.OFF_HAND, 0);
 	}
 	
 	public void tick(EntityPlayer player)
@@ -185,6 +197,39 @@ public class PlayerData
 		System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
+		
+		if (!player.world.isRemote)
+		{
+			delayedshoots.forEach((EnumHand hand, Integer count) -> {
+				if (count > 0)
+				{
+					System.out.println("Delayed "+" "+System.currentTimeMillis());
+					delayedshoots.put(hand, count-1);
+					
+					ItemStack itemstack = player.getHeldItem(hand);
+					//TODO can itemstack be null?
+					Item item = itemstack.getItem();
+					if (item instanceof ItemGun)
+					{
+						System.out.println("Delayed2 "+" "+System.currentTimeMillis());
+						ItemGun gun = (ItemGun) item;
+						gun.shootServer(hand, (EntityPlayerMP) player, itemstack);
+					}
+				}
+			});
+		}
+	}
+	
+	public void addToQueue(EnumHand hand)
+	{
+		Integer count = delayedshoots.get(hand);
+		//TODO this value (10) is arbitrary and should be tested in real environments
+		if (count > 10)
+		{
+			System.out.println("WARNING: Dropping client shoot requests because client is out of sync by more than half an second");
+			return;
+		}
+		delayedshoots.put(hand, count+1);
 	}
 	
 	public void clientTick(EntityPlayer player)

@@ -70,6 +70,7 @@ public class PacketBulletTrail extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
+		//TODO correct way to log this?
 		System.out.println("Received PacketBulletTrail on Server. This packet should only be send to clients");
 		
 	}

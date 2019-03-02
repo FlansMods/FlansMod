@@ -206,13 +206,11 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(gunner == null || gunner.isDead)
 			isShooting = false;
-		System.out.println("hey");
 		// Check for ammo / reloading
 		if(ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
 		{
 			return;
 		}
-		System.out.println("actually shooting");
 		// Fire
 		BulletType bullet = BulletType.getBullet(ammo.getItem());
 		ShootBulletHandler handler = (Boolean isExtraBullet) ->
@@ -223,16 +221,15 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		shootDelay = type.shootDelay;
 		ItemShootable shootableItem = (ItemShootable)ammo.getItem();
 		ShootableType shootableType = shootableItem.type;
+		//TODO save this position
 		Vector3f position = new Vector3f(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D);
 		FireableGun gun = new FireableGun(type, type.damage, type.bulletSpread, type.bulletSpeed);
-		//TODO unchecked cast
 		FiredShot shot = new FiredShot(gun, bullet, this, (EntityPlayerMP) gunner);
 
 		Double radianYaw = Math.toRadians(direction * 90F + rotationYaw);
 		Double radianPitch = Math.toRadians(rotationPitch);
 		Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
-		//TODO save actual position
-		ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler, position);
+		ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler);
 		
 		if(soundDelay <= 0)
 		{

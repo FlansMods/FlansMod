@@ -121,6 +121,7 @@ public class KeyInputHandler
 					
 					if(item.CanReload(stack, player.inventory))
 					{
+						//TODO server reload
 						FlansMod.getPacketHandler().sendToServer(new PacketReload(EnumHand.MAIN_HAND, true));
 						
 						//Set player shoot delay to be the reload delay

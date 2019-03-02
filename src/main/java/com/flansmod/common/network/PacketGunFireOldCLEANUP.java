@@ -1,6 +1,7 @@
 package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
+
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,22 +14,30 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemGun;
 
-public class PacketGunFire extends PacketBase
+//TODO CLEANUP
+@Deprecated
+public class PacketGunFireOldCLEANUP extends PacketBase
 {
+	private boolean held;
+	private boolean lastheld;
 	private EnumHand hand;
 	
-	public PacketGunFire() {
+	public PacketGunFireOldCLEANUP() {
 		
 	}
 	
-	public PacketGunFire(EnumHand hand)
+	public PacketGunFireOldCLEANUP(Boolean held, Boolean lastheld,EnumHand hand)
 	{
+		this.held = held;
+		this.lastheld = lastheld;
 		this.hand = hand;
 	}
 	
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
+		data.writeBoolean(held);
+		data.writeBoolean(lastheld);
 		//TODO Real Packet stuff
 		data.writeInt(EnumHand.MAIN_HAND.equals(hand)?0:1);
 	}
@@ -36,6 +45,8 @@ public class PacketGunFire extends PacketBase
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
+		held = data.readBoolean();
+		lastheld = data.readBoolean();
 		//TODO Real Packet stuff
 		hand = data.readInt()==0?EnumHand.MAIN_HAND:EnumHand.OFF_HAND;
 	}
@@ -43,16 +54,16 @@ public class PacketGunFire extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
+		//FlansMod.log.warn("Depreceated message!");
 		ItemStack itemstack = playerEntity.getHeldItem(hand);
 		//TODO can itemstack be null?
 		Item item = itemstack.getItem();
 		if (item instanceof ItemGun) {
 			ItemGun gun = (ItemGun) item;
-			gun.shootServer(hand, playerEntity, itemstack);
+			//gun.shootServer(held, lastheld, hand, playerEntity, itemstack);
 			
 		} else {
 			//TODO debug
-			//TODO correct way to log this?
 			System.out.println("Invalid Item");
 			System.out.println("Item:"+itemstack);
 			System.out.println("Item:"+item);
