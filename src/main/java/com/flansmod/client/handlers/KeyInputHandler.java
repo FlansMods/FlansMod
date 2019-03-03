@@ -147,31 +147,31 @@ public class KeyInputHandler
 		if(ridingEntity instanceof IControllable)
 		{
 			IControllable riding = (IControllable)ridingEntity;
-			if(mc.gameSettings.keyBindForward.isPressed())
+			if(mc.gameSettings.keyBindForward.isKeyDown())
 				riding.pressKey(0, player);
-			if(mc.gameSettings.keyBindBack.isPressed())
+			if(mc.gameSettings.keyBindBack.isKeyDown())
 				riding.pressKey(1, player);
-			if(mc.gameSettings.keyBindLeft.isPressed())
+			if(mc.gameSettings.keyBindLeft.isKeyDown())
 				riding.pressKey(2, player);
-			if(mc.gameSettings.keyBindRight.isPressed())
+			if(mc.gameSettings.keyBindRight.isKeyDown())
 				riding.pressKey(3, player);
-			if(mc.gameSettings.keyBindJump.isPressed())
+			if(mc.gameSettings.keyBindJump.isKeyDown())
 				riding.pressKey(4, player);
-			if(downKey.isPressed())
+			if(downKey.isKeyDown())
 				riding.pressKey(5, player);
 			if(mc.gameSettings.keyBindSneak.isPressed())
 				riding.pressKey(6, player);
 			if(mc.gameSettings.keyBindInventory.isPressed() || inventoryKey.isPressed())
 				riding.pressKey(7, player);
-			if(bombKey.isPressed())
+			if(bombKey.isKeyDown())
 				riding.pressKey(8, player);
-			if(gunKey.isPressed())
+			if(gunKey.isKeyDown())
 				riding.pressKey(9, player);
 			if(controlSwitchKey.isPressed())
 				riding.pressKey(10, player);
-			if(leftRollKey.isPressed())
+			if(leftRollKey.isKeyDown())
 				riding.pressKey(11, player);
-			if(rightRollKey.isPressed())
+			if(rightRollKey.isKeyDown())
 				riding.pressKey(12, player);
 			if(gearKey.isPressed())
 				riding.pressKey(13, player);
