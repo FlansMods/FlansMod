@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,22 +31,32 @@ import com.flansmod.common.network.PacketRequestDebug;
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
 {
-	public static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LCONTROL, "Flan's Mod");
-	public static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R, "Flan's Mod");
-	public static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V, "Flan's Mod");
-	public static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_B, "Flan's Mod");
-	public static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C, "Flan's Mod");
-	public static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R, "Flan's Mod");
-	public static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G, "Flan's Mod");
-	public static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H, "Flan's Mod");
-	public static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z, "Flan's Mod");
-	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "Flan's Mod");
-	public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
-	public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
-	public static KeyBinding modeKey = new KeyBinding("Mode Switch Key", Keyboard.KEY_J, "Flan's Mod");
-	public static KeyBinding lookAtGunKey = new KeyBinding("Look at Gun", Keyboard.KEY_L, "Flan's Mod");
-	public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
-	public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
+	public static KeyBinding downKey =
+			new KeyBinding("key.pitchDown.desc", Keyboard.KEY_LCONTROL, "key.flansmod.category");
+	public static KeyBinding inventoryKey =
+			new KeyBinding("key.vehicleMenu.desc", Keyboard.KEY_M, "key.flansmod.category");
+	public static KeyBinding bombKey = new KeyBinding("key.dropBomb.desc", Keyboard.KEY_B, "key.flansmod.category");
+	public static KeyBinding gunKey =
+			new KeyBinding("key.fireVehicleGuns.desc", Keyboard.KEY_V, "key.flansmod.category");
+	public static KeyBinding controlSwitchKey =
+			new KeyBinding("key.switchControlMode.desc", Keyboard.KEY_C, "key.flansmod.category");
+	public static KeyBinding reloadKey = new KeyBinding("key.reload.desc", Keyboard.KEY_R, "key.flansmod.category");
+	public static KeyBinding teamsMenuKey =
+			new KeyBinding("key.teamsMenu.desc", Keyboard.KEY_G, "key.flansmod.category");
+	public static KeyBinding teamsScoresKey =
+			new KeyBinding("key.teamsScores.desc", Keyboard.KEY_H, "key.flansmod.category");
+	public static KeyBinding leftRollKey = new KeyBinding("key.rollLeft.desc", Keyboard.KEY_Z, "key.flansmod.category");
+	public static KeyBinding rightRollKey = new KeyBinding("Roll right", Keyboard.KEY_X, "key.flansmod.category");
+	public static KeyBinding gearKey =
+			new KeyBinding("key.toggleLandingGear.desc", Keyboard.KEY_L, "key.flansmod.category");
+	public static KeyBinding doorKey = new KeyBinding("key.toggleDoors.desc", Keyboard.KEY_K, "key.flansmod.category");
+	public static KeyBinding modeKey =
+			new KeyBinding("key.switchMovementMode.desc", Keyboard.KEY_J, "key.flansmod.category");
+	public static KeyBinding lookAtGunKey =
+			new KeyBinding("key.lookAtGun.desc", Keyboard.KEY_L, "key.flansmod.category");
+	public static KeyBinding debugKey = new KeyBinding("key.debug.desc", Keyboard.KEY_F10, "key.flansmod.category");
+	public static KeyBinding reloadModelsKey =
+			new KeyBinding("key.reloadModels.desc", Keyboard.KEY_F9, "key.flansmod.category");
 	
 	private Minecraft mc;
 	
