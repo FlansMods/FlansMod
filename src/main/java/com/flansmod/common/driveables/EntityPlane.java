@@ -68,6 +68,7 @@ public class EntityPlane extends EntityDriveable
 		prevPosX = x;
 		prevPosY = y;
 		prevPosZ = z;
+		ignoreFrustumCheck = true;
 		initType(type, true, false);
 	}
 	
