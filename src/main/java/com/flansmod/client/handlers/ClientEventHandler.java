@@ -47,11 +47,11 @@ public class ClientEventHandler
 				RenderGun.smoothing = event.renderTickTime;
 				FlansModClient.updateCameraZoom(event.renderTickTime);
 				renderHooks.setPartialTick(event.renderTickTime);
+				renderHooks.updatePlayerView();
 				break;
 			}
 			case END:
 			{
-				
 				break;
 			}
 		}

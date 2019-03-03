@@ -592,9 +592,9 @@ public class ClientRenderHooks
 		}
 	}
 	
-	public void cameraSetup(CameraSetup event)
+	public void updatePlayerView()
 	{
-		if(mc.player.getRidingEntity() instanceof IControllable)
+		if(mc.player != null && mc.player.getRidingEntity() instanceof IControllable)
 		{
 			if(FlansMod.proxy.mouseControlEnabled())
 			{
@@ -615,6 +615,22 @@ public class ClientRenderHooks
 			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
 			if(seat != null && seat.driver && FlansMod.proxy.mouseControlEnabled())
 			{
+				seat.applyOrientationToEntity(mc.player);
+			}
+		}
+		else if(mc.mouseHelper.equals(constantMouseHelper))
+		{
+			Minecraft.getMinecraft().mouseHelper = new MouseHelper();
+		}
+	}
+	
+	public void cameraSetup(CameraSetup event)
+	{
+		if(mc.player.getRidingEntity() instanceof IControllable)
+		{
+			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
+			if(seat != null)
+			{
 				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(),
 						(float)event.getRenderPartialTicks());
 				// If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle
@@ -625,16 +641,6 @@ public class ClientRenderHooks
 				}
 				
 				event.setRoll(roll);
-				event.setYaw(seat.driveable.axes.getYaw() + 90);
-				event.setPitch(seat.driveable.axes.getPitch());
-			}
-		}
-		else
-		{
-			// Unlock the player's mouse
-			if(mc.mouseHelper.equals(constantMouseHelper))
-			{
-				mc.mouseHelper = new MouseHelper();
 			}
 		}
 	}

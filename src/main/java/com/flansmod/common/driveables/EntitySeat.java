@@ -356,6 +356,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
 		if(driveable == null)
