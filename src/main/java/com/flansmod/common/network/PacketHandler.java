@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.PacketBlockHitEffect;
 
 /**
  * Flan's Mod packet handler class. Directs packet data to packet classes.
@@ -218,6 +219,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketGunAnimation.class);
 		registerPacket(PacketBulletTrail.class);
 		registerPacket(PacketHitMarker.class);
+		registerPacket(PacketBlockHitEffect.class);
 	}
 	
 	/**

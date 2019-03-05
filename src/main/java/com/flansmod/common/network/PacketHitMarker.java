@@ -15,6 +15,7 @@ public class PacketHitMarker extends PacketBase
 	
 	public PacketHitMarker()
 	{
+		//no data
 	}
 	
 	@Override

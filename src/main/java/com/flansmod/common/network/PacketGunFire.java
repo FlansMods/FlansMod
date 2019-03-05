@@ -29,14 +29,14 @@ public class PacketGunFire extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
-		//TODO Real Packet stuff
+		//TODO Proper packet enum encoding
 		data.writeInt(EnumHand.MAIN_HAND.equals(hand)?0:1);
 	}
 	
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
-		//TODO Real Packet stuff
+		//TODO Proper packet enum encoding
 		hand = data.readInt()==0?EnumHand.MAIN_HAND:EnumHand.OFF_HAND;
 	}
 	
@@ -51,11 +51,7 @@ public class PacketGunFire extends PacketBase
 			gun.shootServer(hand, playerEntity, itemstack);
 			
 		} else {
-			//TODO debug
-			//TODO correct way to log this?
-			System.out.println("Invalid Item");
-			System.out.println("Item:"+itemstack);
-			System.out.println("Item:"+item);
+			FlansMod.log.warn("Received invalid PacketGunFire. Item in hand is not an instance of ItemGun");
 		}
 	}
 	

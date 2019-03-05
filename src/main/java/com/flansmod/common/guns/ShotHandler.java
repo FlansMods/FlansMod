@@ -25,23 +25,19 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -93,7 +89,7 @@ public class ShotHandler
 		}
 	}
 	
-	public static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
+	private static void createMultipleShots(World world, FiredShot shot, Integer bulletAmount, Vector3f rayTraceOrigin, Vector3f shootingDirection, ShootBulletHandler handler)
 	{
 		Float bulletspread = 0.0025f * shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread;
 		for(int i = 0; i < bulletAmount; i++)
@@ -103,7 +99,7 @@ public class ShotHandler
 		}
 	}
 
-	public static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
+	private static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
 		randomizeVectorDirection(world, shootingDirection, bulletspread);
 		shootingDirection.scale(500.0f);
@@ -138,7 +134,6 @@ public class ShotHandler
 			
 			penetrationPower = OnHit(world, hitPos, shootingDirection, shot, hit, penetrationPower);
 			if (penetrationPower <= 0f) {
-				//TODO separate EntityBulletStuff
 				onDetonate(world, shot, hitPos);
 				finalhit = hitPos;
 				break;
@@ -151,7 +146,6 @@ public class ShotHandler
 		}
 		//Animation
 		//TODO should this be send to all Players?
-		//TODO hardcoded values
 		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(rayTraceOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), rayTraceOrigin.x, rayTraceOrigin.y, rayTraceOrigin.z, 500f, world.provider.getDimension());
 	}
 	
@@ -170,7 +164,6 @@ public class ShotHandler
 			//Send hit marker, if player is present
 			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) ->
 			{
-				//TODO possible packet spam
 				FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
 			});
 		}
@@ -182,28 +175,31 @@ public class ShotHandler
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
 			Optional<EntityPlayerMP> optionalPlayer = shot.getPlayerOptional();
 			// Check teams
-			if(optionalPlayer.isPresent() && FlansModClient.teamInfo != null)
+			if (optionalPlayer.isPresent())
 			{
 				EntityPlayerMP player = optionalPlayer.get();
-				Team shooterTeam = FlansModClient.teamInfo.getTeam(player);
-				Team victimTeam = FlansModClient.teamInfo.getTeam(playerHit.hitbox.player);
-				if(shooterTeam == null || shooterTeam != victimTeam)
+				
+				if(FlansModClient.teamInfo != null)
 				{
-					//TODO possible packet spam
+					Team shooterTeam = FlansModClient.teamInfo.getTeam(player);
+					Team victimTeam = FlansModClient.teamInfo.getTeam(playerHit.hitbox.player);
+					if(shooterTeam == null || shooterTeam != victimTeam)
+					{
+						FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+					}
+				}
+				else // No teams mod, just add marker
+				{
 					FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
 				}
-			}
-			else // No teams mod, just add marker
-			{
-				FlansModClient.AddHitMarker();
 			}
 		}
 		else if(bulletHit instanceof EntityHit)
 		{
 			EntityHit entityHit = (EntityHit)bulletHit;
-			
 			if(entityHit.entity != null)
 			{
+				System.out.println(shot.getDamageSource()+" "+shot.getPlayerOptional().orElse(null)+" "+shot.getShooterOptional().orElse(null));
 				if(entityHit.entity.attackEntityFrom(shot.getDamageSource(), damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
 				{
 					EntityLivingBase living = (EntityLivingBase)entityHit.entity;
@@ -224,7 +220,6 @@ public class ShotHandler
 			//Send hit marker, if player is present
 			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) ->
 			{
-				//TODO possible packet spam
 				FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
 			});
 			
@@ -249,60 +244,25 @@ public class ShotHandler
 					destroyBlock(worldServer, pos, shot.getPlayerOptional().orElse(null), false);
 				}
 			}
-			IBlockState state = blockHit.getIBlockState().getActualState(world, pos);;
+			IBlockState state = blockHit.getIBlockState().getActualState(world, pos);
 			
 			penetratingPower -= getBlockPenetrationDecrease(state, pos, world);
 			
-			Vec3i normal = blockHit.getRayTraceResult().sideHit.getDirectionVec();
+			EnumFacing faceing = blockHit.getRayTraceResult().sideHit;
 			Vector3f bulletDir = new Vector3f(shootingDirection);
 			bulletDir.normalise();
 			bulletDir.scale(0.5f);
 			
-			for(int i = 0; i < 2; i++)
+			for (EntityPlayer player : world.playerEntities)
 			{
-				// TODO: [1.12] Check why this isn't moving right
-				//TODO cleanup
-				float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
-				
-				double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-				double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-				double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
-				
-				motionX += bulletDir.x;
-				motionY += bulletDir.y;
-				motionZ += bulletDir.z;
-				
-				//TODO particle
-				/*
-				ParticleDigging fx = (ParticleDigging)Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-						EnumParticleTypes.BLOCK_CRACK.getParticleID(),
-						hit.x, hit.y, hit.z, motionX, motionY, motionZ,
-						Block.getIdFromBlock(state.getBlock()));
-				
-				if(fx != null)
+				//Checks if the player is in a radius of 300 Blocks (300² = 90000)
+				if (player.getDistanceSq(pos) < 90000)
 				{
-					fx.setParticleTexture(Minecraft.getMinecraft().getBlockRendererDispatcher()
-							.getModelForState(state).getParticleTexture());
+					FlansMod.getPacketHandler().sendTo(new PacketBlockHitEffect(hit, bulletDir, pos, faceing), (EntityPlayerMP) player);
 				}
-				*/
-				
-		        if (state.getRenderType() != EnumBlockRenderType.INVISIBLE)
-		        {
-		            world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, hit.x, hit.y, hit.z, motionX, motionY, motionZ, Block.getStateId(state));
-		        }
 			}
 			
-			double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
-			double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-			double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-			double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
-			
-			//TODO effect?
-			//Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-			//		EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
-			
 			//play sound when bullet hits block
-			//TODO effect?
 			PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, world.provider.getDimension(), bulletType.hitSound, false);
 			//FlansMod.proxy.playBlockBreakSound(pos.getX(), pos.getY(), pos.getZ(), blockHit.getIBlockState().getBlock());
 		}
@@ -348,7 +308,7 @@ public class ShotHandler
 		// Drop item on hitting if bullet requires it
 		if(bulletType.dropItemOnHit != null)
 		{
-			//TODO save itemstack on load?
+			//TODO save ItemStack on load into the bulletType
 			String itemName = bulletType.dropItemOnHit;
 			int damage = 0;
 			if(itemName.contains("."))

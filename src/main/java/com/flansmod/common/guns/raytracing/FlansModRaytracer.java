@@ -15,6 +15,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -130,8 +131,8 @@ public class FlansModRaytracer
 						if(hit)
 						{
 							Vec3d hitPoint = new Vec3d(mop.hitVec.x - origin.x, mop.hitVec.y - origin.y, mop.hitVec.z - origin.z);
-							//TODO Debug
-							world.spawnEntity(new EntityDebugDot(world, new Vector3f(mop.hitVec), 1000, 1.0f, 0f, 0f));
+							if (FlansMod.DEBUG)
+								world.spawnEntity(new EntityDebugDot(world, new Vector3f(mop.hitVec), 1000, 1.0f, 0f, 0f));
 							
 							float hitLambda = 1F;
 							if(motion.x != 0F)
@@ -176,8 +177,6 @@ public class FlansModRaytracer
 		
 		if(hit != null)
 		{
-			//TODO some effect at hit.hitPos
-			
 			Vec3d hitVec = hit.hitVec.subtract(posVec);
 			hitVec = hitVec.add(previoushot);
 			

@@ -408,26 +408,19 @@ public class EntityMecha extends EntityDriveable
 						shoot(heldStack, gunType, bulletStack, creative(), left);
 						
 						//Apply animations to 3D modelled guns
-						if(world.isRemote)
-						{
-							//TODO debug
-							new NullPointerException("Should not happen on client side").printStackTrace();
-						}
-						int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
-						int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
-						FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(left?EnumHand.MAIN_HAND:EnumHand.OFF_HAND, pumpDelay, pumpTime, 0), (EntityPlayerMP)this.getDriver());
-						//TODO cleanup
-						/*
+						
+						//TODO this doesn't work
+						
 							if(left)
 							{
-								leftAnimations.doShoot(pumpDelay, pumpTime);
+								leftAnimations.doShoot(gunType.getPumpDelay(), gunType.getPumpTime());
 							}
 							else
 							{
-								rightAnimations.doShoot(pumpDelay, pumpTime);
+								rightAnimations.doShoot(gunType.getPumpDelay(), gunType.getPumpTime());
 							}
-						}
-						*/
+						
+						
 						
 						//Damage the bullet item
 						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
@@ -463,14 +456,13 @@ public class EntityMecha extends EntityDriveable
 		bulletOrigin = Vector3f.add(new Vector3f(posX, posY, posZ), bulletOrigin, null);
 		
 		if(!world.isRemote)
-			for(int k = 0; k < gunType.numBullets * bulletType.numBullets; k++)
-			{
-				ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
-				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-				//TODO unchecked
-				FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
-				ShotHandler.fireGun(world, shot, gunType.numBullets*shootableType.numBullets, bulletOrigin, armVector);
-			}
+		{
+			ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
+			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+			//TODO unchecked cast, grenades will cause an error
+			FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
+			ShotHandler.fireGun(world, shot, gunType.numBullets*bulletType.numBullets, bulletOrigin, armVector);
+		}
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.GetShootDelay(stack), 5) : gunType.GetShootDelay(stack);

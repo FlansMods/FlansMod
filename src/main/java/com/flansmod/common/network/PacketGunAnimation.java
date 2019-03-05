@@ -159,6 +159,8 @@ public class PacketGunAnimation extends PacketBase
 				animations.doReload(reloadtime, pumpdelay, pumptime);
 				PlayerData data = PlayerHandler.getPlayerData(player);
 				data.shootTimeRight = data.shootTimeLeft = reloadtime;
+				data.SetBurstRoundsRemaining(hand, 0);
+				data.reloadingLeft = data.reloadingRight = true;
 				break;
 				
 			case SHOOT:

@@ -34,7 +34,8 @@ public class FiredShot {
 	 * @param weapon weapon used to fire the shot
 	 * @param bullet BulletType of the fired bullet
 	 */
-	public FiredShot(FireableGun weapon, BulletType bullet) {
+	public FiredShot(FireableGun weapon, BulletType bullet)
+	{
 		this.weapon = weapon;
 		this.bullet = bullet;
 		this.player = Optional.empty();
@@ -85,28 +86,32 @@ public class FiredShot {
 	/**
 	 * @return The gun used for this shot
 	 */
-	public FireableGun getFireableGun() {
+	public FireableGun getFireableGun()
+	{
 		return this.weapon;
 	}
 	
 	/**
 	 * @return The BulletType of the bullet used in the shot
 	 */
-	public BulletType getBulletType() {
+	public BulletType getBulletType()
+	{
 		return this.bullet;
 	}
 	
 	/**
 	 * @return the matching DamageSource for the shot
 	 */
-	public DamageSource getDamageSource() {
+	public DamageSource getDamageSource()
+	{
 		return getDamageSource(false);
 	}
 
 	/**
 	 * @return the matching DamageSource for the shot with the additional 'headshot' information
 	 */
-	public DamageSource getDamageSource(Boolean headshot) {
+	public DamageSource getDamageSource(Boolean headshot)
+	{
 		if (player.isPresent()) {
 			return new EntityDamageSourceGun(weapon.getShortName(), player.get(), player.get(), weapon.getInfoType(), headshot);
 		}

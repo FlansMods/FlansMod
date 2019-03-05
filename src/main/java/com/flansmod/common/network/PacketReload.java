@@ -15,9 +15,10 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 
-//TODO description totally outdated
-//When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
-//When the server receives one, it is interpreted as a forced reload
+/**
+ * This packet is send by the client to request a reload. The server checks if the player can reload and in this case actually reloads and sends a GunAnimationPacket as response.
+ * The GunAnimationPacket plays the reload animation and sets the pumpDelay & pumpTime times to prevent the client from shooting while reloading
+ */
 public class PacketReload extends PacketBase
 {
 	public boolean isOffHand;
@@ -62,7 +63,6 @@ public class PacketReload extends PacketBase
 			
 			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, hand, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
 			{
-				//TODO move this into the 
 				//Set the reload delay
 				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
 				if(isOffHand)
@@ -72,7 +72,6 @@ public class PacketReload extends PacketBase
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
 			
-				//TODO burst rounds remaining is not set to 0;
 				FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, type.reloadTime, type.getPumpDelayAfterReload(), type.getPumpTime()), playerEntity);
 			}
 		}

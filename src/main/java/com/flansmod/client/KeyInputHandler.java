@@ -18,12 +18,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.gui.teams.GuiTeamScores;
-import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.GunAnimations.LookAtState;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.network.PacketRequestDebug;
@@ -117,25 +115,11 @@ public class KeyInputHandler
 				if(stack != null && stack.getItem() instanceof ItemGun)
 				{
 					ItemGun item = (ItemGun)stack.getItem();
-					GunType type = item.GetType();
+					//GunType type = item.GetType();
 					
 					if(item.CanReload(stack, player.inventory))
 					{
-						//TODO server reload
 						FlansMod.getPacketHandler().sendToServer(new PacketReload(EnumHand.MAIN_HAND, true));
-						
-						//Set player shoot delay to be the reload delay
-						//Set both gun delays to avoid reloading two guns at once
-						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(stack);
-						
-						GunAnimations animations = FlansModClient.getGunAnimations(player, EnumHand.MAIN_HAND);
-						
-						int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
-						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
-						animations.doReload(type.reloadTime, pumpDelay, pumpTime);
-						
-						data.reloadingRight = true;
-						data.burstRoundsRemainingRight = 0;
 					}
 				}
 			}

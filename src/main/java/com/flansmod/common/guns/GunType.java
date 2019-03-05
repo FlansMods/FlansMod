@@ -829,7 +829,6 @@ public class GunType extends PaintableType implements IScope
 		return 60.0f;
 	}
 	
-	//TODO find out what the value PumpDelayAfterReload really does and add a better description
 	/**
 	 * @return Returns the pumpDelayAfterReload if a model exits, otherwise 0
 	 */
@@ -841,7 +840,6 @@ public class GunType extends PaintableType implements IScope
 		return 0;
 	}
 	
-	//TODO find out what the value PumpDelay really does and add a better description
 	/**
 	 * @return Returns the pumpDelay if a model exits, otherwise 0
 	 */
@@ -853,7 +851,6 @@ public class GunType extends PaintableType implements IScope
 		return 0;
 	}
 	
-	//TODO find out what the value pumpTime really does and add a better description
 	/**
 	 * @return the pump time if a model exits, otherwise 1
 	 */

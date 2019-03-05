@@ -277,18 +277,16 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			float inaccuracy = 0.5F;
 			
 			// Spawn the bullet entities
-			for(int k = 0; k < gunType.numBullets * bullet.numBullets; k++)
-			{
-				Vector3f origin = new Vector3f(posX, posY + getEyeHeight(), posZ);
-				Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
-				Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
-				
-				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-				//TODO unchecked cast, grenades will cause a crash
-				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
-				
-				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
-			}
+			Vector3f origin = new Vector3f(posX, posY + getEyeHeight(), posZ);
+			Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
+			Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
+			
+			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+			//TODO unchecked cast, grenades will cause a crash
+			FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
+			
+			ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
+		
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)
 				ItemGun.dropItem(world, this, bullet.dropItemOnShoot);

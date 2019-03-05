@@ -707,8 +707,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 										bulletItemStack = ItemStack.EMPTY.copy();
 									
 									driveable.getDriveableData().ammo[seatInfo.gunnerID] = bulletItemStack;
-									//TODO cleanup
-									//driveable.getDriveableData().decrStackSize(3 + seatID, 1);
 								}
 							}
 							// Reset the shoot delay

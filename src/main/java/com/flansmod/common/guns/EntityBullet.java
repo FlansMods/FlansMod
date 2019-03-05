@@ -109,7 +109,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private void getLockOnTarget()
 	{
 		BulletType type = shot.getBulletType();
-		//TODO lockonto
+		
 		if(type.lockOnToPlanes || type.lockOnToVehicles || type.lockOnToMechas || type.lockOnToLivings || type.lockOnToPlayers)
 		{
 			Vector3f motionVec = new Vector3f(motionX, motionY, motionZ);
@@ -340,58 +340,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 	}
 	
-	//Not used
-	/*
-	@Deprecated
-	public DamageSource getBulletDamage(boolean headshot)
-	{
-		if(owner instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)owner, firedFrom, headshot))
-					.setProjectile();
-		else
-			return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
-	}
-	//Not used
-	/*
-	@Deprecated
-	public static DamageSource getDamageSource(InfoType firedFrom, BulletType type, Entity owner, boolean headshot)
-	{
-		if (owner == null) {
-			throw new NullPointerException("Owner cannot be null");
-		}
-		if(owner instanceof EntityPlayer)
-		{
-			return (new EntityDamageSourceGun(type.shortName, owner, (EntityPlayer)owner, firedFrom, headshot)).setProjectile();
-		}
-		
-		return (new EntityDamageSourceIndirect(type.shortName, owner, owner)).setProjectile();
-	}
-	
-	//Not used
-	/*
-	private boolean isPartOfOwner(Entity entity)
-	{
-		if(owner == null)
-			return false;
-		if(entity == owner || entity == owner.getControllingPassenger() || entity == owner.getRidingEntity())
-			return true;
-		if(owner instanceof EntityPlayer)
-		{
-			if(PlayerHandler.getPlayerData((EntityPlayer)owner,
-					world.isRemote ? Side.CLIENT : Side.SERVER) == null)
-				return false;
-			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer)owner,
-					world.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
-			if(mg != null && mg == entity)
-			{
-				return true;
-			}
-		}
-		return owner.getRidingEntity() instanceof EntitySeat && (((EntitySeat)owner.getRidingEntity()).driveable == null
-				|| ((EntitySeat)owner.getRidingEntity()).driveable.isPartOfThis(entity));
-	}
-	*/
-	
 	@Override
 	public void setDead()
 	{
@@ -399,59 +347,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		super.setDead();
 	}
-	/*
-	@Deprecated
-	public static void OnDetonate(World world, Vector3f detonatePos, EntityLivingBase owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
-	{
-		if(world.isRemote)
-			return;
-		if(bulletType.explosionRadius > 0)
-		{
-			new FlansModExplosion(world, bullet, owner, bulletType,
-					detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
-		}
-		if(bulletType.fireRadius > 0)
-		{
-			for(float i = -bulletType.fireRadius; i < bulletType.fireRadius; i++)
-			{
-				for(float k = -bulletType.fireRadius; k < bulletType.fireRadius; k++)
-				{
-					for(int j = -1; j < 1; j++)
-					{
-						if(world.getBlockState(new BlockPos((int)(detonatePos.x + i), (int)(detonatePos.y + j), (int)(detonatePos.z + k))).getMaterial() == Material.AIR)
-						{
-							world.setBlockState(new BlockPos((int)(detonatePos.x + i), (int)(detonatePos.y + j), (int)(detonatePos.z + k)), Blocks.FIRE.getDefaultState(), 2);
-						}
-					}
-				}
-			}
-		}
-		// Send flak packet
-		if(bulletType.flak > 0 && owner != null)
-		{
-			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(detonatePos.x, detonatePos.y, detonatePos.z, bulletType.flak, bulletType.flakParticles), detonatePos.x, detonatePos.y, detonatePos.z, 200, owner.dimension);
-		}
-		// Drop item on hitting if bullet requires it
-		if(bulletType.dropItemOnHit != null)
-		{
-			String itemName = bulletType.dropItemOnHit;
-			int damage = 0;
-			if(itemName.contains("."))
-			{
-				damage = Integer.parseInt(itemName.split("\\.")[1]);
-				itemName = itemName.split("\\.")[0];
-			}
-			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
-			
-			if(dropStack != null && !dropStack.isEmpty())
-			{
-				EntityItem entityitem = new EntityItem(world, detonatePos.x, detonatePos.y, detonatePos.z, dropStack);
-				entityitem.setDefaultPickupDelay();
-				world.spawnEntity(entityitem);
-			}
-		}
-	}
-	*/
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag)
@@ -511,138 +406,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			FlansMod.log.throwing(e);
 		}
 	}
-	
-	/*
-	@Deprecated
-	public int getBrightnessForRender(float par1)
-	{
-		if(shot.getBulletType().hasLight)
-		{
-			return 15728880;
-		}
-		else
-		{
-			int i = MathHelper.floor(this.posX);
-			int j = MathHelper.floor(this.posZ);
-			
-			if(!world.isAirBlock(new BlockPos(i, 0, j)))
-			{
-				double d0 = (getCollisionBoundingBox().maxY - getCollisionBoundingBox().minY) * 0.66D;
-				int k = MathHelper.floor(this.posY - (double)this.yOffset + d0);
-				return this.world.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(i, k, j));
-			}
-			else
-			{
-				return 0;
-			}
-		}
-	}
-	*/
-	/*
-	@Override
-	public void writeSpawnData(ByteBuf data)
-	{
-		ByteBufUtils.writeUTF8String(data, shot.getBulletType().shortName);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf data)
-	{
-		try
-		{
-			//Transferring only the bullet type for the client to mimic the real behavior of the bullet
-			shot = new FiredShot(null, BulletType.getBullet(ByteBufUtils.readUTF8String(data)));
-		}
-		catch(Exception e)
-		{
-			FlansMod.log.error("Failed to read bullet owner from server.");
-			super.setDead();
-			FlansMod.log.throwing(e);
-		}
-	}
-	*/
-	/*
-	//TODO sync motion and remove lockedOnTo & bullettype
-	@Override
-	public void writeSpawnData(ByteBuf data)
-	{
-		data.writeDouble(motionX);
-		data.writeDouble(motionY);
-		data.writeDouble(motionZ);
-		data.writeInt(lockedOnTo == null ? -1 : lockedOnTo.getEntityId());
-		ByteBufUtils.writeUTF8String(data, shot.getBulletType().shortName);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf data)
-	{
-		try
-		{
-			motionX = data.readDouble();
-			motionY = data.readDouble();
-			motionZ = data.readDouble();
-			int lockedOnToID = data.readInt();
-			if(lockedOnToID != -1)
-				lockedOnTo = world.getEntityByID(lockedOnToID);
-			//TODO sync other attributes to remove the need for this one
-			//Transferring only the bullet type for the client to mimic the real behavior of the bullet
-			shot = new FiredShot(null, BulletType.getBullet(ByteBufUtils.readUTF8String(data)));
-		}
-		catch(Exception e)
-		{
-			FlansMod.log.error("Failed to read bullet owner from server.");
-			super.setDead();
-			FlansMod.log.throwing(e);
-		}
-	}
-	
-	//There is no need to save/store this data
-	/*
-	@Override
-	public void writeSpawnData(ByteBuf data)
-	{
-		data.writeDouble(motionX);
-		data.writeDouble(motionY);
-		data.writeDouble(motionZ);
-		data.writeInt(lockedOnTo == null ? -1 : lockedOnTo.getEntityId());
-		ByteBufUtils.writeUTF8String(data, type.shortName);
-		if(owner == null)
-			ByteBufUtils.writeUTF8String(data, "null");
-		else
-			ByteBufUtils.writeUTF8String(data, owner.getName());
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf data)
-	{
-		try
-		{
-			motionX = data.readDouble();
-			motionY = data.readDouble();
-			motionZ = data.readDouble();
-			int lockedOnToID = data.readInt();
-			if(lockedOnToID != -1)
-				lockedOnTo = world.getEntityByID(lockedOnToID);
-			type = BulletType.getBullet(ByteBufUtils.readUTF8String(data));
-			penetratingPower = type.penetratingPower;
-			String name = ByteBufUtils.readUTF8String(data);
-			for(Object obj : world.loadedEntityList)
-			{
-				if(obj != null && ((Entity)obj).getName().equals(name))
-				{
-					owner = (EntityLivingBase)obj;
-					break;
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			FlansMod.log.error("Failed to read bullet owner from server.");
-			super.setDead();
-			FlansMod.log.throwing(e);
-		}
-	}
-	*/	
+
 	@Override
 	public boolean isBurning()
 	{
