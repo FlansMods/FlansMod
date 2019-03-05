@@ -261,7 +261,6 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	 */
 	private void shoot(ItemStack stack, GunType gunType, World world, ItemStack bulletStack, Entity entity, boolean left, EntityLivingBase target)
 	{
-		//ItemGun item = (ItemGun)gunType.item;
 		ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 		// Play a sound if the previous sound has finished
 		if(soundDelay <= 0 && gunType.shootSound != null)

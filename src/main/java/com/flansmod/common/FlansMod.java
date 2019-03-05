@@ -300,7 +300,7 @@ public class FlansMod
 		if(addGunpowderRecipe)
 		{
 			NonNullList<Ingredient> ingredients = NonNullList.create();
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GLOWSTONE_DUST, 1, 1)));
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GLOWSTONE_DUST)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));

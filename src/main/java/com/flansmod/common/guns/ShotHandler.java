@@ -16,6 +16,7 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
+import com.flansmod.common.network.PacketBlockHitEffect;
 import com.flansmod.common.network.PacketBulletTrail;
 import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.network.PacketHitMarker;
@@ -149,6 +150,15 @@ public class ShotHandler
 		FlansMod.packetHandler.sendToAllAround(new PacketBulletTrail(rayTraceOrigin, finalhit, 0.05f, 10f, 10f, shot.getBulletType().trailTexture), rayTraceOrigin.x, rayTraceOrigin.y, rayTraceOrigin.z, 500f, world.provider.getDimension());
 	}
 	
+	/**
+	 * @param world             World which contains the location of the hit
+	 * @param hit               The location of the hit
+	 * @param shootingDirection The direction the shot was fired
+	 * @param shot              The FiredShot instance of the shot
+	 * @param bulletHit         BulletHit if the object hit
+	 * @param penetratingPower  Power of the bullet to penetrate objects
+	 * @return The remaining penetrationPower after hitting the object specified in the BulletHit
+	 */
 	public static Float OnHit(World world, Vector3f hit, Vector3f shootingDirection, FiredShot shot, BulletHit bulletHit, Float penetratingPower)
 	{
 		Float damage = shot.getFireableGun().getDamage();
@@ -275,6 +285,11 @@ public class ShotHandler
 		return penetratingPower;
 	}
 	
+	/**
+	 * @param world       World which contains the detonatePos
+	 * @param shot        FiredShot instance of the shot
+	 * @param detonatePos Location where the detonation should happen
+	 */
 	public static void onDetonate(World world, FiredShot shot, Vector3f detonatePos)
 	{
 		BulletType bulletType = shot.getBulletType();

@@ -151,15 +151,7 @@ public class PlayerHitbox
 		return null;
 	}
 
-	/**
-	 * @param damageOwner
-	 * @param firedFrom
-	 * @param bulletType
-	 * @param damage
-	 * @param penetratingPower
-	 * @return
-	 */
-	public float hitByBullet(FiredShot shot, float damage, float penetratingPower)
+	public float hitByBullet(FiredShot shot, Float damage, Float penetratingPower)
 	{
 		BulletType bulletType = shot.getBulletType();
 		if(bulletType.setEntitiesOnFire)

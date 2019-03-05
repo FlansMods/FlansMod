@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 
 /**
- * Object containing all necessary informations about a fired shot
+ * Class for creating object containing all necessary informations about a fired shot
  */
 public class FiredShot {
 
@@ -42,7 +42,6 @@ public class FiredShot {
 		this.shooter = this.player;
 	}
 	
-	/**
 	/**
 	 * @param weapon weapon used to fire the shot
 	 * @param bullet BulletType of the fired bullet

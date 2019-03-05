@@ -1,4 +1,4 @@
-package com.flansmod.common.guns;
+package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.vector.Vector3f;
 
 public class PacketBlockHitEffect extends PacketBase
@@ -116,7 +115,6 @@ public class PacketBlockHitEffect extends PacketBase
 		for(int i = 0; i < 2; i++)
 		{
 			// TODO: [1.12] Check why this isn't moving right
-			//TODO cleanup
 			float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
 			
 			double motionX = (double)faceingDir.getX() * scale + world.rand.nextGaussian() * 0.025d;
@@ -126,8 +124,6 @@ public class PacketBlockHitEffect extends PacketBase
 			motionX += directionX;
 			motionY += directionY;
 			motionZ += directionZ;
-			
-			//TODO particle
 			
 			ParticleDigging fx = (ParticleDigging)Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
 					EnumParticleTypes.BLOCK_CRACK.getParticleID(),
@@ -145,11 +141,7 @@ public class PacketBlockHitEffect extends PacketBase
 		double motionX = (double)faceingDir.getX() * scale + world.rand.nextGaussian() * 0.025d;
 		double motionY = (double)faceingDir.getY() * scale + world.rand.nextGaussian() * 0.025d;
 		double motionZ = (double)faceingDir.getZ() * scale + world.rand.nextGaussian() * 0.025d;
-		
-		System.out.println("Spawning particle: "+x+" "+y+" "+z);
-		//world.spawnParticle(EnumParticleTypes.CLOUD, hit.x, hit.y, hit.z, motionX, motionY, motionZ);
-		
-		//TODO effect?
+
 		Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), x, y, z, motionX, motionY, motionZ);
 		
 	}

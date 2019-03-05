@@ -412,65 +412,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				currentBarrel = (currentBarrel + 1) % type.numBarrels;
 				
 			}
-				
-			//TODO cleanup
-			/*
-			
-			if(mouseHeld && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer)
-			{
-				EntityPlayer player = (EntityPlayer)getControllingPassenger();
-				for(int j = 0; j < type.numBarrels; j++)
-				{
-					if(shootDelay <= 0 && ammo[j] != null && !ammo[j].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
-					{
-						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
-						if(!player.capabilities.isCreativeMode)
-							ammo[j].damageItem(1, player);
-						shootDelay = type.shootDelay;
-						barrelRecoil[j] = type.recoil;
-						
-						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
-								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
-						
-						
-						//world.spawnEntity(((ItemBullet)ammo[j].getItem()).getEntity(world,
-						//		origin, gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, type));
-						
-						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
-					}
-				}
-				currentBarrel = (currentBarrel + 1) % type.numBarrels;
-			}
-			else if(target != null)
-			{
-				for(int j = 0; j < type.numBarrels; j++)
-				{
-					int ammoSlot = j;
-					if(type.shareAmmo)
-						ammoSlot = 0;
-					if(shootDelay <= 0 && ammo[ammoSlot] != null && !ammo[ammoSlot].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == ammoSlot))
-					{
-						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[ammoSlot].getItem());
-						ammo[ammoSlot].setItemDamage(ammo[ammoSlot].getItemDamage() + 1);
-						shootDelay = type.shootDelay;
-						barrelRecoil[ammoSlot] = type.recoil;
-						
-						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
-								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY + 1.5F, posZ);
-						
-						
-						//world.spawnEntity(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(world,
-						//		origin, gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, type));
-						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
-					}
-				}
-				currentBarrel = (currentBarrel + 1) % type.numBarrels;
-			}
-			*/
 		}
 		if(!world.isRemote)
 		{

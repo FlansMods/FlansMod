@@ -470,7 +470,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
 	public boolean pressKey(int key, EntityPlayer player)
 	{
-		System.out.println("DrivableKey: "+key+" "+world.isRemote);
 		if(!world.isRemote && key == 9 && getDriveableType().modePrimary == EnumFireMode.SEMIAUTO) // Primary
 		{
 			shoot(false);
@@ -505,8 +504,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	 */
 	public void shoot(boolean secondary)
 	{
-		System.out.println("Shoot Driveable");
-		new NullPointerException().printStackTrace();
 		DriveableType type = getDriveableType();
 		if(seats[0] == null || !(seats[0].getControllingPassenger() instanceof EntityLivingBase))
 			return;
@@ -568,7 +565,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
 			
-			System.out.println("Stack:"+shootableStack+" "+getDriveableType().numPassengerGunners+" "+currentGun);
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
 				shootDelayPrimary = shootDelaySecondary = 1;

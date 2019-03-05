@@ -422,6 +422,14 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
+	/**
+	 * Used to determine if for example an player is holding a two handed gun but the other hand (the one without a gun) is holding something else
+	 * For example a player is holding two miniguns, a gun requiring both hands, so this method returns true
+	 * 
+	 * @param type   The GunType of the gun
+	 * @param player The player who is handling the gun
+	 * @return if the player can handle the gun based on the contents of the main and off hand and the GunType
+	 */
 	public Boolean gunCantBeHandeled(GunType type, EntityPlayer player)
 	{
 		ItemStack main = player.getHeldItemMainhand();

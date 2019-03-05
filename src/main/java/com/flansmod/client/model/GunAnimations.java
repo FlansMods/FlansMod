@@ -160,7 +160,6 @@ public class GunAnimations
 	
 	public void doShoot(int pumpDelay, int pumpTime)
 	{
-		//minigunBarrelRotationSpeed += 2F;
 		lastGunSlide = gunSlide = 1F;
 		timeUntilPump = pumpDelay;
 		timeToPumpFor = pumpTime;

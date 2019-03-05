@@ -121,7 +121,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveableID = d.getEntityId();
 		seatInfo = driveable.getDriveableType().seats[id];
 		seatID = id;
-		System.out.println("Driveable:"+driveable+" id:"+id+" "+seatInfo.id+" "+seatInfo.gunnerID+" "+seatInfo.gunName+" ");
 		driver = id == 0;
 		setPosition(d.posX, d.posY, d.posZ);
 		playerPosX = prevPlayerPosX = posX;
@@ -620,7 +619,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		// Driver seat should pass input to driveable
-		System.out.println("Driver:"+driver);
 		if(driver && driveable != null)
 		{
 			return driveable.pressKey(key, player);

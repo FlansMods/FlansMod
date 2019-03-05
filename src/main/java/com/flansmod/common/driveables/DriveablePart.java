@@ -36,6 +36,7 @@ public class DriveablePart
 			health--;
 		if(health <= 0 && maxHealth > 0)
 		{
+			health = 0;
 			dead = true;
 		}
 	}
