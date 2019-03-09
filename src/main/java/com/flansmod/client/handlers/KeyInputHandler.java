@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,6 +21,7 @@ import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.gui.teams.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.GunAnimations.LookAtState;
+import com.flansmod.client.util.FlansKeyConflictContext;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -31,36 +33,74 @@ import com.flansmod.common.network.PacketRequestDebug;
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
 {
-	public static KeyBinding downKey =
-			new KeyBinding("key.pitchDown.desc", Keyboard.KEY_LCONTROL, "key.flansmod.category");
-	public static KeyBinding inventoryKey =
-			new KeyBinding("key.vehicleMenu.desc", Keyboard.KEY_M, "key.flansmod.category");
-	public static KeyBinding bombKey = new KeyBinding("key.dropBomb.desc", Keyboard.KEY_B, "key.flansmod.category");
-	public static KeyBinding gunKey =
-			new KeyBinding("key.fireVehicleGuns.desc", Keyboard.KEY_V, "key.flansmod.category");
-	public static KeyBinding controlSwitchKey =
-			new KeyBinding("key.switchControlMode.desc", Keyboard.KEY_C, "key.flansmod.category");
-	public static KeyBinding reloadKey = new KeyBinding("key.reload.desc", Keyboard.KEY_R, "key.flansmod.category");
-	public static KeyBinding teamsMenuKey =
-			new KeyBinding("key.teamsMenu.desc", Keyboard.KEY_G, "key.flansmod.category");
-	public static KeyBinding teamsScoresKey =
-			new KeyBinding("key.teamsScores.desc", Keyboard.KEY_H, "key.flansmod.category");
-	public static KeyBinding leftRollKey = new KeyBinding("key.rollLeft.desc", Keyboard.KEY_Z, "key.flansmod.category");
-	public static KeyBinding rightRollKey = new KeyBinding("Roll right", Keyboard.KEY_X, "key.flansmod.category");
-	public static KeyBinding gearKey =
-			new KeyBinding("key.toggleLandingGear.desc", Keyboard.KEY_L, "key.flansmod.category");
-	public static KeyBinding doorKey = new KeyBinding("key.toggleDoors.desc", Keyboard.KEY_K, "key.flansmod.category");
-	public static KeyBinding modeKey =
-			new KeyBinding("key.switchMovementMode.desc", Keyboard.KEY_J, "key.flansmod.category");
-	public static KeyBinding lookAtGunKey =
-			new KeyBinding("key.lookAtGun.desc", Keyboard.KEY_L, "key.flansmod.category");
-	public static KeyBinding debugKey = new KeyBinding("key.debug.desc", Keyboard.KEY_F10, "key.flansmod.category");
-	public static KeyBinding reloadModelsKey =
-			new KeyBinding("key.reloadModels.desc", Keyboard.KEY_F9, "key.flansmod.category");
+	public static KeyBinding downKey = new KeyBinding("key.pitchDown.desc",
+													  FlansKeyConflictContext.VEHICLE,
+													  Keyboard.KEY_LCONTROL,
+													  "key.flansmod.category");
+	public static KeyBinding inventoryKey = new KeyBinding("key.vehicleMenu.desc",
+														   FlansKeyConflictContext.VEHICLE,
+														   Keyboard.KEY_M,
+														   "key.flansmod.category");
+	public static KeyBinding bombKey = new KeyBinding("key.dropBomb.desc",
+													  FlansKeyConflictContext.VEHICLE,
+													  Keyboard.KEY_B,
+													  "key.flansmod.category");
+	public static KeyBinding gunKey = new KeyBinding("key.fireVehicleGuns.desc",
+													 FlansKeyConflictContext.VEHICLE,
+													 Keyboard.KEY_V,
+													 "key.flansmod.category");
+	public static KeyBinding controlSwitchKey = new KeyBinding("key.switchControlMode.desc",
+															   FlansKeyConflictContext.VEHICLE,
+															   Keyboard.KEY_C,
+															   "key.flansmod.category");
+	public static KeyBinding reloadKey = new KeyBinding("key.reload.desc",
+														FlansKeyConflictContext.GUN,
+														Keyboard.KEY_R,
+														"key.flansmod.category");
+	public static KeyBinding teamsMenuKey = new KeyBinding("key.teamsMenu.desc",
+														   KeyConflictContext.UNIVERSAL,
+														   Keyboard.KEY_G,
+														   "key.flansmod.category");
+	public static KeyBinding teamsScoresKey = new KeyBinding("key.teamsScores.desc",
+															 KeyConflictContext.UNIVERSAL,
+															 Keyboard.KEY_H,
+															 "key.flansmod.category");
+	public static KeyBinding leftRollKey = new KeyBinding("key.rollLeft.desc",
+														  FlansKeyConflictContext.VEHICLE,
+														  Keyboard.KEY_Z,
+														  "key.flansmod.category");
+	public static KeyBinding rightRollKey = new KeyBinding("Roll right",
+														   FlansKeyConflictContext.VEHICLE,
+														   Keyboard.KEY_X,
+														   "key.flansmod.category");
+	public static KeyBinding gearKey = new KeyBinding("key.toggleLandingGear.desc",
+													  FlansKeyConflictContext.VEHICLE,
+													  Keyboard.KEY_L,
+													  "key.flansmod.category");
+	public static KeyBinding doorKey = new KeyBinding("key.toggleDoors.desc",
+													  FlansKeyConflictContext.VEHICLE,
+													  Keyboard.KEY_K,
+													  "key.flansmod.category");
+	public static KeyBinding modeKey = new KeyBinding("key.switchMovementMode.desc",
+													  FlansKeyConflictContext.VEHICLE,
+													  Keyboard.KEY_J,
+													  "key.flansmod.category");
+	public static KeyBinding lookAtGunKey = new KeyBinding("key.lookAtGun.desc",
+														   FlansKeyConflictContext.GUN,
+														   Keyboard.KEY_L,
+														   "key.flansmod.category");
+	public static KeyBinding debugKey = new KeyBinding("key.debug.desc",
+													   KeyConflictContext.UNIVERSAL,
+													   Keyboard.KEY_F10,
+													   "key.flansmod.category");
+	public static KeyBinding reloadModelsKey = new KeyBinding("key.reloadModels.desc",
+															  KeyConflictContext.UNIVERSAL,
+															  Keyboard.KEY_F9,
+															  "key.flansmod.category");
 	
 	private Minecraft mc;
 	
-	public KeyInputHandler()
+	KeyInputHandler()
 	{
 		ClientRegistry.registerKeyBinding(downKey);
 		ClientRegistry.registerKeyBinding(inventoryKey);
@@ -82,15 +122,60 @@ public class KeyInputHandler
 		mc = Minecraft.getMinecraft();
 	}
 	
-	public void checkKeyInput()
+	void checkDrivingKeys()
+	{
+		EntityPlayer player = mc.player;
+		if(player == null)
+		{
+			return;
+		}
+		
+		Entity ridingEntity = player.getRidingEntity();
+		if(ridingEntity instanceof IControllable)
+		{
+			IControllable controllable = (IControllable)ridingEntity;
+			if(mc.gameSettings.keyBindForward.isKeyDown())
+				controllable.pressKey(0, player);
+			if(mc.gameSettings.keyBindBack.isKeyDown())
+				controllable.pressKey(1, player);
+			if(mc.gameSettings.keyBindLeft.isKeyDown())
+				controllable.pressKey(2, player);
+			if(mc.gameSettings.keyBindRight.isKeyDown())
+				controllable.pressKey(3, player);
+			if(mc.gameSettings.keyBindJump.isKeyDown())
+				controllable.pressKey(4, player);
+			if(downKey.isKeyDown())
+				controllable.pressKey(5, player);
+			if(mc.gameSettings.keyBindSneak.isPressed())
+				controllable.pressKey(6, player);
+			if(mc.gameSettings.keyBindInventory.isPressed() || inventoryKey.isPressed())
+				controllable.pressKey(7, player);
+			if(bombKey.isKeyDown())
+				controllable.pressKey(8, player);
+			if(gunKey.isKeyDown())
+				controllable.pressKey(9, player);
+			if(controlSwitchKey.isPressed())
+				controllable.pressKey(10, player);
+			if(leftRollKey.isKeyDown())
+				controllable.pressKey(11, player);
+			if(rightRollKey.isKeyDown())
+				controllable.pressKey(12, player);
+			if(gearKey.isPressed())
+				controllable.pressKey(13, player);
+			if(doorKey.isPressed())
+				controllable.pressKey(14, player);
+			if(modeKey.isPressed())
+				controllable.pressKey(15, player);
+		}
+	}
+	
+	void checkUniversalKeys()
 	{
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
 			return;
 		
 		EntityPlayer player = mc.player;
-		Entity ridingEntity = player.getRidingEntity();
 		
-		//Handle universal keys
 		if(teamsMenuKey.isPressed())
 		{
 			mc.displayGuiScreen(new GuiLandingPage());
@@ -117,8 +202,8 @@ public class KeyInputHandler
 					{
 						FlansMod.getPacketHandler().sendToServer(new PacketReload(EnumHand.MAIN_HAND, true));
 						
-						//Set player shoot delay to be the reload delay
-						//Set both gun delays to avoid reloading two guns at once
+						// Set player shoot delay to be the reload delay
+						// Set both gun delays to avoid reloading two guns at once
 						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(stack);
 						
 						GunAnimations animations = FlansModClient.getGunAnimations(player, EnumHand.MAIN_HAND);
@@ -150,44 +235,6 @@ public class KeyInputHandler
 		if(reloadModelsKey.isPressed())
 		{
 			FlansModClient.reloadModels(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT));
-		}
-		
-		//Handle driving keys
-		if(ridingEntity instanceof IControllable)
-		{
-			IControllable riding = (IControllable)ridingEntity;
-			if(mc.gameSettings.keyBindForward.isKeyDown())
-				riding.pressKey(0, player);
-			if(mc.gameSettings.keyBindBack.isKeyDown())
-				riding.pressKey(1, player);
-			if(mc.gameSettings.keyBindLeft.isKeyDown())
-				riding.pressKey(2, player);
-			if(mc.gameSettings.keyBindRight.isKeyDown())
-				riding.pressKey(3, player);
-			if(mc.gameSettings.keyBindJump.isKeyDown())
-				riding.pressKey(4, player);
-			if(downKey.isKeyDown())
-				riding.pressKey(5, player);
-			if(mc.gameSettings.keyBindSneak.isPressed())
-				riding.pressKey(6, player);
-			if(mc.gameSettings.keyBindInventory.isPressed() || inventoryKey.isPressed())
-				riding.pressKey(7, player);
-			if(bombKey.isKeyDown())
-				riding.pressKey(8, player);
-			if(gunKey.isKeyDown())
-				riding.pressKey(9, player);
-			if(controlSwitchKey.isPressed())
-				riding.pressKey(10, player);
-			if(leftRollKey.isKeyDown())
-				riding.pressKey(11, player);
-			if(rightRollKey.isKeyDown())
-				riding.pressKey(12, player);
-			if(gearKey.isPressed())
-				riding.pressKey(13, player);
-			if(doorKey.isPressed())
-				riding.pressKey(14, player);
-			if(modeKey.isPressed())
-				riding.pressKey(15, player);
 		}
 	}
 }

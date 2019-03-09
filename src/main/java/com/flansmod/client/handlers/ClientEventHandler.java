@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -76,7 +77,7 @@ public class ClientEventHandler
 				renderHooks.update();
 				RenderFlag.angle += 2F;
 				FlansModClient.tick();
-				keyInputHandler.checkKeyInput();
+				keyInputHandler.checkDrivingKeys();
 				break;
 			}
 		}
@@ -105,6 +106,13 @@ public class ClientEventHandler
 					Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onKeyInput(InputEvent.KeyInputEvent event)
+	{
+		keyInputHandler.checkUniversalKeys();
 	}
 	
 	@SubscribeEvent
