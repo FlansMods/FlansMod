@@ -92,7 +92,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
 	private float prevPlayerYaw, prevPlayerPitch;
 	private boolean shooting;
-	private Minecraft mc = Minecraft.getMinecraft();
 	
 	/**
 	 * Default constructor for spawning client side Should not be called server side EVER
@@ -360,6 +359,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@SideOnly(Side.CLIENT)
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
+		Minecraft mc = Minecraft.getMinecraft();
+		
 		if(driveable == null)
 			return;
 		

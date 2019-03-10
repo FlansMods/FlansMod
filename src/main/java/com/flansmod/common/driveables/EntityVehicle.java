@@ -1,7 +1,6 @@
 package com.flansmod.common.driveables;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -73,7 +71,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	}
 	
 	//This one allows you to deal with spawning from items
-	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type, DriveableData data)
+	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type,
+						 DriveableData data)
 	{
 		super(world, type, data);
 		stepHeight = 1.0F;
@@ -120,7 +119,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	}
 	
 	@Override
-	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throttle, float steeringYaw)
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll,
+											 double motX, double motY, double motZ, float velYaw, float velPitch,
+											 float velRoll, float throttle, float steeringYaw)
 	{
 		super.setPositionRotationAndMotion(x, y, z, yaw, pitch, roll, motX, motY, motZ, velYaw, velPitch, velRoll,
 				throttle, steeringYaw);
@@ -304,8 +305,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Work out if this is the client side and the player is driving
-		boolean thePlayerIsDrivingThis = world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& FlansMod.proxy.isThePlayer((EntityPlayer)getSeat(0).getControllingPassenger());
+		boolean thePlayerIsDrivingThis =
+				world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
+						&& FlansMod.proxy.isThePlayer((EntityPlayer)getSeat(0).getControllingPassenger());
 		
 		//Despawning
 		ticksSinceUsed++;
@@ -408,9 +410,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					wheel.motionX *= 1F - (Math.abs(wheelsYaw) * turningDrag);
 					wheel.motionZ *= 1F - (Math.abs(wheelsYaw) * turningDrag);
 					
-					float velocityScale = 0.04F * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+					float velocityScale = 0.04F * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) *
+							data.engine.engineSpeed;
 					float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
-					float effectiveWheelSpeed = (throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale)) * velocityScale;
+					float effectiveWheelSpeed =
+							(throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale)) * velocityScale;
 					wheel.motionX += effectiveWheelSpeed * Math.cos(wheel.rotationYaw * 3.14159265F / 180F);
 					wheel.motionZ += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
 					
@@ -420,7 +424,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				{
 					//if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
 					{
-						float velocityScale = 0.1F * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+						float velocityScale =
+								0.1F * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) *
+										data.engine.engineSpeed;
 						wheel.motionX += Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
 						wheel.motionZ += Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
 					}
@@ -428,10 +434,15 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					//Apply steering
 					if(wheel.getExpectedWheelID() == 2 || wheel.getExpectedWheelID() == 3)
 					{
-						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
+						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) *
+								(throttle > 0 ? 1 : -1);
 						
-						wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
-						wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+						wheel.motionX -=
+								wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale *
+										wheelsYaw;
+						wheel.motionZ +=
+								wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale *
+										wheelsYaw;
 					}
 					else
 					{
@@ -449,10 +460,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheel.move(MoverType.PLAYER, wheel.motionX, wheel.motionY, wheel.motionZ);
 			
 			//Pull wheels towards car
-			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.getExpectedWheelID()].position);
+			Vector3f targetWheelPos = axes
+					.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.getExpectedWheelID()].position);
 			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 			
-			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(getVehicleType().wheelSpringStrength));
+			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null)
+					.scale(getVehicleType().wheelSpringStrength));
 			
 			if(dPos.length() > 0.001F)
 			{
@@ -466,10 +479,18 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		if(wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
 		{
-			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F);
-			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F);
-			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F, (wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F);
-			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F, (wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F);
+			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F,
+					(wheels[2].posY + wheels[3].posY) / 2F,
+					(wheels[2].posZ + wheels[3].posZ) / 2F);
+			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F,
+					(wheels[0].posY + wheels[1].posY) / 2F,
+					(wheels[0].posZ + wheels[1].posZ) / 2F);
+			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F,
+					(wheels[0].posY + wheels[3].posY) / 2F,
+					(wheels[0].posZ + wheels[3].posZ) / 2F);
+			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F,
+					(wheels[1].posY + wheels[2].posY) / 2F,
+					(wheels[1].posZ + wheels[2].posZ) / 2F);
 			
 			float dx = frontAxleCentre.x - backAxleCentre.x;
 			float dy = frontAxleCentre.y - backAxleCentre.y;
@@ -492,7 +513,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			if(type.tank)
 			{
-				yaw = (float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX) + (float)Math.PI / 2F;
+				yaw = (float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX) +
+						(float)Math.PI / 2F;
 			}
 			
 			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
@@ -533,7 +555,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//If this is the server, send position updates to everyone, having received them from the driver
 		if(!world.isRemote && ticksExisted % 5 == 0)
 		{
-			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
+			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this),
+					posX,
+					posY,
+					posZ,
+					FlansMod.driveableUpdateRange,
+					dimension);
 		}
 		
 		int animSpeed = 4;
