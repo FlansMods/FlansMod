@@ -204,36 +204,6 @@ public class FlansModClient extends FlansMod
 			zoomProgress = 1F - (1F - zoomProgress) * 0.66F;
 		}
 		
-		if(minecraft.player.getRidingEntity() instanceof IControllable)
-		{
-			inPlane = true;
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer,
-						((IControllable)minecraft.player.getRidingEntity()).getCameraDistance(), "thirdPersonDistance",
-						"q", "field_78490_B");
-			}
-			catch(Exception e)
-			{
-				log.error("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
-		}
-		else if(inPlane)
-		{
-			try
-			{
-				ObfuscationReflectionHelper
-						.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance",
-								"q", "field_78490_B");
-			}
-			catch(Exception e)
-			{
-				log.error("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
-			inPlane = false;
-		}
 		if(controlModeSwitchTimer > 0)
 			controlModeSwitchTimer--;
 	}
