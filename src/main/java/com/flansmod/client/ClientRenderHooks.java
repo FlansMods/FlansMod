@@ -596,20 +596,10 @@ public class ClientRenderHooks
 	{
 		if(mc.player != null && mc.player.getRidingEntity() instanceof IControllable)
 		{
-			if(FlansMod.proxy.mouseControlEnabled())
+			if(!mc.mouseHelper.equals(constantMouseHelper))
 			{
-				if(mc.mouseHelper != constantMouseHelper)
-				{
-					// Stops the player's hand/head jerking about by setting mouseHelper deltas to constant 0
-					Minecraft.getMinecraft().mouseHelper = constantMouseHelper;
-				}
-			}
-			else
-			{
-				if(mc.mouseHelper.equals(constantMouseHelper))
-				{
-					Minecraft.getMinecraft().mouseHelper = new MouseHelper();
-				}
+				// Stops the player's hand/head jerking about by setting mouseHelper deltas to constant 0
+				Minecraft.getMinecraft().mouseHelper = constantMouseHelper;
 			}
 			
 			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
