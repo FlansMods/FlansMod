@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -157,6 +158,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		VehicleType type = getVehicleType();
@@ -266,6 +268,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			case 17: //Park
 			{
 				break;
+			}
+			case 18: // Change perspective
+			{
+				togglePerspective();
+				return true;
 			}
 		}
 		return false;

@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketDriveableControl;
@@ -24,7 +27,7 @@ import com.flansmod.common.vector.Vector3f;
 public class EntityPlane extends EntityDriveable
 {
 	/**
-	 * The flap positions, used for renderering and for controlling the plane rotations
+	 * The flap positions, used for rendering and for controlling the plane rotations
 	 */
 	public float flapsYaw, flapsPitchLeft, flapsPitchRight;
 	/**
@@ -71,7 +74,8 @@ public class EntityPlane extends EntityDriveable
 		initType(type, true, false);
 	}
 	
-	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type, DriveableData data)
+	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type,
+					   DriveableData data)
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
@@ -128,7 +132,9 @@ public class EntityPlane extends EntityDriveable
 	}
 	
 	@Override
-	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throttle, float steeringYaw)
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll,
+											 double motX, double motY, double motZ, float velYaw, float velPitch,
+											 float velRoll, float throttle, float steeringYaw)
 	{
 		super.setPositionRotationAndMotion(x, y, z, yaw, pitch, roll, motX, motY, motZ, velYaw, velPitch, velRoll,
 				throttle, steeringYaw);
@@ -166,6 +172,7 @@ public class EntityPlane extends EntityDriveable
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		PlaneType type = this.getPlaneType();
@@ -176,7 +183,8 @@ public class EntityPlane extends EntityDriveable
 			return true;
 		}
 		boolean canThrust = ((getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0) && hasWorkingProp();
+				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode)
+				|| getDriveableData().fuelInTank > 0) && hasWorkingProp();
 		switch(key)
 		{
 			case 0: //Accelerate : Increase the throttle, up to 1.
@@ -296,7 +304,8 @@ public class EntityPlane extends EntityDriveable
 						if(mode == EnumPlaneMode.HELI)
 							mode = EnumPlaneMode.PLANE;
 						else mode = EnumPlaneMode.HELI;
-						player.sendMessage(new TextComponentString(mode == EnumPlaneMode.HELI ? "Entering hover mode" : "Entering plane mode"));
+						player.sendMessage(new TextComponentString(
+								mode == EnumPlaneMode.HELI ? "Entering hover mode" : "Entering plane mode"));
 					}
 					toggleTimer = 10;
 					FlansMod.getPacketHandler().sendToServer(new PacketDriveableControl(this));
@@ -311,6 +320,11 @@ public class EntityPlane extends EntityDriveable
 			case 17: //Park
 			{
 				break;
+			}
+			case 18: // Change perspective
+			{
+				togglePerspective();
+				return true;
 			}
 		}
 		return false;
@@ -351,8 +365,9 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Work out if this is the client side and the player is driving
-		boolean thePlayerIsDrivingThis = world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& FlansMod.proxy.isThePlayer((EntityPlayer)getSeat(0).getControllingPassenger());
+		boolean thePlayerIsDrivingThis =
+				world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
+						&& FlansMod.proxy.isThePlayer((EntityPlayer)getSeat(0).getControllingPassenger());
 		
 		//Despawning
 		ticksSinceUsed++;
@@ -416,7 +431,8 @@ public class EntityPlane extends EntityDriveable
 		//With a player default to 0.5 for helicopters (hover speed)
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
-		if(getSeat(0) != null && getSeat(0).getControllingPassenger() != null && mode == EnumPlaneMode.HELI && canThrust())
+		if(getSeat(0) != null && getSeat(0).getControllingPassenger() != null && mode == EnumPlaneMode.HELI &&
+				canThrust())
 			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 		
 		//Get the speed of the plane
@@ -643,7 +659,8 @@ public class EntityPlane extends EntityDriveable
 				wheel.rotationYaw = axes.getYaw();
 				
 				//Pull wheels towards car
-				Vector3f targetWheelPos = axes.findLocalVectorGlobally(getPlaneType().wheelPositions[wheel.getExpectedWheelID()].position);
+				Vector3f targetWheelPos = axes.findLocalVectorGlobally(
+						getPlaneType().wheelPositions[wheel.getExpectedWheelID()].position);
 				Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 				
 				float targetWheelLength = targetWheelPos.length();
@@ -738,14 +755,17 @@ public class EntityPlane extends EntityDriveable
 		float updateSpeed = 0.01F;
 		if(!world.isRemote)// && (Math.abs(posX - prevPosX) > updateSpeed || Math.abs(posY - prevPosY) > updateSpeed || Math.abs(posZ - prevPosZ) > updateSpeed))
 		{
-			FlansMod.getPacketHandler().sendToAllAround(new PacketPlaneControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
+			FlansMod.getPacketHandler()
+					.sendToAllAround(new PacketPlaneControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange,
+							dimension);
 		}
 	}
 	
 	public boolean canThrust()
 	{
 		return (getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode) || driveableData.fuelInTank > 0;
+				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode) ||
+				driveableData.fuelInTank > 0;
 	}
 	
 	@Override
@@ -797,7 +817,8 @@ public class EntityPlane extends EntityDriveable
 	@Override
 	public boolean canHitPart(EnumDriveablePart part)
 	{
-		return varGear || (part != EnumDriveablePart.coreWheel && part != EnumDriveablePart.leftWingWheel && part != EnumDriveablePart.rightWingWheel && part != EnumDriveablePart.tailWheel);
+		return varGear || (part != EnumDriveablePart.coreWheel && part != EnumDriveablePart.leftWingWheel &&
+				part != EnumDriveablePart.rightWingWheel && part != EnumDriveablePart.tailWheel);
 	}
 	
 	@Override

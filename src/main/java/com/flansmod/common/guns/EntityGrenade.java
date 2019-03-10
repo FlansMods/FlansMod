@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerHandler;

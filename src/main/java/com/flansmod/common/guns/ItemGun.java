@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.model.GunAnimations;
@@ -546,7 +546,7 @@ public class ItemGun extends Item implements IPaintableItem
 						if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND)
 								&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
 						{
-							FlansModClient.SetScope(currentScope);
+							FlansModClient.setScope(currentScope);
 						}
 						break;
 					}
@@ -555,7 +555,7 @@ public class ItemGun extends Item implements IPaintableItem
 						if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND)
 								&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
 						{
-							FlansModClient.SetScope(currentScope);
+							FlansModClient.setScope(currentScope);
 						}
 						break;
 					}
@@ -835,7 +835,7 @@ public class ItemGun extends Item implements IPaintableItem
 				if(hitData instanceof EntityHit || hitData instanceof DriveableHit)
 				{
 					// Add a hit marker
-					FlansModClient.AddHitMarker();
+					FlansModClient.addHitMarker();
 				}
 				else if(hitData instanceof PlayerBulletHit)
 				{
@@ -846,12 +846,12 @@ public class ItemGun extends Item implements IPaintableItem
 						Team victimTeam = FlansModClient.teamInfo.getTeam(((PlayerBulletHit)hitData).hitbox.player);
 						if(shooterTeam == null || shooterTeam != victimTeam)
 						{
-							FlansModClient.AddHitMarker();
+							FlansModClient.addHitMarker();
 						}
 					}
 					else // No teams mod, just add marker
 					{
-						FlansModClient.AddHitMarker();
+						FlansModClient.addHitMarker();
 					}
 				}
 			}

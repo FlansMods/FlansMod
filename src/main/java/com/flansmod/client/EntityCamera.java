@@ -29,17 +29,14 @@ public class EntityCamera extends EntityLivingBase
 	@Override
 	public void onUpdate()
 	{
-		//super.onUpdate();
-		
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
 		
-		Vector3f cameraPosition = new Vector3f();//-1F, 0.5F, 0F);
-		//cameraPosition.scale(driveable.getDriveableType().cameraDistance);
+		Vector3f cameraPosition = new Vector3f();
 		cameraPosition = driveable.axes.findLocalVectorGlobally(cameraPosition);
 		
-		//Lerp it
+		// Lerp it
 		double dX = driveable.posX + cameraPosition.x - posX;
 		double dY = driveable.posY + cameraPosition.y - posY;
 		double dZ = driveable.posZ + cameraPosition.z - posZ;
@@ -48,11 +45,17 @@ public class EntityCamera extends EntityLivingBase
 		
 		setPosition(posX + dX * lerpAmount, posY + dY * lerpAmount, posZ + dZ * lerpAmount);
 		
-		rotationYaw = driveable.axes.getYaw() - 90F;
+		rotationYaw = driveable.axes.getYaw() - 90;
 		rotationPitch = driveable.axes.getPitch();
 		
-		for(; rotationYaw - prevRotationYaw >= 180F; rotationYaw -= 360F) ;
-		for(; rotationYaw - prevRotationYaw < -180F; rotationYaw += 360F) ;
+		while(rotationYaw - prevRotationYaw >= 180F)
+		{
+			rotationYaw -= 360F;
+		}
+		while(rotationYaw - prevRotationYaw < -180F)
+		{
+			rotationYaw += 360F;
+		}
 	}
 	
 	@Override
@@ -70,7 +73,7 @@ public class EntityCamera extends EntityLivingBase
 	@Override
 	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack)
 	{
-		
+	
 	}
 	
 	@Override

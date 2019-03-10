@@ -104,7 +104,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void onUpdate()
 	{
-		if(vehicle == null)
+		if(vehicle == null || isDead)
 		{
 			if(getRidingEntity() instanceof EntityDriveable)
 			{

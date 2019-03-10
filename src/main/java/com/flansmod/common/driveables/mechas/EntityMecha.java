@@ -35,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
@@ -217,6 +216,7 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		MechaType type = getMechaType();
@@ -311,6 +311,11 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 17: //???
 			{
+				return true;
+			}
+			case 18:
+			{
+				togglePerspective();
 				return true;
 			}
 			
@@ -710,7 +715,7 @@ public class EntityMecha extends EntityDriveable
 		moveZ = 0;
 		
 		float jetPack = jetPackPower();
-		if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController
+		if(!onGround && thePlayerIsDrivingThis /*&& Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController*/
 				&& FlansMod.proxy.isKeyDown(4) && shouldFly() && (((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode || data.fuelInTank >= (10F * jetPack)))
 		{
 			motionY *= 0.95;
@@ -738,7 +743,7 @@ public class EntityMecha extends EntityDriveable
 		{
 			EntityLivingBase entity = (EntityLivingBase)driverSeat.getControllingPassenger();
 			boolean driverIsCreative = entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode;
-			if(thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController)
+			if(thePlayerIsDrivingThis /*&& Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController*/)
 			{
 				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
 				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;

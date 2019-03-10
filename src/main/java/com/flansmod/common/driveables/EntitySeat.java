@@ -92,6 +92,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
 	private float prevPlayerYaw, prevPlayerPitch;
 	private boolean shooting;
+	private Minecraft mc = Minecraft.getMinecraft();
 	
 	/**
 	 * Default constructor for spawning client side Should not be called server side EVER
@@ -356,6 +357,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
 		if(driveable == null)
@@ -378,7 +380,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			// Calculate the new pitch and consider pitch limiters
 			float newPlayerPitch = playerLooking.getPitch() -
-					deltaY / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+					deltaY / lookSpeed * mc.gameSettings.mouseSensitivity;
 			if(newPlayerPitch > -seatInfo.minPitch)
 				newPlayerPitch = -seatInfo.minPitch;
 			if(newPlayerPitch < -seatInfo.maxPitch)
@@ -386,7 +388,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			// Calculate new yaw and consider yaw limiters
 			float newPlayerYaw = playerLooking.getYaw() +
-					deltaX / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+					deltaX / lookSpeed * mc.gameSettings.mouseSensitivity;
 			// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
 			float otherNewPlayerYaw = newPlayerYaw - 360F;
 			if(newPlayerYaw < 0)
@@ -678,7 +680,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 									(EntityLivingBase)getControllingPassenger(),
 									bullet.bulletSpread * gun.bulletSpread,
 									gun.damage,
-									gun.bulletSpeed <= 0.0f ? 5.0f : gun.bulletSpeed, // TODO : Fix nasty hack 
+									gun.bulletSpeed <= 0.0f ? 5.0f : gun.bulletSpeed, // TODO : Fix nasty hack
 									driveable.getDriveableType()));
 							
 							// Play the shoot sound
