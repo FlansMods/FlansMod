@@ -625,7 +625,8 @@ public class ClientRenderHooks
 						(float)event.getRenderPartialTicks());
 				// If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle
 				// is disorientating at best, so we disable the roll component for these vehicles
-				if(seat.driveable != null && seat.driveable.getDriveableType().canRoll)
+				if(seat.driveable != null && seat.driveable.getDriveableType().canRoll ||
+						(mc.gameSettings.thirdPersonView == 1 && !FlansMod.proxy.mouseControlEnabled()))
 				{
 					roll = 0F;
 				}
