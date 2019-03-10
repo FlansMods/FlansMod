@@ -6,6 +6,7 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -1804,5 +1805,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		
 		return wheels[id];
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void togglePerspective()
+	{
+		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.gameSettings.thirdPersonView == 1)
+			mc.setRenderViewEntity((this.getCamera() == null ? mc.player : this.getCamera()));
+		else mc.setRenderViewEntity(mc.player);
 	}
 }

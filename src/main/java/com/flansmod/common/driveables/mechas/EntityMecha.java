@@ -216,6 +216,7 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		MechaType type = getMechaType();
@@ -310,6 +311,11 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 17: //???
 			{
+				return true;
+			}
+			case 18:
+			{
+				togglePerspective();
 				return true;
 			}
 			

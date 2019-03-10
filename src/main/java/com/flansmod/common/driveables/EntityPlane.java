@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -319,6 +320,11 @@ public class EntityPlane extends EntityDriveable
 			case 17: //Park
 			{
 				break;
+			}
+			case 18: // Change perspective
+			{
+				togglePerspective();
+				return true;
 			}
 		}
 		return false;

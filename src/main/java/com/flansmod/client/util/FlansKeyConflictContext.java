@@ -2,6 +2,7 @@ package com.flansmod.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.settings.IKeyConflictContext;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,7 +24,7 @@ public enum FlansKeyConflictContext implements IKeyConflictContext
 				@Override
 				public boolean conflicts(IKeyConflictContext other)
 				{
-					return equals(other);
+					return this == other;
 				}
 			},
 	
@@ -38,7 +39,7 @@ public enum FlansKeyConflictContext implements IKeyConflictContext
 				@Override
 				public boolean conflicts(IKeyConflictContext other)
 				{
-					return equals(other);
+					return this == other;
 				}
 			}
 }

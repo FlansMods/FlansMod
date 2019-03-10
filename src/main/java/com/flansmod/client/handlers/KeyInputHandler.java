@@ -34,69 +34,73 @@ import com.flansmod.common.network.PacketRequestDebug;
 public class KeyInputHandler
 {
 	public static KeyBinding downKey = new KeyBinding("key.pitchDown.desc",
-													  FlansKeyConflictContext.VEHICLE,
-													  Keyboard.KEY_LCONTROL,
-													  "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_LCONTROL,
+			"key.flansmod.category");
 	public static KeyBinding inventoryKey = new KeyBinding("key.vehicleMenu.desc",
-														   FlansKeyConflictContext.VEHICLE,
-														   Keyboard.KEY_M,
-														   "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_M,
+			"key.flansmod.category");
 	public static KeyBinding bombKey = new KeyBinding("key.dropBomb.desc",
-													  FlansKeyConflictContext.VEHICLE,
-													  Keyboard.KEY_B,
-													  "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_B,
+			"key.flansmod.category");
 	public static KeyBinding gunKey = new KeyBinding("key.fireVehicleGuns.desc",
-													 FlansKeyConflictContext.VEHICLE,
-													 Keyboard.KEY_V,
-													 "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_V,
+			"key.flansmod.category");
 	public static KeyBinding controlSwitchKey = new KeyBinding("key.switchControlMode.desc",
-															   FlansKeyConflictContext.VEHICLE,
-															   Keyboard.KEY_C,
-															   "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_C,
+			"key.flansmod.category");
 	public static KeyBinding reloadKey = new KeyBinding("key.reload.desc",
-														FlansKeyConflictContext.GUN,
-														Keyboard.KEY_R,
-														"key.flansmod.category");
+			FlansKeyConflictContext.GUN,
+			Keyboard.KEY_R,
+			"key.flansmod.category");
 	public static KeyBinding teamsMenuKey = new KeyBinding("key.teamsMenu.desc",
-														   KeyConflictContext.UNIVERSAL,
-														   Keyboard.KEY_G,
-														   "key.flansmod.category");
+			KeyConflictContext.UNIVERSAL,
+			Keyboard.KEY_G,
+			"key.flansmod.category");
 	public static KeyBinding teamsScoresKey = new KeyBinding("key.teamsScores.desc",
-															 KeyConflictContext.UNIVERSAL,
-															 Keyboard.KEY_H,
-															 "key.flansmod.category");
+			KeyConflictContext.UNIVERSAL,
+			Keyboard.KEY_H,
+			"key.flansmod.category");
 	public static KeyBinding leftRollKey = new KeyBinding("key.rollLeft.desc",
-														  FlansKeyConflictContext.VEHICLE,
-														  Keyboard.KEY_Z,
-														  "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_Z,
+			"key.flansmod.category");
 	public static KeyBinding rightRollKey = new KeyBinding("Roll right",
-														   FlansKeyConflictContext.VEHICLE,
-														   Keyboard.KEY_X,
-														   "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_X,
+			"key.flansmod.category");
 	public static KeyBinding gearKey = new KeyBinding("key.toggleLandingGear.desc",
-													  FlansKeyConflictContext.VEHICLE,
-													  Keyboard.KEY_L,
-													  "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_L,
+			"key.flansmod.category");
 	public static KeyBinding doorKey = new KeyBinding("key.toggleDoors.desc",
-													  FlansKeyConflictContext.VEHICLE,
-													  Keyboard.KEY_K,
-													  "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_K,
+			"key.flansmod.category");
 	public static KeyBinding modeKey = new KeyBinding("key.switchMovementMode.desc",
-													  FlansKeyConflictContext.VEHICLE,
-													  Keyboard.KEY_J,
-													  "key.flansmod.category");
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_J,
+			"key.flansmod.category");
 	public static KeyBinding lookAtGunKey = new KeyBinding("key.lookAtGun.desc",
-														   FlansKeyConflictContext.GUN,
-														   Keyboard.KEY_L,
-														   "key.flansmod.category");
+			FlansKeyConflictContext.GUN,
+			Keyboard.KEY_L,
+			"key.flansmod.category");
 	public static KeyBinding debugKey = new KeyBinding("key.debug.desc",
-													   KeyConflictContext.UNIVERSAL,
-													   Keyboard.KEY_F10,
-													   "key.flansmod.category");
+			KeyConflictContext.UNIVERSAL,
+			Keyboard.KEY_F10,
+			"key.flansmod.category");
 	public static KeyBinding reloadModelsKey = new KeyBinding("key.reloadModels.desc",
-															  KeyConflictContext.UNIVERSAL,
-															  Keyboard.KEY_F9,
-															  "key.flansmod.category");
+			KeyConflictContext.UNIVERSAL,
+			Keyboard.KEY_F9,
+			"key.flansmod.category");
+	public static KeyBinding toggleCameraPerspective = new KeyBinding("key.toggleCameraPerspective.desc",
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_F5,
+			"key.flansmod.category");
 	
 	private Minecraft mc;
 	
@@ -166,6 +170,8 @@ public class KeyInputHandler
 				controllable.pressKey(14, player);
 			if(modeKey.isPressed())
 				controllable.pressKey(15, player);
+			if(toggleCameraPerspective.isKeyDown())
+				controllable.pressKey(18, player);
 		}
 	}
 	
