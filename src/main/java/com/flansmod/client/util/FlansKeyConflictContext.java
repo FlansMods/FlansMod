@@ -2,7 +2,6 @@ package com.flansmod.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.settings.IKeyConflictContext;
-import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,8 +16,9 @@ public enum FlansKeyConflictContext implements IKeyConflictContext
 				@Override
 				public boolean isActive()
 				{
-					return Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof ItemGun ||
-							Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof ItemGun;
+					Minecraft mc = Minecraft.getMinecraft();
+					return mc.player != null && (mc.player.getHeldItemMainhand().getItem() instanceof ItemGun ||
+							mc.player.getHeldItemOffhand().getItem() instanceof ItemGun);
 				}
 				
 				@Override
@@ -33,7 +33,8 @@ public enum FlansKeyConflictContext implements IKeyConflictContext
 				@Override
 				public boolean isActive()
 				{
-					return Minecraft.getMinecraft().player.getRidingEntity() instanceof IControllable;
+					Minecraft mc = Minecraft.getMinecraft();
+					return mc.player != null && mc.player.getRidingEntity() instanceof IControllable;
 				}
 				
 				@Override
