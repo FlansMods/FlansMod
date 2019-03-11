@@ -1,6 +1,7 @@
 package com.flansmod.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -328,12 +329,13 @@ public class ClientRenderHooks
 	
 	public void update()
 	{
-		for(KillMessage message : killMessages)
+		for(Iterator<KillMessage> it = killMessages.iterator(); it.hasNext(); )
 		{
+			KillMessage message = it.next();
 			message.timer--;
 			if(message.timer == 0)
 			{
-				killMessages.remove(message);
+				it.remove();
 			}
 		}
 		
