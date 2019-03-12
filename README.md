@@ -17,7 +17,9 @@ permission from jamioflan.
 1. Built files are found in the directory `./build/output`
 
 <hr></hr>
-<h5>Project Members</h5>
+<h1>Project Members</h1>
 <ul>
 	<li>Osman Çalışkan</li>
+	<li>Betül Akkuş</li>
+	<li>Mert Kaya</li>
 </ul>
