@@ -15,10 +15,10 @@ public class RewardBox extends InfoType
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	// To anyone planning to add to this file in future, remember that the Minecraft EULA forbids monetization of any non-cosmetic additions
 	// -------------------------------------------------------------------------------------------------------------------------------------
-	public ArrayList<Paintjob> paintjobs = new ArrayList<>();
+	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
 	public float[] weightPerRarity = new float[]{1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 	
-	private static HashMap<Integer, RewardBox> boxes = new HashMap<>();
+	private static HashMap<Integer, RewardBox> boxes = new HashMap<Integer, RewardBox>();
 	
 	public RewardBox(TypeFile file)
 	{

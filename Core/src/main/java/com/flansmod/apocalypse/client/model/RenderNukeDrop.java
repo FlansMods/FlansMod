@@ -16,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class RenderNukeDrop extends Render<EntityNukeDrop>
 {
@@ -117,7 +118,7 @@ public class RenderNukeDrop extends Render<EntityNukeDrop>
 			if(entity instanceof EntityNukeDrop)
 			{
 				EntityNukeDrop nuke = (EntityNukeDrop)entity;
-				int i = nuke.getBrightnessForRender();
+				int i = VersionHelper.GetBrightnessForRender(nuke, event.getPartialTicks());
 				
 				if(nuke.isBurning())
 				{

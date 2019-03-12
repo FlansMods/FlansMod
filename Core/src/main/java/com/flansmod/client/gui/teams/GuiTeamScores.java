@@ -11,6 +11,7 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.Team;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiTeamScores extends GuiTeamsBase
 {
@@ -41,7 +42,7 @@ public class GuiTeamScores extends GuiTeamsBase
 		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = VersionHelper.GetFontRenderer();
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		
@@ -70,8 +71,8 @@ public class GuiTeamScores extends GuiTeamsBase
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investiagate this
 		
-		drawString(fontRenderer, teamInfo.map, m + 6, n + 6, 0xffffff);
-		drawString(fontRenderer, teamInfo.gametype, m + 312 - 6 - fontRenderer.getStringWidth(teamInfo.gametype), n + 6, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), teamInfo.map, m + 6, n + 6, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), teamInfo.gametype, m + 312 - 6 - VersionHelper.GetFontRenderer().getStringWidth(teamInfo.gametype), n + 6, 0xffffff);
 		
 		if(teamInfo.roundOver())
 		{
@@ -79,14 +80,14 @@ public class GuiTeamScores extends GuiTeamsBase
 			//Time limit was hit
 			if(winners == null)
 			{
-				drawString(fontRenderer, "Time Ran Out!", m + 10, n + 20, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), "Time Ran Out!", m + 10, n + 20, 0xffffff);
 			}
 			else
 			{
-				drawString(fontRenderer, winners.name + " Won!", m + 10, n + 20, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), winners.name + " Won!", m + 10, n + 20, 0xffffff);
 			}
 			
-			drawString(fontRenderer, Math.max(ClientTeamsData.timeLeftInStage / 20, 0) + "", m + 312 - 22, n + 20, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), Math.max(ClientTeamsData.timeLeftInStage / 20, 0) + "", m + 312 - 22, n + 20, 0xffffff);
 			
 		}
 		else
@@ -94,24 +95,24 @@ public class GuiTeamScores extends GuiTeamsBase
 			int secondsLeft = teamInfo.timeLeft / 20;
 			int minutesLeft = secondsLeft / 60;
 			secondsLeft = secondsLeft % 60;
-			drawString(fontRenderer, "Time Left : " + minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft), m + 10, n + 20, 0xffffff);
-			drawString(fontRenderer, "Score Limit : " + teamInfo.scoreLimit, m + 302 - fontRenderer.getStringWidth("Score Limit : " + teamInfo.scoreLimit), n + 20, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Time Left : " + minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft), m + 10, n + 20, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Score Limit : " + teamInfo.scoreLimit, m + 302 - VersionHelper.GetFontRenderer().getStringWidth("Score Limit : " + teamInfo.scoreLimit), n + 20, 0xffffff);
 		}
 		
 		for(int i = 0; i < 2; i++)
 		{
-			fontRenderer.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.name, m + 10 + 151 * i, n + 39, 0xffffff);
-			fontRenderer.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].score, m + 133 + 151 * i, n + 39, 0xffffff);
+			VersionHelper.GetFontRenderer().drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.name, m + 10 + 151 * i, n + 39, 0xffffff);
+			VersionHelper.GetFontRenderer().drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].score, m + 133 + 151 * i, n + 39, 0xffffff);
 			for(int j = 0; j < teamInfo.teamData[i].numPlayers; j++)
 			{
 				if(teamInfo.teamData[i].playerData[j] == null)
 					continue;
 				GlStateManager.color(1.0f, 1.0f, 1.0f);
 				DrawRankIcon(teamInfo.teamData[i].playerData[j].level, 0, m + 10 + 151 * i, n + 65 + 16 * j, false);
-				drawString(fontRenderer, teamInfo.teamData[i].playerData[j].username, m + 30 + 151 * i, n + 68 + 16 * j, 0xffffff);
-				drawCenteredString(fontRenderer, "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 68 + 16 * j, 0xffffff);
-				drawCenteredString(fontRenderer, "" + (teamInfo.showZombieScore ? teamInfo.teamData[i].playerData[j].zombieScore : teamInfo.teamData[i].playerData[j].kills), m + 127 + 151 * i, n + 68 + 16 * j, 0xffffff);
-				drawCenteredString(fontRenderer, "" + teamInfo.teamData[i].playerData[j].deaths, m + 143 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), teamInfo.teamData[i].playerData[j].username, m + 30 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawCenteredString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawCenteredString(VersionHelper.GetFontRenderer(), "" + (teamInfo.showZombieScore ? teamInfo.teamData[i].playerData[j].zombieScore : teamInfo.teamData[i].playerData[j].kills), m + 127 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawCenteredString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[i].playerData[j].deaths, m + 143 + 151 * i, n + 68 + 16 * j, 0xffffff);
 			}
 		}
 		
@@ -161,7 +162,7 @@ public class GuiTeamScores extends GuiTeamsBase
 		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = VersionHelper.GetFontRenderer();
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		
@@ -180,11 +181,11 @@ public class GuiTeamScores extends GuiTeamsBase
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investiagate this
 		
-		drawCenteredString(fontRenderer, teamInfo.gametype, k / 2, n + 4, 0xffffff);
-		drawString(fontRenderer, "Name", m + 8, n + 14, 0xffffff);
-		drawString(fontRenderer, "Score", m + 100, n + 14, 0xffffff);
-		drawString(fontRenderer, "Kills", m + 150, n + 14, 0xffffff);
-		drawString(fontRenderer, "Deaths", m + 200, n + 14, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), teamInfo.gametype, k / 2, n + 4, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Name", m + 8, n + 14, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Score", m + 100, n + 14, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Kills", m + 150, n + 14, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Deaths", m + 200, n + 14, 0xffffff);
 		int line = 0;
 		if(teamInfo.sortedByTeam)
 		{
@@ -192,15 +193,15 @@ public class GuiTeamScores extends GuiTeamsBase
 			{
 				if(teamInfo.teamData[p] == null || teamInfo.teamData[p].team == null)
 					continue;
-				drawString(fontRenderer, "\u00a7" + teamInfo.teamData[p].team.textColour + teamInfo.teamData[p].team.name, m + 8, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamInfo.teamData[p].score, m + 100, n + 25 + 9 * line, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), "\u00a7" + teamInfo.teamData[p].team.textColour + teamInfo.teamData[p].team.name, m + 8, n + 25 + 9 * line, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[p].score, m + 100, n + 25 + 9 * line, 0xffffff);
 				line++;
 				for(int q = 0; q < teamInfo.teamData[p].numPlayers; q++)
 				{
-					drawString(fontRenderer, teamInfo.teamData[p].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
-					drawString(fontRenderer, "" + teamInfo.teamData[p].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
-					drawString(fontRenderer, "" + teamInfo.teamData[p].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
-					drawString(fontRenderer, "" + teamInfo.teamData[p].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
+					drawString(VersionHelper.GetFontRenderer(), teamInfo.teamData[p].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
+					drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[p].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
+					drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[p].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
+					drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[p].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
 					line++;
 				}
 			}
@@ -209,10 +210,10 @@ public class GuiTeamScores extends GuiTeamsBase
 		{
 			for(int q = 0; q < teamInfo.teamData[0].numPlayers; q++)
 			{
-				drawString(fontRenderer, teamInfo.teamData[0].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamInfo.teamData[0].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamInfo.teamData[0].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamInfo.teamData[0].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), teamInfo.teamData[0].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[0].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[0].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
+				drawString(VersionHelper.GetFontRenderer(), "" + teamInfo.teamData[0].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
 				line++;
 			}
 		}

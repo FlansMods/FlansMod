@@ -72,8 +72,8 @@ public class FlansModClient extends FlansMod
 	/**
 	 * Gun animation variables for each entity holding a gun. Currently only applicable to the player
 	 */
-	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<>(),
-			gunAnimationsLeft = new HashMap<>();
+	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<EntityLivingBase, GunAnimations>(),
+			gunAnimationsLeft = new HashMap<EntityLivingBase, GunAnimations>();
 	
 	// Scope variables
 	/**
@@ -120,7 +120,7 @@ public class FlansModClient extends FlansMod
 	
 	public static int hitMarkerTime = 0;
 	
-	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<>();
+	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<Vector3i>();
 	public static int lightOverrideRefreshRate = 5;
 	
 	private static WorldRenderer wr;

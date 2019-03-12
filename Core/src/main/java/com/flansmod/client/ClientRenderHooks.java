@@ -75,6 +75,7 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.versionhelper.VersionHelper;
 
 @SideOnly(Side.CLIENT)
 public class ClientRenderHooks
@@ -97,7 +98,7 @@ public class ClientRenderHooks
 	};
 	
 	private static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	private static List<KillMessage> killMessages = new ArrayList<>();
+	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
 	
 	private CustomItemRenderer[] customRenderers = new CustomItemRenderer[EnumType.values().length];
 	
@@ -766,8 +767,8 @@ public class ClientRenderHooks
 			
 			if(iNumHandsUsed > 2)
 			{
-				mc.fontRenderer.drawString("Too many guns, not enough hands", i / 2 - 85, j - 35, 0x000000);
-				mc.fontRenderer.drawString("Too many guns, not enough hands", i / 2 - 86, j - 36, 0xffffff);
+				VersionHelper.GetFontRenderer().drawString("Too many guns, not enough hands", i / 2 - 85, j - 35, 0x000000);
+				VersionHelper.GetFontRenderer().drawString("Too many guns, not enough hands", i / 2 - 86, j - 36, 0xffffff);
 			}
 			else
 			{
@@ -789,7 +790,7 @@ public class ClientRenderHooks
 								GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 								int xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 16 + x : i / 2 - 32 - x;
-								drawSlotInventory(mc.fontRenderer, bulletStack, xPos, j - 65);
+								drawSlotInventory(VersionHelper.GetFontRenderer(), bulletStack, xPos, j - 65);
 								GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 								RenderHelper.disableStandardItemLighting();
 								String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" +
@@ -798,9 +799,9 @@ public class ClientRenderHooks
 									s = "";
 								
 								xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 32 + x : i / 2 - 16 - x;
-								mc.fontRenderer.drawString(s, xPos, j - 59, 0x000000);
-								mc.fontRenderer.drawString(s, xPos + 1, j - 60, 0xffffff);
-								x += 16 + mc.fontRenderer.getStringWidth(s);
+								VersionHelper.GetFontRenderer().drawString(s, xPos, j - 59, 0x000000);
+								VersionHelper.GetFontRenderer().drawString(s, xPos + 1, j - 60, 0xffffff);
+								x += 16 + VersionHelper.GetFontRenderer().getStringWidth(s);
 							}
 						}
 					}
@@ -874,32 +875,32 @@ public class ClientRenderHooks
 				// Draw the team scores
 				if(teamInfo.teamData[0] != null && teamInfo.teamData[1] != null)
 				{
-					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
-					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
-					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "",
-							i / 2 + 35 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
-					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "",
-							i / 2 + 34 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
+					VersionHelper.GetFontRenderer().drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
+					VersionHelper.GetFontRenderer().drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
+					VersionHelper.GetFontRenderer().drawString(teamInfo.teamData[1].score + "",
+							i / 2 + 35 - VersionHelper.GetFontRenderer().getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
+					VersionHelper.GetFontRenderer().drawString(teamInfo.teamData[1].score + "",
+							i / 2 + 34 - VersionHelper.GetFontRenderer().getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
 				}
 			}
 			
 			
-			mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
-			mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
-			mc.fontRenderer
-					.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 9,
+			VersionHelper.GetFontRenderer().drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
+			VersionHelper.GetFontRenderer().drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
+			VersionHelper.GetFontRenderer()
+					.drawString(teamInfo.map + "", i / 2 - 47 - VersionHelper.GetFontRenderer().getStringWidth(teamInfo.map + ""), 9,
 							0x000000);
-			mc.fontRenderer
-					.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 8,
+			VersionHelper.GetFontRenderer()
+					.drawString(teamInfo.map + "", i / 2 - 48 - VersionHelper.GetFontRenderer().getStringWidth(teamInfo.map + ""), 8,
 							0xffffff);
 			
 			int secondsLeft = teamInfo.timeLeft / 20;
 			int minutesLeft = secondsLeft / 60;
 			secondsLeft = secondsLeft % 60;
 			String timeLeft = minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft);
-			mc.fontRenderer
-					.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
-			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
+			VersionHelper.GetFontRenderer()
+					.drawString(timeLeft, i / 2 - VersionHelper.GetFontRenderer().getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
+			VersionHelper.GetFontRenderer().drawString(timeLeft, i / 2 - VersionHelper.GetFontRenderer().getStringWidth(timeLeft) / 2, 30, 0xffffff);
 			
 			
 			GL11.glDepthMask(true);
@@ -911,9 +912,9 @@ public class ClientRenderHooks
 			PlayerScoreData data = PacketTeamInfo.getPlayerScoreData(playerUsername);
 			if(data != null)
 			{
-				mc.fontRenderer.drawString(data.score + "", i / 2 - 7, 1, 0x000000);
-				mc.fontRenderer.drawString(data.kills + "", i / 2 - 7, 9, 0x000000);
-				mc.fontRenderer.drawString(data.deaths + "", i / 2 - 7, 17, 0x000000);
+				VersionHelper.GetFontRenderer().drawString(data.score + "", i / 2 - 7, 1, 0x000000);
+				VersionHelper.GetFontRenderer().drawString(data.kills + "", i / 2 - 7, 9, 0x000000);
+				VersionHelper.GetFontRenderer().drawString(data.deaths + "", i / 2 - 7, 17, 0x000000);
 			}
 		}
 	}
@@ -922,8 +923,8 @@ public class ClientRenderHooks
 	{
 		for(KillMessage killMessage : killMessages)
 		{
-			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName,
-					i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6,
+			VersionHelper.GetFontRenderer().drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName,
+					i - VersionHelper.GetFontRenderer().getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6,
 					j - 32 - killMessage.line * 16, 0xffffff);
 		}
 		
@@ -935,8 +936,8 @@ public class ClientRenderHooks
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		for(KillMessage killMessage : killMessages)
 		{
-			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item, 1, killMessage.paint),
-					i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12,
+			drawSlotInventory(VersionHelper.GetFontRenderer(), new ItemStack(killMessage.weapon.item, 1, killMessage.paint),
+					i - VersionHelper.GetFontRenderer().getStringWidth("     " + killMessage.killedName) - 12,
 					j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
@@ -961,11 +962,11 @@ public class ClientRenderHooks
 				
 				speed = (int)(speed * 10F) / 10F;
 				
-				mc.fontRenderer.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
+				VersionHelper.GetFontRenderer().drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
 				
 				if(FlansMod.DEBUG)
 				{
-					mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
+					VersionHelper.GetFontRenderer().drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
 				}
 			}
 		}

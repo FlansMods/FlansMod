@@ -31,6 +31,7 @@ import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class RenderPlane extends Render<EntityPlane> implements CustomItemRenderer
 {
@@ -216,7 +217,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			if(entity instanceof EntityPlane)
 			{
 				EntityPlane plane = (EntityPlane)entity;
-				int i = plane.getBrightnessForRender();
+				int i = VersionHelper.GetBrightnessForRender(plane, event.getPartialTicks());
 				
 				if(plane.isBurning())
 				{

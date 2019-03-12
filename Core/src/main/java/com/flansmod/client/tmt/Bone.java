@@ -114,9 +114,9 @@ public class Bone
 		absoluteAngles = new Angle3D(0, 0, 0);
 		positionVector = new Vec3d(0, 0, 0);
 		length = l;
-		childNodes = new ArrayList<>();
-		models = new ArrayList<>();
-		modelBaseRot = new HashMap<>();
+		childNodes = new ArrayList<Bone>();
+		models = new ArrayList<ModelRenderer>();
+		modelBaseRot = new HashMap<ModelRenderer, Angle3D>();
 		parentNode = null;
 		offsetX = 0;
 		offsetY = 0;

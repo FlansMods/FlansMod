@@ -1,6 +1,7 @@
 package com.flansmod.common.types;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -11,7 +12,6 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.potion.Potion;
@@ -28,16 +28,16 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.versionhelper.RecipeData;
 
 public class InfoType
 {
 	/**
 	 * infoTypes
 	 */
-	public static HashMap<Integer, InfoType> infoTypes = new HashMap<>();
+	public static HashMap<Integer, InfoType> infoTypes = new HashMap<Integer, InfoType>();
 	
 	public final String contentPack;
 	public Item item;
@@ -364,131 +364,48 @@ public class InfoType
 	{
 		return super.getClass().getSimpleName() + ": " + shortName;
 	}
-	
-	public void registerItem(IForgeRegistry<Item> registry)
+		
+	public void GetItemsForRegistration(List<Item> list)
 	{
 		if(item != null)
-			registry.register(item);
+			list.add(item);
 	}
 	
-	public void registerBlock(IForgeRegistry<Block> registry)
+	public void GetBlocksForRegistration(List<Block> list)
 	{
 		
 	}
 	
-	public void addRecipe(IForgeRegistry<IRecipe> registry)
-	{
-		this.addRecipe(registry, getItem());
-	}
-	
-	/**
-	 * Reimported from old code
-	 */
-	public void addRecipe(IForgeRegistry<IRecipe> registry, Item par1Item)
+	public void GetRecipes(List<RecipeData> list)
 	{
 		if(smeltableFrom != null)
 		{
-			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 0), new ItemStack(item), 0.0F);
+			GameRegistry.addSmelting(InfoType.getRecipeElement(smeltableFrom, 0), new ItemStack(item), 0.0F);
 		}
-		if(recipeLine == null)
-			return;
-		try
+		
+		if(recipeLine != null)
 		{
-			if(!shapeless)
+			if(shapeless)
 			{
-				// Find the smallest bounding grid
-				int minX = 3, minY = 3, maxX = -1, maxY = -1;
+				RecipeData rec = new RecipeData();
+				rec.shapeless = true;
+				rec.ingredients = recipeLine;
+				rec.ret = new ItemStack(item, recipeOutput);
+				rec.registryName = name + "_shapeless";
 				
-				for(int i = 0; i < 3; i++)
-				{
-					for(int j = 0; j < 3; j++)
-					{
-						if(recipeGrid[i][j] != ' ')
-						{
-							// This is a valid element. Adjust bounds accordingly
-							if(i < minX)
-								minX = i;
-							if(i > maxX)
-								maxX = i;
-							if(j < minY)
-								minY = j;
-							if(j > maxY)
-								maxY = j;
-						}
-					}
-				}
-				
-				// Make the recipe square
-				if(maxX != maxY)
-				{
-					maxX = maxY = Math.max(maxX, maxY);
-				}
-				if(minX != minY)
-				{
-					minX = minY = Math.min(minX, minY);
-				}
-				
-				if((minX == 3 && maxX == -1) || (minY == 3 && maxY == -1))
-				{
-					FlansMod.log.warn("Invalid recipe grid in " + shortName);
-					return;
-				}
-				
-				int width = maxX - minX + 1;
-				int height = maxY - minY + 1;
-				
-				// Make a menu of ingredients from the main recipe line
-				HashMap<Character, ItemStack> menu = new HashMap<>();
-				for(int i = 0; i < (recipeLine.length - 1) / 2; i++)
-				{
-					char c = recipeLine[i * 2 + 1].charAt(0);
-					ItemStack stack = getRecipeElement(recipeLine[i * 2 + 2]);
-					
-					menu.put(c, stack);
-				}
-				
-				// Now pick off the menu and fill out the list
-				NonNullList<Ingredient> ingredients = NonNullList.create();
-				for(int i = 0; i < width; i++)
-				{
-					for(int j = 0; j < height; j++)
-					{
-						char c = recipeGrid[minX + i][minY + j];
-						if(c == ' ')
-						{
-							ingredients.add(Ingredient.fromStacks(ItemStack.EMPTY.copy()));
-						}
-						else
-						{
-							ItemStack stack = menu.get(c);
-							if(stack == null || stack.isEmpty())
-							{
-								FlansMod.log.warn("Failed to find " + c + " in recipe for " + shortName);
-								// This recipe is BORK. Kill it
-								return;
-							}
-							ingredients.add(Ingredient.fromStacks(stack.copy()));
-						}
-					}
-				}
-				// And finally hand all that over to the registry
-				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)).setRegistryName(name + "_shaped"));
+				list.add(rec);
 			}
 			else
 			{
-				NonNullList<Ingredient> ingredients = NonNullList.create();
-				for(int i = 0; i < (recipeLine.length - 1); i++)
-				{
-					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));
-				}
+				RecipeData rec = new RecipeData();
+				rec.shapeless = true;
+				rec.ingredients = recipeLine;
+				rec.recipeGrid = recipeGrid;
+				rec.ret = new ItemStack(item, recipeOutput);
+				rec.registryName = name + "_shapeful";
 				
-				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients).setRegistryName(name + "_shapeless"));
+				list.add(rec);
 			}
-		}
-		catch(Exception e)
-		{
-			FlansMod.log.error("Failed to add recipe for : " + shortName);
-			FlansMod.log.throwing(e);
 		}
 	}
 	

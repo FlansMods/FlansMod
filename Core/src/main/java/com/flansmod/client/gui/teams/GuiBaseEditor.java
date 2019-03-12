@@ -80,7 +80,7 @@ public class GuiBaseEditor extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = VersionHelper.GetFontRenderer();
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);

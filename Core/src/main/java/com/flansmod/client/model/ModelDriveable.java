@@ -13,7 +13,7 @@ public class ModelDriveable extends ModelBase
 	public static final float pi = 3.14159265F;
 	public static final float tau = 2 * pi;
 	
-	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<>();
+	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
 	public ModelRendererTurbo bodyModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];

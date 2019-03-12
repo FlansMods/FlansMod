@@ -40,6 +40,7 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class ClientProxyApocalypse extends CommonProxyApocalypse
 {
@@ -146,7 +147,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		//DEBUG vehicles
 		if(apocalypseCountdown > 0 && FlansMod.DEBUG)
 		{
-			mc.fontRenderer.drawString("Seconds to the apocalypse: " + (apocalypseCountdown / 20), 2, 2, 0xffffff);
+			VersionHelper.GetFontRenderer().drawString("Seconds to the apocalypse: " + (apocalypseCountdown / 20), 2, 2, 0xffffff);
 		}
 		
 		//Draw white screen if we are being nuked

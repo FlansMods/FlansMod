@@ -22,6 +22,7 @@ import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.types.EnumPaintjobRarity;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiTeamsBase extends GuiScreen
 {
@@ -88,11 +89,11 @@ public class GuiTeamsBase extends GuiScreen
 		{
 			
 			drawModalRectWithCustomSizedTexture(i, j, 259, 28, 46, 111, textureX, textureY);
-			drawCenteredString(fontRenderer, "Unlocks", i + 23, j + 23, 0xffffff);
-			drawCenteredString(fontRenderer, "at " + pool.slotUnlockLevels[n], i + 23, j + 40, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Unlocks", i + 23, j + 23, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "at " + pool.slotUnlockLevels[n], i + 23, j + 40, 0xffffff);
 		}
 		
-		drawCenteredString(fontRenderer, "Slot " + (n + 1), i + 23, j + 5, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), "Slot " + (n + 1), i + 23, j + 5, 0xffffff);
 	}
 	
 	protected void DrawRarityBackground(EnumPaintjobRarity rarity, int i, int j)
@@ -179,7 +180,7 @@ public class GuiTeamsBase extends GuiScreen
 		if(itemstack == null || itemstack.isEmpty())
 			return;
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
+		itemRenderer.renderItemOverlayIntoGUI(VersionHelper.GetFontRenderer(), itemstack, i, j, null);
 	}
 	
 	@Override

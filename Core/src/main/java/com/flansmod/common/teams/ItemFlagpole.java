@@ -48,7 +48,7 @@ public class ItemFlagpole extends Item
 		RayTraceResult RayTraceResult = world.rayTraceBlocks(vec3d, vec3d1, true);
 		if(RayTraceResult == null)
 		{
-			return new ActionResult<>(EnumActionResult.PASS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 		}
 		if(RayTraceResult.typeOfHit == Type.BLOCK)
 		{
@@ -64,9 +64,9 @@ public class ItemFlagpole extends Item
 					world.spawnEntity(new EntityFlagpole(world, pos));
 				}
 			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return new ActionResult<>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	private boolean isSolid(World world, BlockPos pos)

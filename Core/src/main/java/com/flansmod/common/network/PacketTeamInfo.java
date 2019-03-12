@@ -156,7 +156,7 @@ public class PacketTeamInfo extends PacketBase
 			else
 			{
 				data.writeBoolean(false);
-				ArrayList<String> playerNames = new ArrayList<>();
+				ArrayList<String> playerNames = new ArrayList<String>();
 				for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
 				{
 					Team team = TeamsManager.getInstance().currentRound.teams[i];

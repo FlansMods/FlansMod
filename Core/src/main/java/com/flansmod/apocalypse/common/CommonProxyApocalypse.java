@@ -55,7 +55,7 @@ public class CommonProxyApocalypse
 	private EntityMecha apocalypseMecha = null;
 	public ApocalypseData data;
 	
-	private static HashMap<EntityPlayer, BlockPos> deathPoints = new HashMap<>();
+	private static HashMap<EntityPlayer, BlockPos> deathPoints = new HashMap<EntityPlayer, BlockPos>();
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{

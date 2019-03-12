@@ -67,7 +67,7 @@ public enum EnumDriveablePart
 	 */
 	public EnumDriveablePart[] getParents()
 	{
-		ArrayList<EnumDriveablePart> parents = new ArrayList<>();
+		ArrayList<EnumDriveablePart> parents = new ArrayList<EnumDriveablePart>();
 		for(EnumDriveablePart part : values())
 		{
 			for(EnumDriveablePart childPart : part.getChildren())

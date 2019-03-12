@@ -27,7 +27,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumParticleTypes;
@@ -119,6 +118,7 @@ import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.versionhelper.VersionHelper;
 
 @Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
@@ -170,10 +170,10 @@ public class FlansMod
 	public static ItemBlockManyNames spawnerItem;
 	public static ItemOpStick opStick;
 	public static ItemFlagpole flag;
-	public static ArrayList<ItemPart> partItems = new ArrayList<>();
-	public static ArrayList<ItemMecha> mechaItems = new ArrayList<>();
-	public static ArrayList<ItemTool> toolItems = new ArrayList<>();
-	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<>();
+	public static ArrayList<ItemPart> partItems = new ArrayList<ItemPart>();
+	public static ArrayList<ItemMecha> mechaItems = new ArrayList<ItemMecha>();
+	public static ArrayList<ItemTool> toolItems = new ArrayList<ItemTool>();
+	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
 	
@@ -200,6 +200,7 @@ public class FlansMod
 		log.debug("Preinitialising Flan's mod.");
 		
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		MinecraftForge.EVENT_BUS.register(VersionHelper.EVENT_HANDLER());
 		
 		proxy.preInit();
 		proxy.registerRenderers();
@@ -241,16 +242,17 @@ public class FlansMod
 		workbenchItem = new ItemBlockManyNames(workbench);
 		spawnerItem = new ItemBlockManyNames(spawner);
 		
-		
-		GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation("flansmod:teamsSpawner"));
-		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, new ResourceLocation("flansmod:paintjobTable"));
-		GameRegistry.registerTileEntity(TileEntityItemHolder.class, new ResourceLocation("flansmod:itemHolder"));
+		VersionHelper.RegisterTileEntity(TileEntitySpawner.class, "flansmod:teamsSpawner");
+		VersionHelper.RegisterTileEntity(TileEntityPaintjobTable.class, "flansmod:paintjobTable");
+		VersionHelper.RegisterTileEntity(TileEntityItemHolder.class, "flansmod:itemHolder");
 		
 		//Read content packs
 		readContentPacks(event);
 		
 		//Force Minecraft to reload all resources in order to load content pack resources.
 		proxy.forceReload();
+		
+		VersionHelper.ModPreInit();
 		
 		log.debug("Preinitializing complete.");
 	}
@@ -281,115 +283,7 @@ public class FlansMod
 			}
 		}
 		
-		//Config
-		//Starting the EventListener
-		new PlayerDeathEventListener();
-		log.info("Loading complete.");
-	}
-	
-	@SubscribeEvent
-	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
-	{
-		log.info("Registering Recipes.");
-		
-		// Recipes
-		for(InfoType type : InfoType.infoTypes.values())
-		{
-			type.addRecipe(event.getRegistry());
-		}
-		if(addGunpowderRecipe)
-		{
-			NonNullList<Ingredient> ingredients = NonNullList.create();
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GLOWSTONE_DUST)));
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
-			
-			event.getRegistry().register(new ShapelessRecipes("FlansMod", new ItemStack(Items.GUNPOWDER), ingredients).setRegistryName("FM_Gunpowder"));
-		}
-		
-		// Add the two workbench recipes
-		{
-			// ICI C = Cauldron
-			// III I = Iron ingot
-			NonNullList<Ingredient> ingredients = NonNullList.create();
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
-			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.CAULDRON)));
-			for(int i = 0; i < 4; i++)
-				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
-			
-			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 2, ingredients, new ItemStack(workbench, 1, 1)).setRegistryName("FM_Workbench"));
-		}
-		{
-			// BBB B = Bowl
-			// III I = Iron ingot
-			// III
-			NonNullList<Ingredient> ingredients = NonNullList.create();
-			for(int i = 0; i < 3; i++)
-				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.BOWL)));
-			for(int i = 0; i < 6; i++)
-				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
-			
-			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 3, ingredients, new ItemStack(workbench, 1, 0)).setRegistryName("FM_Workbench2"));
-		}
-	}
-	
-	@SubscribeEvent
-	public void registerItems(RegistryEvent.Register<Item> event)
-	{
-		log.info("Registering Items");
-		
-		for(InfoType type : InfoType.infoTypes.values())
-		{
-			type.registerItem(event.getRegistry());
-		}
-		
-		event.getRegistry().register(rainbowPaintcan); //, "rainbowPaintcan", MODID);
-		event.getRegistry().register(opStick); //, "opStick", MODID);
-		event.getRegistry().register(flag); //, "flagpole", MODID);
-		
-		event.getRegistry().register(workbenchItem);
-		event.getRegistry().register(spawnerItem);
-	}
-	
-	@SubscribeEvent
-	public void registerBlocks(RegistryEvent.Register<Block> event)
-	{
-		log.info("Registering Blocks");
-		
-		for(InfoType type : InfoType.infoTypes.values())
-		{
-			type.registerBlock(event.getRegistry());
-		}
-		
-		event.getRegistry().register(workbench);//, ItemBlockManyNames.class, "flansWorkbench");
-		event.getRegistry().register(spawner); // ItemBlockManyNames.class, "teamsSpawner");
-		event.getRegistry().register(paintjobTable); //, "paintjobTable");
-	}
-	
-	@SubscribeEvent
-	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
-	{
-		log.info("Registering Entities");
-		
-		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole").setRegistryName("Flagpole"));
-		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag").setRegistryName("Flag"));
-		event.getRegistry().register(new EntityEntry(EntityTeamItem.class, "TeamsItem").setRegistryName("TeamsItem"));
-		event.getRegistry().register(new EntityEntry(EntityGunItem.class, "GunItem").setRegistryName("GunItem"));
-		event.getRegistry().register(new EntityEntry(EntityItemCustomRender.class, "CustomItem").setRegistryName("CustomItem"));
-		event.getRegistry().register(new EntityEntry(EntityPlane.class, "Plane").setRegistryName("Plane"));
-		event.getRegistry().register(new EntityEntry(EntityVehicle.class, "Vehicle").setRegistryName("Vehicle"));
-		event.getRegistry().register(new EntityEntry(EntitySeat.class, "Seat").setRegistryName("Seat"));
-		event.getRegistry().register(new EntityEntry(EntityWheel.class, "Wheel").setRegistryName("Wheel"));
-		event.getRegistry().register(new EntityEntry(EntityParachute.class, "Parachute").setRegistryName("Parachute"));
-		event.getRegistry().register(new EntityEntry(EntityMecha.class, "Mecha").setRegistryName("Mecha"));
-		event.getRegistry().register(new EntityEntry(EntityBullet.class, "Bullet").setRegistryName("Bullet"));
-		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade").setRegistryName("Grenade"));
-		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG").setRegistryName("MG"));
-		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun").setRegistryName("AAGun"));
-		event.getRegistry().register(new EntityEntry(EntityDebugVector.class, "DebugVector").setRegistryName("DebugVector"));
-		event.getRegistry().register(new EntityEntry(EntityDebugDot.class, "DebugDot").setRegistryName("DebugDot"));
-		
+		// Register entities
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), EntityPlane.class, "Plane", 90, this, 250, 3, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:MG"), EntityMG.class, "MG", 91, this, 40, 5, true);
@@ -407,6 +301,15 @@ public class FlansMod
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), EntityWheel.class, "Wheel", 103, this, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:DebugVector"), EntityDebugVector.class, "DebugVector", 104, this, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:DebugDot"), EntityDebugDot.class, "DebugDot", 105, this, 250, 20, false);
+
+		//Config
+		//Starting the EventListener
+		new PlayerDeathEventListener();
+		
+		
+		VersionHelper.ModInit();
+		
+		log.info("Loading complete.");
 	}
 	
 	@EventHandler
@@ -427,6 +330,8 @@ public class FlansMod
 		packetHandler.postInitialise();
 		
 		hooks.hook();
+		
+		VersionHelper.ModPostInit();
 	}
 	
 	@SubscribeEvent
@@ -435,7 +340,7 @@ public class FlansMod
 		for(int i = event.getDrops().size() - 1; i >= 0; i--)
 		{
 			EntityItem ent = event.getDrops().get(i);
-			InfoType type = InfoType.getType(ent.getItem());
+			InfoType type = InfoType.getType(VersionHelper.GetItem(ent));
 			if(type != null && !type.canDrop)
 				event.getDrops().remove(i);
 		}
@@ -444,7 +349,7 @@ public class FlansMod
 	@SubscribeEvent
 	public void playerDrops(ItemTossEvent event)
 	{
-		InfoType type = InfoType.getType(event.getEntityItem().getItem());
+		InfoType type = InfoType.getType(VersionHelper.GetItem(event.getEntityItem()));
 		if(type != null && !type.canDrop)
 			event.setCanceled(true);
 	}

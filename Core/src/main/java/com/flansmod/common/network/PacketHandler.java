@@ -40,15 +40,15 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	//Map of channels for each side
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	//The list of registered packets. Should contain no more than 256 packets.
-	private LinkedList<Class<? extends PacketBase>> packets = new LinkedList<>();
+	private LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
 	//Whether or not Flan's Mod has initialised yet. Once true, no more packets may be registered.
 	private boolean modInitialised = false;
 	
 	/**
 	 * Store received packets in these queues and have the main Minecraft threads use these
 	 */
-	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<>();
-	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<>();
+	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
+	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
 	
 	/**
 	 * Registers a packet with the handler
@@ -139,7 +139,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 					EntityPlayer player = ((NetHandlerPlayServer)netHandler).player;
 					if(!receivedPacketsServer.containsKey(player.getName()))
-						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<>());
+						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<Object>());
 					receivedPacketsServer.get(player.getName()).offer(packet);
 					//packet.handleServerSide();
 					break;

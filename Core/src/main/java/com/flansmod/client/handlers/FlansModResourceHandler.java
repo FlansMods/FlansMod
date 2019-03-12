@@ -25,14 +25,14 @@ import com.flansmod.common.types.PaintableType;
 
 public class FlansModResourceHandler
 {
-	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<>();
-	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<>();
-	private static HashMap<InfoType, ResourceLocation> trailTextureMap = new HashMap<>();
-	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<>();
-	private static HashMap<Paintjob, ResourceLocation> paintjobIconMap = new HashMap<>();
-	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<>();
-	private static HashMap<String, SoundEvent> soundMap = new HashMap<>();
-	private static HashMap<String, ResourceLocation> blockMap = new HashMap<>();
+	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<InfoType, ResourceLocation>();
+	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<InfoType, ResourceLocation>();
+	private static HashMap<InfoType, ResourceLocation> trailTextureMap = new HashMap<InfoType, ResourceLocation>();
+	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<Paintjob, ResourceLocation>();
+	private static HashMap<Paintjob, ResourceLocation> paintjobIconMap = new HashMap<Paintjob, ResourceLocation>();
+	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
+	private static HashMap<String, SoundEvent> soundMap = new HashMap<String, SoundEvent>();
+	private static HashMap<String, ResourceLocation> blockMap = new HashMap<String, ResourceLocation>();
 	
 	public static ResourceLocation flag = new ResourceLocation("flansmod", "textures/items/flagpole.png");
 	public static ResourceLocation[] opStick = new ResourceLocation[]{new ResourceLocation("flansmod", "textures/items/opStick_ownership.png"),
@@ -144,8 +144,8 @@ public class FlansModResourceHandler
 		return resLoc;
 	}
 	
-	private static HashMap<Integer, ResourceLocation> customPaintjobSkins = new HashMap<>();
-	private static HashMap<Integer, ResourceLocation> customPaintjobIcons = new HashMap<>();
+	private static HashMap<Integer, ResourceLocation> customPaintjobSkins = new HashMap<Integer, ResourceLocation>();
+	private static HashMap<Integer, ResourceLocation> customPaintjobIcons = new HashMap<Integer, ResourceLocation>();
 	private static final int BYTES_PER_PIXEL = 4;
 	
 	public static boolean HasResourceForHash(int customPaintHash)

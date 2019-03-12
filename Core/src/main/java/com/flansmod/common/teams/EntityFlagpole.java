@@ -35,9 +35,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	//The map this base is a part of
 	public TeamsMap map;
 	//List of all TeamObjects associated with this base
-	public List<ITeamObject> objects = new ArrayList<>();
+	public List<ITeamObject> objects = new ArrayList<ITeamObject>();
 	// List of spawn points. 
-	public List<BlockPos> spawnPoints = new ArrayList<>();
+	public List<BlockPos> spawnPoints = new ArrayList<BlockPos>();
 	//The name of this base, changeable by the baseList and baseRename commands
 	public String name = "Default Name";
 	//This base's ID

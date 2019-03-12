@@ -38,6 +38,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.Vec3d;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.versionhelper.VersionHelper;
 
 /**
  * Holds a 3-tuple vector.
@@ -97,7 +98,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	
 	public Vector3f(Vec3d vec)
 	{
-		this((float)vec.x, (float)vec.y, (float)vec.z);
+		this((float)VersionHelper.GetX(vec), (float)VersionHelper.GetY(vec), (float)VersionHelper.GetZ(vec));
 	}
 	
 	public Vector3f(double x, double y, double z)

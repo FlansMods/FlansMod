@@ -47,7 +47,7 @@ public class CommonProxy
 	 */
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
-		List<File> contentPacks = new ArrayList<>();
+		List<File> contentPacks = new ArrayList<File>();
 		for(File file : FlansMod.flanDir.listFiles())
 		{
 			//Load folders and valid zip files
@@ -218,7 +218,7 @@ public class CommonProxy
 		
 		//Now we no longer need the temporary inventory backup, so we will use it to find the best stack of engines		
 		//Collect up all the engines into neat and tidy stacks so we can find if any of them are big enough and which of those stacks are best
-		HashMap<PartType, ItemStack> engines = new HashMap<>();
+		HashMap<PartType, ItemStack> engines = new HashMap<PartType, ItemStack>();
 		
 		//Find some suitable engines
 		for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)

@@ -113,7 +113,7 @@ public abstract class ShootableType extends InfoType
 	/**
 	 * The static list of all shootable types
 	 */
-	public static HashMap<Integer, ShootableType> shootables = new HashMap<>();
+	public static HashMap<Integer, ShootableType> shootables = new HashMap<Integer, ShootableType>();
 	
 	public ShootableType(TypeFile file)
 	{

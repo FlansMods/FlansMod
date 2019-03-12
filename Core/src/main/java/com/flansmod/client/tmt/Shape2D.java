@@ -10,12 +10,12 @@ public class Shape2D
 {
 	public Shape2D()
 	{
-		coords = new ArrayList<>();
+		coords = new ArrayList<Coord2D>();
 	}
 	
 	public Shape2D(Coord2D[] coordArray)
 	{
-		coords = new ArrayList<>();
+		coords = new ArrayList<Coord2D>();
 		
 		Collections.addAll(coords, coordArray);
 	}

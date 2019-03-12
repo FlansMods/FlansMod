@@ -28,6 +28,7 @@ import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class EntityGunItem extends EntityItemCustomRender
 {
@@ -43,10 +44,9 @@ public class EntityGunItem extends EntityItemCustomRender
 	
 	public EntityGunItem(EntityItem entity)
 	{
-		super(entity.world, entity.posX, entity.posY, entity.posZ, entity
-				.getItem().copy());
+		super(entity.world, entity.posX, entity.posY, entity.posZ, VersionHelper.GetItem(entity).copy());
 		setSize(1F, 1F);
-		ammoStacks = new ArrayList<>();
+		ammoStacks = new ArrayList<ItemStack>();
 	}
 	
 	public EntityGunItem(World w, double x, double y, double z,
@@ -54,7 +54,7 @@ public class EntityGunItem extends EntityItemCustomRender
 	{
 		super(w, x, y, z, stack);
 		setSize(1F, 1F);
-		ammoStacks = new ArrayList<>();
+		ammoStacks = new ArrayList<ItemStack>();
 		for(ItemStack ammoStack : stacks)
 		{
 			if(ammoStack != null && (ammoStack.getItem() instanceof ItemBullet))
@@ -90,7 +90,7 @@ public class EntityGunItem extends EntityItemCustomRender
 	public void onUpdate()
 	{
 		onEntityUpdate();
-		if(getItem().isEmpty() || !(getItem().getItem() instanceof ItemGun))
+		if(VersionHelper.GetItem(this).isEmpty() || !(VersionHelper.GetItem(this).getItem() instanceof ItemGun))
 			setDead();
 		
 		if(!world.isRemote && ammoStacks == null)
@@ -116,7 +116,7 @@ public class EntityGunItem extends EntityItemCustomRender
 			
 			if(!block.isAir(blockState, world, blockPos))
 			{
-				var2 = block.getSlipperiness(blockState, world, blockPos, this) * 0.98F;
+				var2 = VersionHelper.GetSlipperiness(block, blockState, world, blockPos, this) * 0.98f;
 			}
 		}
 		
@@ -131,7 +131,7 @@ public class EntityGunItem extends EntityItemCustomRender
 		
 		++age;
 		
-		ItemStack item = getItem();
+		ItemStack item = VersionHelper.GetItem(this);
 		
 		if(!world.isRemote && age >= lifespan)
 		{
@@ -190,7 +190,7 @@ public class EntityGunItem extends EntityItemCustomRender
 							{
 								if(player.inventory.addItemStackToInventory(ammoStack))
 								{
-									FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this, stack.copy());
+									VersionHelper.FirePlayerItemPickupEvent(player, this, stack.copy());
 									playSound(
 											SoundEvents.ENTITY_ITEM_PICKUP,
 											0.2F,
@@ -224,7 +224,7 @@ public class EntityGunItem extends EntityItemCustomRender
 			if(!currentItem.isEmpty() && currentItem.getItem() instanceof ItemGun)
 			{
 				GunType gunType = ((ItemGun)currentItem.getItem()).GetType();
-				List<ItemStack> newAmmoStacks = new ArrayList<>();
+				List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
 				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 				{
 					ItemStack stack = player.inventory.getStackInSlot(i);
@@ -243,7 +243,7 @@ public class EntityGunItem extends EntityItemCustomRender
 						posY, posZ, currentItem.copy(), newAmmoStacks);
 				world.spawnEntity(newGunItem);
 				player.inventory.setInventorySlotContents(
-						player.inventory.currentItem, getItem());
+						player.inventory.currentItem, VersionHelper.GetItem(this));
 				for(ItemStack stack : ammoStacks)
 				{
 					player.inventory.addItemStackToInventory(stack);

@@ -13,7 +13,7 @@ public class PlayerClassCustom implements IPlayerClass
 {
 	public int index;
 	public PlayerLoadout loadout;
-	public List<ItemStack> startingItems = new ArrayList<>();
+	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	public ItemStack chest = ItemStack.EMPTY.copy();
 	
 	public PlayerClassCustom(int i, PlayerLoadout playerLoadout)

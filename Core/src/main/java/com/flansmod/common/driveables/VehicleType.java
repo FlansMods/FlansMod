@@ -42,7 +42,7 @@ public class VehicleType extends DriveableType
 	 */
 	public boolean hasDoor = false;
 	
-	public static ArrayList<VehicleType> types = new ArrayList<>();
+	public static ArrayList<VehicleType> types = new ArrayList<VehicleType>();
 	
 	public VehicleType(TypeFile file)
 	{

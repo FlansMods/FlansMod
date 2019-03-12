@@ -28,9 +28,9 @@ import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler
 {
-	public static Map<String, PlayerData> serverSideData = new HashMap<>();
-	public static Map<String, PlayerData> clientSideData = new HashMap<>();
-	public static ArrayList<String> clientsToRemoveAfterThisRound = new ArrayList<>();
+	public static Map<String, PlayerData> serverSideData = new HashMap<String, PlayerData>();
+	public static Map<String, PlayerData> clientSideData = new HashMap<String, PlayerData>();
+	public static ArrayList<String> clientsToRemoveAfterThisRound = new ArrayList<String>();
 	public static Field floatingTickCount = null;
 	
 	public PlayerHandler()

@@ -24,7 +24,7 @@ public class ApocalypseData
 	/**
 	 * The point at which each player entered the apocalypse. For deciding where they should come out
 	 */
-	public HashMap<UUID, BlockPos> entryPoints = new HashMap<>();
+	public HashMap<UUID, BlockPos> entryPoints = new HashMap<UUID, BlockPos>();
 	
 	@SubscribeEvent
 	public void worldData(WorldEvent event)

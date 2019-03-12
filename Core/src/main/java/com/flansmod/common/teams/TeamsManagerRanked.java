@@ -30,7 +30,7 @@ import com.flansmod.common.network.PacketVoting;
 
 public class TeamsManagerRanked extends TeamsManager
 {
-	public static HashMap<UUID, PlayerRankData> rankData = new HashMap<>();
+	public static HashMap<UUID, PlayerRankData> rankData = new HashMap<UUID, PlayerRankData>();
 	
 	public LoadoutPool currentPool;
 	

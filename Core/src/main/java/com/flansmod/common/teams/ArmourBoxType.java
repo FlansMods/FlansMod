@@ -2,12 +2,12 @@ package com.flansmod.common.teams;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.boxes.BoxType;
@@ -17,12 +17,12 @@ public class ArmourBoxType extends BoxType
 {
 	public BlockArmourBox block;
 	
-	public ArrayList<ArmourBoxEntry> pages = new ArrayList<>();
+	public ArrayList<ArmourBoxEntry> pages = new ArrayList<ArmourBoxEntry>();
 	
 	/**
 	 * The static box map. Indexed by shortName for server ~ client syncing
 	 */
-	public static HashMap<String, ArmourBoxType> boxes = new HashMap<>();
+	public static HashMap<String, ArmourBoxType> boxes = new HashMap<String, ArmourBoxType>();
 	
 	public ArmourBoxType(TypeFile file)
 	{
@@ -87,16 +87,18 @@ public class ArmourBoxType extends BoxType
 	}
 	
 	@Override
-	public void registerItem(IForgeRegistry<Item> registry)
+	public void GetItemsForRegistration(List<Item> list)
 	{
-		item = new ItemBlock(block).setRegistryName(shortName + "_item");
-		registry.register(item);
+		if(item != null)
+			list.add(item);
+		
+		//.setRegistryName(shortName + "_item");
 	}
-	
+		
 	@Override
-	public void registerBlock(IForgeRegistry<Block> registry)
+	public void GetBlocksForRegistration(List<Block> list)
 	{
-		registry.register(block);
+		list.add(block);
 	}
 	
 	/**
@@ -118,7 +120,7 @@ public class ArmourBoxType extends BoxType
 			armours = new ArmourType[4];
 			requiredStacks = new ArrayList[4];
 			for(int i = 0; i < 4; i++)
-				requiredStacks[i] = new ArrayList<>();
+				requiredStacks[i] = new ArrayList<ItemStack>();
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.flansmod.common;
 
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
@@ -9,7 +10,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.client.model.ModelItemHolder;
 import com.flansmod.common.types.InfoType;
@@ -22,7 +22,7 @@ public class ItemHolderType extends InfoType
 	
 	public BlockItemHolder block;
 	
-	private static HashMap<String, ItemHolderType> itemHolders = new HashMap<>();
+	private static HashMap<String, ItemHolderType> itemHolders = new HashMap<String, ItemHolderType>();
 	
 	public ItemHolderType(TypeFile file)
 	{
@@ -57,16 +57,18 @@ public class ItemHolderType extends InfoType
 	}
 	
 	@Override
-	public void registerItem(IForgeRegistry<Item> registry)
+	public void GetItemsForRegistration(List<Item> list)
 	{
-		item = new ItemBlock(block).setRegistryName(shortName + "_item");
-		registry.register(item);
+		if(item != null)
+			list.add(item);
+		
+		//.setRegistryName(shortName + "_item");
 	}
-	
+		
 	@Override
-	public void registerBlock(IForgeRegistry<Block> registry)
+	public void GetBlocksForRegistration(List<Block> list)
 	{
-		registry.register(block);
+		list.add(block);
 	}
 	
 	public static ItemHolderType getItemHolder(String string)

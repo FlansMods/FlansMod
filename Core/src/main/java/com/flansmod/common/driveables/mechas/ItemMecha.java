@@ -96,7 +96,7 @@ public class ItemMecha extends Item implements IPaintableItem
 		//Result check
 		if(RayTraceResult == null)
 		{
-			return new ActionResult<>(EnumActionResult.PASS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 		}
 		if(RayTraceResult.typeOfHit == Type.BLOCK)
 		{
@@ -109,9 +109,9 @@ public class ItemMecha extends Item implements IPaintableItem
 			{
 				itemstack.setCount(itemstack.getCount() - 1);
 			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return new ActionResult<>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	public DriveableData getData(ItemStack itemstack, World world)

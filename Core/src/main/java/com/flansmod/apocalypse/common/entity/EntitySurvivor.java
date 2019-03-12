@@ -60,7 +60,7 @@ public class EntitySurvivor extends EntityFlansModShooter
 	 */
 	private void initGunList()
 	{
-		validGuns = new ArrayList<>();
+		validGuns = new ArrayList<GunType>();
 		for(GunType gun : GunType.gunList)
 		{
 			if(gun.mode == EnumFireMode.SEMIAUTO && !gun.deployable && gun.ammo.size() > 0 && !gun.shield && gun.usableByPlayers && gun.dungeonChance != 0)

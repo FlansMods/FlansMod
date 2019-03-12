@@ -20,10 +20,10 @@ import com.flansmod.common.types.TypeFile;
 
 public class Team extends InfoType
 {
-	public static List<Team> teams = new ArrayList<>();
-	public List<String> members = new ArrayList<>();
+	public static List<Team> teams = new ArrayList<Team>();
+	public List<String> members = new ArrayList<String>();
 	//public List<ITeamBase> bases = new ArrayList<ITeamBase>();
-	public List<PlayerClass> classes = new ArrayList<>();
+	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
 	
 	public static Team spectators;
 	
@@ -209,7 +209,7 @@ public class Team extends InfoType
 	
 	public String addPlayer(String username)
 	{
-		ArrayList<String> list = new ArrayList<>();
+		ArrayList<String> list = new ArrayList<String>();
 		list.add(username);
 		for(Team team : teams)
 		{

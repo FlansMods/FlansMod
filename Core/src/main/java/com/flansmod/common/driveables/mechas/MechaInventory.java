@@ -20,7 +20,7 @@ public class MechaInventory implements IInventory
 	public MechaInventory(EntityMecha m)
 	{
 		mecha = m;
-		stacks = new HashMap<>();
+		stacks = new HashMap<EnumMechaSlotType, ItemStack>();
 		for(EnumMechaSlotType type : EnumMechaSlotType.values())
 		{
 			stacks.put(type, null);

@@ -26,8 +26,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	
 	//Server side
 	public int spawnDelay = 1200;
-	public List<ItemStack> stacksToSpawn = new ArrayList<>();
-	public List<EntityTeamItem> itemEntities = new ArrayList<>();
+	public List<ItemStack> stacksToSpawn = new ArrayList<ItemStack>();
+	public List<EntityTeamItem> itemEntities = new ArrayList<EntityTeamItem>();
 	public Entity spawnedEntity;
 	public ITeamBase base;
 	private int baseID = -1;

@@ -20,6 +20,7 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.network.PacketDriveableGUI;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiDriveableRepair extends GuiScreen
 {
@@ -36,7 +37,7 @@ public class GuiDriveableRepair extends GuiScreen
 	/**
 	 * The list of parts that are actually damageable
 	 */
-	private ArrayList<DriveablePart> partsToDraw = new ArrayList<>();
+	private ArrayList<DriveablePart> partsToDraw = new ArrayList<DriveablePart>();
 	
 	/**
 	 * Item renderer
@@ -127,7 +128,7 @@ public class GuiDriveableRepair extends GuiScreen
 		//Render the footer
 		drawTexturedModalRect(guiOriginX, guiOriginY + guiHeight - 8, 0, 65, 202, 8);
 		//Render the title
-		drawString(fontRenderer, driving.getDriveableType().name + " - Repair", guiOriginX + 7, guiOriginY + 7, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), driving.getDriveableType().name + " - Repair", guiOriginX + 7, guiOriginY + 7, 0xffffff);
 		
 		//Render each part
 		//Where to start rendering from. Updated with each part
@@ -145,8 +146,8 @@ public class GuiDriveableRepair extends GuiScreen
 			drawTexturedModalRect(guiOriginX + 121, guiOriginY + y + 2, 0, 73, (int)(70 * percentHealth), 16);
 			
 			//Write the part name and percent health
-			drawString(fontRenderer, part.type.getName(), guiOriginX + 10, guiOriginY + y + 6, 0xffffff);
-			drawCenteredString(fontRenderer, (int)(percentHealth * 100F) + "%", guiOriginX + 158, guiOriginY + y + 6, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), part.type.getName(), guiOriginX + 10, guiOriginY + y + 6, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), (int)(percentHealth * 100F) + "%", guiOriginX + 158, guiOriginY + y + 6, 0xffffff);
 			
 			//If the part is damaged, draw the parts required to fix it
 			if(broken)
@@ -233,7 +234,7 @@ public class GuiDriveableRepair extends GuiScreen
 		if(itemstack == null || itemstack.isEmpty())
 			return;
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
+		itemRenderer.renderItemOverlayIntoGUI(VersionHelper.GetFontRenderer(), itemstack, i, j, null);
 	}
 
 	@Override

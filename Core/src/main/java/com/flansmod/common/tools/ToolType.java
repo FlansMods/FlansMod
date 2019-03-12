@@ -2,26 +2,26 @@ package com.flansmod.common.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.versionhelper.RecipeData;
 
 public class ToolType extends InfoType
 {
-	public static HashMap<String, ToolType> tools = new HashMap<>();
+	public static HashMap<String, ToolType> tools = new HashMap<String, ToolType>();
 	
 	@SideOnly(value = Side.CLIENT)
 	/** The parachute model */
@@ -46,7 +46,7 @@ public class ToolType extends InfoType
 	/**
 	 * The items required to be added (shapelessly) to recharge the tool
 	 */
-	public ArrayList<ItemStack> rechargeRecipe = new ArrayList<>();
+	public String[] rechargeRecipe = null;
 	/**
 	 * Not yet implemented. For making tools chargeable with IC2 EU
 	 */
@@ -102,14 +102,7 @@ public class ToolType extends InfoType
 				EUPerCharge = Integer.parseInt(split[1]);
 			else if(split[0].equals("RechargeRecipe"))
 			{
-				for(int i = 0; i < (split.length - 1) / 2; i++)
-				{
-					int amount = Integer.parseInt(split[2 * i + 1]);
-					boolean damaged = split[2 * i + 2].contains(".");
-					String itemName = damaged ? split[2 * i + 2].split("\\.")[0] : split[2 * i + 2];
-					int damage = damaged ? Integer.parseInt(split[2 * i + 2].split("\\.")[1]) : 0;
-					rechargeRecipe.add(getRecipeElement(itemName, amount, damage, shortName));
-				}
+				rechargeRecipe = split;
 			}
 			else if(split[0].equals("DestroyOnEmpty"))
 				destroyOnEmpty = Boolean.parseBoolean(split[1].toLowerCase());
@@ -124,20 +117,27 @@ public class ToolType extends InfoType
 	}
 	
 	@Override
-	public void addRecipe(IForgeRegistry<IRecipe> registry, Item item)
+	public void GetRecipes(List<RecipeData> list)
 	{
-		super.addRecipe(registry, item);
-		//Add the recharge recipe if there is one
-		if(rechargeRecipe.size() < 1)
-			return;
-		rechargeRecipe.add(new ItemStack(item, 1, toolLife));
+		super.GetRecipes(list);
 		
-		NonNullList<Ingredient> ingredients = NonNullList.create();
-		for(ItemStack stack : rechargeRecipe)
+		//Add the recharge recipe if there is one
+		if(rechargeRecipe.length > 0)
 		{
-			ingredients.add(Ingredient.fromStacks(stack));
+			RecipeData rec = new RecipeData();
+			
+			rec.shapeless = true;
+			rec.registryName = name + "_recharge";
+			rec.ingredients = new String[rechargeRecipe.length + 2];
+			for(int i = 0; i < rechargeRecipe.length; i++)
+			{
+				rec.ingredients[i] = rechargeRecipe[i];
+			}
+			rec.ingredients[rechargeRecipe.length] = shortName + "." + toolLife;
+			rec.ingredients[rechargeRecipe.length + 1] = "1";
+
+			list.add(rec);
 		}
-		registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, 1, 0), ingredients).setRegistryName(name + "_recharge"));
 	}
 	
 	public static ToolType getType(String shortName)

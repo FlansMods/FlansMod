@@ -46,7 +46,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	private static Random gunScrambler = new Random();
 	private float spinSpeed = 0.555555555f;
 	
-	private ArrayList<Paintjob> options = new ArrayList<>();
+	private ArrayList<Paintjob> options = new ArrayList<Paintjob>();
 	private int target = WAITING_FOR_SERVER;
 	private EnumPageState state = EnumPageState.SPINNING;
 	private int timeLeftInState = spinTime;
@@ -98,7 +98,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		timeLeftInState = spinTime;
 		target = WAITING_FOR_SERVER;
 		
-		ArrayList<Paintjob> temp = new ArrayList<>(rewardBox.paintjobs);
+		ArrayList<Paintjob> temp = new ArrayList<Paintjob>(rewardBox.paintjobs);
 		
 		int size = rewardBox.paintjobs.size();
 		for(int i = 0; i < size; i++)

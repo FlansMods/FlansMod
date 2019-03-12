@@ -12,6 +12,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiLandingPage extends GuiTeamsBase
 {
@@ -134,10 +135,10 @@ public class GuiLandingPage extends GuiTeamsBase
 		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 146, 259, 164, (int)(92.0f * XPProgress), 16, textureX, textureY);
 		
 		// Draw text
-		drawCenteredString(fontRenderer, ClientTeamsData.motd, guiOriginX + 128, guiOriginY + 12, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), ClientTeamsData.motd, guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
-		drawString(fontRenderer, mc.player.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
-		drawCenteredString(fontRenderer, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), mc.player.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);
 		
 		// Draw rank icon
 		DrawRankIcon(data.currentLevel, 0, 9, 146, false);
@@ -161,7 +162,7 @@ public class GuiLandingPage extends GuiTeamsBase
 	{
 		RewardBox box = pool.rewardBoxes[index];
 		drawSlotInventory(new ItemStack(box.getItem()), x + 3, y + 3);
-		drawCenteredString(fontRenderer, "x " + data.GetNumOfUnopenedBoxes(box), x + 33, y + 7, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), "x " + data.GetNumOfUnopenedBoxes(box), x + 33, y + 7, 0xffffff);
 	}
 	
 	@Override

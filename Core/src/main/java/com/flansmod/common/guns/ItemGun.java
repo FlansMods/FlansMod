@@ -130,7 +130,7 @@ public class ItemGun extends Item implements IPaintableItem
 			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld;
 	}
 	
-	private static List<ShotData> shotsFiredClient = new ArrayList<>(), shotsFiredServer = new ArrayList<>();
+	private static List<ShotData> shotsFiredClient = new ArrayList<ShotData>(), shotsFiredServer = new ArrayList<ShotData>();
 	
 	public ItemGun(GunType type)
 	{
@@ -272,7 +272,7 @@ public class ItemGun extends Item implements IPaintableItem
 							for(EntityMG mg : EntityMG.mgs)
 							{
 								if(mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
-									return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+									return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 							}
 							EntityMG mg = new EntityMG(world, i, j + 1, k, playerDir, type);
 							
@@ -295,7 +295,7 @@ public class ItemGun extends Item implements IPaintableItem
 			for(int i = 0; i < 3; i++)
 				Minecraft.getMinecraft().entityRenderer.itemRenderer.updateEquippedItem();
 		}
-		return new ActionResult<>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	// _____________________________________________________________________________

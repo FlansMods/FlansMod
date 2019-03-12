@@ -50,7 +50,7 @@ public class PartType extends InfoType
 	 */
 	public boolean canBeDefaultEngine = true;
 	
-	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<>();
+	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
 	
 	//------- RedstoneFlux -------
 	/**
@@ -66,20 +66,20 @@ public class PartType extends InfoType
 	/**
 	 * The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative
 	 */
-	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<>();
+	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
 	/**
 	 * The list of all PartTypes
 	 */
-	public static List<PartType> parts = new ArrayList<>();
+	public static List<PartType> parts = new ArrayList<PartType>();
 	/**
 	 * Hash map sorted
 	 */
-	public static HashMap<EnumPartCategory, ArrayList<PartType>> partsByCategory = new HashMap<>();
+	public static HashMap<EnumPartCategory, ArrayList<PartType>> partsByCategory = new HashMap<EnumPartCategory, ArrayList<PartType>>();
 	
 	static
 	{
 		for(EnumPartCategory cat : EnumPartCategory.values())
-			partsByCategory.put(cat, new ArrayList<>());
+			partsByCategory.put(cat, new ArrayList<Object>());
 	}
 	
 	public PartType(TypeFile file)
@@ -140,7 +140,7 @@ public class PartType extends InfoType
 			}
 			else if(split[0].equals("WorksWith"))
 			{
-				worksWith = new ArrayList<>();
+				worksWith = new ArrayList<EnumType>();
 				for(int i = 0; i < split.length - 1; i++)
 				{
 					worksWith.add(EnumType.get(split[i + 1]));

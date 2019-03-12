@@ -26,7 +26,7 @@ public abstract class PaintableType extends InfoType
 	/**
 	 * The list of all available paintjobs for this gun
 	 */
-	public ArrayList<Paintjob> paintjobs = new ArrayList<>();
+	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
 	/**
 	 * The default paintjob for this gun. This is created automatically in the load process from existing info
 	 */
@@ -36,7 +36,7 @@ public abstract class PaintableType extends InfoType
 	 */
 	private int nextPaintjobID = 1;
 	
-	private static HashMap<Integer, PaintableType> paintableTypes = new HashMap<>();
+	private static HashMap<Integer, PaintableType> paintableTypes = new HashMap<Integer, PaintableType>();
 	
 	public static PaintableType GetPaintableType(int iHash)
 	{
@@ -61,7 +61,7 @@ public abstract class PaintableType extends InfoType
 		//After all lines have been read, set up the default paintjob
 		defaultPaintjob = new Paintjob(this, 0, "", texture, new ItemStack[0]);
 		//Move to a new list to ensure that the default paintjob is always first
-		ArrayList<Paintjob> newPaintjobList = new ArrayList<>();
+		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
 		newPaintjobList.add(defaultPaintjob);
 		newPaintjobList.addAll(paintjobs);
 		paintjobs = newPaintjobList;

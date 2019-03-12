@@ -2,6 +2,8 @@ package com.flansmod.common.vector;
 
 import java.nio.FloatBuffer;
 
+import com.flansmod.versionhelper.VersionHelper;
+
 import net.minecraft.util.math.Vec3d;
 
 public class Vector3i extends Vector
@@ -22,7 +24,7 @@ public class Vector3i extends Vector
 	
 	public Vector3i(Vec3d vec)
 	{
-		this((int)vec.x, (int)vec.y, (int)vec.z);
+		this((int)VersionHelper.GetX(vec), (int)VersionHelper.GetY(vec), (int)VersionHelper.GetZ(vec));
 	}
 	
 	public Vector3i(double x, double y, double z)

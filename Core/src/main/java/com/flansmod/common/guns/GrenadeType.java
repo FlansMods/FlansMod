@@ -10,7 +10,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class GrenadeType extends ShootableType
 {
-	public static ArrayList<GrenadeType> grenades = new ArrayList<>();
+	public static ArrayList<GrenadeType> grenades = new ArrayList<GrenadeType>();
 	
 	//Misc
 	/**
@@ -113,7 +113,7 @@ public class GrenadeType extends ShootableType
 	/**
 	 * The effects to be given to people coming too close
 	 */
-	public ArrayList<PotionEffect> smokeEffects = new ArrayList<>();
+	public ArrayList<PotionEffect> smokeEffects = new ArrayList<PotionEffect>();
 	/**
 	 * The radius for smoke effects to take place in
 	 */
@@ -135,7 +135,7 @@ public class GrenadeType extends ShootableType
 	/**
 	 * The potion effects to apply to users of this bag
 	 */
-	public ArrayList<PotionEffect> potionEffects = new ArrayList<>();
+	public ArrayList<PotionEffect> potionEffects = new ArrayList<PotionEffect>();
 	/**
 	 * The number of clips to give to the player when using this bag
 	 * When they right click with a gun, they will get this number of clips for that gun.

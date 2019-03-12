@@ -34,6 +34,7 @@ import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiEditLoadout extends GuiTeamsBase
 {
@@ -51,7 +52,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 	
 	private PlayerLoadout previousLoadout = null;
 	
-	protected ArrayList<LoadoutEntry> availableComponents = new ArrayList<>();
+	protected ArrayList<LoadoutEntry> availableComponents = new ArrayList<LoadoutEntry>();
 	
 	private static final String[] WEAPON_COMPONENT_NAMES = new String[]
 			{"Weapon", "Paint", "Scope", "Barrel", "Stock", "Grip", "Extra"};
@@ -128,17 +129,17 @@ public class GuiEditLoadout extends GuiTeamsBase
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, WIDTH, HEIGHT, textureX, textureY);
 		
 		// Draw title text
-		drawCenteredString(fontRenderer, "Edit Loadout " + (selectedLoadout + 1), guiOriginX + WIDTH / 2, guiOriginY + 4, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), "Edit Loadout " + (selectedLoadout + 1), guiOriginX + WIDTH / 2, guiOriginY + 4, 0xffffff);
 		
 		// Draw loadout slots panel
 		{
 			mc.renderEngine.bindTexture(texture);
 			drawModalRectWithCustomSizedTexture(guiOriginX + 70, guiOriginY + 32 + 22 * selectedSlot.ordinal(), 70, 203, 36, 22, textureX, textureY);
 			
-			drawCenteredString(fontRenderer, "Loadout", guiOriginX + 51, guiOriginY + 18, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Loadout", guiOriginX + 51, guiOriginY + 18, 0xffffff);
 			for(int n = 0; n < EnumLoadoutSlot.values().length; n++)
 			{
-				drawCenteredString(fontRenderer, EnumLoadoutSlot.values()[n].name, guiOriginX + 39, guiOriginY + 38 + 22 * n, 0xffffff);
+				drawCenteredString(VersionHelper.GetFontRenderer(), EnumLoadoutSlot.values()[n].name, guiOriginX + 39, guiOriginY + 38 + 22 * n, 0xffffff);
 				
 				ItemStack stack = data.loadouts[selectedLoadout].slots[n];
 				drawSlotInventory(stack, guiOriginX + 73, guiOriginY + 35 + 22 * n);
@@ -150,7 +151,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 			mc.renderEngine.bindTexture(texture);
 			drawModalRectWithCustomSizedTexture(guiOriginX + 169, guiOriginY + 32 + 22 * selectedCategory, 70, 203, 36, 22, textureX, textureY);
 			
-			drawCenteredString(fontRenderer, selectedSlot.name, guiOriginX + 150, guiOriginY + 18, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), selectedSlot.name, guiOriginX + 150, guiOriginY + 18, 0xffffff);
 			if(selectedSlot.isWeapon)
 			{
 				for(int n = 0; n < WEAPON_COMPONENT_NAMES.length; n++)
@@ -160,10 +161,10 @@ public class GuiEditLoadout extends GuiTeamsBase
 					int numUnlocks = type != null ? data.GetNumUnlocksForType(type) : 0;
 					if(n == 1 && type != null && numUnlocks > 0)
 					{
-						drawCenteredString(fontRenderer, WEAPON_COMPONENT_NAMES[n] + " (" + numUnlocks + ")", guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+						drawCenteredString(VersionHelper.GetFontRenderer(), WEAPON_COMPONENT_NAMES[n] + " (" + numUnlocks + ")", guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
 					}
 					else
-						drawCenteredString(fontRenderer, WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+						drawCenteredString(VersionHelper.GetFontRenderer(), WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
 					
 					switch(n)
 					{
@@ -220,7 +221,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 			{
 				for(int n = 0; n < NON_WEAPON_COMPONENT_NAMES.length; n++)
 				{
-					drawCenteredString(fontRenderer, NON_WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+					drawCenteredString(VersionHelper.GetFontRenderer(), NON_WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
 					ItemStack stack = data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()];
 					switch(n)
 					{
@@ -258,13 +259,13 @@ public class GuiEditLoadout extends GuiTeamsBase
 				name = stack.getDisplayName();
 			}
 			
-			drawCenteredString(fontRenderer, name, guiOriginX + 262, guiOriginY + 18, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), name, guiOriginX + 262, guiOriginY + 18, 0xffffff);
 			
 			DrawGun(stack, guiOriginX + 254, guiOriginY + 48, 40f);
 			
-			drawCenteredString(fontRenderer, "Damage", guiOriginX + 234, guiOriginY + 60, 0xffffff);
-			drawCenteredString(fontRenderer, "Accuracy", guiOriginX + 234, guiOriginY + 70, 0xffffff);
-			drawCenteredString(fontRenderer, "Ammo", guiOriginX + 234, guiOriginY + 80, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Damage", guiOriginX + 234, guiOriginY + 60, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Accuracy", guiOriginX + 234, guiOriginY + 70, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Ammo", guiOriginX + 234, guiOriginY + 80, 0xffffff);
 			
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
@@ -286,16 +287,16 @@ public class GuiEditLoadout extends GuiTeamsBase
 				
 				if(mainAmmo != null)
 				{
-					drawCenteredString(fontRenderer, String.format("%.0f", type.damage * mainAmmo.damageVsLiving * mainAmmo.numBullets), guiOriginX + 290, guiOriginY + 60, 0xffffff);
-					drawCenteredString(fontRenderer, String.format("%.0f", (50.0f - type.bulletSpread) * 2.0f), guiOriginX + 290, guiOriginY + 70, 0xffffff);
-					drawCenteredString(fontRenderer, String.format("%d", mainAmmo.roundsPerItem * numClips), guiOriginX + 290, guiOriginY + 80, 0xffffff);
+					drawCenteredString(VersionHelper.GetFontRenderer(), String.format("%.0f", type.damage * mainAmmo.damageVsLiving * mainAmmo.numBullets), guiOriginX + 290, guiOriginY + 60, 0xffffff);
+					drawCenteredString(VersionHelper.GetFontRenderer(), String.format("%.0f", (50.0f - type.bulletSpread) * 2.0f), guiOriginX + 290, guiOriginY + 70, 0xffffff);
+					drawCenteredString(VersionHelper.GetFontRenderer(), String.format("%d", mainAmmo.roundsPerItem * numClips), guiOriginX + 290, guiOriginY + 80, 0xffffff);
 				}
 			}
 		}
 		
 		// Draw selector panel
 		{
-			drawCenteredString(fontRenderer, "Choose " + WEAPON_COMPONENT_NAMES[selectedCategory].toLowerCase(), guiOriginX + 262, guiOriginY + 95, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Choose " + WEAPON_COMPONENT_NAMES[selectedCategory].toLowerCase(), guiOriginX + 262, guiOriginY + 95, 0xffffff);
 			
 			for(int row = 0; row < 4; row++)
 			{
@@ -330,7 +331,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 						drawModalRectWithCustomSizedTexture(guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18, 332, 161, 16, 16, textureX, textureY);
 						if(entry.unlockLevel > 0)
 						{
-							drawCenteredString(fontRenderer, "" + entry.unlockLevel, guiOriginX + 218 + col * 18, guiOriginY + 112 + row * 18, 0xffffff);
+							drawCenteredString(VersionHelper.GetFontRenderer(), "" + entry.unlockLevel, guiOriginX + 218 + col * 18, guiOriginY + 112 + row * 18, 0xffffff);
 						}
 						GlStateManager.popMatrix();
 					}
@@ -530,8 +531,8 @@ public class GuiEditLoadout extends GuiTeamsBase
 		PlayerRankData data = ClientTeamsData.theRankData;
 		LoadoutPool pool = ClientTeamsData.currentPool;
 		
-		ArrayList<LoadoutEntry> unlockedEntries = new ArrayList<>();
-		ArrayList<LoadoutEntry> lockedEntries = new ArrayList<>();
+		ArrayList<LoadoutEntry> unlockedEntries = new ArrayList<LoadoutEntry>();
+		ArrayList<LoadoutEntry> lockedEntries = new ArrayList<LoadoutEntry>();
 		
 		if(selectedCategory == 1) // Paint
 		{

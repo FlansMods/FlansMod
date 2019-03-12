@@ -52,7 +52,7 @@ public class PlayerData
 	/**
 	 * When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates
 	 */
-	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<>();
+	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<EntityGrenade>();
 	/**
 	 * Sound delay parameters
 	 */

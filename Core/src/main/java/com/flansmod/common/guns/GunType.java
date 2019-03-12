@@ -25,7 +25,7 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * The list of bullet types that can be used in this gun
 	 */
-	public List<ShootableType> ammo = new ArrayList<>(), nonExplosiveAmmo = new ArrayList<>();
+	public List<ShootableType> ammo = new ArrayList<ShootableType>(), nonExplosiveAmmo = new ArrayList<ShootableType>();
 	/**
 	 * Whether the player can press the reload key (default R) to reload this gun
 	 */
@@ -111,11 +111,11 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * The path the melee weapon takes
 	 */
-	public ArrayList<Vector3f> meleePath = new ArrayList<>(), meleePathAngles = new ArrayList<>();
+	public ArrayList<Vector3f> meleePath = new ArrayList<Vector3f>(), meleePathAngles = new ArrayList<Vector3f>();
 	/**
 	 * The points on the melee weapon that damage is actually done from.
 	 */
-	public ArrayList<Vector3f> meleeDamagePoints = new ArrayList<>();
+	public ArrayList<Vector3f> meleeDamagePoints = new ArrayList<Vector3f>();
 	/**
 	 * Set these to make guns only usable by a certain type of entity
 	 */
@@ -254,7 +254,7 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * The list of allowed attachments for this gun
 	 */
-	public ArrayList<AttachmentType> allowedAttachments = new ArrayList<>();
+	public ArrayList<AttachmentType> allowedAttachments = new ArrayList<AttachmentType>();
 	/**
 	 * Whether each attachment slot is available
 	 */
@@ -268,11 +268,11 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * The static hashmap of all guns by shortName
 	 */
-	public static HashMap<Integer, GunType> guns = new HashMap<>();
+	public static HashMap<Integer, GunType> guns = new HashMap<Integer, GunType>();
 	/**
 	 * The static list of all guns
 	 */
-	public static ArrayList<GunType> gunList = new ArrayList<>();
+	public static ArrayList<GunType> gunList = new ArrayList<GunType>();
 	
 	//Modifiers
 	/**
@@ -574,7 +574,7 @@ public class GunType extends PaintableType implements IScope
 	public ArrayList<AttachmentType> getCurrentAttachments(ItemStack gun)
 	{
 		checkForTags(gun);
-		ArrayList<AttachmentType> attachments = new ArrayList<>();
+		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
 		NBTTagCompound attachmentTags = gun.getTagCompound().getCompoundTag("attachments");
 		NBTTagList genericsList = attachmentTags.getTagList("generics", (byte)10); //TODO : Check this 10 is correct
 		for(int i = 0; i < numGenericAttachmentSlots; i++)

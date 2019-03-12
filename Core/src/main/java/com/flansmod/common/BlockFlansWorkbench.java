@@ -7,6 +7,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -14,7 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockFlansWorkbench extends Block
+public class BlockFlansWorkbench extends com.flansmod.versionhelper.Block
 {
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
@@ -29,7 +30,7 @@ public class BlockFlansWorkbench extends Block
 	}
 	
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items)
+	public void GetSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> items)
 	{
 		if(tab == FlansMod.tabFlanDriveables)
 			items.add(new ItemStack(this, 1, 0));

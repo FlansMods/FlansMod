@@ -120,7 +120,7 @@ public class ClientProxy extends CommonProxy
 	 */
 	public List<File> contentPacks;
 	
-	public List<SoundEvent> eventsToRegister = new ArrayList<>();
+	public List<SoundEvent> eventsToRegister = new ArrayList<SoundEvent>();
 	
 	private FlansModClient flansModClient;
 	
@@ -233,7 +233,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
-		contentPacks = new ArrayList<>();
+		contentPacks = new ArrayList<File>();
 		for(File file : FlansMod.flanDir.listFiles())
 		{
 			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
@@ -242,7 +242,7 @@ public class ClientProxy extends CommonProxy
 				{
 					method.invoke(classloader, file.toURI().toURL());
 					
-					HashMap<String, Object> map = new HashMap<>();
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("modid", FlansMod.MODID);
 					map.put("name", "Flan's Mod : " + file.getName());
 					map.put("version", "1");

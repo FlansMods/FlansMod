@@ -1451,7 +1451,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public ArrayList<BulletHit> attackFromBullet(Vector3f origin, Vector3f motion)
 	{
 		// Make an array to contain the hits
-		ArrayList<BulletHit> hits = new ArrayList<>();
+		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
 		// Get the position of the bullet origin, relative to the centre of the plane, and then rotate the vectors onto local co-ordinates
 		Vector3f relativePosVector = Vector3f.sub(origin, new Vector3f((float)posX, (float)posY, (float)posZ), null);
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);

@@ -65,6 +65,6 @@ public class PositionTransformVertex extends PositionTextureVertex
 	}
 	
 	public Vec3d neutralVector;
-	public ArrayList<TransformGroup> transformGroups = new ArrayList<>();
+	public ArrayList<TransformGroup> transformGroups = new ArrayList<TransformGroup>();
 	
 }

@@ -26,6 +26,7 @@ import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiDriveableCrafting extends GuiScreen
 {
@@ -123,9 +124,9 @@ public class GuiDriveableCrafting extends GuiScreen
 		//Draw the background
 		drawTexturedModalRect(guiOriginX, guiOriginY, 0, 0, 176, 198);
 		
-		drawString(fontRenderer, "Vehicle Crafting", guiOriginX + 6, guiOriginY + 6, 0xffffff);
-		drawString(fontRenderer, "Requires", guiOriginX + 6, guiOriginY + 125, 0xffffff);
-		drawString(fontRenderer, "Engine", guiOriginX + 114, guiOriginY + 141, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Vehicle Crafting", guiOriginX + 6, guiOriginY + 6, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Requires", guiOriginX + 6, guiOriginY + 125, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), "Engine", guiOriginX + 114, guiOriginY + 141, 0xffffff);
 
 		for(int m = 0; m < 2; m++)
 		{
@@ -199,12 +200,12 @@ public class GuiDriveableCrafting extends GuiScreen
 				recipeName = recipeName.substring(0, 15) + "...";
 			
 			//Render the info text alongside the driveable
-			drawString(fontRenderer, recipeName, guiOriginX + 82, guiOriginY + 64, 0xffffff);
-			drawString(fontRenderer, "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
-			drawString(fontRenderer, "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
-			drawString(fontRenderer, "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
-			drawString(fontRenderer, "Guns : " + (selectedType.ammoSlots()), guiOriginX + 82, guiOriginY + 104, 0xffffff);
-			drawString(fontRenderer, selectedType.numEngines() + "x", guiOriginX + 100, guiOriginY + 141, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), recipeName, guiOriginX + 82, guiOriginY + 64, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Guns : " + (selectedType.ammoSlots()), guiOriginX + 82, guiOriginY + 104, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), selectedType.numEngines() + "x", guiOriginX + 100, guiOriginY + 141, 0xffffff);
 			
 			//Create a temporary copy of the player inventory in order to work out whether the player has each of the itemstacks required
 			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
@@ -263,7 +264,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			}
 			
 			//Collect up all the engines into neat and tidy stacks so we can find if any of them are big enough and which of those stacks are best
-			HashMap<PartType, ItemStack> engines = new HashMap<>();
+			HashMap<PartType, ItemStack> engines = new HashMap<PartType, ItemStack>();
 			
 			//Find some suitable engines
 			for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)
@@ -322,7 +323,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			buttonList.get(0).enabled = false;
 			mc.renderEngine.bindTexture(texture);
 			drawTexturedModalRect(guiOriginX + 108, guiOriginY + 160, 176, 28, 44, 24);
-			drawString(fontRenderer, "Craft", guiOriginX + 116, guiOriginY + 168, 0xa0a0a0);
+			drawString(VersionHelper.GetFontRenderer(), "Craft", guiOriginX + 116, guiOriginY + 168, 0xa0a0a0);
 		}
 		//If we can craft it, draw and enable the button for crafting
 		else
@@ -340,7 +341,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
+		itemRenderer.renderItemOverlayIntoGUI(VersionHelper.GetFontRenderer(), itemstack, i, j, null);
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package com.flansmod.common.tools;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
@@ -29,6 +28,7 @@ import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class ItemTool extends ItemFood implements IFlanItem
 {
@@ -85,7 +85,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 			if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 				itemstack.setCount(itemstack.getCount() - 1);
 			//Our work here is done. Let's be off
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
 		else if(type.remote)
 		{
@@ -106,7 +106,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 					itemstack.setCount(itemstack.getCount() - 1);
 				//Our work here is done. Let's be off
-				return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 			}
 		}
 		else
@@ -155,7 +155,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 								if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 									itemstack.setCount(itemstack.getCount() - 1);
 								//Our work here is done. Let's be off
-								return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 							}
 						}
 					}
@@ -169,8 +169,8 @@ public class ItemTool extends ItemFood implements IFlanItem
 				
 				//Iterate over entities within range of the ray
 				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
-						Math.min(posVec.x, lookVec.x), Math.min(posVec.y, lookVec.y), Math.min(posVec.z, lookVec.z),
-						Math.max(posVec.x, lookVec.x), Math.max(posVec.y, lookVec.y), Math.max(posVec.z, lookVec.z)));
+						Math.min(VersionHelper.GetX(posVec), VersionHelper.GetX(lookVec)), Math.min(VersionHelper.GetY(posVec), VersionHelper.GetY(lookVec)), Math.min(VersionHelper.GetZ(posVec), VersionHelper.GetZ(lookVec)),
+						Math.max(VersionHelper.GetX(posVec), VersionHelper.GetX(lookVec)), Math.max(VersionHelper.GetY(posVec), VersionHelper.GetY(lookVec)), Math.max(VersionHelper.GetZ(posVec), VersionHelper.GetZ(lookVec))));
 				for(Object aList : list)
 				{
 					if(!(aList instanceof EntityLivingBase))
@@ -190,7 +190,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				{
 					//If its finished, don't use it
 					if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
-						return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+						return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
 					
 					hitLiving.heal(type.healAmount);
 					FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
@@ -202,11 +202,11 @@ public class ItemTool extends ItemFood implements IFlanItem
 					if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() >= itemstack.getMaxDamage())
 						itemstack.setCount(itemstack.getCount() - 1);
 					
-					return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 				}
 			}
 		}
-		return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
 	}
 	
 	@Override

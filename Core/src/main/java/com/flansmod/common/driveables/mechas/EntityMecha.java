@@ -1327,7 +1327,7 @@ public class EntityMecha extends EntityDriveable
 	
 	public ArrayList<MechaItemType> getUpgradeTypes()
 	{
-		ArrayList<MechaItemType> types = new ArrayList<>();
+		ArrayList<MechaItemType> types = new ArrayList<MechaItemType>();
 		for(ItemStack stack : inventory.stacks.values())
 		{
 			if(stack != null && stack.getItem() instanceof ItemMechaAddon)

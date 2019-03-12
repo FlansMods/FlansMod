@@ -30,6 +30,7 @@ import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRenderer
 {
@@ -298,7 +299,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 			if(entity instanceof EntityVehicle)
 			{
 				EntityVehicle vehicle = (EntityVehicle)entity;
-				int i = vehicle.getBrightnessForRender();
+				int i = VersionHelper.GetBrightnessForRender(vehicle, event.getPartialTicks());
 				
 				if(vehicle.isBurning())
 				{

@@ -15,10 +15,10 @@ public class TypeFile
 	
 	static
 	{
-		files = new HashMap<>();
+		files = new HashMap<EnumType, ArrayList<TypeFile>>();
 		for(EnumType type : EnumType.values())
 		{
-			files.put(type, new ArrayList<>());
+			files.put(type, new ArrayList<TypeFile>());
 		}
 		
 	}
@@ -33,7 +33,7 @@ public class TypeFile
 		type = t;
 		name = s;
 		this.contentPack = contentPack;
-		lines = new ArrayList<>();
+		lines = new ArrayList<String>();
 		if(addToTypeFileList)
 			files.get(type).add(this);
 	}

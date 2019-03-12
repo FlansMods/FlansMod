@@ -45,9 +45,9 @@ public class ModelRendererTurbo extends ModelRenderer
 		vertices = new PositionTextureVertex[0];
 		faces = new TexturedPolygon[0];
 		forcedRecompile = false;
-		transformGroup = new HashMap<>();
+		transformGroup = new HashMap<String, TransformGroup>();
 		transformGroup.put("0", new TransformGroupBone(new Bone(0, 0, 0, 0), 1D));
-		textureGroup = new HashMap<>();
+		textureGroup = new HashMap<String, TextureGroup>();
 		textureGroup.put("0", new TextureGroup());
 		currentTextureGroup = textureGroup.get("0");
 		boxName = s;

@@ -126,7 +126,7 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 		//Result check
 		if(RayTraceResult == null)
 		{
-			return new ActionResult<>(EnumActionResult.PASS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 		}
 		if(RayTraceResult.typeOfHit == Type.BLOCK)
 		{
@@ -143,9 +143,9 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 					itemstack.setCount(itemstack.getCount() - 1);
 				}
 			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return new ActionResult<>(EnumActionResult.PASS, itemstack);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	public Entity spawnVehicle(World world, double x, double y, double z, ItemStack stack)

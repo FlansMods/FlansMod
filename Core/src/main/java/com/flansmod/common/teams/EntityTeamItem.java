@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdditionalSpawnData
 {
@@ -93,17 +94,17 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 			}
 			
 			//Getter of EntityItem
-			int var2 = getItem().getCount();
+			int var2 = VersionHelper.GetItem(this).getCount();
 			
-			if((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(getItem())))
+			if((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(VersionHelper.GetItem(this))))
 			{
-				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this, getItem().copy());
+				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this, VersionHelper.GetItem(this).copy());
 				
 				playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 				player.onItemPickup(this, var2);
 				
 				//Getter of EntityItem
-				if(getItem().getCount() <= 0)
+				if(VersionHelper.GetItem(this).getCount() <= 0)
 				{
 					spawner.itemEntities.remove(this);
 					setDead();
@@ -130,7 +131,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		data.writeDouble(angle);
 		NBTTagCompound tags = new NBTTagCompound();
 		//Getter of EntityItem
-		getItem().writeToNBT(tags);
+		VersionHelper.GetItem(this).writeToNBT(tags);
 		ByteBufUtils.writeTag(data, tags);
 	}
 	
@@ -141,7 +142,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		yCoord = data.readInt();
 		zCoord = data.readInt();
 		angle = data.readDouble();
-		setItem(new ItemStack(ByteBufUtils.readTag(data)));
+		VersionHelper.SetItem(this, new ItemStack(ByteBufUtils.readTag(data)));
 	}
 	
 	@Override

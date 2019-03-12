@@ -13,7 +13,7 @@ public class TexturedPolygon
 		this.invertNormal = false;
 		this.vertexPositions = apositionTexturevertex;
 		this.nVertices = apositionTexturevertex.length;
-		this.iNormals = new ArrayList<>();
+		this.iNormals = new ArrayList<Vec3d>();
 		this.normals = new float[0];
 	}
 	

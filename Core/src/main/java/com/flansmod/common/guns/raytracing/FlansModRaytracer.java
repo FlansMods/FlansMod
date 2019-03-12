@@ -38,7 +38,7 @@ public class FlansModRaytracer
 	public static List<BulletHit> Raytrace(World world, Entity playerToIgnore, boolean canHitSelf, Entity entityToIgnore, Vector3f origin, Vector3f motion, int pingOfShooter)
 	{
 		//Create a list for all bullet hits
-		ArrayList<BulletHit> hits = new ArrayList<>();
+		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
 		
 		float speed = motion.length();
 		

@@ -20,6 +20,7 @@ import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntryTopLevel;
 import com.flansmod.common.guns.boxes.GunBoxType.GunBoxPage;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiGunBox extends GuiContainer
 {
@@ -240,9 +241,9 @@ public class GuiGunBox extends GuiContainer
 				renderInfoType(entry.type, originX + 106, originY + 58 + i * 22);
 			}
 		}
-		int stringWidth = mc.fontRenderer.getStringWidth(type.name);
-		mc.fontRenderer.drawString(type.name, originX + xSize / 2 - stringWidth / 2, originY + 8, 0x00000000);
-		mc.fontRenderer.drawString(type.name, originX + xSize / 2 - stringWidth / 2 + 1, originY + 7, 0xffffffff);
+		int stringWidth = VersionHelper.GetFontRenderer().getStringWidth(type.name);
+		VersionHelper.GetFontRenderer().drawString(type.name, originX + xSize / 2 - stringWidth / 2, originY + 8, 0x00000000);
+		VersionHelper.GetFontRenderer().drawString(type.name, originX + xSize / 2 - stringWidth / 2 + 1, originY + 7, 0xffffffff);
 	}
 	
 	@Override
@@ -281,7 +282,7 @@ public class GuiGunBox extends GuiContainer
 		{
 			return;
 		}
-		FontRenderer fr = mc.fontRenderer;
+		FontRenderer fr = VersionHelper.GetFontRenderer();
 		
 		String bufferLine = "";
 		String bufferLine2 = "";

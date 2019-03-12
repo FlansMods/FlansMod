@@ -18,6 +18,7 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
+import com.flansmod.versionhelper.VersionHelper;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
 
@@ -371,46 +372,46 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(XPForNextLevel > 0)
 		{
-			drawCenteredString(fontRenderer, displayXP + " / " + XPForNextLevel, guiOriginX + 128, guiOriginY + 110, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), displayXP + " / " + XPForNextLevel, guiOriginX + 128, guiOriginY + 110, 0xffffff);
 		}
 		else
 		{
-			drawCenteredString(fontRenderer, "" + displayXP, guiOriginX + 128, guiOriginY + 110, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "" + displayXP, guiOriginX + 128, guiOriginY + 110, 0xffffff);
 		}
 		
 		// Draw text
-		drawString(fontRenderer, (ClientTeamsData.timeLeftInStage / 20) + "", guiOriginX + 12, guiOriginY + 12, 0xffffff);
-		drawCenteredString(fontRenderer, "ROUND OVER", guiOriginX + 128, guiOriginY + 12, 0xffffff);
+		drawString(VersionHelper.GetFontRenderer(), (ClientTeamsData.timeLeftInStage / 20) + "", guiOriginX + 12, guiOriginY + 12, 0xffffff);
+		drawCenteredString(VersionHelper.GetFontRenderer(), "ROUND OVER", guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.LEVEL_UP.ordinal() && state.ordinal() <= EnumResultsState.REVEAL_UNLOCK4.ordinal())
 		{
-			drawCenteredString(fontRenderer, "RANK INCREASED", guiOriginX + 128, guiOriginY + 135, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "RANK INCREASED", guiOriginX + 128, guiOriginY + 135, 0xffffff);
 		}
 		else
 		{
-			drawString(fontRenderer, "Rank " + displayRank, guiOriginX + 44, guiOriginY + 135, 0xffffff);
-			drawString(fontRenderer, "Next Rank", guiOriginX + 163, guiOriginY + 135, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Rank " + displayRank, guiOriginX + 44, guiOriginY + 135, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Next Rank", guiOriginX + 163, guiOriginY + 135, 0xffffff);
 		}
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_1_XP.ordinal())
 		{
-			drawString(fontRenderer, "XP Earned: ", guiOriginX + 11, guiOriginY + 31, 0xffffff);
-			drawString(fontRenderer, "" + earnedXP, guiOriginX + 244 - fontRenderer.getStringWidth("" + earnedXP), guiOriginY + 31, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "XP Earned: ", guiOriginX + 11, guiOriginY + 31, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "" + earnedXP, guiOriginX + 244 - VersionHelper.GetFontRenderer().getStringWidth("" + earnedXP), guiOriginY + 31, 0xffffff);
 		}
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_2_VICTORY_BONUS.ordinal())
-			drawString(fontRenderer, "", guiOriginX + 11, guiOriginY + 41, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "", guiOriginX + 11, guiOriginY + 41, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_3.ordinal())
-			drawString(fontRenderer, "", guiOriginX + 11, guiOriginY + 51, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "", guiOriginX + 11, guiOriginY + 51, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_4.ordinal())
-			drawString(fontRenderer, "", guiOriginX + 11, guiOriginY + 61, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "", guiOriginX + 11, guiOriginY + 61, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_5_TOTAL.ordinal())
 		{
-			drawString(fontRenderer, "Total: ", guiOriginX + 11, guiOriginY + 91, 0xffffff);
-			drawString(fontRenderer, "" + earnedXP, guiOriginX + 244 - fontRenderer.getStringWidth("" + earnedXP), guiOriginY + 91, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "Total: ", guiOriginX + 11, guiOriginY + 91, 0xffffff);
+			drawString(VersionHelper.GetFontRenderer(), "" + earnedXP, guiOriginX + 244 - VersionHelper.GetFontRenderer().getStringWidth("" + earnedXP), guiOriginY + 91, 0xffffff);
 		}
 		
 		// Draw rank icon
@@ -445,8 +446,8 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(entry.isWeapon)
 		{
-			drawCenteredString(fontRenderer, "New item unlocked", i + 58, j + 2, 0xffffff);
-			drawCenteredString(fontRenderer, entry.loadoutEntry.type.name, i + 58, j + 31, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "New item unlocked", i + 58, j + 2, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), entry.loadoutEntry.type.name, i + 58, j + 31, 0xffffff);
 			
 			if(entry.loadoutEntry.type instanceof GunType)
 			{
@@ -459,8 +460,8 @@ public class GuiMissionResults extends GuiTeamsBase
 		}
 		else
 		{
-			drawCenteredString(fontRenderer, "Reward obtained", i + 58, j + 2, 0xffffff);
-			drawCenteredString(fontRenderer, entry.rewardBox.name, i + 58, j + 31, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), "Reward obtained", i + 58, j + 2, 0xffffff);
+			drawCenteredString(VersionHelper.GetFontRenderer(), entry.rewardBox.name, i + 58, j + 31, 0xffffff);
 			drawSlotInventory(new ItemStack(entry.rewardBox.getItem()), i + 49, j + 12);
 		}
 	}

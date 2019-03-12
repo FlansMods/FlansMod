@@ -118,7 +118,7 @@ public class BlockGunBox extends Block
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		ArrayList<ItemStack> ret = new ArrayList<>();
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(this, 1, 0));
 		return ret;
 	}

@@ -15,9 +15,9 @@ public class TeamsMap
 	public String shortName;
 	public String name;
 	public Ticket chunkLoadingTicket;
-	public ArrayList<ITeamBase> bases = new ArrayList<>();
+	public ArrayList<ITeamBase> bases = new ArrayList<ITeamBase>();
 	public int minPlayers = 0, maxPlayers = 1000000;
-	public ArrayList<PermanentBaseData> permanentBaseData = new ArrayList<>();
+	public ArrayList<PermanentBaseData> permanentBaseData = new ArrayList<PermanentBaseData>();
 	
 	public TeamsMap(World world, String sn, String n)
 	{
@@ -27,7 +27,7 @@ public class TeamsMap
 	
 	public ArrayList<ITeamBase> getBasesPerTeam(int teamID)
 	{
-		ArrayList<ITeamBase> basesForThisTeam = new ArrayList<>();
+		ArrayList<ITeamBase> basesForThisTeam = new ArrayList<ITeamBase>();
 		for(ITeamBase base : bases)
 		{
 			if(base.getOwnerID() == teamID)

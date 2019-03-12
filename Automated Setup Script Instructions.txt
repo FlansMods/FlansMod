@@ -6,5 +6,7 @@ Foreach project, setup project settings
 	Foreach build configuration
 		Working Directory = ${project_loc}/../runDir
 		
+	Optional rename project helpfully
+		
 Forges needed
 1.12_Forge2768

@@ -20,7 +20,7 @@ public class AAGunType extends InfoType
 	/**
 	 * The ammo types used by this gun
 	 */
-	public List<BulletType> ammo = new ArrayList<>();
+	public List<BulletType> ammo = new ArrayList<BulletType>();
 	public int reloadTime;
 	public int recoil = 5;
 	public int accuracy;
@@ -49,7 +49,7 @@ public class AAGunType extends InfoType
 	 */
 	public boolean shareAmmo = false;
 	
-	public static List<AAGunType> infoTypes = new ArrayList<>();
+	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 	
 	public AAGunType(TypeFile file)
 	{

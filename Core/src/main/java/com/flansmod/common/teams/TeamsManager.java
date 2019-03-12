@@ -64,6 +64,7 @@ import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class TeamsManager
 {
@@ -164,10 +165,10 @@ public class TeamsManager
 		MinecraftForge.EVENT_BUS.register(this);
 		
 		//Init arrays
-		bases = new ArrayList<>();
-		objects = new ArrayList<>();
-		maps = new HashMap<>();
-		rounds = new ArrayList<>();
+		bases = new ArrayList<ITeamBase>();
+		objects = new ArrayList<ITeamObject>();
+		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 		//currentMap = TeamsMap.def;
@@ -191,10 +192,10 @@ public class TeamsManager
 		
 		currentRound = null;
 		
-		bases = new ArrayList<>();
-		objects = new ArrayList<>();
-		maps = new HashMap<>();
-		rounds = new ArrayList<>();
+		bases = new ArrayList<ITeamBase>();
+		objects = new ArrayList<ITeamObject>();
+		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 	}
@@ -723,13 +724,13 @@ public class TeamsManager
 	@SubscribeEvent
 	public void playerDrops(PlayerDropsEvent event)
 	{
-		ArrayList<EntityItem> dropsToThrow = new ArrayList<>();
+		ArrayList<EntityItem> dropsToThrow = new ArrayList<EntityItem>();
 		//First collect together guns and ammo if smart drops are enabled
 		if(weaponDrops == 2)
 		{
 			for(EntityItem entity : event.getDrops())
 			{
-				ItemStack stack = entity.getItem();
+				ItemStack stack = VersionHelper.GetItem(entity);
 				if(stack != null && !stack.isEmpty())
 				{
 					if(stack.getItem() instanceof ItemGun)
@@ -739,10 +740,10 @@ public class TeamsManager
 						boolean alreadyAdded = false;
 						for(EntityItem check : dropsToThrow)
 						{
-							if(check.getItem().isEmpty() || !(check.getItem().getItem() instanceof ItemGun))
+							if(VersionHelper.GetItem(check).isEmpty() || !(VersionHelper.GetItem(check).getItem() instanceof ItemGun))
 								continue;
 							
-							if(((ItemGun)stack.getItem()).GetType() == ((ItemGun)check.getItem().getItem()).GetType())
+							if(((ItemGun)stack.getItem()).GetType() == ((ItemGun)VersionHelper.GetItem(check).getItem()).GetType())
 								alreadyAdded = true;
 						}
 						if(!alreadyAdded)
@@ -758,10 +759,10 @@ public class TeamsManager
 		for(EntityItem entity : dropsToThrow)
 		{
 			EntityGunItem gunEntity = (EntityGunItem)entity;
-			GunType gunType = ((ItemGun)gunEntity.getItem().getItem()).GetType();
+			GunType gunType = ((ItemGun)VersionHelper.GetItem(gunEntity).getItem()).GetType();
 			for(EntityItem ammoEntity : event.getDrops())
 			{
-				ItemStack ammoItemstack = ammoEntity.getItem();
+				ItemStack ammoItemstack = VersionHelper.GetItem(ammoEntity);
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemShootable)
 				{
 					ShootableType bulletType = ((ItemShootable)ammoItemstack.getItem()).type;
@@ -776,7 +777,7 @@ public class TeamsManager
 		//Now check the remaining items to see if they should be dropped
 		for(EntityItem entity : event.getDrops())
 		{
-			ItemStack stack = entity.getItem();
+			ItemStack stack = VersionHelper.GetItem(entity);
 			if(stack != null && !stack.isEmpty())
 			{
 				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
@@ -803,7 +804,7 @@ public class TeamsManager
 	{
 		if(event.getEntity() instanceof EntityPlayer)
 		{
-			ItemStack itemStack = event.getItem().getItem();
+			ItemStack itemStack = VersionHelper.GetItem(event.getItem());
 			PlayerData data = PlayerHandler.getPlayerData(event.getEntityPlayer());
 			if(enabled && currentRound != null && data != null)
 			{

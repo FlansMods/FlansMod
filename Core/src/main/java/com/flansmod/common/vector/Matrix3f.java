@@ -34,11 +34,6 @@ public class Matrix3f
 		return Matrix3f.multMatrix(this, m);
 	}
 	
-	public Vec3d mult(Vec3d v)
-	{
-		return Matrix3f.multVec(this, v);
-	}
-	
 	public static Matrix3f getMatrixRotX(float r)
 	{
 		float sn = MathHelper.sin(r);
@@ -77,22 +72,7 @@ public class Matrix3f
 						{0, 0, 1}
 				});
 	}
-	
-	public static Vec3d multVec(Matrix3f m, Vec3d vec)
-	{
-		float[][] retMat = new float[3][3];
-		float[] retVec = new float[3];
 		
-		for(int i = 0; i < 3; i++)
-		{
-			float[] row = {m.matrix[i][0], m.matrix[i][1], m.matrix[i][2]};
-			float[] column = {(float)vec.x, (float)vec.y, (float)vec.z};
-			for(int sm = 0; sm < 3; sm++) retVec[i] += row[sm] * column[sm];
-		}
-		
-		return new Vec3d(retVec[0], retVec[1], retVec[2]);
-	}
-	
 	public static Matrix3f multMatrix(Matrix3f m1, Matrix3f m2)
 	{
 		Matrix3f retMat = new Matrix3f(new float[3][3]);
