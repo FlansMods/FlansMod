@@ -78,7 +78,7 @@ public class EntityAIMecha extends EntityMecha
 		//And if we have line of sight, shoot it
 		if(!world.isRemote && target != null)
 		{
-			Vec3d rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().add(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().add(posX, posY, posZ);
+			Vec3d rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().addVector(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().addVector(posX, posY, posZ);
 			Vec3d targetOrigin = new Vec3d(target.posX, target.posY + target.getEyeHeight() / 2D, target.posZ);
 			
 			double dX = targetOrigin.x - rightArmOrigin.x;

@@ -1,0 +1,10 @@
+Create subfolders for each Forge version
+Install forge into them
+Foreach project, setup project settings
+	Java Build Path += \Core\src\main\java
+	Java Build Path += \Core\src\main\resources
+	Foreach build configuration
+		Working Directory = ${project_loc}/../runDir
+		
+Forges needed
+1.12_Forge2768

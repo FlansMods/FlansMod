@@ -3,7 +3,7 @@
 build/
 bin/
 out/
-run/*
+runDir/*
 
 # IDEs
 .classpath
@@ -20,7 +20,7 @@ Thumbs.db
 .DS_Store
 
 # Flan's Mod
-!run/Flan/
+!runDir/Flan/
 
 # Flan's Scripts
 upload.bat
@@ -28,5 +28,4 @@ upload.bat
 
 #1.12_Forge2768
 1.12_Forge2768/*
-!1.12_Forge2768/run/Flan/
 !1.12_Forge2768/src

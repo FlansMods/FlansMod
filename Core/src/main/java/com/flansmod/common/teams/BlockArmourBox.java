@@ -25,7 +25,7 @@ public class BlockArmourBox extends Block
 		super(Material.WOOD);
 		type = t;
 		
-		setTranslationKey(type.shortName);
+		setUnlocalizedName(type.shortName);
 		setHardness(2F);
 		setResistance(4F);
 		setRegistryName(type.shortName);

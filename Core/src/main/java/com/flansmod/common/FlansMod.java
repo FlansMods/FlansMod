@@ -232,11 +232,11 @@ public class FlansMod
 		}
 		
 		//Set up mod blocks and items
-		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setTranslationKey("flansWorkbench"));
+		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setUnlocalizedName("flansWorkbench"));
 		opStick = new ItemOpStick();
-		flag = (ItemFlagpole)(new ItemFlagpole().setTranslationKey("flagpole"));
-		spawner = (BlockSpawner)(new BlockSpawner(Material.CARPET).setTranslationKey("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
-		rainbowPaintcan = new Item().setTranslationKey("rainbowPaintcan").setRegistryName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
+		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
+		spawner = (BlockSpawner)(new BlockSpawner(Material.CARPET).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
+		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setRegistryName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
 		paintjobTable = new BlockPaintjobTable();
 		workbenchItem = new ItemBlockManyNames(workbench);
 		spawnerItem = new ItemBlockManyNames(spawner);
@@ -654,39 +654,39 @@ public class FlansMod
 					infoType.read(typeFile);
 					switch(type)
 					{
-						case bullet: new ItemBullet((BulletType)infoType).setTranslationKey(infoType.shortName);
+						case bullet: new ItemBullet((BulletType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case attachment: new ItemAttachment((AttachmentType)infoType).setTranslationKey(infoType.shortName);
+						case attachment: new ItemAttachment((AttachmentType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case gun: new ItemGun((GunType)infoType).setTranslationKey(infoType.shortName);
+						case gun: new ItemGun((GunType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case grenade: new ItemGrenade((GrenadeType)infoType).setTranslationKey(infoType.shortName);
+						case grenade: new ItemGrenade((GrenadeType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case part: partItems.add((ItemPart)new ItemPart((PartType)infoType).setTranslationKey(infoType.shortName));
+						case part: partItems.add((ItemPart)new ItemPart((PartType)infoType).setUnlocalizedName(infoType.shortName));
 							break;
-						case plane: new ItemPlane((PlaneType)infoType).setTranslationKey(infoType.shortName);
+						case plane: new ItemPlane((PlaneType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case vehicle: new ItemVehicle((VehicleType)infoType).setTranslationKey(infoType.shortName);
+						case vehicle: new ItemVehicle((VehicleType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case aa: new ItemAAGun((AAGunType)infoType).setTranslationKey(infoType.shortName);
+						case aa: new ItemAAGun((AAGunType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case mechaItem: new ItemMechaAddon((MechaItemType)infoType).setTranslationKey(infoType.shortName);
+						case mechaItem: new ItemMechaAddon((MechaItemType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case mecha: mechaItems.add((ItemMecha)new ItemMecha((MechaType)infoType).setTranslationKey(infoType.shortName));
+						case mecha: mechaItems.add((ItemMecha)new ItemMecha((MechaType)infoType).setUnlocalizedName(infoType.shortName));
 							break;
-						case tool: toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setTranslationKey(infoType.shortName));
+						case tool: toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setUnlocalizedName(infoType.shortName));
 							break;
-						case box: new BlockGunBox((GunBoxType)infoType).setTranslationKey(infoType.shortName);
+						case box: new BlockGunBox((GunBoxType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
-						case armour: armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setTranslationKey(infoType.shortName));
+						case armour: armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setUnlocalizedName(infoType.shortName));
 							break;
-						case armourBox: new BlockArmourBox((ArmourBoxType)infoType).setTranslationKey(infoType.shortName);
+						case armourBox: new BlockArmourBox((ArmourBoxType)infoType).setUnlocalizedName(infoType.shortName);
 							break;
 						case playerClass: break;
 						case team: break;
 						case itemHolder: new BlockItemHolder((ItemHolderType)infoType);
 							break;
-						case rewardBox: new ItemRewardBox((RewardBox)infoType).setTranslationKey(infoType.shortName);
+						case rewardBox: new ItemRewardBox((RewardBox)infoType).setUnlocalizedName(infoType.shortName);
 							break;
 						case loadout: break;
 						default: log.warn("Unrecognised type for " + infoType.shortName);
