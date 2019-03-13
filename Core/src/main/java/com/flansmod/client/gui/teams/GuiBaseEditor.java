@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketBaseEdit;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class GuiBaseEditor extends GuiScreen
 {

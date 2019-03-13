@@ -27,6 +27,7 @@ import com.flansmod.common.network.PacketOpenRewardBox;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.network.PacketVoting;
+import com.flansmod.versionhelper.VersionHelper;
 
 public class TeamsManagerRanked extends TeamsManager
 {
@@ -172,9 +173,9 @@ public class TeamsManagerRanked extends TeamsManager
 		
 		PlayerData victimData = PlayerHandler.getPlayerData(victim);
 		
-		if(source.getTrueSource() instanceof EntityPlayerMP)
+		if(VersionHelper.GetTrueDamageSource(source) instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP attacker = ((EntityPlayerMP)source.getTrueSource());
+			EntityPlayerMP attacker = ((EntityPlayerMP)VersionHelper.GetTrueDamageSource(source));
 			PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 			if(attackerData != null && attackerData.team != null)
 			{

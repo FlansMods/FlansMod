@@ -32,6 +32,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -66,7 +67,8 @@ public class VersionHelper
 	}
 	public static FontRenderer GetFontRenderer() { return Minecraft.getMinecraft().fontRendererObj; }
 	public static int GetBrightnessForRender(Entity entity, float partialTicks) { return entity.getBrightnessForRender(partialTicks); } 
-	
+	public static Entity GetImmediateDamageSource(DamageSource source) { return source.getEntity(); }
+	public static Entity GetTrueDamageSource(DamageSource source) { return source.getSourceOfDamage(); }
 	public static void ModPreInit() {}
 	public static void ModInit() 
 	{

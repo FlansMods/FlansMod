@@ -574,9 +574,9 @@ public class TeamsManager
 				return;
 			}
 			
-			if(source instanceof EntityDamageSource && source.getImmediateSource() instanceof EntityPlayerMP)
+			if(source instanceof EntityDamageSource && VersionHelper.GetImmediateDamageSource(source) instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP attacker = ((EntityPlayerMP)source.getImmediateSource());
+				EntityPlayerMP attacker = ((EntityPlayerMP)VersionHelper.GetImmediateDamageSource(source));
 				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 				
 				if(attackerData == null)
@@ -867,7 +867,7 @@ public class TeamsManager
 				//player.setPositionAndUpdate(spawnPoint.x, spawnPoint.y, spawnPoint.z);
 				playerMP.dismountRidingEntity();
 				EnumSet enumset = EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class);
-				playerMP.connection.setPlayerLocation(spawnPoint.x, spawnPoint.y, spawnPoint.z, 0F, 0F, enumset);
+				playerMP.connection.setPlayerLocation(VersionHelper.GetX(spawnPoint), VersionHelper.GetY(spawnPoint), VersionHelper.GetZ(spawnPoint), 0F, 0F, enumset);
 				//playerMP.setRotationYawHead(f);
 			}
 		}
@@ -895,7 +895,7 @@ public class TeamsManager
 		
 		Vec3d spawnPoint = currentRound.gametype.getSpawnPoint(player);
 		if(spawnPoint != null)
-			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(spawnPoint.x), MathHelper.floor(spawnPoint.y) + 1, MathHelper.floor(spawnPoint.z)), 0);
+			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(VersionHelper.GetX(spawnPoint)), MathHelper.floor(VersionHelper.GetY(spawnPoint)) + 1, MathHelper.floor(VersionHelper.GetZ(spawnPoint))), 0);
 		else
 			FlansMod.log.warn("Could not find spawn point for " + player.getDisplayName() + " on team " +
 					(data.newTeam == null ? "null" : data.newTeam.name));

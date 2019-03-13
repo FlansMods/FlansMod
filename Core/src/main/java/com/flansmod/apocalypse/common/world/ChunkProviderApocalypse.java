@@ -33,8 +33,9 @@ import com.flansmod.apocalypse.common.world.buildings.WorldGenResearchLab;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenRunway;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenSkeleton;
 import com.flansmod.common.ModuloHelper;
+import com.flansmod.versionhelper.IChunkGeneratorIntermediate;
 
-public class ChunkProviderApocalypse implements IChunkGenerator
+public class ChunkProviderApocalypse implements IChunkGeneratorIntermediate
 {
 	protected static final IBlockState STONE = Blocks.STONE.getDefaultState();
 	private final Random rand;
@@ -207,6 +208,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	/**
 	 * Generates the chunk at the specified position, from scratch
 	 */
+	@Override
 	public Chunk generateChunk(int x, int z)
 	{
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
@@ -352,6 +354,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	/**
 	 * Generate initial structures in this chunk, e.g. mineshafts, temples, lakes, and dungeons
 	 */
+	@Override
 	public void populate(int x, int z)
 	{
 		BlockFalling.fallInstantly = true;
@@ -474,15 +477,8 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 		BlockFalling.fallInstantly = false;
 	}
 	
-	/**
-	 * Called to generate additional structures after initial worldgen, used by ocean monuments
-	 */
-	public boolean generateStructures(Chunk chunkIn, int x, int z)
-	{
-		
-		return false;
-	}
-	
+
+	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
 		Biome biome = this.world.getBiome(pos);
@@ -490,6 +486,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 		return biome.getSpawnableList(creatureType);
 	}
 	
+	@Override
 	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos)
 	{
 		if(!this.mapFeaturesEnabled)
@@ -536,6 +533,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	 * placing any blocks. When called for the first time before any chunk is generated - also initializes the internal
 	 * state needed by getPossibleCreatures.
 	 */
+	@Override
 	public void recreateStructures(Chunk chunkIn, int x, int z)
 	{
 		if(this.mapFeaturesEnabled)
@@ -543,5 +541,26 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 			this.mineshaftGenerator.generate(this.world, x, z, null);
 			this.villageGenerator.generate(this.world, x, z, null);
 		}
+	}
+
+	@Override
+	public Chunk provideChunk(int x, int z) 
+	{
+		return generateChunk(x, z);
+	}
+
+	/**
+	 * Called to generate additional structures after initial worldgen, used by ocean monuments
+	 */
+	@Override
+	public boolean generateStructures(Chunk chunkIn, int x, int z)
+	{
+		return false;
+	}
+	
+	@Override
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean findUnexplored) 
+	{
+		return getNearestStructurePos(worldIn, structureName, position, findUnexplored);
 	}
 }

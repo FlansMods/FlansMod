@@ -98,7 +98,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 			
 			if((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(VersionHelper.GetItem(this))))
 			{
-				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this, VersionHelper.GetItem(this).copy());
+				VersionHelper.FirePlayerItemPickupEvent(player, this, VersionHelper.GetItem(this).copy());
 				
 				playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 				player.onItemPickup(this, var2);

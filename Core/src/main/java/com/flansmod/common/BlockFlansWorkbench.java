@@ -15,7 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockFlansWorkbench extends com.flansmod.versionhelper.Block
+public class BlockFlansWorkbench extends com.flansmod.versionhelper.Block_Intermediate
 {
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	

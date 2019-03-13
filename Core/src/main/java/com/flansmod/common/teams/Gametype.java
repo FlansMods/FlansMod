@@ -20,6 +20,7 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.versionhelper.VersionHelper;
 
 public abstract class Gametype
 {
@@ -206,15 +207,16 @@ public abstract class Gametype
 	public static EntityPlayerMP getPlayerFromDamageSource(DamageSource source)
 	{
 		EntityPlayerMP attacker = null;
+		Entity trueSource = VersionHelper.GetTrueDamageSource(source);
 		if(source instanceof EntityDamageSource)
 		{
-			if(source.getTrueSource() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)source.getTrueSource();
+			if(trueSource instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP)trueSource;
 		}
 		if(source instanceof EntityDamageSourceIndirect)
 		{
-			if(source.getTrueSource() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)source.getTrueSource();
+			if(trueSource instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP)trueSource;
 		}
 		return attacker;
 	}

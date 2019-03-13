@@ -9,10 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-public abstract class Block extends net.minecraft.block.Block
+public abstract class Block_Intermediate extends net.minecraft.block.Block
 {
-	public Block(Material mat) { super(mat); }
-    public Block(Material mat, MapColor col) { super(mat, col); }
+	public Block_Intermediate(Material mat) { super(mat); }
+    public Block_Intermediate(Material mat, MapColor col) { super(mat, col); }
     
 	@Override
     public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list)

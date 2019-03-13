@@ -79,7 +79,7 @@ public class PartType extends InfoType
 	static
 	{
 		for(EnumPartCategory cat : EnumPartCategory.values())
-			partsByCategory.put(cat, new ArrayList<Object>());
+			partsByCategory.put(cat, new ArrayList<PartType>());
 	}
 	
 	public PartType(TypeFile file)

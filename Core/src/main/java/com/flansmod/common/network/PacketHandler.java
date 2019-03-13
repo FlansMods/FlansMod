@@ -139,7 +139,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 					EntityPlayer player = ((NetHandlerPlayServer)netHandler).player;
 					if(!receivedPacketsServer.containsKey(player.getName()))
-						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<Object>());
+						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<PacketBase>());
 					receivedPacketsServer.get(player.getName()).offer(packet);
 					//packet.handleServerSide();
 					break;
