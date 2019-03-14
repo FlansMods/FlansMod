@@ -40,7 +40,7 @@ public class PacketDriveableKey extends PacketBase
 	{
 		if(playerEntity.getRidingEntity() != null && playerEntity.getRidingEntity() instanceof IControllable)
 		{
-			((IControllable)playerEntity.getRidingEntity()).pressKey(key, playerEntity);
+			((IControllable)playerEntity.getRidingEntity()).serverHandleKeyPress(key, playerEntity);
 		}
 	}
 	

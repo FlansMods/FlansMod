@@ -388,13 +388,13 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			{
 				toolType.model.render(mecha, dT);
 				GL11.glPushMatrix();
-				if((leftHand && mecha.leftMouseHeld) || (!leftHand && mecha.rightMouseHeld))
+				if((leftHand && mecha.primaryShootHeld) || (!leftHand && mecha.secondaryShootHeld))
 				{
 					GL11.glRotatef(25F * (float)mecha.ticksExisted, 1F, 0F, 0F);
 				}
 				toolType.model.renderDrill(mecha, dT);
 				GL11.glPopMatrix();
-				toolType.model.renderSaw(mecha, dT, (leftHand && mecha.leftMouseHeld) || (!leftHand && mecha.rightMouseHeld));
+				toolType.model.renderSaw(mecha, dT, (leftHand && mecha.primaryShootHeld) || (!leftHand && mecha.secondaryShootHeld));
 			}
 		}
 		else if(item instanceof ItemGun && ((ItemGun)item).GetType().model != null)

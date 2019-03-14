@@ -77,7 +77,7 @@ public class ClientEventHandler
 				renderHooks.update();
 				RenderFlag.angle += 2F;
 				FlansModClient.tick();
-				keyInputHandler.checkDrivingKeys();
+				keyInputHandler.checkTickKeys();
 				break;
 			}
 		}
@@ -112,7 +112,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event)
 	{
-		keyInputHandler.checkUniversalKeys();
+		keyInputHandler.checkEventKeys();
 	}
 	
 	@SubscribeEvent

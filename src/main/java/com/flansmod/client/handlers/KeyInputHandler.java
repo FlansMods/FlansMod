@@ -37,7 +37,7 @@ public class KeyInputHandler
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_LCONTROL,
 			"key.flansmod.category");
-	public static KeyBinding inventoryKey = new KeyBinding("key.vehicleMenu.desc",
+	public static KeyBinding vehicleMenuKey = new KeyBinding("key.vehicleMenu.desc",
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_M,
 			"key.flansmod.category");
@@ -101,13 +101,21 @@ public class KeyInputHandler
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_F5,
 			"key.flansmod.category");
+	public static KeyBinding primaryVehicleInteract = new KeyBinding("key.primaryVehicleInteract.desc",
+			FlansKeyConflictContext.VEHICLE,
+			Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(),
+			"key.flansmod.category");
+	public static KeyBinding secondaryVehicleInteract = new KeyBinding("key.secondaryVehicleInteract.desc",
+			FlansKeyConflictContext.VEHICLE,
+			Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(),
+			"key.flansmod.category");
 	
 	private Minecraft mc;
 	
 	KeyInputHandler()
 	{
 		ClientRegistry.registerKeyBinding(downKey);
-		ClientRegistry.registerKeyBinding(inventoryKey);
+		ClientRegistry.registerKeyBinding(vehicleMenuKey);
 		ClientRegistry.registerKeyBinding(bombKey);
 		ClientRegistry.registerKeyBinding(gunKey);
 		ClientRegistry.registerKeyBinding(controlSwitchKey);
@@ -122,11 +130,13 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(lookAtGunKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
+		ClientRegistry.registerKeyBinding(primaryVehicleInteract);
+		ClientRegistry.registerKeyBinding(secondaryVehicleInteract);
 		
 		mc = Minecraft.getMinecraft();
 	}
 	
-	void checkDrivingKeys()
+	void checkTickKeys()
 	{
 		EntityPlayer player = mc.player;
 		if(player == null)
@@ -139,43 +149,29 @@ public class KeyInputHandler
 		{
 			IControllable controllable = (IControllable)ridingEntity;
 			if(mc.gameSettings.keyBindForward.isKeyDown())
-				controllable.pressKey(0, player);
+				controllable.pressKey(0, player, false);
 			if(mc.gameSettings.keyBindBack.isKeyDown())
-				controllable.pressKey(1, player);
+				controllable.pressKey(1, player, false);
 			if(mc.gameSettings.keyBindLeft.isKeyDown())
-				controllable.pressKey(2, player);
+				controllable.pressKey(2, player, false);
 			if(mc.gameSettings.keyBindRight.isKeyDown())
-				controllable.pressKey(3, player);
+				controllable.pressKey(3, player, false);
 			if(mc.gameSettings.keyBindJump.isKeyDown())
-				controllable.pressKey(4, player);
+				controllable.pressKey(4, player, false);
 			if(downKey.isKeyDown())
-				controllable.pressKey(5, player);
-			if(mc.gameSettings.keyBindSneak.isPressed())
-				controllable.pressKey(6, player);
-			if(mc.gameSettings.keyBindInventory.isPressed() || inventoryKey.isPressed())
-				controllable.pressKey(7, player);
-			if(bombKey.isKeyDown())
-				controllable.pressKey(8, player);
-			if(gunKey.isKeyDown())
-				controllable.pressKey(9, player);
-			if(controlSwitchKey.isPressed())
-				controllable.pressKey(10, player);
+				controllable.pressKey(5, player, false);
+			if(secondaryVehicleInteract.isKeyDown())
+				controllable.pressKey(8, player, false);
+			if(primaryVehicleInteract.isKeyDown())
+				controllable.pressKey(9, player, false);
 			if(leftRollKey.isKeyDown())
-				controllable.pressKey(11, player);
+				controllable.pressKey(11, player, false);
 			if(rightRollKey.isKeyDown())
-				controllable.pressKey(12, player);
-			if(gearKey.isPressed())
-				controllable.pressKey(13, player);
-			if(doorKey.isPressed())
-				controllable.pressKey(14, player);
-			if(modeKey.isPressed())
-				controllable.pressKey(15, player);
-			if(toggleCameraPerspective.isKeyDown())
-				controllable.pressKey(18, player);
+				controllable.pressKey(12, player, false);
 		}
 	}
 	
-	void checkUniversalKeys()
+	void checkEventKeys()
 	{
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
 			return;
@@ -223,11 +219,13 @@ public class KeyInputHandler
 					}
 				}
 			}
+			return;
 		}
 		if(lookAtGunKey.isPressed())
 		{
 			FlansModClient.getGunAnimations(mc.player, EnumHand.MAIN_HAND).lookAt = LookAtState.TILT1;
 			FlansModClient.getGunAnimations(mc.player, EnumHand.OFF_HAND).lookAt = LookAtState.TILT1;
+			return;
 		}
 		if(debugKey.isPressed())
 		{
@@ -237,10 +235,41 @@ public class KeyInputHandler
 			{
 				FlansMod.packetHandler.sendToServer(new PacketRequestDebug());
 			}
+			return;
 		}
 		if(reloadModelsKey.isPressed())
 		{
 			FlansModClient.reloadModels(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT));
+			return;
+		}
+		
+		if(player == null)
+		{
+			return;
+		}
+		
+		Entity ridingEntity = player.getRidingEntity();
+		if(ridingEntity instanceof IControllable)
+		{
+			IControllable controllable = (IControllable)ridingEntity;
+			if(mc.gameSettings.keyBindSneak.isPressed())
+				controllable.pressKey(6, player, true);
+			if(vehicleMenuKey.isPressed())
+				controllable.pressKey(7, player, true);
+			if(primaryVehicleInteract.isPressed())
+				controllable.pressKey(9, player, true);
+			if(secondaryVehicleInteract.isPressed())
+				controllable.pressKey(8, player, true);
+			if(controlSwitchKey.isPressed())
+				controllable.pressKey(10, player, true);
+			if(gearKey.isPressed())
+				controllable.pressKey(13, player, true);
+			if(doorKey.isPressed())
+				controllable.pressKey(14, player, true);
+			if(modeKey.isPressed())
+				controllable.pressKey(15, player, true);
+			if(toggleCameraPerspective.isKeyDown())
+				controllable.pressKey(18, player, true);
 		}
 	}
 }
