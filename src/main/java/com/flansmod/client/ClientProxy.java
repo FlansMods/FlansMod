@@ -306,7 +306,7 @@ public class ClientProxy extends CommonProxy
 		{
 			FlansModClient.doneTutorial = true;
 			
-			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.getKeyCode()) + " to open the menu"));
+			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.vehicleMenuKey.getKeyCode()) + " to open the menu"));
 			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) + " to get out"));
 			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.getKeyCode()) + " to switch controls"));
 			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch VTOL mode"));

@@ -22,7 +22,9 @@ public interface IControllable
 	 * @param key the keycode of the key. see @link:KeyInputHandler
 	 * @return boolean to indicate it this key was handled.
 	 */
-	boolean pressKey(int key, EntityPlayer player);
+	boolean pressKey(int key, EntityPlayer player, boolean isOnEvent);
+	
+	boolean serverHandleKeyPress(int key, EntityPlayer player);
 	
 	void updateKeyHeldState(int key, boolean held);
 	

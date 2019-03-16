@@ -160,7 +160,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean pressKey(int key, EntityPlayer player)
+	public boolean pressKey(int key, EntityPlayer player, boolean isOnEvent)
 	{
 		VehicleType type = getVehicleType();
 		//Send keys which require server side updates to the server
@@ -227,7 +227,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			case 8: //Shoot shell
 			case 9: //Shoot bullet
 			{
-				return super.pressKey(key, player);
+				return super.pressKey(key, player, false);
 			}
 			case 10: //Change control mode : Do nothing
 			{

@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -170,17 +171,17 @@ public class EntityPlane extends EntityDriveable
 		return false;
 	}
 	
+	public boolean serverHandleKeyPress(int key, EntityPlayer player)
+	{
+		return super.serverHandleKeyPress(key, player);
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean pressKey(int key, EntityPlayer player)
+	public boolean pressKey(int key, EntityPlayer player, boolean isOnEvent)
 	{
 		PlaneType type = this.getPlaneType();
 		//Send keys which require server side updates to the server
-		if(world.isRemote && (key == 6 || key == 8 || key == 9))
-		{
-			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-			return true;
-		}
 		boolean canThrust = ((getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
 				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode)
 				|| getDriveableData().fuelInTank > 0) && hasWorkingProp();
@@ -230,11 +231,9 @@ public class EntityPlane extends EntityDriveable
 				flapsPitchRight -= 1F;
 				return true;
 			}
-			case 6: //Exit : Get out
+			case 6: //Exit
 			{
-				if(getSeat(0).getControllingPassenger() != null)
-					getSeat(0).removePassengers();
-				return true;
+				return super.pressKey(key, player, isOnEvent);
 			}
 			case 7: //Inventory : Check to see if this plane allows in-flight inventory editing or if the plane is on the ground
 			{
@@ -245,9 +244,12 @@ public class EntityPlane extends EntityDriveable
 				return true;
 			}
 			case 8: //Drop bomb
+			{
+				return super.pressKey(key, player, isOnEvent);
+			}
 			case 9: //Shoot bullet
 			{
-				return super.pressKey(key, player);
+				return super.pressKey(key, player, isOnEvent);
 			}
 			case 10: //Change control mode
 			{
@@ -333,15 +335,6 @@ public class EntityPlane extends EntityDriveable
 	public void updateKeyHeldState(int key, boolean held)
 	{
 		super.updateKeyHeldState(key, held);
-		//On the server. For semi-auto weapons, shoot!
-		if(!world.isRemote)
-		{
-			switch(key)
-			{
-				case 9: //Left Mouse
-				case 8: //Right Mouse
-			}
-		}
 	}
 	
 	@Override

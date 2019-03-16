@@ -222,16 +222,11 @@ public class EntityMecha extends EntityDriveable
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean pressKey(int key, EntityPlayer player)
+	public boolean pressKey(int key, EntityPlayer player, boolean isOnEvent)
 	{
 		MechaType type = getMechaType();
 		DriveableData data = getDriveableData();
 		//send keys which require server side updates to the server
-		if(world.isRemote && (key == 6 || key == 8 || key == 9))
-		{
-			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-			return true;
-		}
 		switch(key)
 		{
 			case 0: //Forwards (these movement cases are redundant, as Mechas need to stop when the key is released)
@@ -269,8 +264,7 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 6: //Exit : Get out
 			{
-				getSeat(0).removePassengers();
-				return true;
+				return super.pressKey(key, player, isOnEvent);
 			}
 			case 7: //Inventory
 			{
@@ -280,11 +274,11 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 8: //UseR
 			{
-				return true; //useItem(false);
+				return super.pressKey(key, player, isOnEvent);
 			}
 			case 9: //UseL
 			{
-				return true; //useItem(true);
+				return super.pressKey(key, player, isOnEvent);
 			}
 			case 10: //Change control mode : Do nothing
 			{
@@ -564,7 +558,7 @@ public class EntityMecha extends EntityDriveable
 		
 		//If the player left the driver's seat, stop digging / whatever
 		if(!world.isRemote && (driverSeat == null || driverSeat.getControllingPassenger() == null))
-			rightMouseHeld = leftMouseHeld = false;
+			primaryShootHeld = secondaryShootHeld = false;
 		
 		//Update gun animations
 		leftAnimations.update();
@@ -700,7 +694,7 @@ public class EntityMecha extends EntityDriveable
 						axes.setAngles(axesLegs - type.limitHeadTurnValue, 0F, 0F);
 				}
 				
-				float yaw = driverSeat.looking.getYaw() - driverSeat.prevLooking.getYaw();
+				float yaw = driverSeat.looking.getYaw();
 				axes.rotateGlobalYaw(yaw);
 				driverSeat.looking.rotateGlobalYaw(-yaw);
 				driverSeat.playerLooking.rotateGlobalYaw(-yaw);
@@ -811,9 +805,9 @@ public class EntityMecha extends EntityDriveable
 			if(!world.isRemote)
 			{
 				//Use left and right items on the server side
-				if(leftMouseHeld)
+				if(primaryShootHeld)
 					useItem(true);
-				if(rightMouseHeld)
+				if(secondaryShootHeld)
 					useItem(false);
 				
 				//Check the left block being mined
@@ -831,7 +825,7 @@ public class EntityMecha extends EntityDriveable
 					//Work out if we are actually breaking blocks
 					boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaAddon;
 					boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaAddon;
-					boolean breakingBlocks = (leftMouseHeld && leftStackIsTool) || (rightMouseHeld && rightStackIsTool);
+					boolean breakingBlocks = (primaryShootHeld && leftStackIsTool) || (secondaryShootHeld && rightStackIsTool);
 					
 					//If we are not breaking blocks, reset everything
 					if(blockHit == null || !breakingBlocks)

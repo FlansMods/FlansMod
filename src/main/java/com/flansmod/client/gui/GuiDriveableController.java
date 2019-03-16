@@ -59,7 +59,7 @@ public class GuiDriveableController extends GuiScreen
 		
 		//Right mouse. Fires shells, drops bombs. Is not a holding thing
 		if(Mouse.isButtonDown(1))
-			plane.pressKey(8, player);
+			plane.pressKey(8, player, true);
 		
 		if(!leftMouseHeld && Mouse.isButtonDown(0)) //Left mouse, for MGs. Is a holding thing
 		{
@@ -152,67 +152,67 @@ public class GuiDriveableController extends GuiScreen
 		{
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindForward.getKeyCode()))//KeyInputHandler.accelerateKey.getKeyCode()))
 			{
-				plane.pressKey(0, player);
+				plane.pressKey(0, player, true);
 			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindBack.getKeyCode()))//KeyInputHandler.decelerateKey.getKeyCode()))
 			{
-				plane.pressKey(1, player);
+				plane.pressKey(1, player, true);
 			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindLeft.getKeyCode()))//KeyInputHandler.leftKey.getKeyCode()))
 			{
-				plane.pressKey(2, player);
+				plane.pressKey(2, player, true);
 			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindRight.getKeyCode()))//KeyInputHandler.rightKey.getKeyCode()))
 			{
-				plane.pressKey(3, player);
+				plane.pressKey(3, player, true);
 			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindJump.getKeyCode()))//KeyInputHandler.upKey.getKeyCode()))
 			{
-				plane.pressKey(4, player);
+				plane.pressKey(4, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.downKey.getKeyCode()))
 			{
-				plane.pressKey(5, player);
+				plane.pressKey(5, player, true);
 			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindSneak.getKeyCode()))//KeyInputHandler.exitKey.getKeyCode()))
 			{
-				plane.pressKey(6, player);
+				plane.pressKey(6, player, true);
 			}
-			if(FlansMod.proxy.keyDown(KeyInputHandler.inventoryKey.getKeyCode()))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.vehicleMenuKey.getKeyCode()))
 			{
-				plane.pressKey(7, player);
+				plane.pressKey(7, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.bombKey.getKeyCode()))
 			{
-				plane.pressKey(8, player);
+				plane.pressKey(8, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.gunKey.getKeyCode()))
 			{
-				plane.pressKey(9, player);
+				plane.pressKey(9, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.controlSwitchKey.getKeyCode()))
 			{
-				plane.pressKey(10, player);
+				plane.pressKey(10, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.leftRollKey.getKeyCode()))
 			{
-				plane.pressKey(11, player);
+				plane.pressKey(11, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.rightRollKey.getKeyCode()))
 			{
-				plane.pressKey(12, player);
+				plane.pressKey(12, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.gearKey.getKeyCode()))
 			{
-				plane.pressKey(13, player);
+				plane.pressKey(13, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.doorKey.getKeyCode()))
 			{
-				plane.pressKey(14, player);
+				plane.pressKey(14, player, true);
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.modeKey.getKeyCode()))
 			{
-				plane.pressKey(15, player);
+				plane.pressKey(15, player, true);
 			}
 			
 		}

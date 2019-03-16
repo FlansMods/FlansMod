@@ -37,6 +37,7 @@ import com.flansmod.api.IExplodeable;
 import com.flansmod.client.EntityCamera;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugVector;
+import com.flansmod.client.handlers.KeyInputHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
@@ -54,6 +55,7 @@ import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
+import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.EnumPartCategory;
@@ -112,7 +114,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/**
 	 * Whether each mouse button is held
 	 */
-	public boolean leftMouseHeld = false, rightMouseHeld = false;
+	public boolean primaryShootHeld = false, secondaryShootHeld = false;
 	
 	/**
 	 * Shoot delay variables
@@ -469,17 +471,67 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	@Override
-	public boolean pressKey(int key, EntityPlayer player)
+	public boolean serverHandleKeyPress(int key, EntityPlayer player)
 	{
-		if(!world.isRemote && key == 9 && getDriveableType().modePrimary == EnumFireMode.SEMIAUTO) // Primary
+		switch(key)
 		{
-			shoot(false);
-			return true;
+			case 6:
+				if(getSeat(0).getControllingPassenger() != null)
+					getSeat(0).removePassengers();
+				return true;
+			case 8:
+				if(getDriveableType().modeSecondary == EnumFireMode.SEMIAUTO) // Secondary
+				{
+					shoot(true);
+					return true;
+				}
+			case 9:
+				if(getDriveableType().modePrimary == EnumFireMode.SEMIAUTO) // Primary
+				{
+					shoot(false);
+					return true;
+				}
 		}
-		else if(!world.isRemote && key == 8 && getDriveableType().modeSecondary == EnumFireMode.SEMIAUTO) // Secondary
+		return false;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean pressKey(int key, EntityPlayer player, boolean isOnEvent)
+	{
+		switch(key)
 		{
-			shoot(true);
-			return true;
+			case 6: //Exit
+			{
+				Minecraft mc = Minecraft.getMinecraft();
+				mc.setRenderViewEntity(mc.player);
+				FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+				return true;
+			}
+			case 8: //Drop bomb
+			{
+				if(isOnEvent)
+				{
+					FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+				}
+				else if(!secondaryShootHeld)
+				{
+					updateKeyHeldState(8, true);
+				}
+				return true;
+			}
+			case 9: //Shoot bullet
+			{
+				if(isOnEvent)
+				{
+					FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+				}
+				else if(!primaryShootHeld)
+				{
+					updateKeyHeldState(9, true);
+				}
+				return true;
+			}
 		}
 		return false;
 	}
@@ -493,9 +545,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		switch(key)
 		{
-			case 9: leftMouseHeld = held;
+			case 9:
+				primaryShootHeld = held;
 				break;
-			case 8: rightMouseHeld = held;
+			case 8:
+				secondaryShootHeld = held;
 				break;
 		}
 	}
@@ -817,6 +871,21 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			return;
 		}
 		
+		// Reset weapon key held states if necessary
+		if(world.isRemote)
+		{
+			if(primaryShootHeld && !KeyInputHandler.primaryVehicleInteract.isKeyDown())
+			{
+				primaryShootHeld = false;
+				updateKeyHeldState(9, false);
+			}
+			if(secondaryShootHeld && !KeyInputHandler.secondaryVehicleInteract.isKeyDown())
+			{
+				secondaryShootHeld = false;
+				updateKeyHeldState(8, false);
+			}
+		}
+		
 		// Harvest stuff
 		// Aesthetics
 		if(hasEnoughFuel())
@@ -1009,7 +1078,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				!canThrust && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
 		{
 			throttle *= 0.98F;
-			rightMouseHeld = leftMouseHeld = false;
+			primaryShootHeld = secondaryShootHeld = false;
 		}
 		else if(getDriver() != null && getDriver() == getControllingPassenger())
 		{
@@ -1023,19 +1092,19 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			shootDelaySecondary--;
 		if(!world.isRemote)
 		{
-			if(leftMouseHeld && getDriveableType().modePrimary == EnumFireMode.FULLAUTO)
+			if(primaryShootHeld && getDriveableType().modePrimary == EnumFireMode.FULLAUTO)
 				shoot(false);
-			if(rightMouseHeld && getDriveableType().modeSecondary == EnumFireMode.FULLAUTO)
+			if(secondaryShootHeld && getDriveableType().modeSecondary == EnumFireMode.FULLAUTO)
 				shoot(true);
 			minigunSpeedPrimary *= 0.9F;
 			minigunSpeedSecondary *= 0.9F;
-			if(leftMouseHeld && getDriveableType().modePrimary == EnumFireMode.MINIGUN)
+			if(primaryShootHeld && getDriveableType().modePrimary == EnumFireMode.MINIGUN)
 			{
 				minigunSpeedPrimary += 0.1F;
 				if(minigunSpeedPrimary > 1F)
 					shoot(false);
 			}
-			if(rightMouseHeld && getDriveableType().modeSecondary == EnumFireMode.MINIGUN)
+			if(secondaryShootHeld && getDriveableType().modeSecondary == EnumFireMode.MINIGUN)
 			{
 				minigunSpeedSecondary += 0.1F;
 				if(minigunSpeedSecondary > 1F)
@@ -1761,8 +1830,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void togglePerspective()
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.gameSettings.thirdPersonView == 1)
-			mc.setRenderViewEntity((this.getCamera() == null ? mc.player : this.getCamera()));
+		if(mc.gameSettings.thirdPersonView == 0)
+			mc.setRenderViewEntity((getCamera() == null ? mc.player : getCamera()));
 		else mc.setRenderViewEntity(mc.player);
 	}
 }

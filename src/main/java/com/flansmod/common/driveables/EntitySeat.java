@@ -208,7 +208,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		}
 		
 		if(entityInThisSeat instanceof EntityPlayer && shooting)
-			pressKey(9, (EntityPlayer)entityInThisSeat);
+			pressKey(9, (EntityPlayer)entityInThisSeat, false);
 		
 		minigunSpeed *= 0.95F;
 		minigunAngle += minigunSpeed;
@@ -619,12 +619,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean pressKey(int key, EntityPlayer player)
+	@SideOnly(Side.CLIENT)
+	public boolean pressKey(int key, EntityPlayer player, boolean isOnTick)
 	{
 		// Driver seat should pass input to driveable
 		if(driver && driveable != null)
 		{
-			return driveable.pressKey(key, player);
+			return driveable.pressKey(key, player, isOnTick);
 		}
 		
 		if(world.isRemote && key == 7 && driveable != null)
@@ -717,6 +718,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				}
 			}
 		}
+		return false;
+	}
+	
+	@Override
+	public boolean serverHandleKeyPress(int key, EntityPlayer player)
+	{
 		return false;
 	}
 	
