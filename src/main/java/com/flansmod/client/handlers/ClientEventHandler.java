@@ -1,7 +1,6 @@
 package com.flansmod.client.handlers;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,8 +15,6 @@ import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,8 +28,10 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemGun;
 
 /**
- * All handled events for the client should go through here and be passed on. Makes it easier to see which events are being handled by the mod
+ * All handled events for the client should go through here and be passed on, this makes it easier to see which events
+ * are being handled by the mod
  */
+@SideOnly(Side.CLIENT)
 public class ClientEventHandler
 {
 	private KeyInputHandler keyInputHandler = new KeyInputHandler();
@@ -47,13 +46,13 @@ public class ClientEventHandler
 			case START:
 			{
 				RenderGun.smoothing = event.renderTickTime;
-				FlansModClient.UpdateCameraZoom(event.renderTickTime);
-				renderHooks.SetPartialTick(event.renderTickTime);
+				FlansModClient.updateCameraZoom(event.renderTickTime);
+				renderHooks.setPartialTick(event.renderTickTime);
+				renderHooks.updatePlayerView();
 				break;
 			}
 			case END:
 			{
-				
 				break;
 			}
 		}
@@ -69,7 +68,7 @@ public class ClientEventHandler
 			{
 				//Handle all packets received since last tick
 				FlansMod.getPacketHandler().handleClientPackets();
-				FlansModClient.UpdateFlashlights(Minecraft.getMinecraft());
+				FlansModClient.updateFlashlights(Minecraft.getMinecraft());
 				break;
 			}
 			case END:
@@ -78,7 +77,7 @@ public class ClientEventHandler
 				renderHooks.update();
 				RenderFlag.angle += 2F;
 				FlansModClient.tick();
-				
+				keyInputHandler.checkDrivingKeys();
 				break;
 			}
 		}
@@ -103,15 +102,17 @@ public class ClientEventHandler
 		if(player.getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
 			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded &&
-					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.getDwheel()) > 0)
+					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) &&
+					Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void CheckKeyInput(KeyInputEvent event)
+	public void onKeyInput(InputEvent.KeyInputEvent event)
 	{
-		keyInputHandler.CheckKeyInput(event);
+		keyInputHandler.checkUniversalKeys();
 	}
 	
 	@SubscribeEvent
@@ -156,6 +157,6 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void ModifyHUD(RenderGameOverlayEvent event)
 	{
-		renderHooks.ModifyHUD(event);
+		renderHooks.modifyHUD(event);
 	}
 }

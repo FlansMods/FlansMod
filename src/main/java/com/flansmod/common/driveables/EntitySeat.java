@@ -361,8 +361,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
+		Minecraft mc = Minecraft.getMinecraft();
+		
 		if(driveable == null)
 			return;
 		
@@ -383,7 +386,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			// Calculate the new pitch and consider pitch limiters
 			float newPlayerPitch = playerLooking.getPitch() -
-					deltaY / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+					deltaY / lookSpeed * mc.gameSettings.mouseSensitivity;
 			if(newPlayerPitch > -seatInfo.minPitch)
 				newPlayerPitch = -seatInfo.minPitch;
 			if(newPlayerPitch < -seatInfo.maxPitch)
@@ -391,7 +394,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			// Calculate new yaw and consider yaw limiters
 			float newPlayerYaw = playerLooking.getYaw() +
-					deltaX / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+					deltaX / lookSpeed * mc.gameSettings.mouseSensitivity;
 			// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
 			float otherNewPlayerYaw = newPlayerYaw - 360F;
 			if(newPlayerYaw < 0)

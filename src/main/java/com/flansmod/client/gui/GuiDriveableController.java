@@ -5,16 +5,14 @@ import java.io.IOException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.KeyInputHandler;
+import com.flansmod.client.handlers.KeyInputHandler;
 import com.flansmod.common.FlansMod;
 
 public class GuiDriveableController extends GuiScreen
@@ -90,45 +88,14 @@ public class GuiDriveableController extends GuiScreen
 	@Override
 	protected void keyTyped(char c, int i)
 	{
-		if(i == 1)
-		{
-			mc.displayGuiScreen(null);
-			mc.displayInGameMenu();
-		}
-		if(i == 59)
-		{
-			mc.gameSettings.hideGUI = !mc.gameSettings.hideGUI;
-		}
-		if(i == 61)
-		{
-			mc.gameSettings.showDebugInfo = !mc.gameSettings.showDebugInfo;
-		}
+
+		
 		if(i == 63)
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
 			if(mc.gameSettings.thirdPersonView == 1)
 				mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
 			else mc.setRenderViewEntity(mc.player);
-		}
-		if(i == 66)
-		{
-			mc.gameSettings.smoothCamera = !mc.gameSettings.smoothCamera;
-		}
-		if(i == mc.gameSettings.keyBindInventory.getKeyCode())
-		{
-			mc.displayGuiScreen(new GuiInventory(mc.player));
-		}
-		if(i == mc.gameSettings.keyBindDrop.getKeyCode())
-		{
-			//mc.player.dropCurrentItem();
-		}
-		if(i == mc.gameSettings.keyBindChat.getKeyCode())
-		{
-			mc.displayGuiScreen(new GuiChat());
-		}
-		if(i == mc.gameSettings.keyBindCommand.getKeyCode())
-		{
-			mc.displayGuiScreen(new GuiChat("/"));
 		}
 		if(i == KeyInputHandler.debugKey.getKeyCode())
 		{
@@ -247,22 +214,12 @@ public class GuiDriveableController extends GuiScreen
 			{
 				plane.pressKey(15, player);
 			}
-			//if(FlansMod.proxy.keyDown(KeyInputHandler.trimKey.getKeyCode()))
-			//{
-			//	plane.pressKey(16, player);
-			//}				
 			
 		}
 		else
 		{
 			mc.displayGuiScreen(null);
 		}
-	}
-	
-	@Override
-	public void drawBackground(int i)
-	{
-		//Plane gauges overlay
 	}
 	
 	@Override

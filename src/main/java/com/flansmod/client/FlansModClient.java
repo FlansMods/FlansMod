@@ -1,9 +1,7 @@
 package com.flansmod.client;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -28,7 +26,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.client.util.WorldRenderer;
@@ -44,9 +41,10 @@ import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3i;
 
+@SideOnly(Side.CLIENT)
 public class FlansModClient extends FlansMod
 {
-	//Plane / Vehicle control handling
+	// Plane / Vehicle control handling
 	/**
 	 * Whether the player has received the vehicle tutorial text
 	 */
@@ -60,7 +58,7 @@ public class FlansModClient extends FlansMod
 	 */
 	public static int controlModeSwitchTimer = 20;
 	
-	//Recoil variables
+	// Recoil variables
 	/**
 	 * The recoil applied to the player view by shooting
 	 */
@@ -70,13 +68,14 @@ public class FlansModClient extends FlansMod
 	 */
 	public static float antiRecoil;
 	
-	//Gun animations
+	// Gun animations
 	/**
 	 * Gun animation variables for each entity holding a gun. Currently only applicable to the player
 	 */
-	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<>(), gunAnimationsLeft = new HashMap<>();
+	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<>(),
+			gunAnimationsLeft = new HashMap<>();
 	
-	//Scope variables
+	// Scope variables
 	/**
 	 * A delayer on the scope button to avoid repeat presses
 	 */
@@ -94,7 +93,7 @@ public class FlansModClient extends FlansMod
 	 */
 	public static float lastZoomLevel = 1F, lastFOVZoomLevel = 1F;
 	
-	//Variables to hold the state of some settings so that after being hacked for scopes, they may be restored
+	// Variables to hold the state of some settings so that after being hacked for scopes, they may be restored
 	/**
 	 * The player's mouse sensitivity setting, as it was before being hacked by my mod
 	 */
@@ -137,27 +136,21 @@ public class FlansModClient extends FlansMod
 		wr = new WorldRenderer();
 	}
 	
-	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
-	
-	@SuppressWarnings("null")
 	public static void tick()
 	{
 		if(minecraft.player == null || minecraft.world == null)
 			return;
-		
-		if(minecraft.player.getRidingEntity() instanceof IControllable && minecraft.currentScreen == null)
-			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.player.getRidingEntity()));
 		
 		if(teamInfo != null && teamInfo.timeLeft > 0)
 			teamInfo.timeLeft--;
 		
 		ClientTeamsData.Tick();
 		
-		// Force crash if too many vehicles break to prevent save data corruption
+		// Force shutdown if too many vehicles break to prevent save data corruption
 		if(numVehicleExceptions > 2)
 		{
-			List list = null;
-			list.size();
+			log.error("Too many vehicle exceptions, shutting down.");
+			minecraft.shutdown();
 		}
 		
 		// Guns
@@ -173,7 +166,7 @@ public class FlansModClient extends FlansMod
 		minecraft.player.rotationPitch += antiRecoil * 0.2F;
 		antiRecoil *= 0.8F;
 		
-		//Update gun animations for the gun in hand
+		// Update gun animations for the gun in hand
 		for(GunAnimations g : gunAnimationsRight.values())
 		{
 			g.update();
@@ -183,18 +176,13 @@ public class FlansModClient extends FlansMod
 			g.update();
 		}
 		
-		//If the currently held item is not a gun or is the wrong gun, unscope
-		Item itemInHand = null;
+		// If the currently held item is not a gun or is the wrong gun, unscope
 		ItemStack itemstackInHand = minecraft.player.inventory.getCurrentItem();
-		if(itemstackInHand != null)
-			itemInHand = itemstackInHand.getItem();
+		Item itemInHand = itemstackInHand.getItem();
 		if(currentScope != null)
 		{
-			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
-			
 			// If we've opened a GUI page, or we switched weapons, close the current scope
 			if(FMLClientHandler.instance().getClient().currentScreen != null
-					|| itemInHand == null
 					|| !(itemInHand instanceof ItemGun)
 					|| ((ItemGun)itemInHand).GetType().getCurrentScope(itemstackInHand) != currentScope)
 			{
@@ -205,7 +193,7 @@ public class FlansModClient extends FlansMod
 			}
 		}
 		
-		//Calculate new zoom variables
+		// Calculate new zoom variables
 		lastZoomProgress = zoomProgress;
 		if(currentScope == null)
 		{
@@ -216,37 +204,11 @@ public class FlansModClient extends FlansMod
 			zoomProgress = 1F - (1F - zoomProgress) * 0.66F;
 		}
 		
-		if(minecraft.player.getRidingEntity() instanceof IControllable)
-		{
-			inPlane = true;
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.player.getRidingEntity()).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
-			}
-			catch(Exception e)
-			{
-				log.error("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
-		}
-		else if(inPlane)
-		{
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "q", "field_78490_B");
-			}
-			catch(Exception e)
-			{
-				log.error("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
-			inPlane = false;
-		}
 		if(controlModeSwitchTimer > 0)
 			controlModeSwitchTimer--;
 	}
 	
-	public static void SetScope(IScope scope)
+	public static void setScope(IScope scope)
 	{
 		GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
 		
@@ -274,9 +236,9 @@ public class FlansModClient extends FlansMod
 		}
 	}
 	
-	public static void UpdateCameraZoom(float smoothing)
+	public static void updateCameraZoom(float smoothing)
 	{
-		//If the zoom has changed sufficiently, update it
+		// If the zoom has changed sufficiently, update it
 		if(Math.abs(zoomProgress - lastZoomProgress) > 0.0001F)
 		{
 			float actualZoomProgress = lastZoomProgress + (zoomProgress - lastZoomProgress) * smoothing;
@@ -291,30 +253,11 @@ public class FlansModClient extends FlansMod
 		}
 	}
 	
-	private boolean checkFileExists(File file)
-	{
-		if(!file.exists())
-		{
-			try
-			{
-				file.createNewFile();
-			}
-			catch(Exception e)
-			{
-				FlansMod.log.error("Failed to create file");
-				FlansMod.log.error(file.getAbsolutePath());
-			}
-			return false;
-		}
-		return true;
-	}
-	
 	public static boolean flipControlMode()
 	{
 		if(controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
-		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().player.getRidingEntity()) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}
@@ -350,7 +293,6 @@ public class FlansModClient extends FlansMod
 	public static Particle getParticle(String s, World w, double x, double y, double z)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		//return mc.renderGlobal.doSpawnParticle(s, x, y, z, 0.01D, 0.01D, 0.01D);
 		
 		int particleID = 0;
 		int[] data = new int[0];
@@ -394,7 +336,6 @@ public class FlansModClient extends FlansMod
 		else if(s.equals("barrier")) particleID = EnumParticleTypes.BARRIER.getParticleID();
 		else if(s.contains("_"))
 		{
-			int k;
 			String[] split = s.split("_", 3);
 			
 			
@@ -405,7 +346,8 @@ public class FlansModClient extends FlansMod
 			}
 			else
 			{
-				data = new int[]{Block.getIdFromBlock(Block.getBlockFromItem(InfoType.getRecipeElement(split[1], 0).getItem()))};
+				data = new int[]{
+						Block.getIdFromBlock(Block.getBlockFromItem(InfoType.getRecipeElement(split[1], 0).getItem()))};
 				
 				if(split[0].equals("blockcrack"))
 				{
@@ -418,17 +360,12 @@ public class FlansModClient extends FlansMod
 			}
 		}
 		
-		
-		// TODO : [1.12] Check that this is okay
-		//if(mc.gameSettings.fancyGraphics)
-		//	fx.renderDistanceWeight = 200D;
-		
 		return mc.effectRenderer.spawnEffectParticle(particleID, x, y, z, 0D, 0D, 0D, data);
 	}
 	
 	public static GunAnimations getGunAnimations(EntityLivingBase living, EnumHand hand)
 	{
-		GunAnimations animations = null;
+		GunAnimations animations;
 		if(hand == EnumHand.OFF_HAND)
 		{
 			if(FlansModClient.gunAnimationsLeft.containsKey(living))
@@ -452,7 +389,7 @@ public class FlansModClient extends FlansMod
 		return animations;
 	}
 	
-	public static void AddHitMarker()
+	public static void addHitMarker()
 	{
 		hitMarkerTime = 20;
 	}
@@ -460,20 +397,20 @@ public class FlansModClient extends FlansMod
 	/**
 	 * Handle flashlight block light override
 	 */
-	public static void UpdateFlashlights(Minecraft mc)
+	public static void updateFlashlights(Minecraft mc)
 	{
-		//Handle lighting from flashlights and glowing bullets
+		// Handle lighting from flashlights and glowing bullets
 		if(FlansMod.ticker % lightOverrideRefreshRate == 0 && mc.world != null)
 		{
-			//Check graphics setting and adjust refresh rate
+			// Check graphics setting and adjust refresh rate
 			lightOverrideRefreshRate = mc.gameSettings.fancyGraphics ? 10 : 20;
 			
-			//Reset old light values
+			// Reset old light values
 			for(Vector3i v : blockLightOverrides)
 			{
 				mc.world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(v.x, v.y, v.z));
 			}
-			//Clear the list
+			// Clear the list
 			blockLightOverrides.clear();
 			
 			//Find all flashlights
@@ -498,17 +435,23 @@ public class FlansModClient extends FlansMod
 								EnumFacing side = ray.sideHit;
 								switch(side)
 								{
-									case DOWN: y--;
+									case DOWN:
+										y--;
 										break;
-									case UP: y++;
+									case UP:
+										y++;
 										break;
-									case NORTH: z--;
+									case NORTH:
+										z--;
 										break;
-									case SOUTH: z++;
+									case SOUTH:
+										z++;
 										break;
-									case WEST: x--;
+									case WEST:
+										x--;
 										break;
-									case EAST: x++;
+									case EAST:
+										x++;
 										break;
 								}
 								blockLightOverrides.add(new Vector3i(x, y, z));
@@ -554,7 +497,9 @@ public class FlansModClient extends FlansMod
 					if(mecha.lightLevel() > 0)
 					{
 						blockLightOverrides.add(new Vector3i(x, y, z));
-						mc.world.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z), Math.max(mc.world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z)), mecha.lightLevel()));
+						mc.world.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z),
+								Math.max(mc.world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z)),
+										mecha.lightLevel()));
 						mc.world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y + 1, z));
 						mc.world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y - 1, z));
 						mc.world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x + 1, y, z));
@@ -574,7 +519,8 @@ public class FlansModClient extends FlansMod
 									int yd = j + y;
 									int zd = k + z;
 									blockLightOverrides.add(new Vector3i(xd, yd, zd));
-									mc.world.setLightFor(EnumSkyBlock.SKY, new BlockPos(xd, yd, zd), Math.abs(i) + Math.abs(j) + Math.abs(k));
+									mc.world.setLightFor(EnumSkyBlock.SKY, new BlockPos(xd, yd, zd),
+											Math.abs(i) + Math.abs(j) + Math.abs(k));
 								}
 							}
 						}

@@ -40,6 +40,6 @@ public class PacketHitMarker extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-		FlansModClient.AddHitMarker();
+		FlansModClient.addHitMarker();
 	}
 }

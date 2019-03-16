@@ -33,6 +33,8 @@ import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.discovery.ContainerType;
 import net.minecraftforge.fml.common.discovery.ModCandidate;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -50,6 +52,9 @@ import com.flansmod.client.gui.GuiGunBox;
 import com.flansmod.client.gui.GuiGunModTable;
 import com.flansmod.client.gui.GuiMechaInventory;
 import com.flansmod.client.gui.GuiPaintjobTable;
+import com.flansmod.client.handlers.ClientEventHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
+import com.flansmod.client.handlers.KeyInputHandler;
 import com.flansmod.client.model.RenderAAGun;
 import com.flansmod.client.model.RenderBullet;
 import com.flansmod.client.model.RenderFlag;
@@ -102,6 +107,7 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 
+@SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "com.flansmod.client.model.";

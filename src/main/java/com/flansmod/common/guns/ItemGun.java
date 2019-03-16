@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.EntityItemCustomRender;
@@ -301,7 +301,7 @@ public class ItemGun extends Item implements IPaintableItem
 					if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND)
 							&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
 					{
-						FlansModClient.SetScope(currentScope);
+						FlansModClient.setScope(currentScope);
 					}
 					break;
 				}
@@ -310,7 +310,7 @@ public class ItemGun extends Item implements IPaintableItem
 					if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND)
 							&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
 					{
-						FlansModClient.SetScope(currentScope);
+						FlansModClient.setScope(currentScope);
 					}
 					break;
 				}
