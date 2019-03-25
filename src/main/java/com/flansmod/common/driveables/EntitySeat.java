@@ -5,8 +5,8 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemLead;
@@ -735,27 +735,24 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return true;
 		if(currentItem.getItem() instanceof ItemLead)
 		{
-			if(getControllingPassenger() != null && getControllingPassenger() instanceof EntityLiving &&
-					!(getControllingPassenger() instanceof EntityPlayer))
+			if(getControllingPassenger() instanceof EntityAnimal)
 			{
-				EntityLiving mob = (EntityLiving)getControllingPassenger();
-				mob.dismountRidingEntity();
-				mob.setLeashHolder(entityplayer, true);
+				// Minecraft will handle dismounting the mob
 				return true;
 			}
+			
 			double checkRange = 10;
-			List nearbyMobs = world.getEntitiesWithinAABB(EntityLiving.class,
+			List<EntityAnimal> nearbyAnimals = world.getEntitiesWithinAABB(EntityAnimal.class,
 					new AxisAlignedBB(posX - checkRange, posY - checkRange, posZ - checkRange, posX + checkRange,
 							posY + checkRange, posZ + checkRange));
-			for(Object obj : nearbyMobs)
+			for(EntityAnimal animal : nearbyAnimals)
 			{
-				EntityLiving entity = (EntityLiving)obj;
-				if(entity.getLeashed() && entity.getLeashHolder() == entityplayer)
+				if(animal.getLeashed() && animal.getLeashHolder() == entityplayer)
 				{
-					if(entity.startRiding(this))
+					if(animal.startRiding(this))
 					{
-						looking.setAngles(-entity.rotationYaw, entity.rotationPitch, 0F);
-						entity.clearLeashed(true, !entityplayer.capabilities.isCreativeMode);
+						looking.setAngles(-animal.rotationYaw, animal.rotationPitch, 0F);
+						animal.clearLeashed(true, !entityplayer.capabilities.isCreativeMode);
 					}
 					else
 					{
