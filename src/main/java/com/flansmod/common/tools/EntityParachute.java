@@ -1,5 +1,8 @@
 package com.flansmod.common.tools;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -92,6 +95,14 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	@Override
 	protected void entityInit()
 	{
+	}
+	
+	@Nullable
+	@Override
+	public Entity getControllingPassenger()
+	{
+		List<Entity> list = this.getPassengers();
+		return list.isEmpty() ? null : list.get(0);
 	}
 	
 	@Override
