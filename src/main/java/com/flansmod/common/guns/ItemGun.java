@@ -85,6 +85,8 @@ import com.flansmod.common.vector.Vector3f;
 
 public class ItemGun extends Item implements IPaintableItem
 {
+
+
 	private static final int CLIENT_TO_SERVER_UPDATE_INTERVAL = 1;
 	private static final int SERVER_TO_CLIENT_UPDATE_INTERVAL = 2;
 	
@@ -113,6 +115,7 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean lastRightMouseHeld;
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
+	private static int holdRecoil;
 	
 	private static boolean GetMouseHeld(EnumHand hand)
 	{
@@ -458,8 +461,22 @@ public class ItemGun extends Item implements IPaintableItem
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							
-							float spread = 0.0025f * type.getSpread(gunstack) * shootableType.bulletSpread;
-							
+						//	float spread = 0.0025f * type.getSpread(gunstack) * shootableType.bulletSpread;
+							float spread;
+							if(rightMouseHeld && lastRightMouseHeld) {    // continious fire right is pressing
+								spread = 0.0025f * type.getSpread(gunstack) * shootableType.bulletSpread;
+								holdRecoil = type.recoil;
+								type.recoil = holdRecoil;
+							}else if(!(rightMouseHeld && lastRightMouseHeld)){ //only left click
+								spread = 0.0035f * type.getSpread(gunstack) * shootableType.bulletSpread;
+								if(type.recoil >= 2) {
+									type.recoil -= 1;
+									holdRecoil = type.recoil+1;
+								}
+							}else {	// first shot or (one by one)
+								spread = 0;
+							}
+
 							rayTraceDirection.x += (float)world.rand.nextGaussian() * spread;
 							rayTraceDirection.y += (float)world.rand.nextGaussian() * spread;
 							rayTraceDirection.z += (float)world.rand.nextGaussian() * spread;
@@ -913,12 +930,13 @@ public class ItemGun extends Item implements IPaintableItem
 			if(world.isRemote && Minecraft.getMinecraft().currentScreen == null)
 			{
 				// Get button presses. Do this before splitting into each hand. Prevents second pass wiping the data
+
 				lastRightMouseHeld = rightMouseHeld;
 				lastLeftMouseHeld = leftMouseHeld;
 				rightMouseHeld = Mouse.isButtonDown(1);
 				leftMouseHeld = Mouse.isButtonDown(0);
 			}
-			
+
 			ItemStack main = player.getHeldItemMainhand();
 			ItemStack off = player.getHeldItemOffhand();
 			boolean hasOffHand = !main.isEmpty() && !off.isEmpty();
