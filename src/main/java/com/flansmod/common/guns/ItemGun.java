@@ -468,6 +468,9 @@ public class ItemGun extends Item implements IPaintableItem
 							}else if(!(rightMouseHeld && lastRightMouseHeld)){ //only left click
 								spread = 0.0035f * type.getSpread(gunstack) * shootableType.bulletSpread;
 								}
+							else{
+								spread = 0; //one click
+							}
 
 							rayTraceDirection.x += (float)world.rand.nextGaussian() * spread;
 							rayTraceDirection.y += (float)world.rand.nextGaussian() * spread;
