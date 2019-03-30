@@ -18,7 +18,7 @@ Recoil 2
 //Damage in half hearts
 Damage 4
 //The higher this value, the more the bullets spread
-Accuracy 15
+Accuracy 9
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound M14Shoot
@@ -29,7 +29,7 @@ BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0
-FOVZoomLevel 1.25
+FOVZoomLevel 1.50
 //Deployable Settings
 Deployable False
 DeployedModel None
