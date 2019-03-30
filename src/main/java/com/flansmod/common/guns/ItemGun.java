@@ -115,6 +115,7 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean lastRightMouseHeld;
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
+	private static int holdRecoil;
 	
 	private static boolean GetMouseHeld(EnumHand hand)
 	{
@@ -464,12 +465,16 @@ public class ItemGun extends Item implements IPaintableItem
 							float spread;
 							if(rightMouseHeld && lastRightMouseHeld) {    // continious fire right is pressing
 								spread = 0.0025f * type.getSpread(gunstack) * shootableType.bulletSpread;
-
+								holdRecoil = type.recoil;
+								type.recoil = holdRecoil;
 							}else if(!(rightMouseHeld && lastRightMouseHeld)){ //only left click
 								spread = 0.0035f * type.getSpread(gunstack) * shootableType.bulletSpread;
+								if(type.recoil >= 2) {
+									type.recoil -= 1;
+									holdRecoil = type.recoil+1;
 								}
-							else{
-								spread = 0; //one click
+							}else {	// first shot or (one by one)
+								spread = 0;
 							}
 
 							rayTraceDirection.x += (float)world.rand.nextGaussian() * spread;
