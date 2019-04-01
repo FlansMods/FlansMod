@@ -231,10 +231,6 @@ public class EntityPlane extends EntityDriveable
 				flapsPitchRight -= 1F;
 				return true;
 			}
-			case 6: //Exit
-			{
-				return super.pressKey(key, player, isOnEvent);
-			}
 			case 7: //Inventory : Check to see if this plane allows in-flight inventory editing or if the plane is on the ground
 			{
 				if(world.isRemote && (type.invInflight || (Math.abs(throttle) < 0.1F && onGround)))
@@ -242,14 +238,6 @@ public class EntityPlane extends EntityDriveable
 					FlansMod.proxy.openDriveableMenu((EntityPlayer)getSeat(0).getControllingPassenger(), world, this);
 				}
 				return true;
-			}
-			case 8: //Drop bomb
-			{
-				return super.pressKey(key, player, isOnEvent);
-			}
-			case 9: //Shoot bullet
-			{
-				return super.pressKey(key, player, isOnEvent);
 			}
 			case 10: //Change control mode
 			{
@@ -318,17 +306,11 @@ public class EntityPlane extends EntityDriveable
 				axes.setAngles(axes.getYaw(), 0, 0);
 				return true;
 			}
-			case 17: //Park
+			default:
 			{
-				break;
-			}
-			case 18: // Change perspective
-			{
-				togglePerspective();
-				return true;
+				return super.pressKey(key, player, isOnEvent);
 			}
 		}
-		return false;
 	}
 	
 	@Override

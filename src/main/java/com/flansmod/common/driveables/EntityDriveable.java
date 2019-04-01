@@ -532,8 +532,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 				return true;
 			}
+			case 18:
+			{
+				togglePerspective();
+				return true;
+			}
+			default:
+			{
+				return false;
+			}
 		}
-		return false;
 	}
 	
 	@Override
