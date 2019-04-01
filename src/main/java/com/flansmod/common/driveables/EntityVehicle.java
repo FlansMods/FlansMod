@@ -163,12 +163,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public boolean pressKey(int key, EntityPlayer player, boolean isOnEvent)
 	{
 		VehicleType type = getVehicleType();
-		//Send keys which require server side updates to the server
-		if(world.isRemote && (key == 6 || key == 8 || key == 9))
-		{
-			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-			return true;
-		}
 		switch(key)
 		{
 			case 0: //Accelerate : Increase the throttle, up to 1.
@@ -225,9 +219,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				return true;
 			}
 			case 8: //Shoot shell
+			{
+				return super.pressKey(key, player, isOnEvent);
+			}
 			case 9: //Shoot bullet
 			{
-				return super.pressKey(key, player, false);
+				return super.pressKey(key, player, isOnEvent);
 			}
 			case 10: //Change control mode : Do nothing
 			{
