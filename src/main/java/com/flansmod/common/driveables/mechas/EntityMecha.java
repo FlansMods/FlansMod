@@ -224,22 +224,6 @@ public class EntityMecha extends EntityDriveable
 		//send keys which require server side updates to the server
 		switch(key)
 		{
-			case 0: //Forwards (these movement cases are redundant, as Mechas need to stop when the key is released)
-			{
-				return true;
-			}
-			case 1: //Backwards
-			{
-				return true;
-			}
-			case 2: //Left
-			{
-				return true;
-			}
-			case 3: //Right
-			{
-				return true;
-			}
 			case 4: //Jump
 			{
 				boolean canThrustCreatively = getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
@@ -253,68 +237,17 @@ public class EntityMecha extends EntityDriveable
 				}
 				return true;
 			}
-			case 5: //Down : Do nothing
-			{
-				return true;
-			}
-			case 6: //Exit : Get out
-			{
-				return super.pressKey(key, player, isOnEvent);
-			}
 			case 7: //Inventory
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(4));
 				((EntityPlayer)getSeat(0).getControllingPassenger()).openGui(FlansMod.INSTANCE, 10, world, chunkCoordX, chunkCoordY, chunkCoordZ);
 				return true;
 			}
-			case 8: //UseR
+			default:
 			{
 				return super.pressKey(key, player, isOnEvent);
 			}
-			case 9: //UseL
-			{
-				return super.pressKey(key, player, isOnEvent);
-			}
-			case 10: //Change control mode : Do nothing
-			{
-				return true;
-			}
-			case 11: //Roll left : Do nothing
-			{
-				return true;
-			}
-			case 12: //Roll right : Do nothing
-			{
-				return true;
-			}
-			case 13: //Gear : Do nothing
-			{
-				return true;
-			}
-			case 14: //Door : Do nothing
-			{
-				return true;
-			}
-			case 15: //???
-			{
-				return true;
-			}
-			case 16: //???
-			{
-				return true;
-			}
-			case 17: //???
-			{
-				return true;
-			}
-			case 18:
-			{
-				togglePerspective();
-				return true;
-			}
-			
 		}
-		return false;
 	}
 	
 	protected boolean creative()
