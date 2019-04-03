@@ -1,0 +1,20 @@
+Name OldunCiq Ammo
+ShortName OldunCiq
+Model Bullet
+Colour 255 255 255
+Icon AK74Ammo
+FallSpeed 0.35
+MaxStackSize 5
+RoundsPerItem 300
+Damage 10
+Explosion 1
+ExplodeOnImpact False
+Fuse 0
+FlakParticles 0
+Fire 1
+BreaksGlass True
+HitBoxSize 0.1
+HitSound bullet
+Penetrates True
+SmokeTrail False
+Description Ammo Type : ForBetul
