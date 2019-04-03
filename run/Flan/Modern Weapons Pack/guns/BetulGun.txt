@@ -1,0 +1,31 @@
+Name BetulGun
+ShortName Betul
+Ammo OldunCiq
+Icon AK74_BLUE
+Colour 255 0 0
+ReloadTime 80
+Recoil 1
+Damage 50
+Accuracy 5
+ShootDelay 1
+ShootSound AK74Shoot
+ReloadSound MWMP40Reload
+Mode FullAuto
+BulletSpeed 20.0
+Scope None
+ZoomLevel 2.0
+FOVZoomLevel 1.25
+Deployable False
+DeployedModel None
+Model mw.BetulGun
+Texture AK74
+ModelScale 1.0
+AllowAllAttachments false
+AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1
+Paintjob AK74_Blue AK74_Blue blue 1 lightBlue 1
+Description Ammo Type : ForBetul
