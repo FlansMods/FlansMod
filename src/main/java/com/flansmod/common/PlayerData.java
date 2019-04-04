@@ -203,7 +203,6 @@ public class PlayerData
 			delayedshoots.forEach((EnumHand hand, Integer count) -> {
 				if (count > 0)
 				{
-					System.out.println("Delayed "+" "+System.currentTimeMillis());
 					delayedshoots.put(hand, count-1);
 					
 					ItemStack itemstack = player.getHeldItem(hand);
@@ -211,7 +210,6 @@ public class PlayerData
 					Item item = itemstack.getItem();
 					if (item instanceof ItemGun)
 					{
-						System.out.println("Delayed2 "+" "+System.currentTimeMillis());
 						ItemGun gun = (ItemGun) item;
 						gun.shootServer(hand, (EntityPlayerMP) player, itemstack);
 					}
@@ -226,7 +224,7 @@ public class PlayerData
 		//TODO this value (10) is arbitrary and should be tested in real environments
 		if (count > 10)
 		{
-			System.out.println("WARNING: Dropping client shoot requests because client is out of sync by more than half an second");
+			Flans("WARNING: Dropping client shoot requests because client is out of sync by more than half an second");
 			return;
 		}
 		delayedshoots.put(hand, count+1);

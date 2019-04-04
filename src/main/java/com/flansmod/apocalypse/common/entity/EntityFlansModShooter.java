@@ -281,11 +281,14 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
 			
 			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-			//TODO unchecked cast, grenades will cause a crash
-			FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
 			
-			ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
-		
+			//Grenades are currently disabled for this entity
+			if (bullet instanceof BulletType)
+			{
+				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
+			
+				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
+			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)
 				ItemGun.dropItem(world, this, bullet.dropItemOnShoot);
