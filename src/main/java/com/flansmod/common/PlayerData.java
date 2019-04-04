@@ -226,7 +226,7 @@ public class PlayerData
 		//TODO this value (10) is arbitrary and should be tested in real environments
 		if (count > 10)
 		{
-			System.out.println("WARNING: Dropping client shoot requests because client is out of sync by more than half an second");
+			FlansMod.log.warn("Dropping client shoot requests because the client is out of sync with the server by more than half a second");
 			return;
 		}
 		delayedshoots.put(hand, count+1);
