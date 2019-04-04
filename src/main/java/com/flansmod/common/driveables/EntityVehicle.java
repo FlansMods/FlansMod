@@ -163,22 +163,16 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public boolean pressKey(int key, EntityPlayer player, boolean isOnEvent)
 	{
 		VehicleType type = getVehicleType();
-		//Send keys which require server side updates to the server
-		if(world.isRemote && (key == 6 || key == 8 || key == 9))
-		{
-			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-			return true;
-		}
 		switch(key)
 		{
-			case 0: //Accelerate : Increase the throttle, up to 1.
+			case 0: // Accelerate : Increase the throttle, up to 1.
 			{
 				throttle += 0.01F;
 				if(throttle > 1F)
 					throttle = 1F;
 				return true;
 			}
-			case 1: //Decelerate : Decrease the throttle, down to -1, or 0 if the vehicle cannot reverse
+			case 1: // Decelerate : Decrease the throttle, down to -1, or 0 if the vehicle cannot reverse
 			{
 				throttle -= 0.01F;
 				if(throttle < -1F)
@@ -187,17 +181,17 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					throttle = 0F;
 				return true;
 			}
-			case 2: //Left : Yaw the wheels left
+			case 2: // Left : Yaw the wheels left
 			{
 				wheelsYaw -= 1F;
 				return true;
 			}
-			case 3: //Right : Yaw the wheels right
+			case 3: // Right : Yaw the wheels right
 			{
 				wheelsYaw += 1F;
 				return true;
 			}
-			case 4: //Up : Brake
+			case 4: // Up : Brake
 			{
 				throttle *= 0.8F;
 				if(onGround)
@@ -207,42 +201,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 				return true;
 			}
-			case 5: //Down : Do nothing
-			{
-				return true;
-			}
-			case 6: //Exit : Get out
-			{
-				getSeat(0).removePassengers();
-				return true;
-			}
 			case 7: //Inventory
 			{
 				if(world.isRemote)
 				{
 					FlansMod.proxy.openDriveableMenu((EntityPlayer)getSeat(0).getControllingPassenger(), world, this);
 				}
-				return true;
-			}
-			case 8: //Shoot shell
-			case 9: //Shoot bullet
-			{
-				return super.pressKey(key, player, false);
-			}
-			case 10: //Change control mode : Do nothing
-			{
-				return true;
-			}
-			case 11: //Roll left : Do nothing
-			{
-				return true;
-			}
-			case 12: //Roll right : Do nothing
-			{
-				return true;
-			}
-			case 13: // Gear : Do nothing
-			{
 				return true;
 			}
 			case 14: // Door
@@ -257,26 +221,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 				return true;
 			}
-			case 15: // Wing : Do nothing
+			default:
 			{
-				return true;
-			}
-			case 16: // Trim Button
-			{
-				//applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
-				return true;
-			}
-			case 17: //Park
-			{
-				break;
-			}
-			case 18: // Change perspective
-			{
-				togglePerspective();
-				return true;
+				return super.pressKey(key, player, isOnEvent);
 			}
 		}
-		return false;
 	}
 	
 	@Override
