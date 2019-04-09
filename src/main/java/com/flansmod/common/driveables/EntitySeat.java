@@ -622,6 +622,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@SideOnly(Side.CLIENT)
 	public boolean pressKey(int key, EntityPlayer player, boolean isOnTick)
 	{
+		//TODO DEBUG
+		System.out.println("Key:"+key);
 		// Driver seat should pass input to driveable
 		if(driver && driveable != null)
 		{
@@ -638,84 +640,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			if(driveable != null)
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+				//setting client side minigun speed for animation
 				if(key == 9)
 					minigunSpeed += 0.1F;
-			}
-			return false;
-		}
-		
-		// Exit key pressed
-		if(key == 6 && getControllingPassenger() != null)
-		{
-			removePassengers();
-		}
-		
-		if(key == 9) //Shoot
-		{
-			System.out.println("Seat shoot");
-			// Get the gun from the plane type and the ammo from the data
-			GunType gun = seatInfo.gunType;
-			
-			minigunSpeed += 0.1F;
-			if(gun != null && gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
-			{
-				if(gunDelay <= 0 && TeamsManager.bulletsEnabled &&
-						seatInfo.gunnerID < driveable.getDriveableData().ammo.length)
-				{
-					
-					ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];
-					// Check that neither is null and that the bullet item is actually a bullet
-					if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemShootable)
-					{
-						ShootableType bullet = ((ItemShootable)bulletItemStack.getItem()).type;
-						if(gun.isAmmo(bullet))
-						{
-							// Gun origin
-							Vector3f gunOrigin =
-									Vector3f.add(driveable.axes.findLocalVectorGlobally(seatInfo.gunOrigin),
-											new Vector3f(driveable.posX, driveable.posY, driveable.posZ), null);
-							// Calculate the look axes globally
-							//RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
-							Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
-							// Calculate the origin of the bullets
-							Vector3f yOffset = driveable.axes
-									.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
-							
-							FireableGun fireableGun = new FireableGun(gun, gun.damage, gun.bulletSpread, gun.bulletSpeed);
-							//TODO unchecked cast, grenades will cause a crash (currently no vehicle with this feature exists)
-							FiredShot shot = new FiredShot(fireableGun, (BulletType) bullet, this, (EntityPlayerMP)getControllingPassenger());
-							ShotHandler.fireGun(world, shot, gun.numBullets*bullet.numBullets, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec);
-							// Play the shoot sound
-							if(soundDelay <= 0)
-							{
-								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
-										gun.shootSound, false);
-								soundDelay = gun.shootSoundLength;
-							}
-							//use ammo (unless in creative)
-							if(!((EntityPlayer)getControllingPassenger()).capabilities.isCreativeMode)
-							{
-								// Get the bullet item damage and increment it
-								int damage = bulletItemStack.getItemDamage();
-								bulletItemStack.setItemDamage(damage + 1);
-								// If the bullet item is completely damaged (empty)
-								System.out.println(damage+" "+bulletItemStack.getMaxDamage());
-								if(damage + 1 >= bulletItemStack.getMaxDamage())
-								{
-									//Set the damage to 0 and consume one ammo item
-									bulletItemStack.setItemDamage(0);
-									bulletItemStack.setCount(bulletItemStack.getCount()-1);
-									if (bulletItemStack.getCount() <= 0)
-										bulletItemStack = ItemStack.EMPTY.copy();
-									
-									driveable.getDriveableData().ammo[seatInfo.gunnerID] = bulletItemStack;
-								}
-							}
-							// Reset the shoot delay
-							gunDelay = gun.shootDelay;
-						}
-					}
-				}
 			}
 		}
 		return false;
@@ -724,6 +651,74 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public boolean serverHandleKeyPress(int key, EntityPlayer player)
 	{
+		switch (key)
+		{
+			case 9:
+				// Get the gun from the plane type and the ammo from the data
+				GunType gun = seatInfo.gunType;
+				
+				//setting server side minigun speed
+				minigunSpeed += 0.15F;
+				//TODO DEBUG
+				System.out.println("MinigunSpeed: "+minigunSpeed);
+				if(gun != null && gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
+				{
+					if(gunDelay <= 0 && TeamsManager.bulletsEnabled && seatInfo.gunnerID < driveable.getDriveableData().ammo.length)
+					{
+						
+						ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];
+						// Check that neither is null and that the bullet item is actually a bullet
+						if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemShootable)
+						{
+							ShootableType bullet = ((ItemShootable)bulletItemStack.getItem()).type;
+							if(gun.isAmmo(bullet))
+							{
+								// Gun origin
+								Vector3f gunOrigin = Vector3f.add(driveable.axes.findLocalVectorGlobally(seatInfo.gunOrigin), new Vector3f(driveable.posX, driveable.posY, driveable.posZ), null);
+								// Calculate the look axes globally
+								Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
+								// Calculate the origin of the bullets
+								Vector3f yOffset = driveable.axes
+										.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
+								
+								FireableGun fireableGun = new FireableGun(gun, gun.damage, gun.bulletSpread, gun.bulletSpeed);
+								//TODO unchecked cast, grenades wont work (currently no vehicle with this feature exists)
+								FiredShot shot = new FiredShot(fireableGun, (BulletType) bullet, this, (EntityPlayerMP)getControllingPassenger());
+								ShotHandler.fireGun(world, shot, gun.numBullets*bullet.numBullets, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec);
+								// Play the shoot sound
+								if(soundDelay <= 0)
+								{
+									PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
+											gun.shootSound, false);
+									soundDelay = gun.shootSoundLength;
+								}
+								//use ammo (unless in creative)
+								if(!((EntityPlayer)getControllingPassenger()).capabilities.isCreativeMode)
+								{
+									// Get the bullet item damage and increment it
+									int damage = bulletItemStack.getItemDamage();
+									bulletItemStack.setItemDamage(damage + 1);
+									// If the bullet item is completely damaged (empty)
+									System.out.println(damage+" "+bulletItemStack.getMaxDamage());
+									if(damage + 1 >= bulletItemStack.getMaxDamage())
+									{
+										//Set the damage to 0 and consume one ammo item
+										bulletItemStack.setItemDamage(0);
+										bulletItemStack.setCount(bulletItemStack.getCount()-1);
+										if (bulletItemStack.getCount() <= 0)
+											bulletItemStack = ItemStack.EMPTY.copy();
+										
+										driveable.getDriveableData().ammo[seatInfo.gunnerID] = bulletItemStack;
+									}
+								}
+								// Reset the shoot delay
+								gunDelay = gun.shootDelay;
+							}
+						}
+					}
+				}
+				return true;
+		}
 		return false;
 	}
 	

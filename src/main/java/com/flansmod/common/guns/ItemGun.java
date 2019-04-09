@@ -541,7 +541,7 @@ public class ItemGun extends Item implements IPaintableItem
 						animations.recoil += recoil;
 						
 						boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
-						PlayShotSound(world, silenced, rayTraceOrigin.x, rayTraceOrigin.y, rayTraceOrigin.z);
+						playShotSound(world, rayTraceOrigin, silenced);
 					} else
 					{
 						Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
@@ -595,7 +595,7 @@ public class ItemGun extends Item implements IPaintableItem
 			}
 	}
 	
-	public void playShootSound(World world, Vector3f position, Boolean silenced) {
+	public void playShotSound(World world, Vector3f position, Boolean silenced) {
 		// Play shot sounds
 		if(soundDelay <= 0 && type.shootSound != null)
 		{

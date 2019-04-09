@@ -26,20 +26,37 @@ public class FireableGun
 	/**
 	 * the damage this gun will cause
 	 */
-	private Float damage;
+	private float damage;
 	
+	/**
+	 * the damage against vehicles
+	 */
+	private float vehicledamage;
 	/**
 	 * @param type        InfoType of the gun
 	 * @param damage      Damage of the gun
 	 * @param spread      Bullet spread of the gun
 	 * @param bulletSpeed Bullet speed of the gun (0 means instant/raytraced)
 	 */
-	public FireableGun(InfoType type, Float damage, Float spread, Float bulletSpeed)
+	public FireableGun(InfoType type, float damage, float spread, float bulletSpeed)
+	{
+		this(type, damage, damage, spread, bulletSpeed);
+	}
+	
+	/**
+	 * @param type          InfoType of the gun
+	 * @param damage        Damage of the gun
+	 * @param vehicledamage	Damage of the gun against vehicles
+	 * @param spread        Bullet spread of the gun
+	 * @param bulletSpeed   Bullet speed of the gun (0 means instant/raytraced)
+	 */
+	public FireableGun(InfoType type, float damage, float vehicledamage, float spread, float bulletSpeed)
 	{
 		this.type = type;
 		this.damage = damage;
 		this.spread = spread;
 		this.bulletSpeed = bulletSpeed;
+		this.vehicledamage = vehicledamage;
 	}
 	
 	/**
@@ -82,4 +99,11 @@ public class FireableGun
 		return this.bulletSpeed;
 	}
 	
+	/**
+	 * @return the damage this gun will cause against vehicles
+	 */
+	public Float getDamageAgainstVehicles()
+	{
+		return this.vehicledamage;
+	}
 }

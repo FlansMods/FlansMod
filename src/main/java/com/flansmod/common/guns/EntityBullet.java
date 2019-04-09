@@ -1,13 +1,18 @@
 package com.flansmod.common.guns;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -17,6 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,6 +35,7 @@ import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 import io.netty.buffer.ByteBuf;
@@ -351,34 +358,76 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public void writeEntityToNBT(NBTTagCompound tag)
 	{
 		tag.setString("type", shot.getBulletType().shortName);
-		//bullets should not be saved, while it is theoretically possible it would create an huge amount of problems
-		/*
-		tag.setString("type", type.shortName);
-		if(owner == null)
-			tag.setString("owner", "null");
-		else
-			tag.setString("owner", owner.getName());
-			*/
+		FireableGun gun = shot.getFireableGun();
+		//this data will only be present and saved on the server side
+		if (gun != null)
+		{
+			NBTTagCompound fireablegun = new NBTTagCompound();
+			fireablegun.setInteger("infotype", gun.getInfoType().shortName.hashCode());
+			fireablegun.setFloat("spread", gun.getGunSpread());
+			fireablegun.setFloat("speed", gun.getBulletSpeed());
+			fireablegun.setFloat("damage", gun.getDamage());
+			fireablegun.setFloat("vehicledamage", gun.getDamageAgainstVehicles());
+			tag.setTag("fireablegun",fireablegun);
+		
+			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) -> 
+			{
+				NBTTagCompound compound = NBTUtil.createUUIDTag(player.getUniqueID());
+				tag.setTag("player", compound);
+			});
+			
+			shot.getShooterOptional().ifPresent((Entity shooter) -> 
+			{
+				NBTTagCompound compound = NBTUtil.createUUIDTag(shooter.getUniqueID());
+				tag.setTag("shooter", compound);
+			});
+			
+		}
 	}
 	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag)
 	{
-		//TODO this may cause problems, because of data loss
-		shot = new FiredShot(null, BulletType.getBullet(tag.getString("type")));
-		this.dataManager.set(BULLET_TYPE, shot.getBulletType().shortName);
-		//bullets should not be saved
-		/*
+		FireableGun fireablegun = null;
+		String shortName = tag.getString("type");
+		BulletType type = BulletType.getBullet(shortName);
+		EntityPlayerMP player = null;
+		Entity shooter = null;
+		this.dataManager.set(BULLET_TYPE, shortName);
 		
-		String typeString = tag.getString("type");
-		String ownerName = tag.getString("owner");
+		if (tag.hasKey("fireablegun"))
+		{
+			NBTTagCompound gun = tag.getCompoundTag("fireablegun");
+			fireablegun = new FireableGun(InfoType.getType(gun.getInteger("infotype")), gun.getFloat("damage"), gun.getFloat("vehicledamage"), gun.getFloat("spread"), gun.getFloat("speed"));
+		}
 		
-		if(typeString != null)
-			type = BulletType.getBullet(typeString);
+		if (tag.hasKey("player"))
+		{
+			UUID uuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("player"));
+			for (Entity entity : world.loadedEntityList)
+			{
+				if (entity.getUniqueID().equals(uuid) && entity instanceof EntityPlayerMP)
+				{
+					player = (EntityPlayerMP)entity;
+					break;
+				}
+			}
+		}
+
+		if (tag.hasKey("shooter"))
+		{
+			UUID uuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("shooter"));
+			for (Entity entity : world.loadedEntityList)
+			{
+				if (entity.getUniqueID().equals(uuid))
+				{
+					shooter = entity;
+					break;
+				}
+			}
+		}
 		
-		if(ownerName != null && !ownerName.equals("null"))
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(ownerName);
-			*/
+		shot = new FiredShot(fireablegun, type, shooter, player);
 	}
 	
 	@Override

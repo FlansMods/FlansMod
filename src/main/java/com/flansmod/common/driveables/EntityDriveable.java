@@ -669,7 +669,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			if (type.shootSound(secondary) != null)
 			{
-				//TODO proper general sound implementation
 				PacketPlaySound.sendSoundPacket(gunVector.x, gunVector.y, gunVector.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound(secondary), false);
 			}
 
@@ -773,10 +772,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		ItemStack bullet = driveableData.getStackInSlot(slot);
 		ItemBullet bulletItem = (ItemBullet)bullet.getItem();
 		int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-		//TODO damage vs living & damage vs driveable
-		//TODO speed?
-		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.bulletSpread, 3f);
-		//TODO unchecked cast, grenades will cause a crash (currently no vehicle with this feature exists)
+
+		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.damageVsDriveable*damageMultiplier, bulletItem.type.bulletSpread, 3f);
+		//TODO unchecked cast, grenades wont work (currently no vehicle with this feature exists)
 		FiredShot shot = new FiredShot(fireableGun, (BulletType) bulletItem.type, this, (EntityPlayerMP) getDriver());
 		
 		ShootBulletHandler handler = (Boolean isExtraBullet) ->

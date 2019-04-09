@@ -167,7 +167,7 @@ public class ShotHandler
 		if(bulletHit instanceof DriveableHit)
 		{
 			DriveableHit driveableHit = (DriveableHit)bulletHit;
-			penetratingPower = driveableHit.driveable.bulletHit(bulletType, damage, driveableHit, penetratingPower);
+			penetratingPower = driveableHit.driveable.bulletHit(bulletType, shot.getFireableGun().getDamageAgainstVehicles(), driveableHit, penetratingPower);
 			if(FlansMod.DEBUG)
 				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 			
@@ -209,7 +209,6 @@ public class ShotHandler
 			EntityHit entityHit = (EntityHit)bulletHit;
 			if(entityHit.entity != null)
 			{
-				System.out.println(shot.getDamageSource()+" "+shot.getPlayerOptional().orElse(null)+" "+shot.getShooterOptional().orElse(null));
 				if(entityHit.entity.attackEntityFrom(shot.getDamageSource(), damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
 				{
 					EntityLivingBase living = (EntityLivingBase)entityHit.entity;
