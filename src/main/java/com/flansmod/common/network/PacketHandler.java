@@ -156,8 +156,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	@SideOnly(Side.CLIENT)
 	public void handleClientPackets()
 	{
-		for(PacketBase packet = receivedPacketsClient.poll(); packet != null; packet = receivedPacketsClient.poll())
+		while(!receivedPacketsClient.isEmpty())
 		{
+			PacketBase packet = receivedPacketsClient.poll();
 			packet.handleClientSide(getClientPlayer());
 		}
 	}
@@ -168,8 +169,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		{
 			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
 			EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(playerName);
-			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
+			while(!receivedPacketsFromPlayer.isEmpty())
 			{
+				PacketBase packet = receivedPacketsFromPlayer.poll();
 				packet.handleServerSide(player);
 			}
 		}
