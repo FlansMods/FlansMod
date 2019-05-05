@@ -559,7 +559,7 @@ public class ItemGun extends Item implements IPaintableItem
 							//throw grenade
 							ItemGrenade grenade = (ItemGrenade) shootableItem;
 							grenade.throwGrenade(world, player);
-							handler.shooting(true);
+							handler.shooting(false);
 						}
 						
 						//TODO make server based sound

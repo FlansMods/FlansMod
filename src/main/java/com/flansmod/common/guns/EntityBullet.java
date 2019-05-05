@@ -1,7 +1,6 @@
 package com.flansmod.common.guns;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
@@ -22,7 +21,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,6 +55,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 	@SideOnly(Side.CLIENT)
 	private boolean playedFlybySound;
+	
+	/**
+	 * These values are used to store the UUIDs until the next entity update is performed. This prevents issues caused by the loading order
+	 */
+	private UUID playeruuid;
+	private UUID shooteruuid;
+	private boolean checkforuuids;
 
 	public EntityBullet(World world)
 	{
@@ -75,7 +80,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		motionX = direction.x;
 		motionY = direction.y;
 		motionZ = direction.z;
-		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed()*0 + 1);
+		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
 		
 		currentPenetratingPower = shot.getBulletType().penetratingPower;
 	}
@@ -168,6 +173,53 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		try
 		{
+			//This checks if the shooter and/or player can be found. If they are loaded/online they will be included in the FiredShot data, if not this data will be deleted/ignored
+			if (checkforuuids)
+			{
+				EntityPlayerMP player = null;
+				Entity shooter = null;
+				
+				if (playeruuid != null)
+				{
+				for (Entity entity : world.loadedEntityList)
+				{
+					if (entity.getUniqueID().equals(playeruuid) && entity instanceof EntityPlayerMP)
+					{
+						player = (EntityPlayerMP)entity;
+						break;
+					}
+				}
+				playeruuid = null;
+			}
+			
+			if (shooteruuid != null)
+			{
+				if (player != null && shooteruuid.equals(player.getUniqueID()))
+				{
+					shooter = player;
+				}
+				else
+				{
+					for (Entity entity : world.loadedEntityList)
+					{
+						if (entity.getUniqueID().equals(shooteruuid))
+						{
+							shooter = entity;
+							break;
+						}
+					}
+				}
+				shooteruuid = null;
+			}
+			
+			if (shooter != null)
+			{
+				shot = new FiredShot(shot.getFireableGun(), shot.getBulletType(), shooter, player);
+			}
+			
+			checkforuuids = false;
+			}
+			
 			BulletType type = this.getFiredShot().getBulletType();
 			
 			// Movement dampening variables
@@ -372,6 +424,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 			shot.getPlayerOptional().ifPresent((EntityPlayerMP player) -> 
 			{
+				
 				NBTTagCompound compound = NBTUtil.createUUIDTag(player.getUniqueID());
 				tag.setTag("player", compound);
 			});
@@ -391,8 +444,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		FireableGun fireablegun = null;
 		String shortName = tag.getString("type");
 		BulletType type = BulletType.getBullet(shortName);
-		EntityPlayerMP player = null;
-		Entity shooter = null;
 		this.dataManager.set(BULLET_TYPE, shortName);
 		
 		if (tag.hasKey("fireablegun"))
@@ -403,31 +454,17 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		if (tag.hasKey("player"))
 		{
-			UUID uuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("player"));
-			for (Entity entity : world.loadedEntityList)
-			{
-				if (entity.getUniqueID().equals(uuid) && entity instanceof EntityPlayerMP)
-				{
-					player = (EntityPlayerMP)entity;
-					break;
-				}
-			}
+			playeruuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("player"));
+			checkforuuids = true;
 		}
 
 		if (tag.hasKey("shooter"))
 		{
-			UUID uuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("shooter"));
-			for (Entity entity : world.loadedEntityList)
-			{
-				if (entity.getUniqueID().equals(uuid))
-				{
-					shooter = entity;
-					break;
-				}
-			}
+			shooteruuid = NBTUtil.getUUIDFromTag(tag.getCompoundTag("shooter"));
+			checkforuuids = true;
 		}
 		
-		shot = new FiredShot(fireablegun, type, shooter, player);
+		shot = new FiredShot(fireablegun, type);
 	}
 	
 	@Override

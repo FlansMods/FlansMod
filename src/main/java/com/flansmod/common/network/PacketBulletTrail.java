@@ -2,6 +2,7 @@ package com.flansmod.common.network;
 
 import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.vector.Vector3f;
 
 import io.netty.buffer.ByteBuf;
@@ -70,9 +71,7 @@ public class PacketBulletTrail extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
-		//TODO correct way to log this?
-		System.out.println("Received PacketBulletTrail on Server. This packet should only be send to clients");
-		
+		FlansMod.log.warn("Received PacketBulletTrail on Server. This packet should only be send to clients");
 	}
 
 	@Override

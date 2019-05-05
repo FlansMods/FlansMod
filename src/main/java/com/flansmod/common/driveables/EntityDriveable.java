@@ -697,7 +697,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							shootProjectile(slot, gunVec, lookVector, type, secondary);
+							shootProjectile(slot, gunVec, lookVector, type, secondary, (float)getSpeed());
 						}
 						else
 						{
@@ -725,7 +725,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							shootProjectile(slot, gunVec, lookVector, type, secondary);
+							shootProjectile(slot, gunVec, lookVector, type, secondary, (float)getSpeed()+3f);
 						}
 						else
 						{
@@ -742,6 +742,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					break;
 			}
 		}
+	}
+	
+	public double getSpeed()
+	{
+		return Math.sqrt(motionX*motionX + motionY*motionY + motionZ*motionZ);
 	}
 	
 	public Vector3f getOrigin(DriveablePosition dp)
@@ -767,13 +772,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return axes.getXAxis();
 	}
 	
-	private void shootProjectile(final Integer slot, Vector3f gunVec, Vector3f lookVector, DriveableType type, Boolean secondary)
+	private void shootProjectile(final Integer slot, Vector3f gunVec, Vector3f lookVector, DriveableType type, Boolean secondary, float speed)
 	{
 		ItemStack bullet = driveableData.getStackInSlot(slot);
 		ItemBullet bulletItem = (ItemBullet)bullet.getItem();
 		int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
 
-		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.damageVsDriveable*damageMultiplier, bulletItem.type.bulletSpread, 3f);
+		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.damageVsDriveable*damageMultiplier, bulletItem.type.bulletSpread, speed);
 		//TODO unchecked cast, grenades wont work (currently no vehicle with this feature exists)
 		FiredShot shot = new FiredShot(fireableGun, (BulletType) bulletItem.type, this, (EntityPlayerMP) getDriver());
 		

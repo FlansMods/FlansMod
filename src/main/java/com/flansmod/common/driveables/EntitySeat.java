@@ -622,8 +622,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@SideOnly(Side.CLIENT)
 	public boolean pressKey(int key, EntityPlayer player, boolean isOnTick)
 	{
-		//TODO DEBUG
-		System.out.println("Key:"+key);
 		// Driver seat should pass input to driveable
 		if(driver && driveable != null)
 		{
@@ -659,8 +657,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				
 				//setting server side minigun speed
 				minigunSpeed += 0.15F;
-				//TODO DEBUG
-				System.out.println("MinigunSpeed: "+minigunSpeed);
 				if(gun != null && gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
 				{
 					if(gunDelay <= 0 && TeamsManager.bulletsEnabled && seatInfo.gunnerID < driveable.getDriveableData().ammo.length)
@@ -699,7 +695,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 									int damage = bulletItemStack.getItemDamage();
 									bulletItemStack.setItemDamage(damage + 1);
 									// If the bullet item is completely damaged (empty)
-									System.out.println(damage+" "+bulletItemStack.getMaxDamage());
 									if(damage + 1 >= bulletItemStack.getMaxDamage())
 									{
 										//Set the damage to 0 and consume one ammo item
