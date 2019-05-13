@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -485,6 +486,10 @@ public class EntityMecha extends EntityDriveable
 			return;
 		
 		EntitySeat driverSeat = getSeat(0);
+		Entity driver = driverSeat == null ? null : driverSeat.getControllingPassenger();
+		EntityLivingBase livingDriver = driver instanceof EntityLivingBase ? (EntityLivingBase)driver : null;
+		EntityPlayer playerDriver = driver instanceof EntityPlayer ? (EntityPlayer)driver : null;
+		boolean isCreative = playerDriver != null && playerDriver.capabilities.isCreativeMode;
 		
 		//Decrement delay variables
 		if(jumpDelay > 0) jumpDelay--;
@@ -494,7 +499,7 @@ public class EntityMecha extends EntityDriveable
 		if(soundDelayRight > 0) soundDelayRight--;
 		
 		//If the player left the driver's seat, stop digging / whatever
-		if(!world.isRemote && (driverSeat == null || driverSeat.getControllingPassenger() == null))
+		if(!world.isRemote && (driverSeat == null || driver == null))
 			primaryShootHeld = secondaryShootHeld = false;
 		
 		//Update gun animations
@@ -519,8 +524,7 @@ public class EntityMecha extends EntityDriveable
 			for(EnumDriveablePart part : EnumDriveablePart.values())
 			{
 				DriveablePart thisPart = data.parts.get(part);
-				boolean hasCreativePlayer = driverSeat != null && driverSeat.getControllingPassenger() instanceof EntityPlayer
-						&& ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode;
+				boolean hasCreativePlayer = playerDriver != null && isCreative;
 				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
 				{
 					thisPart.health += 1;
@@ -531,8 +535,7 @@ public class EntityMecha extends EntityDriveable
 			toggleTimer = 20;
 		}
 		
-		if(diamondDetect() != null && diamondTimer == 0 && world.isRemote && driverSeat != null && driverSeat.getControllingPassenger() instanceof EntityPlayer
-				&& FlansMod.proxy.isThePlayer((EntityPlayer)driverSeat.getControllingPassenger()))
+		if(diamondDetect() != null && diamondTimer == 0 && world.isRemote && FlansMod.proxy.isThePlayer(playerDriver))
 		{
 			float sqDistance = 901;
 			for(float i = -30; i <= 30; i++)
@@ -572,13 +575,11 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		//Work out of this is client side and the player is driving
-		boolean thePlayerIsDrivingThis = world.isRemote && driverSeat != null && driverSeat.getControllingPassenger() instanceof EntityPlayer
-				&& FlansMod.proxy.isThePlayer((EntityPlayer)driverSeat.getControllingPassenger());
-		boolean driverIsLiving = driverSeat != null && driverSeat.getControllingPassenger() instanceof EntityLivingBase;
+		boolean thePlayerIsDrivingThis = world.isRemote && FlansMod.proxy.isThePlayer(playerDriver);
 		
 		//Despawning
 		ticksSinceUsed++;
-		if(!world.isRemote && driverSeat.getControllingPassenger() != null)
+		if(!world.isRemote && driver != null)
 			ticksSinceUsed = 0;
 		if(!world.isRemote && TeamsManager.mechaLove > 0 && ticksSinceUsed > TeamsManager.mechaLove * 20)
 		{
@@ -608,8 +609,10 @@ public class EntityMecha extends EntityDriveable
 			//{
 			//	axes.rotateGlobalYaw(2F);
 			//}
-			if(driverSeat.getControllingPassenger() instanceof EntityLivingBase && !(driverSeat.getControllingPassenger() instanceof EntityPlayer))
-				axes.setAngles(((EntityLivingBase)driverSeat.getControllingPassenger()).renderYawOffset + 90F, 0F, 0F);
+			if(livingDriver != null && playerDriver == null)
+			{
+				axes.setAngles(livingDriver.renderYawOffset + 90F, 0F, 0F);
+			}
 			else
 			{
 				//Function to limit Head Movement Left/Right
@@ -643,13 +646,15 @@ public class EntityMecha extends EntityDriveable
 		
 		float jetPack = jetPackPower();
 		if(!onGround && thePlayerIsDrivingThis /*&& Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController*/
-				&& FlansMod.proxy.isKeyDown(4) && shouldFly() && (((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode || data.fuelInTank >= (10F * jetPack)))
+				&& FlansMod.proxy.isKeyDown(4) && shouldFly() && (isCreative || data.fuelInTank >= (10F * jetPack)))
 		{
 			motionY *= 0.95;
 			motionY += (0.07 * jetPack);
 			fallDistance = 0;
-			if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+			if(!isCreative)
+			{
 				data.fuelInTank -= (10F * jetPack);
+			}
 			if(rocketTimer <= 0 && rocketPack().soundEffect != null)
 			{
 				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, rocketPack().soundEffect, false);
@@ -666,10 +671,8 @@ public class EntityMecha extends EntityDriveable
 		
 		Vector3f actualMotion = new Vector3f(0F, motionY - (16F / 400F), 0F);
 		
-		if(driverIsLiving)
+		if(livingDriver != null)
 		{
-			EntityLivingBase entity = (EntityLivingBase)driverSeat.getControllingPassenger();
-			boolean driverIsCreative = entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode;
 			if(thePlayerIsDrivingThis /*&& Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController*/)
 			{
 				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
@@ -677,7 +680,7 @@ public class EntityMecha extends EntityDriveable
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
 				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
 			}
-			else if(driverSeat.getControllingPassenger() instanceof EntityLiving && !(driverSeat.getControllingPassenger() instanceof EntityPlayer))
+			else if(livingDriver != null && playerDriver == null)
 			{
 				
 				moveZ = 1;
@@ -716,16 +719,13 @@ public class EntityMecha extends EntityDriveable
 				}
 				
 				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier()) * (4.3F / 20F));
-				
-				boolean canThrustCreatively = driverSeat != null && driverSeat.getControllingPassenger() instanceof EntityPlayer
-						&& ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode;
-				
-				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
+								
+				if((isCreative || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(!onGround && shouldFly() && (canThrustCreatively || data.fuelInTank > 10F * jetPack + data.engine.fuelConsumption))
+					if(!onGround && shouldFly() && (isCreative || data.fuelInTank > 10F * jetPack + data.engine.fuelConsumption))
 					{
 						intent.scale(jetPack);
-						if(!canThrustCreatively)
+						if(!isCreative)
 							data.fuelInTank -= 10F * jetPack;
 					}
 					
@@ -733,7 +733,7 @@ public class EntityMecha extends EntityDriveable
 					Vector3f.add(actualMotion, intent, actualMotion);
 					
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
-					if(!canThrustCreatively)
+					if(!isCreative)
 						data.fuelInTank -= data.engine.fuelConsumption;
 				}
 			}
@@ -816,9 +816,9 @@ public class EntityMecha extends EntityDriveable
 						if(breakingProgress >= 1F)
 						{
 							boolean cancelled = false;
-							if(entity instanceof EntityPlayerMP)
+							if(playerDriver instanceof EntityPlayerMP)
 							{
-								int eventOutcome = ForgeHooks.onBlockBreakEvent(world, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+								int eventOutcome = ForgeHooks.onBlockBreakEvent(world, isCreative ? GameType.CREATIVE : playerDriver.capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)playerDriver, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 								cancelled = eventOutcome == -1;
 							}
 							if(!cancelled)
@@ -836,66 +836,66 @@ public class EntityMecha extends EntityDriveable
 									for(ItemStack stack : drops)
 									{
 										//Check for iron regarding refining
-										boolean fuelCheck = (data.fuelInTank >= 5F || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										boolean fuelCheck = (data.fuelInTank >= 5F || isCreative);
 										if(fuelCheck && refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).getBlock() == Blocks.IRON_ORE)
 										{
 											stack = (new ItemStack(Items.IRON_INGOT, 1, 0));
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 5F;
 										}
 										
 										//Check for waste to be compacted
-										fuelCheck = (data.fuelInTank >= 0.1F || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										fuelCheck = (data.fuelInTank >= 0.1F || isCreative);
 										if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock &&
 												(((ItemBlock)stack.getItem()).getBlock() == Blocks.COBBLESTONE
 														|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.DIRT
 														|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.SAND))
 										{
 											stack.setCount(0);
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 0.1F;
 										}
 										
 										//Check for item multipliers
-										fuelCheck = (data.fuelInTank >= 3F * diamondMultiplier() || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										fuelCheck = (data.fuelInTank >= 3F * diamondMultiplier() || isCreative);
 										if(fuelCheck && stack.getItem() == Items.DIAMOND)
 										{
 											float multiplier = diamondMultiplier();
 											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 3F * diamondMultiplier();
 										}
-										fuelCheck = (data.fuelInTank >= 2F * redstoneMultiplier() || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										fuelCheck = (data.fuelInTank >= 2F * redstoneMultiplier() || isCreative);
 										if(fuelCheck && stack.getItem() == Items.REDSTONE)
 										{
 											float multiplier = redstoneMultiplier();
 											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 2F * redstoneMultiplier();
 										}
-										fuelCheck = (data.fuelInTank >= 2F * coalMultiplier() || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										fuelCheck = (data.fuelInTank >= 2F * coalMultiplier() || isCreative);
 										if(fuelCheck && stack.getItem() == Items.COAL)
 										{
 											float multiplier = coalMultiplier();
 											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 2F * coalMultiplier();
 										}
-										fuelCheck = (data.fuelInTank >= 2F * emeraldMultiplier() || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										fuelCheck = (data.fuelInTank >= 2F * emeraldMultiplier() || isCreative);
 										if(fuelCheck && stack.getItem() == Items.EMERALD)
 										{
 											float multiplier = emeraldMultiplier();
 											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 2F * emeraldMultiplier();
 										}
-										fuelCheck = (data.fuelInTank >= 2F * ironMultiplier() || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
+										fuelCheck = (data.fuelInTank >= 2F * ironMultiplier() || isCreative);
 										//check for refineIron OTHERWISE NICE DUPE. think about it and you will get why
 										if(fuelCheck && (stack.getItem() == Items.IRON_INGOT) && refineIron())
 										{
 											float multiplier = ironMultiplier();
 											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode)
+											if(!isCreative)
 												data.fuelInTank -= 2F * ironMultiplier();
 										}
 										
@@ -908,7 +908,7 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Add the itemstack to mecha inventory
-										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !world.isRemote && world.getGameRules().getBoolean("doTileDrops"))
+										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, isCreative) && !world.isRemote && world.getGameRules().getBoolean("doTileDrops"))
 										{
 											world.spawnEntity(new EntityItem(world, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
 										}
@@ -920,7 +920,7 @@ public class EntityMecha extends EntityDriveable
 									WorldServer worldServer = (WorldServer)world;
 									BlockPos pos = new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 									boolean dropBlocks = atLeastOneEffectiveTool && !vacuumItems;
-									destroyBlock(worldServer, pos, driverSeat.getControllingPassenger(), dropBlocks);
+									destroyBlock(worldServer, pos, driver, dropBlocks);
 								}
 							}
 						}
@@ -957,7 +957,7 @@ public class EntityMecha extends EntityDriveable
 				seat.updatePosition();
 		}
 		
-		if(!driverIsLiving || thePlayerIsDrivingThis)
+		if(livingDriver == null || thePlayerIsDrivingThis)
 			legSwing = legSwing / type.legSwingLimit;
 	}
 	
