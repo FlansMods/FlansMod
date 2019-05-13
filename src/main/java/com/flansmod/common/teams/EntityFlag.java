@@ -221,7 +221,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	
 	public int getTeamID()
 	{
-		return getDataManager().get(TEAMID);
+		return (int)getDataManager().get(TEAMID);
 	}
 	
 	@Override

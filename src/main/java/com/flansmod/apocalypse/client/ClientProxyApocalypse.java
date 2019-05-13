@@ -71,7 +71,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	private void registerVanillaItemModel(Item... items)
 	{
 		for(Item item : items)
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(FlansModApocalypse.MODID + ":" + item.getTranslationKey().split("\\.")[1], "inventory"));
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(FlansModApocalypse.MODID + ":" + item.getUnlocalizedName().split("\\.")[1], "inventory"));
 	}
 	
 	public void postInit(FMLPostInitializationEvent event)
