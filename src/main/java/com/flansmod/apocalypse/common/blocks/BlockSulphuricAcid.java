@@ -26,7 +26,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 	}
 	
 	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		entity.attackEntityFrom(acidDamage, 5.0F);
 	}

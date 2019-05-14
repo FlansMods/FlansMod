@@ -395,7 +395,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						
 						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
+								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ);
 						
 						Double radianYaw = Math.toRadians(gunYaw + 90F);
 						Double radianPitch = Math.toRadians(gunPitch);
@@ -410,7 +410,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					}
 				}
 				currentBarrel = (currentBarrel + 1) % type.numBarrels;
-				
 			}
 		}
 		if(!world.isRemote)

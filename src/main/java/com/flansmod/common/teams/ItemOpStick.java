@@ -18,7 +18,7 @@ public class ItemOpStick extends Item
 	public ItemOpStick()
 	{
 		super();
-		setTranslationKey("opStick");
+		setUnlocalizedName("opStick");
 		setRegistryName("opStick");
 		setHasSubtypes(true);
 	}
@@ -188,8 +188,8 @@ public class ItemOpStick extends Item
 	}
 	
 	@Override
-	public String getTranslationKey(ItemStack stack)
+	public String getUnlocalizedName(ItemStack stack)
 	{
-		return super.getTranslationKey() + "." + stack.getItemDamage();
+		return super.getUnlocalizedName() + "." + stack.getItemDamage();
 	}
 }
