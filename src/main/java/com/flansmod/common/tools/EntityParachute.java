@@ -33,6 +33,29 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		type = t;
 		setPosition(player.posX, player.posY, player.posZ);
 	}
+	
+
+	public EntityParachute(World w, ToolType t, EntityPlayer player)
+	{
+		this(w);
+		type = t;
+
+		if(canUseParachute(player))
+		{
+			player.posY -= 1;
+			setPosition(player.posX, player.posY-1.5, player.posZ);
+		}
+		else
+		{
+			setDead();
+		}
+	}
+	
+	public static boolean canUseParachute(Entity player)
+	{
+		List list = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.expand(0, 3, 0));
+		return list.size() == 0;
+	}
 
 	@Override
 	public void onUpdate()
@@ -47,11 +70,11 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
-		motionY = -0.1D;
+		motionY = -0.2D;
 		
 		if(riddenByEntity != null && riddenByEntity instanceof EntityLivingBase)
 		{
-			float speedMultiplier = 0.002F;
+			float speedMultiplier = 0.0025F;
 			double moveForwards = ((EntityLivingBase)this.riddenByEntity).moveForward;
 			double moveStrafing = ((EntityLivingBase)this.riddenByEntity).moveStrafing;
 			double sinYaw = -Math.sin((riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
@@ -63,8 +86,8 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			rotationYaw = riddenByEntity.rotationYaw;
 		}		
 		
-		motionX *= 0.8F;
-		motionZ *= 0.8F;
+		motionX *= 0.9F;
+		motionZ *= 0.9F;
 		
 		moveEntity(motionX, motionY, motionZ);
 		
