@@ -643,7 +643,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				return;
 			
 			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
-			//TODO unchecked cast, grenades will cause a crash (currently no vehicle with this feature exists)
+			//TODO grenades wont work (currently no vehicle with this feature exists)
+			if (shootableType instanceof BulletType)
+			{
 			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, (EntityPlayerMP) getDriver());
 			
 			ShootBulletHandler handler = (Boolean isExtraBullet) ->
@@ -671,7 +673,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				PacketPlaySound.sendSoundPacket(gunVector.x, gunVector.y, gunVector.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound(secondary), false);
 			}
-
+			}
+			
 			// Reset the shoot delay
 			setShootDelay(type.shootDelay(secondary), secondary);
 		}
@@ -779,8 +782,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
 
 		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.damageVsDriveable*damageMultiplier, bulletItem.type.bulletSpread, speed);
-		//TODO unchecked cast, grenades wont work (currently no vehicle with this feature exists)
-		FiredShot shot = new FiredShot(fireableGun, (BulletType) bulletItem.type, this, (EntityPlayerMP) getDriver());
+		FiredShot shot = new FiredShot(fireableGun, bulletItem.type, this, (EntityPlayerMP) getDriver());
 		
 		ShootBulletHandler handler = (Boolean isExtraBullet) ->
 		{

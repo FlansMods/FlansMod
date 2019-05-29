@@ -1,5 +1,8 @@
 package com.flansmod.common.guns;
 
+/**
+ * Functional interface to add effect when a bullet is fired. This is used to reduce the ammo, apply knockback, drop empty shells, etc.
+ */
 public interface ShootBulletHandler {
 	
 	/**
