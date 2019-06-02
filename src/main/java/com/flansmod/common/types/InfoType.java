@@ -467,12 +467,12 @@ public class InfoType
 								// This recipe is BORK. Kill it
 								return;
 							}
-							ingredients.add(Ingredient.fromStacks(stack.copy()));
+							ingredients.add(Ingredient.fromStacks(stack.copy())); 
 						}
 					}
 				}
 				// And finally hand all that over to the registry
-				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)).setRegistryName(name + "_shaped"));
+				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)).setRegistryName(shortName + "_shaped"));
 			}
 			else
 			{
@@ -482,7 +482,7 @@ public class InfoType
 					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));
 				}
 				
-				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients).setRegistryName(name + "_shapeless"));
+				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients).setRegistryName(shortName + "_shapeless"));
 			}
 		}
 		catch(Exception e)
@@ -531,7 +531,7 @@ public class InfoType
 		if(str.contains("."))
 			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
 		else
-			return getRecipeElement(str, 32767);
+			return getRecipeElement(str, Short.MAX_VALUE);
 	}
 	
 	public static ItemStack getRecipeElement(String s, int damage)
