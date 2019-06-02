@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Reduces the damage_taken by your mecha
+Name Diamond Mecha Armour
 ShortName mechaDiamondArmour
 Icon DiamondArmour
 //Colour in Red, Green, Blue, each going up to 255.

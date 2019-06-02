@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Emits lvl15 light
+Name Illuminator
 ShortName mechaIlluminator
 Icon Illuminator
 //Colour in Red, Green, Blue, each going up to 255.

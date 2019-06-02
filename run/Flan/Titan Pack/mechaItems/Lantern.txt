@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Emits lvl12 light
+Name Mecha Lantern
 ShortName mechaLantern
 Icon Lantern
 //Colour in Red, Green, Blue, each going up to 255.

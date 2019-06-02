@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Scans for nearby_diamonds
+Name Diamond Detector
 ShortName mechaDiamondDetector
 Icon DiamondDetector
 //Colour in Red, Green, Blue, each going up to 255.

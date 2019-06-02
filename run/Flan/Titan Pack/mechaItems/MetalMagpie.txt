@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Allows smaller emerald_pieces to be extracted to_increase yield_(1.5x Emerald Drop Rate)_Requires Item Vacuum
+Name Metal Magpie
 ShortName mechaMetalMagpie
 Icon MetalMagpie
 //Colour in Red, Green, Blue, each going up to 255.

@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Extracts and combines_coal dust to increase yield_(1.5x Coal Drop Rate)_Requires Item Vacuum
+Name Dust Extractor
 ShortName mechaDustExtractor
 Icon DustExtractor
 //Colour in Red, Green, Blue, each going up to 255.

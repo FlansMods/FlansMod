@@ -1,3 +1,4 @@
+Name Iron Drill
 ShortName ironDrill
 Icon IronDrill
 Model titan.Drill

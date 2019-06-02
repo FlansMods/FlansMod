@@ -1,5 +1,6 @@
 //Description for hover text. Underscores represent new lines.
 Description Slowly repairs your mecha
+Name Nanobots
 ShortName mechaNanobots
 Icon Nanobots
 //Colour in Red, Green, Blue, each going up to 255.
