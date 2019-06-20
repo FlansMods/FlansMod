@@ -185,6 +185,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				looking = new RotatedAxes();
 				playerLooking = new RotatedAxes();
 			}
+			
+			if(entityInThisSeat instanceof EntityPlayer && shooting)
+			{
+				pressKey(9, (EntityPlayer)entityInThisSeat, false);
+			}
 		}
 		else
 		{
@@ -201,9 +206,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				}
 			}
 		}
-		
-		if(entityInThisSeat instanceof EntityPlayer && shooting)
-			pressKey(9, (EntityPlayer)entityInThisSeat, false);
 		
 		minigunSpeed *= 0.95F;
 		minigunAngle += minigunSpeed;
