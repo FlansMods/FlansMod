@@ -119,7 +119,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 			float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
 			double length = 5D;
 			Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);
-			Vec3d lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+			Vec3d lookVec = posVec.add(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 			
 			if(world.isRemote && FlansMod.DEBUG)
 			{
@@ -212,7 +212,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 	@Override
 	public String toString()
 	{
-		return type == null ? getUnlocalizedName() : type.name;
+		return type == null ? getTranslationKey() : type.name;
 	}
 	
 	@Override

@@ -468,7 +468,7 @@ public abstract class DriveableType extends PaintableType
 				int damage = -1;
 				for(int i = 0; i < EnumDyeColor.values().length; i++)
 				{
-					if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(split[2]))
+					if(EnumDyeColor.byDyeDamage(i).getTranslationKey().equals(split[2]))
 						damage = i;
 				}
 				if(damage == -1)

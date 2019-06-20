@@ -120,7 +120,7 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 		float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
 		double length = 5D;
 		Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);
-		Vec3d lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+		Vec3d lookVec = posVec.add(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 		RayTraceResult RayTraceResult = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
 		
 		//Result check
