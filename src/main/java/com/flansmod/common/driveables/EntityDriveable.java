@@ -870,16 +870,27 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(passenger instanceof EntitySeat)
 			{
 				EntitySeat seat = (EntitySeat)passenger;
-				if(seat.getExpectedSeatID() >= 0 && seats[seat.getExpectedSeatID()] == null)
+				if(seat.getExpectedSeatID() >= 0 && seats[seat.getExpectedSeatID()] != seat)
 				{
+					if(seats[seat.getExpectedSeatID()] != null)
+					{
+						FlansMod.log.error("Driveable already had a seat in place");
+						seats[seat.getExpectedSeatID()].setDead();
+					}
+					
 					seats[seat.getExpectedSeatID()] = seat;
 				}
 			}
 			else if(passenger instanceof EntityWheel)
 			{
 				EntityWheel wheel = (EntityWheel)passenger;
-				if(wheel.getExpectedWheelID() >= 0 && wheels[wheel.getExpectedWheelID()] == null)
+				if(wheel.getExpectedWheelID() >= 0 && wheels[wheel.getExpectedWheelID()] != wheel)
 				{
+					if(wheels[wheel.getExpectedWheelID()] != null)
+					{
+						FlansMod.log.error("Driveable already had a wheel in place");
+						wheels[wheel.getExpectedWheelID()].setDead();
+					}
 					wheels[wheel.getExpectedWheelID()] = wheel;
 				}
 			}

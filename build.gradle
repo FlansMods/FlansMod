@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "5.5.2"
+version = "5.6"
 group = "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -24,7 +24,7 @@ minecraft {
     version = "1.12.2-14.23.5.2768"
     runDir = "run"
 
-    replace "@ALLOWED_VERSIONS@", "[5.5.2,5.5.3)"
+    replace "@ALLOWED_VERSIONS@", "[5.6, 5.7)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 
@@ -32,7 +32,7 @@ minecraft {
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
 
-    mappings = "stable_39"
+    mappings = "snapshot_20171003"
 }
 
 processResources {
