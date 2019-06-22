@@ -749,7 +749,11 @@ public abstract class DriveableType extends PaintableType
 			emitter.velocity.scale(1.0f / 16.0f);
 			d.emitters.add(emitter);
 		});
-
+		parsers.put("Model", (split, d) -> 
+		{ 
+			if(FMLCommonHandler.instance().getSide().isClient())
+				d.model = FlansMod.proxy.loadModel(split[1], d.shortName, ModelDriveable.class);
+		});
 
 
 
@@ -1048,6 +1052,7 @@ public abstract class DriveableType extends PaintableType
 		{ 
 			d.stealth = split[1].equals("True");
 		});
+	
 	}
 	
 	public DriveableType(TypeFile file)

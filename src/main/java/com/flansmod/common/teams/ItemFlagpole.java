@@ -44,7 +44,7 @@ public class ItemFlagpole extends Item
 		float f7 = f4 * f5;
 		float f9 = f3 * f5;
 		double d3 = 5D;
-		Vec3d vec3d1 = vec3d.addVector(f7 * d3, f6 * d3, f9 * d3);
+		Vec3d vec3d1 = vec3d.add(f7 * d3, f6 * d3, f9 * d3);
 		RayTraceResult RayTraceResult = world.rayTraceBlocks(vec3d, vec3d1, true);
 		if(RayTraceResult == null)
 		{

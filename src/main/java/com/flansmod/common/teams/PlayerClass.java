@@ -174,7 +174,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 				for(Object object : Item.REGISTRY)
 				{
 					Item item = (Item)object;
-					if(item != null && (item.getUnlocalizedName().equals(itemNames[0]) || item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(itemNames[0])))
+					if(item != null && (item.getTranslationKey().equals(itemNames[0]) || item.getTranslationKey().split("\\.").length > 1 && item.getTranslationKey().split("\\.")[1].equals(itemNames[0])))
 						matchingItem = item;
 				}
 				for(InfoType type : InfoType.infoTypes.values())

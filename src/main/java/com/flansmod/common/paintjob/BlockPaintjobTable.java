@@ -22,7 +22,7 @@ public class BlockPaintjobTable extends BlockContainer
 		super(Material.ROCK);
 		setHardness(2F);
 		setResistance(4F);
-		setUnlocalizedName("paintjobTable");
+		setTranslationKey("paintjobTable");
 		setRegistryName("paintjobTable");
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}

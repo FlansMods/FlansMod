@@ -163,18 +163,18 @@ public class FlansModApocalypse
 		
 		//Sulphur block and item
 		// TODO: [1.12] .setStepSound(Block.soundTypeSand)
-		blockSulphur = new BlockSulphur().setUnlocalizedName("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
-		sulphur = new Item().setUnlocalizedName("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
+		blockSulphur = new BlockSulphur().setTranslationKey("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
+		sulphur = new Item().setTranslationKey("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
 		
-		itemBlockSulphur = new ItemBlock(blockSulphur).setUnlocalizedName("blockSulphur").setRegistryName("itemBlockSulphur").setCreativeTab(tabApocalypse);
+		itemBlockSulphur = new ItemBlock(blockSulphur).setTranslationKey("blockSulphur").setRegistryName("itemBlockSulphur").setCreativeTab(tabApocalypse);
 		
 		//Sulphuric acid
 		sulphuricAcid = new Fluid("sulphuricAcid", sulphuricAcidStill, sulphuricAcidFlowing).setTemperature(300).setViscosity(800);
 		if(FluidRegistry.registerFluid(sulphuricAcid))
 		{
-			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setUnlocalizedName("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
+			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setTranslationKey("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
 			sulphuricAcid.setBlock(blockSulphuricAcid);
-			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
+			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getTranslationKey());
 			FluidRegistry.addBucketForFluid(sulphuricAcid);
 		}
 		else
@@ -184,12 +184,12 @@ public class FlansModApocalypse
 		}
 		
 		//Laboratory Stone
-		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
-		itemBlockLabStone = new ItemBlock(blockLabStone).setUnlocalizedName("labStone").setRegistryName("itemBlockLabStone").setCreativeTab(tabApocalypse);
+		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setTranslationKey("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
+		itemBlockLabStone = new ItemBlock(blockLabStone).setTranslationKey("labStone").setRegistryName("itemBlockLabStone").setCreativeTab(tabApocalypse);
 		
 		//Power Cube
-		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setUnlocalizedName("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
-		itemBlockPowerCube = new ItemBlock(blockPowerCube).setUnlocalizedName("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
+		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setTranslationKey("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
+		itemBlockPowerCube = new ItemBlock(blockPowerCube).setTranslationKey("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
 		GameRegistry.registerTileEntity(TileEntityPowerCube.class, new ResourceLocation("flansmodapocalypse:powercube"));
 		
 		proxy.preInit(event);

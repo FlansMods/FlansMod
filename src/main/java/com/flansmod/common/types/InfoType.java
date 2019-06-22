@@ -500,7 +500,7 @@ public class InfoType
 		int damage = -1;
 		for(int i = 0; i < EnumDyeColor.values().length; i++)
 		{
-			if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(dyeName))
+			if(EnumDyeColor.byDyeDamage(i).getTranslationKey().equals(dyeName))
 				damage = i;
 		}
 		if(damage == -1)
@@ -568,7 +568,7 @@ public class InfoType
 		}
 		for(Item item : Item.REGISTRY)
 		{
-			if(item != null && (item.getUnlocalizedName().equals("item." + s) || item.getUnlocalizedName().equals("tile." + s)))
+			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
 			{
 				return new ItemStack(item, amount, damage);
 			}

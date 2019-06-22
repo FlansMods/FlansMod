@@ -28,7 +28,7 @@ public class CreativeTabFlan extends CreativeTabs
 	}
 	
 	@Override
-	public ItemStack getTabIconItem()
+	public ItemStack createIcon()
 	{
 		icon = FlansMod.ticker / 20;
 		switch(type)

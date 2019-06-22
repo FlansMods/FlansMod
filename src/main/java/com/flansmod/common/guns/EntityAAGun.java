@@ -384,7 +384,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						
 						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ);
+								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
 						
 						world.spawnEntity(((ItemBullet)ammo[j].getItem()).getEntity(world,
 								origin, gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, type));
@@ -411,7 +411,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						
 						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY + 1.5F, posZ);
+								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY + 1.5F, posZ);
 						
 						world.spawnEntity(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(world,
 								origin, gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, type));
