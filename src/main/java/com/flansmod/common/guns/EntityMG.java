@@ -269,7 +269,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		// Player right clicked on gun
 		// Mount gun
-		if(gunner != null && (gunner instanceof EntityPlayer) && gunner != player)
+		if(gunner != null && gunner != player)
 		{
 			return true;
 		}
@@ -302,8 +302,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				int slot = findAmmo(player);
 				if(slot >= 0)
 				{
-					ammo = player.inventory.getStackInSlot(slot);
-					player.inventory.setInventorySlotContents(slot, ItemStack.EMPTY.copy());
+					ammo = player.inventory.getStackInSlot(slot).splitStack(1);
 					reloadTimer = type.reloadTime;
 					playSound(FlansModResourceHandler.getSoundEvent(type.reloadSound), 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
