@@ -71,7 +71,8 @@ public abstract class DriveableType extends PaintableType
 	public int damageModifierPrimary = 1, damageModifierSecondary = 1;
 
 	/** Positions of primary and secondary weapons */
-	public ArrayList<DriveablePosition> shootPointsPrimary = new ArrayList<>(), shootPointsSecondary = new ArrayList<>();
+	public ArrayList<ShootPoint> shootPointsPrimary = new ArrayList<ShootPoint>();
+	public ArrayList<ShootPoint> shootPointsSecondary = new ArrayList<ShootPoint>();
 	/** Pilot guns also have their own seperate array so ammo handling can be done */
 	public ArrayList<PilotGun> pilotGuns = new ArrayList<>();
 	
@@ -108,7 +109,7 @@ public abstract class DriveableType extends PaintableType
 	// Shoot particles
 	public float vehicleGunModelScale = 1f;
 	
-	public class ShootParticle
+	public static class ShootParticle
 	{
 		public ShootParticle(String s, float x1, float y1, float z1)
 		{
@@ -432,20 +433,20 @@ public abstract class DriveableType extends PaintableType
 		{ 
 			d.damageModifierSecondary = Integer.parseInt(split[1]);
 		});
-		parsers.put("AlternatePrimary", (split, d) -> 
-		{ 
+		parsers.put("AlternatePrimary", (split, d) ->
+		{
 			d.alternatePrimary = Boolean.parseBoolean(split[1]);
 		});
-		parsers.put("AlternateSecondary", (split, d) -> 
-		{ 
+		parsers.put("AlternateSecondary", (split, d) ->
+		{
 			d.alternateSecondary = Boolean.parseBoolean(split[1]);
 		});
-		parsers.put("ModePrimary", (split, d) -> 
-		{ 
+		parsers.put("ModePrimary", (split, d) ->
+		{
 			d.modePrimary = EnumFireMode.valueOf(split[1].toUpperCase());
 		});
-		parsers.put("ModeSecondary", (split, d) -> 
-		{ 
+		parsers.put("ModeSecondary", (split, d) ->
+		{
 			d.modeSecondary = EnumFireMode.valueOf(split[1].toUpperCase());
 		});
 		parsers.put("ShootPointPrimary", (split, d) -> 
@@ -506,19 +507,29 @@ public abstract class DriveableType extends PaintableType
 		{ 
 			d.secondary = EnumWeaponType.GUN;
 			PilotGun pilotGun = (PilotGun)d.getShootPoint(split);
-			d.shootPointsSecondary.add(pilotGun);
+			d.shootPointsSecondary.add(new ShootPoint(pilotGun, new Vector3f(0, 0, 0)));
 			d.pilotGuns.add(pilotGun);
 			d.driveableRecipe.add(new ItemStack(pilotGun.type.item));
 		});
 		parsers.put("BombPosition", (split, d) -> 
 		{ 
 			d.primary = EnumWeaponType.BOMB;
-			d.shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.core));
+			DriveablePosition pos = new DriveablePosition(new Vector3f(
+					Float.parseFloat(split[1]) / 16F,
+					Float.parseFloat(split[2]) / 16F,
+					Float.parseFloat(split[3]) / 16F),
+				EnumDriveablePart.core);
+			d.shootPointsPrimary.add(new ShootPoint(pos, new Vector3f(0, 0, 0)));
 		});
 		parsers.put("BarrelPosition", (split, d) -> 
 		{ 
 			d.primary = EnumWeaponType.SHELL;
-			d.shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.turret));
+			DriveablePosition pos = new DriveablePosition(new Vector3f(
+					Float.parseFloat(split[1]) / 16F,
+					Float.parseFloat(split[2]) / 16F,
+					Float.parseFloat(split[3]) / 16F),
+				EnumDriveablePart.turret);
+			d.shootPointsPrimary.add(new ShootPoint(pos, new Vector3f(0, 0, 0)));
 		});
 		parsers.put("ShootDelay", (split, d) -> 
 		{ 
@@ -552,7 +563,7 @@ public abstract class DriveableType extends PaintableType
 			int damage = -1;
 			for(int i = 0; i < EnumDyeColor.values().length; i++)
 			{
-				if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(split[2]))
+				if(EnumDyeColor.byDyeDamage(i).getTranslationKey().equals(split[2]))
 					damage = i;
 			}
 			if(damage == -1)
@@ -1155,7 +1166,7 @@ public abstract class DriveableType extends PaintableType
 		return new DriveablePosition(new Vector3f(), EnumDriveablePart.core);
 	}
 	
-	public ArrayList<DriveablePosition> shootPoints(boolean s)
+	public ArrayList<ShootPoint> shootPoints(boolean s)
 	{
 		return s ? shootPointsSecondary : shootPointsPrimary;
 	}

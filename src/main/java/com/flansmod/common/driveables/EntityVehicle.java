@@ -229,7 +229,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	}
 	
 	@Override
-	public Vector3f getLookVector(DriveablePosition dp)
+	public Vector3f getLookVector(ShootPoint shootPoint)
 	{
 		return rotate(getSeat(0).looking.getXAxis());
 	}

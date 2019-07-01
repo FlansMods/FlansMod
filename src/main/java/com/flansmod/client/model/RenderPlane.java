@@ -30,6 +30,7 @@ import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
+import com.flansmod.common.driveables.ShootPoint;
 import com.flansmod.common.guns.Paintjob;
 
 public class RenderPlane extends Render<EntityPlane> implements CustomItemRenderer
@@ -139,19 +140,31 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			
 			// Render shoot points
 			GL11.glColor4f(1F, 0F, 1F, 0.3F);
-			for(DriveablePosition point : type.shootPointsPrimary)
+			for(ShootPoint point : type.shootPointsPrimary)
 			{
-				renderOffsetAABB(
-						new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F,
-								point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+				DriveablePosition driveablePosition = point.rootPos;
+				renderOffsetAABB(new AxisAlignedBB(
+						driveablePosition.position.x - 0.25F,
+						driveablePosition.position.y - 0.25F,
+						driveablePosition.position.z - 0.25F,
+						driveablePosition.position.x + 0.25F,
+						driveablePosition.position.y + 0.25F,
+						driveablePosition.position.z + 0.25F),
+					0, 0, 0);
 			}
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
-			for(DriveablePosition point : type.shootPointsSecondary)
+			for(ShootPoint point : type.shootPointsSecondary)
 			{
-				renderOffsetAABB(
-						new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F,
-								point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+				DriveablePosition driveablePosition = point.rootPos;
+				renderOffsetAABB(new AxisAlignedBB(
+						driveablePosition.position.x - 0.25F,
+						driveablePosition.position.y - 0.25F,
+						driveablePosition.position.z - 0.25F,
+						driveablePosition.position.x + 0.25F,
+						driveablePosition.position.y + 0.25F,
+						driveablePosition.position.z + 0.25F),
+					0, 0, 0);
 			}
 			
 			

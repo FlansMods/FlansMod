@@ -580,7 +580,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		while(getShootDelay(secondary) <= 0.0f)
 		{
 			// We can shoot, so grab the available shoot points and the weaponType
-			ArrayList<DriveablePosition> shootPoints = type.shootPoints(secondary);
+			ArrayList<ShootPoint> shootPoints = type.shootPoints(secondary);
 			EnumWeaponType weaponType = type.weaponType(secondary);
 			// If there are no shoot points, return
 			if(shootPoints.isEmpty())
@@ -621,7 +621,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
-	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary,
+	private void shootEach(DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary,
 						   EnumWeaponType weaponType)
 	{
 		// Rotate the gun vector to global axes
@@ -630,9 +630,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f lookVector = getLookVector(shootPoint);
 		
 		// If its a pilot gun, then it is using a gun type, so do the following
-		if(shootPoint instanceof PilotGun)
+		if(shootPoint.rootPos instanceof PilotGun)
 		{
-			PilotGun pilotGun = (PilotGun)shootPoint;
+			PilotGun pilotGun = (PilotGun)shootPoint.rootPos;
 			// Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
@@ -834,12 +834,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
-	public Vector3f getOrigin(DriveablePosition dp)
+	public Vector3f getOrigin(ShootPoint shootPoint)
 	{
+		DriveablePosition driveablePosition = shootPoint.rootPos;
 		// Rotate the gun vector to global axes
-		Vector3f localGunVec = new Vector3f(dp.position);
+		Vector3f localGunVec = new Vector3f(driveablePosition.position);
 		
-		if(dp.part == EnumDriveablePart.turret)
+		if(driveablePosition.part == EnumDriveablePart.turret)
 		{
 			// Untranslate by the turret origin, to get the rotation about the right point
 			Vector3f.sub(localGunVec, getDriveableType().turretOrigin, localGunVec);
@@ -852,7 +853,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return rotate(localGunVec);
 	}
 	
-	public Vector3f getLookVector(DriveablePosition dp)
+	public Vector3f getLookVector(ShootPoint shootPoint)
 	{
 		return axes.getXAxis();
 	}

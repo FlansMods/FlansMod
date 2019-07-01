@@ -24,6 +24,7 @@ import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.ShootPoint;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.EnumMechaSlotType;
 import com.flansmod.common.driveables.mechas.ItemMecha;
@@ -209,12 +210,32 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			
 			//Render shoot points
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
-			for(DriveablePosition point : type.shootPointsPrimary)
-				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+			for(ShootPoint point : type.shootPointsPrimary)
+			{
+				DriveablePosition driveablePosition = point.rootPos;
+				renderOffsetAABB(new AxisAlignedBB(
+						driveablePosition.position.x - 0.25F,
+						driveablePosition.position.y - 0.25F,
+						driveablePosition.position.z - 0.25F,
+						driveablePosition.position.x + 0.25F,
+						driveablePosition.position.y + 0.25F,
+						driveablePosition.position.z + 0.25F),
+					0, 0, 0);
+			}
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
-			for(DriveablePosition point : type.shootPointsSecondary)
-				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+			for(ShootPoint point : type.shootPointsSecondary)
+			{
+				DriveablePosition driveablePosition = point.rootPos;
+				renderOffsetAABB(new AxisAlignedBB(
+						driveablePosition.position.x - 0.25F,
+						driveablePosition.position.y - 0.25F,
+						driveablePosition.position.z - 0.25F,
+						driveablePosition.position.x + 0.25F,
+						driveablePosition.position.y + 0.25F,
+						driveablePosition.position.z + 0.25F),
+					0, 0, 0);
+			}
 			
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

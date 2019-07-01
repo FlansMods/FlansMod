@@ -32,7 +32,7 @@ minecraft {
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
 
-    mappings = "snapshot_20171003"
+    mappings = "stable_39"
 }
 
 processResources {
