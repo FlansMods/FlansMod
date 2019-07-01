@@ -123,7 +123,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 				throw new NullPointerException("Packet not registered for discriminator : " + discriminator);
 			
 			//Create an empty packet and decode our packet data into it
-			PacketBase packet = cl.newInstance();
+			PacketBase packet = cl.getConstructor().newInstance();
 			packet.decodeInto(ctx, encodedData.slice());
 			//Check the side and handle our packet accordingly
 			switch(FMLCommonHandler.instance().getEffectiveSide())
@@ -196,7 +196,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketDriveableKey.class);
 		registerPacket(PacketDriveableKeyHeld.class);
 		registerPacket(PacketFlak.class);
-		//registerPacket(PacketGunFire.class);	
+		registerPacket(PacketGunFire.class);	
 		registerPacket(PacketGunPaint.class);
 		registerPacket(PacketKillMessage.class);
 		registerPacket(PacketMechaControl.class);
@@ -208,7 +208,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketRepairDriveable.class);
 		registerPacket(PacketRoundFinished.class);
 		registerPacket(PacketSeatUpdates.class);
-		registerPacket(PacketShotData.class);
 		registerPacket(PacketTeamInfo.class);
 		registerPacket(PacketTeamSelect.class);
 		registerPacket(PacketVehicleControl.class);
@@ -218,6 +217,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketLoadoutData.class);
 		registerPacket(PacketOpenRewardBox.class);
 		registerPacket(PacketAddSingleRewardBoxInstance.class);
+		registerPacket(PacketGunAnimation.class);
+		registerPacket(PacketBulletTrail.class);
+		registerPacket(PacketHitMarker.class);
+		registerPacket(PacketBlockHitEffect.class);
 	}
 	
 	/**
@@ -299,7 +302,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/**
 	 * Send a packet to all players
 	 */
-	public void sendToAll(Packet packet)
+	public void sendToAll(Packet<?> packet)
 	{
 		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendPacketToAllPlayers(packet);
 	}
@@ -307,7 +310,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/**
 	 * Send a packet to a player
 	 */
-	public void sendTo(Packet packet, EntityPlayerMP player)
+	public void sendTo(Packet<?> packet, EntityPlayerMP player)
 	{
 		player.connection.sendPacket(packet);
 	}
@@ -315,7 +318,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/**
 	 * Send a packet to all around a point
 	 */
-	public void sendToAllAround(Packet packet, NetworkRegistry.TargetPoint point)
+	public void sendToAllAround(Packet<?> packet, NetworkRegistry.TargetPoint point)
 	{
 		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendToAllNearExcept(null, point.x, point.y, point.z, point.range, point.dimension, packet);
 	}
@@ -323,7 +326,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/**
 	 * Send a packet to all in a dimension
 	 */
-	public void sendToDimension(Packet packet, int dimensionID)
+	public void sendToDimension(Packet<?> packet, int dimensionID)
 	{
 		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendPacketToAllPlayersInDimension(packet, dimensionID);
 	}
@@ -331,7 +334,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/**
 	 * Send a packet to the server
 	 */
-	public void sendToServer(Packet packet)
+	public void sendToServer(Packet<?> packet)
 	{
 		Minecraft.getMinecraft().player.connection.sendPacket(packet);
 	}

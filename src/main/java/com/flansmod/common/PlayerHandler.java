@@ -53,6 +53,7 @@ public class PlayerHandler
 		EntityLivingBase entity = event.getEntityLiving();
 		if(event instanceof LivingAttackEvent && (entity.getRidingEntity() instanceof EntityDriveable || entity.getRidingEntity() instanceof EntitySeat))
 		{
+			//TODO Set Drivable damage
 			event.setCanceled(true);
 		}
 	}

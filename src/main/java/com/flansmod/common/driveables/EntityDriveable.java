@@ -1,8 +1,6 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -39,25 +36,22 @@ import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
 import com.flansmod.client.EntityCamera;
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.handlers.KeyInputHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.FireableGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootBulletHandler;
 import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.guns.ShotData;
-import com.flansmod.common.guns.ShotData.InstantShotData;
-import com.flansmod.common.guns.ShotData.SpawnEntityShotData;
-import com.flansmod.common.guns.raytracing.FlansModRaytracer;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
@@ -587,18 +581,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			return ((EntityPlayer)seats[0].getControllingPassenger());
 		}
-		else
-		{
+		else {
 			return null;
 		}
 	}
 	
-	private void shootEach(DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary,
-						   EnumWeaponType weaponType)
+	private void shootEach(DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
 	{
 		// Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
-		Vector3f globalGunVec = Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null);
 		Vector3f lookVector = getLookVector(shootPoint);
 		
 		// If its a pilot gun, then it is using a gun type, so do the following
@@ -608,7 +599,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			// Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
-			EntityPlayer driver = getDriver();
 			
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
@@ -617,55 +607,44 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 			
 			// For each 
+
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
 			
-			float spread = 0.005f * gunType.bulletSpread * shootableType.bulletSpread;
+			if (!gunType.isAmmo(shootableType))
+				return;
 			
-			lookVector.x += (float)world.rand.nextGaussian() * spread;
-			lookVector.y += (float)world.rand.nextGaussian() * spread;
-			lookVector.z += (float)world.rand.nextGaussian() * spread;
-			
-			lookVector.scale(500.0f);
-			
-			// Instant bullets. Do a raytrace
-			if(gunType.bulletSpeed == 0.0f)
+			FireableGun fireableGun = new FireableGun(gunType, gunType.damage, gunType.bulletSpread, gunType.bulletSpeed);
+			//TODO grenades wont work (currently no vehicle with this feature exists)
+			if (shootableType instanceof BulletType)
 			{
-				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
+			FiredShot shot = new FiredShot(fireableGun, (BulletType) shootableType, this, (EntityPlayerMP) getDriver());
+			
+			ShootBulletHandler handler = (Boolean isExtraBullet) ->
+			{
+				if (driverIsCreative())
+					return;
+				if (shootableStack.getItem() instanceof ItemShootable)
 				{
-					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, globalGunVec,
-						lookVector, 0);
-					Vector3f hitPos = Vector3f.add(globalGunVec, lookVector, null);
-					BulletHit firstHit = null;
-					if(!hits.isEmpty())
+					shootableStack.setItemDamage(shootableStack.getItemDamage() + 1);
+					if(shootableStack.getItemDamage() >= shootableStack.getMaxDamage())
 					{
-						firstHit = hits.get(0);
-						hitPos = Vector3f.add(globalGunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
-					}
-					
-					if(FlansMod.DEBUG && world.isRemote)
-					{
-						world.spawnEntity(new EntityDebugDot(world, globalGunVec, 100, 1.0f, 1.0f, 1.0f));
-					}
-					
-					if(driver != null)
-					{
-						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver,
-							globalGunVec, firstHit, hitPos, gunType.damage,
-							i < gunType.numBullets * shootableType.numBullets - 1, false);
-						((ItemGun)gunType.item).handleDriveableShotData(shootableStack, -1, world, this, false,
-							shotData);
+						shootableStack.setItemDamage(0);
+						shootableStack.setCount(shootableStack.getCount() - 1);
+						if(shootableStack.getCount() <= 0)
+							driveableData.ammo[getDriveableType().numPassengerGunners + currentGun] = ItemStack.EMPTY.copy();
 					}
 				}
+			};
+			
+			Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
+			
+			ShotHandler.fireGun(world, shot, gunType.numBullets * shootableType.numBullets, gunVector, lookVector, handler);
+			
+			if (type.shootSound(secondary) != null)
+			{
+				PacketPlaySound.sendSoundPacket(gunVector.x, gunVector.y, gunVector.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound(secondary), false);
 			}
-			else // Spawn an entity
-			{
-				if(driver != null)
-				{
-					ShotData shotData = new SpawnEntityShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver,
-						lookVector);
-					((ItemGun)gunType.item).handleDriveableShotData(shootableStack, -1, world, this, false, shotData);
-				}
 			}
 			
 			// Reset the shoot delay
@@ -693,40 +672,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							int damageMultiplier =
-								secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-							
-							ItemStack bulletStack = driveableData.getStackInSlot(slot);
-							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-							EntityShootable bulletEntity = bulletItem.getEntity(world,
-								new Vec3d(globalGunVec.x, globalGunVec.y, globalGunVec.z),
-								axes.getYaw(),
-								axes.getPitch(),
-								motionX,
-								motionY,
-								motionZ,
-								(EntityLivingBase)seats[0].getControllingPassenger(),
-								damageMultiplier,
-								type);
-							
-							world.spawnEntity(bulletEntity);
-							
-							if(type.shootSound(secondary) != null)
-								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
-									type.shootSound(secondary), false);
-							if(!driverIsCreative())
-							{
-								bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-								if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
-								{
-									bulletStack.setItemDamage(0);
-									bulletStack.setCount(bulletStack.getCount() - 1);
-									if(bulletStack.getCount() == 0)
-										bulletStack = ItemStack.EMPTY.copy();
-								}
-								driveableData.setInventorySlotContents(slot, bulletStack);
-							}
-							setShootDelay(type.shootDelay(secondary), secondary);
+							shootProjectile(slot, gunVec, lookVector, type, secondary, (float)getSpeed());
 						}
 						else
 						{
@@ -754,40 +700,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(slot != -1)
 						{
-							int spread = 0;
-							int damageMultiplier =
-								secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
-							float shellSpeed = 3F;
-							
-							ItemStack bulletStack = driveableData.getStackInSlot(slot);
-							ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-							EntityShootable bulletEntity = bulletItem.getEntity(world,
-								globalGunVec,
+							shootProjectile(slot, gunVec,
 								lookVector,
-								(EntityLivingBase)seats[0].getControllingPassenger(),
-								spread,
-								damageMultiplier,
-								shellSpeed,
-								type);
-							
-							world.spawnEntity(bulletEntity);
-							
-							if(type.shootSound(secondary) != null)
-								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension,
-									type.shootSound(secondary), false);
-							if(!driverIsCreative())
-							{
-								bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-								if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
-								{
-									bulletStack.setItemDamage(0);
-									bulletStack.setCount(bulletStack.getCount() - 1);
-									if(bulletStack.getCount() == 0)
-										bulletStack = ItemStack.EMPTY.copy();
-								}
-								driveableData.setInventorySlotContents(slot, bulletStack);
-							}
-							setShootDelay(type.shootDelay(secondary), secondary);
+								type, secondary, (float)getSpeed()+3f);
 						}
 						else
 						{
@@ -804,6 +719,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					break;
 			}
 		}
+	}
+	
+	public double getSpeed()
+	{
+		return Math.sqrt(motionX*motionX + motionY*motionY + motionZ*motionZ);
 	}
 	
 	public Vector3f getOrigin(ShootPoint shootPoint)
@@ -828,6 +748,45 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public Vector3f getLookVector(ShootPoint shootPoint)
 	{
 		return axes.getXAxis();
+	}
+	
+	private void shootProjectile(final Integer slot, Vector3f gunVec, Vector3f lookVector, DriveableType type, Boolean secondary, float speed)
+	{
+		ItemStack bullet = driveableData.getStackInSlot(slot);
+		ItemBullet bulletItem = (ItemBullet)bullet.getItem();
+		int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
+
+		FireableGun fireableGun = new FireableGun(bulletItem.type, bulletItem.type.damageVsLiving*damageMultiplier, bulletItem.type.damageVsDriveable*damageMultiplier, bulletItem.type.bulletSpread, speed);
+		FiredShot shot = new FiredShot(fireableGun, bulletItem.type, this, (EntityPlayerMP) getDriver());
+		
+		ShootBulletHandler handler = (Boolean isExtraBullet) ->
+		{
+			if(!driverIsCreative())
+			{
+				ItemStack bulletStack = driveableData.getStackInSlot(slot);
+				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+				if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
+				{
+					bulletStack.setItemDamage(0);
+					bulletStack.setCount(bulletStack.getCount() - 1);
+					if(bulletStack.getCount() == 0)
+						bulletStack = ItemStack.EMPTY.copy();
+				}
+				driveableData.setInventorySlotContents(slot, bulletStack);
+			}
+		};
+		
+		Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX,posY,posZ), null);
+		
+		ShotHandler.fireGun(world, shot, bulletItem.type.numBullets, gunVector, lookVector, handler);
+		
+		if (type.shootSound(secondary) != null)
+		{
+			//TODO proper general sound implementation
+			PacketPlaySound.sendSoundPacket(gunVector.x, gunVector.y, gunVector.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound(secondary), false);
+		}
+		// Reset the shoot delay
+		setShootDelay(type.shootDelay(secondary), secondary);
 	}
 	
 	@Override

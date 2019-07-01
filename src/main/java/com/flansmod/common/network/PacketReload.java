@@ -15,8 +15,10 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 
-//When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
-//When the server receives one, it is interpreted as a forced reload
+/**
+ * This packet is send by the client to request a reload. The server checks if the player can reload and in this case actually reloads and sends a GunAnimationPacket as response.
+ * The GunAnimationPacket plays the reload animation and sets the pumpDelay & pumpTime times to prevent the client from shooting while reloading
+ */
 public class PacketReload extends PacketBase
 {
 	public boolean isOffHand;
@@ -49,6 +51,7 @@ public class PacketReload extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
+		EnumHand hand = isOffHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
 		ItemStack main = playerEntity.getHeldItemMainhand();
 		ItemStack off = playerEntity.getHeldItemOffhand();
@@ -58,7 +61,7 @@ public class PacketReload extends PacketBase
 		{
 			GunType type = ((ItemGun)stack.getItem()).GetType();
 			
-			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, isOffHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
+			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, hand, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
 			{
 				//Set the reload delay
 				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
@@ -68,6 +71,8 @@ public class PacketReload extends PacketBase
 				//Play reload sound
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
+			
+				FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, type.reloadTime, type.getPumpDelayAfterReload(), type.getPumpTime()), playerEntity);
 			}
 		}
 	}

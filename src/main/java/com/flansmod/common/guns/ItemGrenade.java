@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -24,7 +23,6 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.vector.Vector3f;
 
 public class ItemGrenade extends ItemShootable implements IFlanItem
 {
@@ -108,39 +106,6 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		return type;
 	}
 	
-	@Override
-	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
-									 float pitch, double motionX, double motionY, double motionZ,
-									 EntityLivingBase shooter, float gunDamage,
-									 InfoType shotFrom)
-	{
-		return null;
-	}
-	
-	@Override
-	public EntityShootable getEntity(World world, Vector3f origin,
-									 Vector3f direction, EntityLivingBase thrower, float spread,
-									 float damage, float speed, InfoType shotFrom)
-	{
-		return getGrenade(world, thrower);
-	}
-	
-	@Override
-	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
-									 float pitch, EntityLivingBase shooter, float spread, float damage,
-									 InfoType shotFrom)
-	{
-		return null;
-	}
-	
-	@Override
-	public EntityShootable getEntity(World world, EntityLivingBase player,
-									 float bulletSpread, float damage, float bulletSpeed, boolean b,
-									 InfoType shotFrom)
-	{
-		return getGrenade(world, player);
-	}
-	
 	public EntityGrenade getGrenade(World world, EntityLivingBase thrower)
 	{
 		//Create a new grenade entity
@@ -160,16 +125,9 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		}
 	}
 	
-	public void shoot(World world,
-					  Vector3f origin,
-					  Vector3f direction,
-					  float damageModifier,
-					  float spreadModifier,
-					  float speedModifier,
-					  InfoType shotFrom,
-					  EntityLivingBase shooter)
+	public void throwGrenade(World world, EntityLivingBase thrower)
 	{
-		EntityGrenade grenade = getGrenade(world, shooter);
+		EntityGrenade grenade = getGrenade(world, thrower);
 		world.spawnEntity(grenade);
 	}
 }

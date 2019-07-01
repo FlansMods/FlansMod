@@ -32,12 +32,10 @@ public class PlayerDeathEventListener
 			if(event.getSource().getTrueSource() instanceof EntityGrenade)
 			{
 				isGrenade = true;
-				EntityGrenade Grenade = (EntityGrenade)event.getSource().getTrueSource();
 			}
 			else
 			{
 				isGrenade = false;
-				EntityBullet Grenade = (EntityBullet)event.getSource().getTrueSource();
 			}
 			EntityPlayer killer = null;
 			EntityPlayer killed = (EntityPlayer)event.getEntityLiving();
@@ -49,14 +47,14 @@ public class PlayerDeathEventListener
 			}
 			else
 			{
-				killer = (EntityPlayer)((EntityBullet)event.getSource().getTrueSource()).owner;
+				killer = (EntityPlayer)((EntityBullet)event.getSource().getTrueSource()).getFiredShot().getPlayerOptional().orElse(null);
 			}
 			killerTeam = PlayerHandler.getPlayerData(killer).team;
 			killedTeam = PlayerHandler.getPlayerData(killed).team;
 			if(event.getEntityLiving() instanceof EntityPlayer && !isGrenade)
 			{
 				FlansMod.getPacketHandler().sendToDimension(
-						new PacketKillMessage(false, ((EntityBullet)event.getSource().getTrueSource()).type,
+						new PacketKillMessage(false, ((EntityBullet)event.getSource().getTrueSource()).getFiredShot().getBulletType(),
 								(killedTeam == null ? "f" : killedTeam.textColour) + event.getEntity().getDisplayName().getFormattedText(),
 								(killerTeam == null ? "f" : killedTeam.textColour) + event.getSource().getTrueSource().getDisplayName().getFormattedText()),
 						event.getEntityLiving().dimension);

@@ -96,6 +96,7 @@ public class GunAnimations
 		if(reloading && reloadAnimationProgress >= 1F)
 			reloading = false;
 		
+		//TODO cycle after one rotation
 		minigunBarrelRotation += minigunBarrelRotationSpeed;
 		minigunBarrelRotationSpeed *= 0.9F;
 		
@@ -152,9 +153,13 @@ public class GunAnimations
 		}
 	}
 	
+	public void addMinigunBarrelRotationSpeed(Float speed)
+	{
+		minigunBarrelRotationSpeed += speed;
+	}
+	
 	public void doShoot(int pumpDelay, int pumpTime)
 	{
-		minigunBarrelRotationSpeed += 2F;
 		lastGunSlide = gunSlide = 1F;
 		timeUntilPump = pumpDelay;
 		timeToPumpFor = pumpTime;

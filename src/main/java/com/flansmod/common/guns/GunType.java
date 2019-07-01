@@ -80,6 +80,10 @@ public class GunType extends PaintableType implements IScope
 	 */
 	public float minigunStartSpeed = 15F;
 	/**
+	 * The maximum speed a minigun mode gun can reach
+	 */
+	public float minigunMaxSpeed = 30F;
+	/**
 	 * Whether this gun can be used underwater
 	 */
 	public boolean canShootUnderwater = true;
@@ -243,7 +247,8 @@ public class GunType extends PaintableType implements IScope
 	/**
 	 * For guns with 3D models
 	 */
-	@SideOnly(Side.CLIENT)
+	//TODO properly separate the data
+	//@SideOnly(Side.CLIENT)
 	public ModelGun model;
 	
 	//Attachment settings
@@ -822,5 +827,38 @@ public class GunType extends PaintableType implements IScope
 	public float GetRecommendedScale()
 	{
 		return 60.0f;
+	}
+	
+	/**
+	 * @return Returns the pumpDelayAfterReload if a model exits, otherwise 0
+	 */
+	public Integer getPumpDelayAfterReload()
+	{
+		if (model != null)
+			return model.pumpDelayAfterReload;
+		
+		return 0;
+	}
+	
+	/**
+	 * @return Returns the pumpDelay if a model exits, otherwise 0
+	 */
+	public Integer getPumpDelay()
+	{
+		if (model != null)
+			return model.pumpDelay;
+		
+		return 0;
+	}
+	
+	/**
+	 * @return the pump time if a model exits, otherwise 1
+	 */
+	public Integer getPumpTime()
+	{
+		if (model != null)
+			return model.pumpTime;
+		
+		return 0;
 	}
 }
