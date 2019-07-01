@@ -22,10 +22,14 @@ import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.FireableGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.vector.Vector3f;
 
@@ -257,7 +261,6 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	 */
 	private void shoot(ItemStack stack, GunType gunType, World world, ItemStack bulletStack, Entity entity, boolean left, EntityLivingBase target)
 	{
-		ItemGun item = (ItemGun)gunType.item;
 		ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 		// Play a sound if the previous sound has finished
 		if(soundDelay <= 0 && gunType.shootSound != null)
@@ -273,27 +276,25 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			float inaccuracy = 0.5F;
 			
 			// Spawn the bullet entities
-			for(int k = 0; k < gunType.numBullets * bullet.numBullets; k++)
+			Vector3f origin = new Vector3f(posX, posY + getEyeHeight(), posZ);
+			Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
+			Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
+			
+			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+			
+			//Grenades are currently disabled for this entity
+			if (bullet instanceof BulletType)
 			{
-				Vector3f origin = new Vector3f(posX, posY + getEyeHeight(), posZ);
-				Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
-				Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
-				ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
-				shootableItem.shoot(world,
-						origin,
-						direction,
-						gunType.getDamage(stack),
-						gunType.getSpread(stack),
-						gunType.getBulletSpeed(stack),
-						gunType,
-						this);
+				FiredShot shot = new FiredShot(fireableGun, (BulletType)bullet, this);
+			
+				ShotHandler.fireGun(world, shot, gunType.numBullets*bullet.numBullets, origin, direction);
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null)
-				item.dropItem(world, this, bullet.dropItemOnShoot);
+				ItemGun.dropItem(world, this, bullet.dropItemOnShoot);
 			// Drop item on shooting if gun requires it
 			if(gunType.dropItemOnShoot != null)
-				item.dropItem(world, this, gunType.dropItemOnShoot);
+				ItemGun.dropItem(world, this, gunType.dropItemOnShoot);
 		}
 		shootDelay = gunType.GetShootDelay(stack);
 	}

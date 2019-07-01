@@ -98,7 +98,7 @@ public class InfoType
 		}
 		postRead(file);
 		
-		hash = file.hashCode();
+	hash = file.hashCode();
 		infoTypes.put(shortName.hashCode(), this);
 		totalDungeonChance += dungeonChance;
 	}

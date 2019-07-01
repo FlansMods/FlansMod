@@ -45,16 +45,21 @@ import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.FireableGun;
+import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
+import com.flansmod.common.network.PacketGunAnimation;
 import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
@@ -336,20 +341,20 @@ public class EntityMecha extends EntityDriveable
 						shoot(heldStack, gunType, bulletStack, creative(), left);
 						
 						//Apply animations to 3D modelled guns
-						//TODO : Move to client side and sync
-						if(world.isRemote)
-						{
-							int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
-							int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
+						
+						//TODO this doesn't work
+						
 							if(left)
 							{
-								leftAnimations.doShoot(pumpDelay, pumpTime);
+								leftAnimations.doShoot(gunType.getPumpDelay(), gunType.getPumpTime());
 							}
 							else
 							{
-								rightAnimations.doShoot(pumpDelay, pumpTime);
+								rightAnimations.doShoot(gunType.getPumpDelay(), gunType.getPumpTime());
 							}
-						}
+						
+						
+						
 						//Damage the bullet item
 						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 						
@@ -384,22 +389,13 @@ public class EntityMecha extends EntityDriveable
 		bulletOrigin = Vector3f.add(new Vector3f(posX, posY, posZ), bulletOrigin, null);
 		
 		if(!world.isRemote)
-			for(int k = 0; k < gunType.numBullets * bulletType.numBullets; k++)
-			{
-				
-				// TODO: Do mechas properly. No hacks
-				float speed = gunType.getBulletSpeed(stack);
-				if(speed <= 0.0f)
-					speed = 5.0f;
-				world.spawnEntity(((ItemShootable)bulletStack.getItem()).getEntity(world,
-						bulletOrigin,
-						armVector,
-						(EntityLivingBase)(getSeat(0).getControllingPassenger()),
-						gunType.getSpread(stack) / 2F,
-						gunType.getDamage(stack),
-						speed,
-						mechaType));
-			}
+		{
+			ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
+			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+			//TODO unchecked cast, grenades will cause an error
+			FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
+			ShotHandler.fireGun(world, shot, gunType.numBullets*bulletType.numBullets, bulletOrigin, armVector);
+		}
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.GetShootDelay(stack), 5) : gunType.GetShootDelay(stack);

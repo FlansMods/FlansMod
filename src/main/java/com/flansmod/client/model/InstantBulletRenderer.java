@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.util.WorldRenderer;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.vector.Vector3f;
 
 public class InstantBulletRenderer
@@ -58,15 +57,16 @@ public class InstantBulletRenderer
 		
 		private ResourceLocation texture;
 		
-		public InstantShotTrail(Vector3f origin, Vector3f hitPos, BulletType type)
+		public InstantShotTrail(Vector3f origin, Vector3f hitPos, float width, float length, float bulletSpeed, String trailTexture)
 		{
-			this.ticksExisted = 0;
-			this.bulletSpeed = 10.0f;
 			this.origin = origin;
 			this.hitPos = hitPos;
-			this.width = 0.05f; // type.trailWidth
-			this.length = 10.0f;
-			this.texture = FlansModResourceHandler.getTrailTexture(type);
+			this.width = width;
+			this.length = length;
+			this.bulletSpeed = bulletSpeed;
+			
+			this.ticksExisted = 0;
+			this.texture = FlansModResourceHandler.getTrailTexture(trailTexture);
 			
 			Vector3f dPos = Vector3f.sub(hitPos, origin, null);
 			this.distanceToTarget = dPos.length();

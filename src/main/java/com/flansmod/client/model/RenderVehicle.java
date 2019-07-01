@@ -371,4 +371,3 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		}
 	}
 }
-
