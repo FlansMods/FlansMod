@@ -73,7 +73,7 @@ public abstract class DriveableType extends PaintableType
 	/** Positions of primary and secondary weapons */
 	public ArrayList<ShootPoint> shootPointsPrimary = new ArrayList<>();
 	public ArrayList<ShootPoint> shootPointsSecondary = new ArrayList<>();
-	/** Pilot guns also have their own seperate array so ammo handling can be done */
+	/** Pilot guns also have their own separate array so ammo handling can be done */
 	public ArrayList<PilotGun> pilotGuns = new ArrayList<>();
 	
 	/** Sounds */
@@ -172,20 +172,12 @@ public abstract class DriveableType extends PaintableType
 	public int animFrames = 2;
 	
 	/** Sounds */
-	public int startSoundRange = 50;
 	public String startSound = "";
 	public int startSoundLength;
-	public int engineSoundRange = 50;
 	public String engineSound = "";
 	public int engineSoundLength;
-	public int backSoundRange = 50;
-	public String idleSound = "";
-	public int idleSoundLength = 50;
-	public String backSound = "";
-	public int backSoundLength;
 	
 	public boolean collisionDamageEnable = false;
-	public boolean pushOnCollision = true;
 	public float collisionDamageThrottle = 0;
 	public float collisionDamageTimes = 0;
 	
@@ -200,12 +192,9 @@ public abstract class DriveableType extends PaintableType
 	public boolean isExplosionWhenDestroyed = false;
 	
 	public String lockedOnSound = "";
-	public int soundTime = 0;
 	
 	public int canLockOnAngle = 10;
 	public int lockOnSoundTime = 60;
-	public String lockOnSound = "";
-	public int maxRangeLockOn = 500;
 	public int lockedOnSoundRange = 5;
 	public String lockingOnSound = "";
 	
@@ -239,7 +228,6 @@ public abstract class DriveableType extends PaintableType
 	public boolean setPlayerInvisible = false;
 	
 	public float maxThrottleInWater = 0.5F;
-	public int maxDepth = 3;
 	
 	public ArrayList<Vector3f> leftTrackPoints = new ArrayList<>();
 	public ArrayList<Vector3f> rightTrackPoints = new ArrayList<>();
@@ -250,8 +238,6 @@ public abstract class DriveableType extends PaintableType
 	
 	public ArrayList<CollisionShapeBox> collisionBox = new ArrayList<>();
 	public boolean fancyCollision = false;
-	
-	public CollisionShapeBox colbox;
 	
 	
 	public static ArrayList<DriveableType> types = new ArrayList<>();
@@ -266,33 +252,23 @@ public abstract class DriveableType extends PaintableType
 	static
 	{
 		// BASICS /////////////////////////////////////////////////////////////////////////////
-		parsers.put("MaxThrottle", (split, d) ->
-			d.maxThrottle = Float.parseFloat(split[1]));
-		parsers.put("MaxNegativeThrottle", (split, d) ->
-			d.maxNegativeThrottle = Float.parseFloat(split[1]));
-		parsers.put("Drag", (split, d) ->
-			d.drag = Float.parseFloat(split[1]));
+		parsers.put("MaxThrottle", (split, d) -> d.maxThrottle = Float.parseFloat(split[1]));
+		parsers.put("MaxNegativeThrottle", (split, d) -> d.maxNegativeThrottle = Float.parseFloat(split[1]));
+		parsers.put("Drag", (split, d) -> d.drag = Float.parseFloat(split[1]));
 		parsers.put("TurretOrigin", (split, d) ->
 			d.turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F,
 				Float.parseFloat(split[2]) / 16F,
 				Float.parseFloat(split[3]) / 16F));
 		
-		parsers.put("TurretRotationSpeed", (split, d) ->
-			d.turretRotationSpeed = Float.parseFloat(split[1]));
-		parsers.put("CanRoll", (split, d) ->
-			d.canRoll = Boolean.parseBoolean(split[1]));
-		parsers.put("YOffset", (split, d) ->
-			d.yOffset = Float.parseFloat(split[1]));
-		parsers.put("CameraDistance", (split, d) ->
-			d.cameraDistance = Float.parseFloat(split[1]));
+		parsers.put("TurretRotationSpeed", (split, d) -> d.turretRotationSpeed = Float.parseFloat(split[1]));
+		parsers.put("CanRoll", (split, d) -> d.canRoll = Boolean.parseBoolean(split[1]));
+		parsers.put("YOffset", (split, d) -> d.yOffset = Float.parseFloat(split[1]));
+		parsers.put("CameraDistance", (split, d) -> d.cameraDistance = Float.parseFloat(split[1]));
 		
 		// BOATS ////////////////////////////////////////////////////////////////////////////
-		parsers.put("PlaceableOnLand", (split, d) ->
-			d.placeableOnLand = Boolean.parseBoolean(split[1]));
-		parsers.put("PlaceableOnWater", (split, d) ->
-			d.placeableOnWater = Boolean.parseBoolean(split[1]));
-		parsers.put("FloatOnWater", (split, d) ->
-			d.floatOnWater = Boolean.parseBoolean(split[1]));
+		parsers.put("PlaceableOnLand", (split, d) -> d.placeableOnLand = Boolean.parseBoolean(split[1]));
+		parsers.put("PlaceableOnWater", (split, d) -> d.placeableOnWater = Boolean.parseBoolean(split[1]));
+		parsers.put("FloatOnWater", (split, d) -> d.floatOnWater = Boolean.parseBoolean(split[1]));
 		parsers.put("Boat", (split, d) ->
 		{
 			d.placeableOnLand = false;
@@ -300,8 +276,7 @@ public abstract class DriveableType extends PaintableType
 			d.floatOnWater = true;
 			d.wheelStepHeight = 0F;
 		});
-		parsers.put("Buoyancy", (split, d) ->
-			d.buoyancy = Float.parseFloat(split[1]));
+		parsers.put("Buoyancy", (split, d) -> d.buoyancy = Float.parseFloat(split[1]));
 		
 		// WHEELS ////////////////////////////////////////////////////////////////////////////////
 		parsers.put("Wheel", (split, d) ->
@@ -309,18 +284,14 @@ public abstract class DriveableType extends PaintableType
 				Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F),
 				split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel));
 		parsers.put("WheelPosition", parsers.get("Wheel")); // Alt name
-		parsers.put("WheelRadius", (split, d) ->
-			d.wheelStepHeight = Float.parseFloat(split[1]));
+		parsers.put("WheelRadius", (split, d) -> d.wheelStepHeight = Float.parseFloat(split[1]));
 		parsers.put("WheelStepHeight", parsers.get("WheelRadius")); // Alt name
-		parsers.put("WheelSpringStrength", (split, d) ->
-			d.wheelSpringStrength = Float.parseFloat(split[1]));
+		parsers.put("WheelSpringStrength", (split, d) -> d.wheelSpringStrength = Float.parseFloat(split[1]));
 		parsers.put("SpringStrength", parsers.get("WheelSpringStrength")); // Alt name
 		
 		// HARVESTERS //////////////////////////////////////////////////////////////////////////////
-		parsers.put("Harvester", (split, d) ->
-			d.harvestBlocks = Boolean.parseBoolean(split[1]));
-		parsers.put("HarvestMaterial", (split, d) ->
-			d.materialsHarvested.add(getMaterial(split[1])));
+		parsers.put("Harvester", (split, d) -> d.harvestBlocks = Boolean.parseBoolean(split[1]));
+		parsers.put("HarvestMaterial", (split, d) -> d.materialsHarvested.add(getMaterial(split[1])));
 		parsers.put("HarvestToolType", (split, d) ->
 		{
 			switch(split[1])
@@ -357,47 +328,29 @@ public abstract class DriveableType extends PaintableType
 		});
 		
 		// CARGO ////////////////////////////////////////////////////////////////////////////////////////
-		parsers.put("CargoSlots", (split, d) ->
-			d.numCargoSlots = Integer.parseInt(split[1]));
-		parsers.put("BombSlots", (split, d) ->
-			d.numBombSlots = Integer.parseInt(split[1]));
+		parsers.put("CargoSlots", (split, d) -> d.numCargoSlots = Integer.parseInt(split[1]));
+		parsers.put("BombSlots", (split, d) -> d.numBombSlots = Integer.parseInt(split[1]));
 		parsers.put("MineSlots", parsers.get("BombSlots")); // Alt name
-		parsers.put("MissileSlots", (split, d) ->
-			d.numMissileSlots = Integer.parseInt(split[1]));
+		parsers.put("MissileSlots", (split, d) -> d.numMissileSlots = Integer.parseInt(split[1]));
 		parsers.put("ShellSlots", parsers.get("MissileSlots")); // Alt name
-		parsers.put("FuelTankSize", (split, d) ->
-			d.fuelTankSize = Integer.parseInt(split[1]));
-		parsers.put("TrackFrames", (split, d) ->
-			d.animFrames = Integer.parseInt(split[1]) - 1);
-		parsers.put("BulletDetection", (split, d) ->
-			d.bulletDetectionRadius = Integer.parseInt(split[1]));
+		parsers.put("FuelTankSize", (split, d) -> d.fuelTankSize = Integer.parseInt(split[1]));
+		parsers.put("TrackFrames", (split, d) -> d.animFrames = Integer.parseInt(split[1]) - 1);
+		parsers.put("BulletDetection", (split, d) -> d.bulletDetectionRadius = Integer.parseInt(split[1]));
 		
 		// AMMO ////////////////////////////////////////////////////////////////////////////////////////
-		parsers.put("AddAmmo", (split, d) ->
-			d.ammo.add(BulletType.getBullet(split[1])));
-		parsers.put("AllowAllAmmo", (split, d) ->
-			d.acceptAllAmmo = Boolean.parseBoolean(split[1]));
+		parsers.put("AddAmmo", (split, d) -> d.ammo.add(BulletType.getBullet(split[1])));
+		parsers.put("AllowAllAmmo", (split, d) -> d.acceptAllAmmo = Boolean.parseBoolean(split[1]));
 		parsers.put("AcceptAllAmmo", parsers.get("AllowAllAmmo")); // Alt name
-		parsers.put("Primary", (split, d) ->
-			d.primary = EnumWeaponType.valueOf(split[1].toUpperCase()));
-		parsers.put("Secondary", (split, d) ->
-			d.secondary = EnumWeaponType.valueOf(split[1].toUpperCase()));
-		parsers.put("ShootDelayPrimary", (split, d) ->
-			d.shootDelayPrimary = Integer.parseInt(split[1]));
-		parsers.put("ShootDelaySecondary", (split, d) ->
-			d.shootDelaySecondary = Integer.parseInt(split[1]));
-		parsers.put("DamageModifierPrimary", (split, d) ->
-			d.damageModifierPrimary = Integer.parseInt(split[1]));
-		parsers.put("DamageModifierSecondary", (split, d) ->
-			d.damageModifierSecondary = Integer.parseInt(split[1]));
-		parsers.put("AlternatePrimary", (split, d) ->
-			d.alternatePrimary = Boolean.parseBoolean(split[1]));
-		parsers.put("AlternateSecondary", (split, d) ->
-			d.alternateSecondary = Boolean.parseBoolean(split[1]));
-		parsers.put("ModePrimary", (split, d) ->
-			d.modePrimary = EnumFireMode.valueOf(split[1].toUpperCase()));
-		parsers.put("ModeSecondary", (split, d) ->
-			d.modeSecondary = EnumFireMode.valueOf(split[1].toUpperCase()));
+		parsers.put("Primary", (split, d) -> d.primary = EnumWeaponType.valueOf(split[1].toUpperCase()));
+		parsers.put("Secondary", (split, d) -> d.secondary = EnumWeaponType.valueOf(split[1].toUpperCase()));
+		parsers.put("ShootDelayPrimary", (split, d) -> d.shootDelayPrimary = Integer.parseInt(split[1]));
+		parsers.put("ShootDelaySecondary", (split, d) -> d.shootDelaySecondary = Integer.parseInt(split[1]));
+		parsers.put("DamageModifierPrimary", (split, d) -> d.damageModifierPrimary = Integer.parseInt(split[1]));
+		parsers.put("DamageModifierSecondary", (split, d) -> d.damageModifierSecondary = Integer.parseInt(split[1]));
+		parsers.put("AlternatePrimary", (split, d) -> d.alternatePrimary = Boolean.parseBoolean(split[1]));
+		parsers.put("AlternateSecondary", (split, d) -> d.alternateSecondary = Boolean.parseBoolean(split[1]));
+		parsers.put("ModePrimary", (split, d) -> d.modePrimary = EnumFireMode.valueOf(split[1].toUpperCase()));
+		parsers.put("ModeSecondary", (split, d) -> d.modeSecondary = EnumFireMode.valueOf(split[1].toUpperCase()));
 		parsers.put("ShootPointPrimary", (split, d) ->
 		{
 			DriveablePosition rootPos;
@@ -488,10 +441,8 @@ public abstract class DriveableType extends PaintableType
 				EnumDriveablePart.turret);
 			d.shootPointsPrimary.add(new ShootPoint(pos, new Vector3f(0, 0, 0)));
 		});
-		parsers.put("ShootDelay", (split, d) ->
-			d.shootDelaySecondary = Integer.parseInt(split[1]));
-		parsers.put("ShellDelay", (split, d) ->
-			d.shootDelayPrimary = Integer.parseInt(split[1]));
+		parsers.put("ShootDelay", (split, d) -> d.shootDelaySecondary = Integer.parseInt(split[1]));
+		parsers.put("ShellDelay", (split, d) -> d.shootDelayPrimary = Integer.parseInt(split[1]));
 		parsers.put("BombDelay", parsers.get("ShellDelay")); // Alt name
 		
 		// RECIPE ////////////////////////////////////////////////////////////////////////////////
@@ -540,8 +491,7 @@ public abstract class DriveableType extends PaintableType
 				Integer.parseInt(split[8]));
 			d.health.put(part, box);
 		});
-		parsers.put("CollisionPoint", (split, d) ->
-			d.collisionPoints.add(new DriveablePosition(split)));
+		parsers.put("CollisionPoint", (split, d) -> d.collisionPoints.add(new DriveablePosition(split)));
 		parsers.put("AddCollisionPoint", parsers.get("CollisionPoint")); // Alt name
 		
 		
@@ -1085,8 +1035,6 @@ public abstract class DriveableType extends PaintableType
 			if(gun.part == part.type)
 			{
 				stacks.add(new ItemStack(gun.type.item));
-				//if(data.ammo[numPassengerGunners + pilotGuns.indexOf(gun)] != null)
-				//	stacks.add(data.ammo[numPassengerGunners + pilotGuns.indexOf(gun)]);
 			}
 		}
 		for(Seat seat : seats)
@@ -1094,8 +1042,6 @@ public abstract class DriveableType extends PaintableType
 			if(seat != null && seat.part == part.type && seat.gunType != null)
 			{
 				stacks.add(new ItemStack(seat.gunType.item));
-				//if(data.ammo[seat.id] != null)
-				//	stacks.add(data.ammo[seat.id]);
 			}
 		}
 		return stacks;
