@@ -1,7 +1,10 @@
 package com.flansmod.common.teams;
 
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -10,19 +13,19 @@ import net.minecraft.util.EnumChatFormatting;
 
 import com.flansmod.common.FlansMod;
 
-public class CommandTeams extends CommandBase 
+public class CommandTeams extends CommandBase
 {
-	
+
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 
 	@Override
-	public String getCommandName() 
+	public String getCommandName()
 	{
 		return "teams";
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] split) 
+	public void processCommand(ICommandSender sender, String[] split)
 	{
 		if(teamsManager == null)
 		{
@@ -192,7 +195,7 @@ public class CommandTeams extends CommandBase
 			{
 				sender.addChatMessage(new ChatComponentText("Map (" + split[1] + ") not found"));
 			}
-			
+
 			return;
 		}
 		if(split[0].equals("setRound"))
@@ -307,7 +310,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.autoBalance = Boolean.parseBoolean(split[1]);
@@ -318,7 +321,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.voting = !Boolean.parseBoolean(split[1]);
@@ -329,7 +332,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.voting = Boolean.parseBoolean(split[1]);
@@ -372,7 +375,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <ID>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <ID>"));
 				return;
 			}
 			int map = Integer.parseInt(split[1]);
@@ -382,26 +385,26 @@ public class CommandTeams extends CommandBase
 		}
 		if(split[0].equals("addMapToRotation") || split[0].equals("addToRotation") || split[0].equals("addRotation") || split[0].equals("addRound"))
 		{
-			if(split.length < 7)
+			if(split.length < 8)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <TimeLimit> <ScoreLimit>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <TimeLimit> <ScoreLimit> <isNextRoundOn true/false>"));
 				return;
 			}
 			TeamsMap map = TeamsManager.getInstance().maps.get(split[1]);
 			if(map == null)
 			{
-				sender.addChatMessage(new ChatComponentText("Could not find map : " + split[1]));	
+				sender.addChatMessage(new ChatComponentText("Could not find map : " + split[1]));
 				return;
 			}
 			Gametype gametype = Gametype.getGametype(split[2]);
 			if(gametype == null)
 			{
-				sender.addChatMessage(new ChatComponentText("Could not find gametype : " + split[2]));	
+				sender.addChatMessage(new ChatComponentText("Could not find gametype : " + split[2]));
 				return;
 			}
-			if(split.length != 5 + gametype.numTeamsRequired)
+			if(split.length != 6 + gametype.numTeamsRequired)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <ScoreLimit> <TimeLimit>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <ScoreLimit> <TimeLimit> <isNextRoundOn true/false>"));
 				return;
 			}
 			Team[] teams = new Team[gametype.numTeamsRequired];
@@ -410,7 +413,7 @@ public class CommandTeams extends CommandBase
 				teams[i] = Team.getTeam(split[3 + i]);
 			}
 			sender.addChatMessage(new ChatComponentText("Added map (" + map.shortName + ") to rotation"));
-			TeamsManager.getInstance().rounds.add(new TeamsRound(map, gametype, teams, Integer.parseInt(split[3 + gametype.numTeamsRequired]), Integer.parseInt(split[4 + gametype.numTeamsRequired])));
+			TeamsManager.getInstance().rounds.add(new TeamsRound(map, gametype, teams, Integer.parseInt(split[3 + gametype.numTeamsRequired]), Integer.parseInt(split[4 + gametype.numTeamsRequired]), Boolean.getBoolean(split[5 + gametype.numTeamsRequired])));
 			return;
 		}
 		if(split[0].equals("start") || split[0].equals("begin"))
@@ -430,7 +433,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <ID>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <ID>"));
 				return;
 			}
 			int prevRotation = Integer.parseInt(split[1]) - 1;
@@ -445,7 +448,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.forceAdventureMode = Boolean.parseBoolean(split[1]);
@@ -456,7 +459,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.overrideHunger = Boolean.parseBoolean(split[1]);
@@ -467,7 +470,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.explosions = Boolean.parseBoolean(split[1]);
@@ -478,7 +481,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.bombsEnabled = Boolean.parseBoolean(split[1]);
@@ -489,7 +492,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.bulletsEnabled = Boolean.parseBoolean(split[1]);
@@ -500,7 +503,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.canBreakGuns = Boolean.parseBoolean(split[1]);
@@ -511,7 +514,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.canBreakGlass = Boolean.parseBoolean(split[1]);
@@ -522,7 +525,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.armourDrops = Boolean.parseBoolean(split[1]);
@@ -533,7 +536,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <on/off/smart>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <on/off/smart>"));
 				return;
 			}
 			if(split[1].toLowerCase().equals("on"))
@@ -557,7 +560,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.vehiclesNeedFuel = Boolean.parseBoolean(split[1]);
@@ -568,7 +571,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.mgLife = Integer.parseInt(split[1]);
@@ -581,7 +584,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.planeLife = Integer.parseInt(split[1]);
@@ -594,7 +597,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.vehicleLife = Integer.parseInt(split[1]);
@@ -607,7 +610,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.mechaLove = Integer.parseInt(split[1]);
@@ -620,7 +623,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.aaLife = Integer.parseInt(split[1]);
@@ -633,18 +636,29 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
 				return;
 			}
 			TeamsManager.driveablesBreakBlocks = Boolean.parseBoolean(split[1]);
 			sender.addChatMessage(new ChatComponentText("Vehicles will " + (TeamsManager.driveablesBreakBlocks ? "now" : "no longer") + " break blocks"));
 			return;
 		}
+		if(split[0].equals("vehiclesCanZoom"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));
+				return;
+			}
+			TeamsManager.allowVehicleZoom = Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Vehicles will " + (TeamsManager.allowVehicleZoom ? "now" : "no longer") + " be able to zoom"));
+			return;
+		}
 		if(split[0].equals("scoreDisplayTime"))
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.scoreDisplayTime = Integer.parseInt(split[1]) * 20;
@@ -655,7 +669,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.votingTime = Integer.parseInt(split[1]) * 20;
@@ -666,7 +680,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));
 				return;
 			}
 			TeamsManager.autoBalanceInterval = Integer.parseInt(split[1]) * 20;
@@ -677,12 +691,12 @@ public class CommandTeams extends CommandBase
 		{
 			if(TeamsManager.getInstance().currentRound == null)
 			{
-				sender.addChatMessage(new ChatComponentText("There is no gametype to set variables for"));		
+				sender.addChatMessage(new ChatComponentText("There is no gametype to set variables for"));
 				return;
 			}
 			if(split.length != 3)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams setVariable <variable> <value>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams setVariable <variable> <value>"));
 				return;
 			}
 			if(TeamsManager.getInstance().currentRound.gametype.setVariable(split[1], split[2]))
@@ -690,23 +704,132 @@ public class CommandTeams extends CommandBase
 			else sender.addChatMessage(new ChatComponentText("Variable " + split[1] + " did not exist in gametype " + TeamsManager.getInstance().currentRound.gametype.shortName));
 			return;
 		}
+		if(split[0].equals("ping"))
+		{
+			int ping_sum = 0;
+			int ping_cnt = 0;
+			List<EntityPlayer> list = TeamsManager.getPlayers();
+			for(EntityPlayer player : list)
+			{
+				if(player instanceof EntityPlayerMP)
+				{
+					EntityPlayerMP pm = (EntityPlayerMP)player;
+					sender.addChatMessage(new ChatComponentText("[Ping] " + pm.ping + " : "+ pm.getDisplayName()));
+					if(pm.ping > 0)
+					{
+						ping_sum += pm.ping;
+						ping_cnt++;
+					}
+				}
+			}
+
+			if(ping_cnt > 0)
+			{
+				sender.addChatMessage(new ChatComponentText("[PingAverage] " + String.format("%.1f", (double)ping_sum/ping_cnt)));
+			}
+
+			return;
+		}
+		if(split[0].equals("bltss"))
+		{
+			if(split.length != 3)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams bltss <0 ... 100> <0 ... 1000>"));
+				sender.addChatMessage(new ChatComponentText("Bullet use player snapshot = Min[default=0] + (Ping / Divisor[default=50])"));
+				return;
+			}
+			int bmn = Integer.parseInt(split[1]);
+			int bdv = Integer.parseInt(split[2]);
+			if(bmn < 0)		bmn = 0;
+			if(bmn > 100)	bmn = 100;
+			if(bdv < 0)		bdv = 0;
+			if(bdv > 1000)	bdv = 1000;
+			if(TeamsManager.bulletSnapshotMin != bmn || TeamsManager.bulletSnapshotDivisor != bdv)
+			{
+				TeamsManager.bulletSnapshotMin		= bmn;
+				TeamsManager.bulletSnapshotDivisor	= bdv;
+				FlansMod.updateBltssConfig(bmn, bdv);
+			}
+
+			sender.addChatMessage(new ChatComponentText("[BulletDelay] Min=" + bmn + " : Divisor=" + bdv));
+
+			return;
+		}
+		if(split[0].equals("showbltss"))
+		{
+			sender.addChatMessage(new ChatComponentText("[BulletDelay] Min=" + TeamsManager.bulletSnapshotMin + " : Divisor=" + TeamsManager.bulletSnapshotDivisor));
+			return;
+		}
+
 		sender.addChatMessage(new ChatComponentText(split[0] + " is not a valid teams command. Try /teams help"));
 	}
-	
+
+	public List addTabCompletionOptions(ICommandSender sender, String[] prm)
+	{
+		if(prm.length <= 1)
+		{
+			return getListOfStringsMatchingLastWord(prm, new String[] {
+					"help",
+					"off",
+					"arena",
+					"survival",
+					"getSticks",
+					"listGametypes",
+					"setGametype",
+					"listAllTeams",
+					"listTeams",
+					"setTeams",
+					"addMap",
+					"listMaps",
+					"removeMap",
+					"setMap",
+					"useRotation",
+					"voting",
+					"addRound",
+					"listRounds",
+					"removeRound",
+					"nextMap",
+					"goToMap",
+					"votingTime",
+					"scoreDisplayTime",
+					"setVariable",
+					"forceAdventure",
+					"overrideHunger",
+					"explosions",
+					"canBreakGuns",
+					"canBreakGlass",
+					"armourDrops",
+					"weaponDrops",
+					"fuelNeeded",
+					"mgLife",
+					"planeLife",
+					"vehicleLife",
+					"aaLife",
+					"vehiclesBreakBlocks",
+					"ping",
+					"bltss",
+					"showbltss",
+					"vehiclesCanZoom"
+			});
+		}
+		
+		return null;
+	}
+
 	public void sendHelpInformation(ICommandSender sender, int page)
 	{
-		if(page > 3 || page < 1)
+		if(page > 4 || page < 1)
 		{
-			ChatComponentText text = new ChatComponentText("Invalid help page, should be in the range (1-3)");
+			ChatComponentText text = new ChatComponentText("Invalid help page, should be in the range (1-4)");
 			text.getChatStyle().setColor(EnumChatFormatting.RED);
 			sender.addChatMessage(text);
 			return;
 		}
-		
-		sender.addChatMessage(new ChatComponentText("\u00a72Listing teams commands \u00a7f[Page " + page + " of 3]"));
+
+		sender.addChatMessage(new ChatComponentText("\u00a72Listing teams commands \u00a7f[Page " + page + " of 4]"));
 		switch(page)
 		{
-		case 1 : 
+		case 1 :
 		{
 			sender.addChatMessage(new ChatComponentText("/teams help [page]"));
 			sender.addChatMessage(new ChatComponentText("/teams off"));
@@ -729,11 +852,11 @@ public class CommandTeams extends CommandBase
 			//sender.addChatMessage(new ChatComponentText("/teams setMap <shortName>"));
 			sender.addChatMessage(new ChatComponentText("/teams useRotation <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams voting <true / false>"));
-			sender.addChatMessage(new ChatComponentText("/teams addRound <map> <gametype> <team1> <team2> <TimeLimit> <ScoreLimit>"));
+			sender.addChatMessage(new ChatComponentText("/teams addRound <map> <gametype> <team1> <team2> <TimeLimit> <ScoreLimit> <isNextRoundOn true/false>"));
 			sender.addChatMessage(new ChatComponentText("/teams listRounds"));
 			sender.addChatMessage(new ChatComponentText("/teams removeRound <ID>"));
-			sender.addChatMessage(new ChatComponentText("/teams nextMap"));			
-			//sender.addChatMessage(new ChatComponentText("/teams goToMap <ID>"));		
+			sender.addChatMessage(new ChatComponentText("/teams nextMap"));
+			//sender.addChatMessage(new ChatComponentText("/teams goToMap <ID>"));
 			sender.addChatMessage(new ChatComponentText("/teams votingTime <time>"));
 			sender.addChatMessage(new ChatComponentText("/teams scoreDisplayTime <time>"));
 			break;
@@ -754,7 +877,15 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("/teams vehicleLife <time>"));
 			sender.addChatMessage(new ChatComponentText("/teams aaLife <time>"));
 
-			sender.addChatMessage(new ChatComponentText("/teams vehiclesBreakBlocks <true / false>"));		
+			sender.addChatMessage(new ChatComponentText("/teams vehiclesBreakBlocks <true / false>"));
+			break;
+		}
+		case 4 :
+		{
+			sender.addChatMessage(new ChatComponentText("/teams ping <PlayerName>"));
+			sender.addChatMessage(new ChatComponentText("/teams bltss <0 ... 100> <0 ... 1000>"));
+			sender.addChatMessage(new ChatComponentText("/teams showbltss"));
+			sender.addChatMessage(new ChatComponentText("/teams vehiclesCanZoom <true / false>"));
 			break;
 		}
 		}
@@ -766,7 +897,7 @@ public class CommandTeams extends CommandBase
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) 
+	public String getCommandUsage(ICommandSender icommandsender)
 	{
 		return "Try \"/teams help\"";
 	}

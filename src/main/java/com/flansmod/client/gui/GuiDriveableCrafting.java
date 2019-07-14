@@ -151,10 +151,18 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glRotatef(30F, 1F, 0F, 0F);
 			GL11.glRotatef(spinner / 5F, 0F, 1F, 0F);
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
-			selectedType.model.render(selectedType);
+			if( selectedType.model != null )
+			{
+				selectedType.model.render(selectedType);
+			}
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glPopMatrix();
+
+			if( selectedType.model == null )
+			{
+				drawString(fontRendererObj, "Model not found.", guiOriginX + 12, guiOriginY + 84, 0xffffff);
+			}
 			
 			recipeName = selectedType.name;
 			if (recipeName.length() > 16)
@@ -181,10 +189,10 @@ public class GuiDriveableCrafting extends GuiScreen
 					//Work out what recipe item this is
 					int recipeItemNumber = recipeScroll * 4 + r * 4 + c;
 					//If this is actually a valid recipe item
-					if(recipeItemNumber < selectedType.recipe.size())
+					if(recipeItemNumber < selectedType.driveableRecipe.size())
 					{
 						//Get the itemstack required by the recipe
-						ItemStack recipeStack = selectedType.recipe.get(recipeItemNumber);
+						ItemStack recipeStack = selectedType.driveableRecipe.get(recipeItemNumber);
 						//The total amount of items found that match this recipe stack
 						int totalAmountFound = 0;
 						//Iterate over the temporary inventory
@@ -193,7 +201,7 @@ public class GuiDriveableCrafting extends GuiScreen
 							//Get the stack in each slot
 							ItemStack stackInSlot = temporaryInventory.getStackInSlot(n);
 							//If the stack is what we want
-							if(stackInSlot != null && stackInSlot.getItem() == recipeStack.getItem() && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
+							if(stackInSlot != null && recipeStack!=null && stackInSlot.getItem() == recipeStack.getItem() && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
 							{
 								//Work out the amount to take from the stack
 								int amountFound = Math.min(stackInSlot.stackSize, recipeStack.stackSize - totalAmountFound);
@@ -356,7 +364,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			if(x >= 83 && x <= 93 && y >= 177 && y <= 187)
 			{
 				DriveableType selectedType = DriveableType.types.get(selectedBlueprint);
-				if(selectedType != null && recipeScroll * 4 + 12 < selectedType.recipe.size())
+				if(selectedType != null && recipeScroll * 4 + 12 < selectedType.driveableRecipe.size())
 					recipeScroll++;
 			}
 		}

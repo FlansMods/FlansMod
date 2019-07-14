@@ -1,14 +1,20 @@
 package com.flansmod.common.network;
 
+import net.minecraft.entity.player.EntityPlayer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.vector.Vector3f;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketPlaneControl extends PacketDriveableControl 
 {
-	public boolean gear, doors, wings; 
+	public boolean gear, doors, wings, flare; 
+	public int state;
 
 	public PacketPlaneControl() {}
 
@@ -19,6 +25,8 @@ public class PacketPlaneControl extends PacketDriveableControl
 		gear = plane.varGear;
 		doors = plane.varDoor;
 		wings = plane.varWing;
+		state = plane.anim.state;
+		
 	}
 	
 	@Override
@@ -28,6 +36,7 @@ public class PacketPlaneControl extends PacketDriveableControl
     	data.writeBoolean(gear);
     	data.writeBoolean(doors);
     	data.writeBoolean(wings);
+    	data.writeInt(state);
 	}
 
 	@Override
@@ -37,6 +46,7 @@ public class PacketPlaneControl extends PacketDriveableControl
 		gear = data.readBoolean();
 		doors = data.readBoolean();
 		wings = data.readBoolean();
+		state = data.readInt();
 	}
 	
 	@Override
@@ -47,6 +57,7 @@ public class PacketPlaneControl extends PacketDriveableControl
 		plane.varDoor = doors;
 		plane.varGear = gear;
 		plane.varWing = wings;
+		plane.anim.state = state;
 	}
 }
 

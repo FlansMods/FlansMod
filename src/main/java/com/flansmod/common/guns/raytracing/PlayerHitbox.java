@@ -163,7 +163,7 @@ public class PlayerHitbox
 		case BODY :  case HEAD :  case LEFTARM :  case RIGHTARM : 
 		{
 			//Calculate the hit damage
-			float hitDamage = bullet.damage * bullet.type.damageVsLiving * damageModifier;
+			float hitDamage = bullet.damage * bullet.type.damageVsPlayer * damageModifier;
 			//Create a damage source object
 			DamageSource damagesource = bullet.owner == null ? DamageSource.generic : bullet.getBulletDamage(type == EnumHitboxType.HEAD);
 

@@ -22,7 +22,7 @@ public class BlockArmourBox extends Block
 {
 	public ArmourBoxType type;
 	
-	public BlockArmourBox(ArmourBoxType t) 
+	public BlockArmourBox(ArmourBoxType t) throws Exception 
 	{
 		super(Material.wood);
 		type = t;
@@ -30,6 +30,11 @@ public class BlockArmourBox extends Block
 		setBlockName(type.shortName);
 		setHardness(2F);
 	    setResistance(4F);
+	    Block block = Block.getBlockFromName("flansmod:armorBox." + type.shortName);
+	    if(block != null)
+	    {
+	    	throw new Exception("Caught an exception during block registration");
+	    }
 	    GameRegistry.registerBlock(this, "armorBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		type.block = this;

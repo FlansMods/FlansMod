@@ -2,6 +2,7 @@ package com.flansmod.common.guns.boxes;
 
 import java.util.ArrayList;
 
+import com.flansmod.common.types.InfoType;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -11,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -25,7 +28,7 @@ public class BlockGunBox extends Block
 {
 	public GunBoxType type;
 	
-	public BlockGunBox(GunBoxType t)
+	public BlockGunBox(GunBoxType t) throws Exception
 	{
 		super(Material.wood);
 		setHardness(2F);
@@ -33,73 +36,73 @@ public class BlockGunBox extends Block
 	    type = t;
 
 	    setBlockName(type.shortName);
+	    Block block = Block.getBlockFromName("flansmod:gunBox." + type.shortName);
+	    if(block != null)
+	    {
+	    	throw new Exception("Caught an exception during block registration");
+	    }
 	    GameRegistry.registerBlock(this, "gunBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	    type.block = this;
 	    type.item = Item.getItemFromBlock(this);	
 	}
-		
-	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
+
+	public void buyGun(InfoType item, InventoryPlayer inventory, GunBoxType type)
 	{
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.proxy.buyGun(type, i);
-		} 
-		if (i <= type.numGuns && type.guns[i] != null)
+			FlansMod.proxy.buyGun(type, item);
+		}
+		GunBoxEntry entry = searchFor(item);
+		if(entry != null)
 		{
 			boolean canBuy = true;
-			for (ItemStack check : type.gunParts[i])
+			for (ItemStack check : entry.requiredParts)
 			{
 				int numMatchingStuff = 0;
 				for (int j = 0; j < inventory.getSizeInventory(); j++)
 				{
 					ItemStack stack = inventory.getStackInSlot(j);
 					if (stack != null && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
-					{
 						numMatchingStuff += stack.stackSize;
-					}
 				}
 				if (numMatchingStuff < check.stackSize)
-				{
 					canBuy = false;
-				}
 			}
+
 			if (canBuy)
 			{
-				for (ItemStack remove : type.gunParts[i])
+				for (ItemStack remove : entry.requiredParts)
 				{
 					int amountLeft = remove.stackSize;
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
 						ItemStack stack = inventory.getStackInSlot(j);
 						if (amountLeft > 0 && stack != null && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
-						{
 							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
-						}
 					}
 				}
-				ItemStack gunStack = new ItemStack(type.guns[i].getItem());
-				if(type.guns[i] instanceof GunType)
+
+				ItemStack gunStack = new ItemStack(entry.type.getItem());
+				if(entry.type instanceof GunType)
 				{
-					GunType gunType = (GunType)type.guns[i];
+					GunType gunType = (GunType)entry.type;
 					NBTTagCompound tags = new NBTTagCompound();
 					tags.setString("Paint", gunType.defaultPaintjob.iconName);
 					//Add ammo tags
 					NBTTagList ammoTagsList = new NBTTagList();
-					for(int j = 0; j < gunType.numAmmoItemsInGun; j++)
-					{
+					for(int j = 0; j < gunType.numPrimaryAmmoItems; j++)
 						ammoTagsList.appendTag(new NBTTagCompound());
-					}
+
 					tags.setTag("ammo", ammoTagsList);
-					
 					gunStack.stackTagCompound = tags;
 				}
+
+				// Drop gun on floor
 				if (!inventory.addItemStackToInventory(gunStack))
-				{
-					// Drop gun on floor
 					inventory.player.dropPlayerItemWithRandomChoice(gunStack, false);
-				}
-			} else
+			}
+ 			else
 			{
 				// Cant buy
 				// TODO : Add flashing red squares around the items you lack
@@ -107,104 +110,31 @@ public class BlockGunBox extends Block
 		}
 	}
 
-	public void buyAmmo(int i, InventoryPlayer inventory, GunBoxType type)
+	private GunBoxEntry searchFor(InfoType item)
 	{
-		
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+		for(GunPage page: type.gunPages)
 		{
-			FlansMod.proxy.buyAmmo(type, i, 1);
-		} 
-		if (i <= type.numGuns && type.bulletParts[i] != null)
-		{
-			boolean canBuy = true;
-			for (ItemStack check : type.bulletParts[i])
+			for(GunBoxEntry entry: page.gunList)
 			{
-				int numMatchingStuff = 0;
-				for (int j = 0; j < inventory.getSizeInventory(); j++)
+				if(entry.type == item)
 				{
-					ItemStack stack = inventory.getStackInSlot(j);
-					if (stack != null && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
-					{
-						numMatchingStuff += stack.stackSize;
-					}
+					return entry;
 				}
-				if (numMatchingStuff < check.stackSize)
+				else
 				{
-					canBuy = false;
-				}
-			}
-			if (canBuy)
-			{
-				for (ItemStack remove : type.bulletParts[i])
-				{
-					int amountLeft = remove.stackSize;
-					for (int j = 0; j < inventory.getSizeInventory(); j++)
+					if(!entry.isAmmoNullOrEmpty())
 					{
-						ItemStack stack = inventory.getStackInSlot(j);
-						if (amountLeft > 0 && stack != null && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
+						for(GunBoxEntry ammoEntry: entry.ammoEntryList)
 						{
-							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
+							if(ammoEntry.type == item)
+								return ammoEntry;
 						}
 					}
 				}
-				if (!inventory.addItemStackToInventory(new ItemStack(type.bullets[i].getItem())))
-				{
-						// Drop gun on floor
-				}
-			} 
+			}
 		}
-		//TODO Add flashing red squares if cant buy.
-	}
 
-	public void buyAltAmmo(int i, InventoryPlayer inventory, GunBoxType type)
-	{
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-		{
-			FlansMod.proxy.buyAmmo(type, i, 2);
-		} 
-		if (i <= type.numGuns && type.altBulletParts[i] != null)
-		{
-			boolean canBuy = true;
-			for (ItemStack check : type.altBulletParts[i])
-			{
-				int numMatchingStuff = 0;
-				for (int j = 0; j < inventory.getSizeInventory(); j++)
-				{
-					ItemStack stack = inventory.getStackInSlot(j);
-					if (stack != null && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
-					{
-						numMatchingStuff += stack.stackSize;
-					}
-				}
-				if (numMatchingStuff < check.stackSize)
-				{
-					canBuy = false;
-				}
-			}
-			if (canBuy)
-			{
-				for (ItemStack remove : type.altBulletParts[i])
-				{
-					int amountLeft = remove.stackSize;
-					for (int j = 0; j < inventory.getSizeInventory(); j++)
-					{
-						ItemStack stack = inventory.getStackInSlot(j);
-						if (amountLeft > 0 && stack != null && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
-						{
-							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
-						}
-					}
-				}
-				if (!inventory.addItemStackToInventory(new ItemStack(type.altBullets[i].getItem())))
-				{
-					// Drop gun on floor
-				}
-			} else
-			{
-				// Cant buy
-				// TODO : Add flashing red squares around the items you lack
-			}
-		}
+		return null; //No InfoType was found
 	}
 	
 	@SideOnly(value = Side.CLIENT)
@@ -231,18 +161,8 @@ public class BlockGunBox extends Block
 		if(entityplayer.isSneaking())
 			return false;
 		entityplayer.openGui(FlansMod.INSTANCE, 5, world, i, j, k);
+		//entityplayer.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.BLUE + "CFR " + EnumChatFormatting.WHITE + "♦ Flans crafting is disabled."));
 		return true;
-	}
-	
-	public Block purchaseItem(int i, int id, InventoryPlayer inventory, GunBoxType type) 
-	{
-		switch(i) 
-		{
-			case 0: buyGun(id, inventory, type); break;
-			case 1: buyAmmo(id, inventory, type); break;
-			case 2: buyAltAmmo(id, inventory, type); break;
-		}
-		return this;
 	}
 	
 	@Override

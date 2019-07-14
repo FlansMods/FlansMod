@@ -196,7 +196,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 					TexturedPolygon poly = new TexturedPolygon(vToArr);
 					poly.setNormals(normal[0], normal[1], normal[2]);
 					poly.setNormals(iNormal);
-					
+
 					face.add(poly);
 					texture.addPoly(poly);
                 }

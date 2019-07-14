@@ -30,8 +30,17 @@ public enum EnumDriveablePart
 	frontRightWheel(new EnumDriveablePart[] { }, "frontRightWheel", "Front Right Wheel"),
 	leftTrack(new EnumDriveablePart[] { }, "leftTrack", "Left Track"),
 	rightTrack(new EnumDriveablePart[] { }, "rightTrack", "Right Track"),
-	trailer(new EnumDriveablePart[] { }, "trailer", "Trailer"),	
+	trailer(new EnumDriveablePart[] { }, "trailer", "AdditionArmor"),	
 	harvester(new EnumDriveablePart[] { }, "harvester", "Harvester"),	//This is the drill bit, combine blades or excavator for utility vehicles
+	//New parts
+	frontalArmor(new EnumDriveablePart[] { }, "frontalArmor", "Frontal Armor"),
+	leftsideArmor(new EnumDriveablePart[] { }, "leftsideArmor", "Left Side Armor"),
+	rightsideArmor(new EnumDriveablePart[] { }, "rightsideArmor", "Right Side Armor"),
+	additionalArmor(new EnumDriveablePart[] { }, "additionalArmor", "Additional Armor"),
+	ERA(new EnumDriveablePart[] { }, "ERA", "ERA"),
+	APS(new EnumDriveablePart[] { }, "APS", "APS"),
+	ADS(new EnumDriveablePart[] { }, "ADS", "ADS"),
+	
 	
 	//Mecha parts
 	leftArm(new EnumDriveablePart[] { }, "leftArm", "Left Arm"),

@@ -1,18 +1,20 @@
 package com.flansmod.common.tools;
 
-import io.netty.buffer.ByteBuf;
+import java.util.List;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -31,7 +33,22 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		this(w);
 		type = t;
-		setPosition(player.posX, player.posY, player.posZ);
+
+		if(canUseParachute(player))
+		{
+			player.posY -= 1;
+			setPosition(player.posX, player.posY-1.5, player.posZ);
+		}
+		else
+		{
+			setDead();
+		}
+	}
+	
+	public static boolean canUseParachute(Entity player)
+	{
+		List list = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.expand(0, 3, 0));
+		return list.size() == 0;
 	}
 
 	@Override
@@ -47,11 +64,11 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
-		motionY = -0.1D;
+		motionY = -0.3D;
 		
 		if(riddenByEntity != null && riddenByEntity instanceof EntityLivingBase)
 		{
-			float speedMultiplier = 0.002F;
+			float speedMultiplier = 0.025F;
 			double moveForwards = ((EntityLivingBase)this.riddenByEntity).moveForward;
 			double moveStrafing = ((EntityLivingBase)this.riddenByEntity).moveStrafing;
 			double sinYaw = -Math.sin((riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
@@ -63,8 +80,8 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			rotationYaw = riddenByEntity.rotationYaw;
 		}		
 		
-		motionX *= 0.8F;
-		motionZ *= 0.8F;
+		motionX *= 0.93F;
+		motionZ *= 0.93F;
 		
 		moveEntity(motionX, motionY, motionZ);
 		

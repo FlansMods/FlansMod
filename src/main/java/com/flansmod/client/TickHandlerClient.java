@@ -3,12 +3,9 @@ package com.flansmod.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -26,12 +23,12 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.RenderFlag;
 import com.flansmod.client.model.RenderGun;
@@ -39,7 +36,10 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EntityBullet;
@@ -49,20 +49,36 @@ import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 import com.flansmod.common.vector.Vector3i;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
 
 public class TickHandlerClient
 {
 	public static final ResourceLocation offHand = new ResourceLocation("flansmod","gui/offHand.png");
 	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<Vector3i>();
+	public static ArrayList<Vector3i>vehicleLightOverrides = new ArrayList<Vector3i>();
 	public static int lightOverrideRefreshRate = 5;
-	
+	public static int vehicleLightOverrideRefreshRate = 1;
+	int tickcount = 0;
+	int tickcountflash = 0;
+	int tickcountWounded = 0;
+	boolean isInFlash;
+	int flashTime;
+	EntityPlayer entityPlayerFlash;
+	private static GuiScreen guiDriveableController = null;
+
 	public TickHandlerClient()
 	{
 		FMLCommonHandler.instance().bus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
 	@SubscribeEvent
 	public void eventHandler(MouseEvent event)
 	{
@@ -71,28 +87,40 @@ public class TickHandlerClient
 		{
 			if(((ItemGun)player.getCurrentEquippedItem().getItem()).type.oneHanded && Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.dwheel) > 0)
 				event.setCanceled(true);
-				
+
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void eventHandler(RenderGameOverlayEvent event)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		
-		//Remove crosshairs if looking down the sights of a gun
-		if(event.type == ElementType.CROSSHAIRS && FlansModClient.currentScope != null)
+		//If main config is set to false, blanket disable crosshairs (client synced)
+		if(!FlansMod.crosshairEnable && event.type == ElementType.CROSSHAIRS && mc.thePlayer != null && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemGun)
 		{
 			event.setCanceled(true);
 			return;
 		}
-		
+		//Otherwise, fall back to weapon config settings (default false)
+		else
+		{
+			//Remove crosshairs if looking down the sights of a gun
+			if(event.type == ElementType.CROSSHAIRS && mc.thePlayer != null && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemGun)
+			{
+				if(!((ItemGun)mc.thePlayer.getHeldItem().getItem()).type.showCrosshair || FlansModClient.currentScope != null) 
+				{
+					event.setCanceled(true);
+					return;
+				}
+			}
+		}
+
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
-					
+
 		Tessellator tessellator = Tessellator.instance;
-		
+
 		if(!event.isCancelable() && event.type == ElementType.HELMET)
 		{
 			//Scopes and helmet overlays
@@ -109,7 +137,7 @@ public class TickHandlerClient
 					overlayTexture = ((ItemTeamArmour)stack.getItem()).type.overlay;
 				}
 			}
-			
+
 			if(overlayTexture != null)
 			{
 				FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
@@ -134,9 +162,9 @@ public class TickHandlerClient
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 		}
-		
-	    if(!event.isCancelable() && event.type == ElementType.HOTBAR)
-	    {      
+
+	    if(!event.isCancelable() && event.type == ElementType.HOTBAR && FlansMod.bulletGuiEnable)
+	    {
 			//Player ammo overlay
 			if(mc.thePlayer != null)
 			{
@@ -146,7 +174,7 @@ public class TickHandlerClient
 					ItemGun gunItem = (ItemGun)stack.getItem();
 					GunType gunType = gunItem.type;
 					int x = 0;
-					for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
+					for(int n = 0; n < gunType.getNumAmmoItemsInGun(stack); n++)
 					{
 						ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
 						if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
@@ -158,6 +186,10 @@ public class TickHandlerClient
 							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 							RenderHelper.disableStandardItemLighting();
 							String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+							if(gunType.submode.length >= 2)
+							{
+								s = s + "[" + gunType.getFireMode(stack) + "]";
+							}
 							if(bulletStack.getMaxDamage() == 1)
 								s = "";
 							mc.fontRenderer.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
@@ -174,24 +206,28 @@ public class TickHandlerClient
 						{
 							GunType offHandGunType = ((ItemGun)offHandStack.getItem()).type;
 							x = 0;
-							for(int n = 0; n < offHandGunType.numAmmoItemsInGun; n++)
+							for(int n = 0; n < offHandGunType.getNumAmmoItemsInGun(offHandStack); n++)
 							{
 								ItemStack bulletStack = ((ItemGun)offHandStack.getItem()).getBulletItemStack(offHandStack, n);
 								if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 								{
 									//Find the string we are displaying next to the ammo item
 									String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+									if(gunType.submode.length >= 2)
+									{
+										s = s + "[" + gunType.getFireMode(offHandStack) + "]";
+									}
 									if(bulletStack.getMaxDamage() == 1)
 										s = "";
-									
+
 									//Draw the slot and then move leftwards
 									RenderHelper.enableGUIStandardItemLighting();
 									GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 									GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 									OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 32 - x, j - 65);	
+									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 32 - x, j - 65);
 									x += 16 + mc.fontRenderer.getStringWidth(s);
-									
+
 									//Draw the string
 									GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 									RenderHelper.disableStandardItemLighting();
@@ -203,9 +239,9 @@ public class TickHandlerClient
 					}
 				}
 			}
-			
+
 			PacketTeamInfo teamInfo = FlansModClient.teamInfo;
-			
+
 			if(teamInfo != null && FlansModClient.minecraft.thePlayer != null && (teamInfo.numTeams > 0 || !teamInfo.sortedByTeam) && teamInfo.getPlayerScoreData(FlansModClient.minecraft.thePlayer.getCommandSenderName()) != null)
 			{
 				GL11.glEnable(3042 /* GL_BLEND */);
@@ -214,21 +250,21 @@ public class TickHandlerClient
 				GL11.glBlendFunc(770, 771);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-	
+
 				mc.renderEngine.bindTexture(GuiTeamScores.texture);
-								
+
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
 				tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
 				tessellator.addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
 				tessellator.addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
 				tessellator.draw();
-				
+
 				//If we are in a two team gametype, draw the team scores at the top of the screen
 				if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
 				{
 					//Draw team 1 colour bit
-					int colour = teamInfo.teamData[0].team.teamColour;	
+					int colour = teamInfo.teamData[0].team.teamColour;
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 					tessellator.startDrawingQuads();
 					tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
@@ -237,7 +273,7 @@ public class TickHandlerClient
 					tessellator.addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
 					tessellator.draw();
 					//Draw team 2 colour bit
-					colour = teamInfo.teamData[1].team.teamColour;	
+					colour = teamInfo.teamData[1].team.teamColour;
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 					tessellator.startDrawingQuads();
 					tessellator.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
@@ -245,38 +281,38 @@ public class TickHandlerClient
 					tessellator.addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
 					tessellator.addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
 					tessellator.draw();
-					
+
 					GL11.glDepthMask(true);
 					GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 					GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-					
+
 					//Draw the team scores
 					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
 					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
 					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
 					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
 				}
-				
+
 				mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
 				mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
 				mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 9, 0x000000);
 				mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 8, 0xffffff);
-				
+
 				int secondsLeft = teamInfo.timeLeft / 20;
 				int minutesLeft = secondsLeft / 60;
 				secondsLeft = secondsLeft % 60;
 				String timeLeft = minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft);
 				mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
 				mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
-	
-				
+
+
 				GL11.glDepthMask(true);
 				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				String playerUsername = FlansModClient.minecraft.thePlayer.getCommandSenderName();
-				
+
 				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
 				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
 				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
@@ -284,7 +320,7 @@ public class TickHandlerClient
 			for (KillMessage killMessage : killMessages) {
 				mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 			}
-						
+
 			//Draw icons indicated weapons used
 			RenderHelper.enableGUIStandardItemLighting();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -295,13 +331,13 @@ public class TickHandlerClient
 			}
 			GL11.glDisable(3042 /*GL_BLEND*/);
 			RenderHelper.disableStandardItemLighting();
-			
+
 			//Off-hand weapon graphics
 			mc.renderEngine.bindTexture(offHand);
-			
+
 			ItemStack currentStack = mc.thePlayer.inventory.getCurrentItem();
 			PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
-			
+
 			if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).type.oneHanded)
 			{
 				for(int n = 0; n < 9; n++)
@@ -316,7 +352,7 @@ public class TickHandlerClient
 						tessellator.draw();
 					}
 					else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
-					{					
+					{
 						tessellator.startDrawingQuads();
 						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 0D / 64D, 16D / 32D);
 						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
@@ -326,21 +362,172 @@ public class TickHandlerClient
 					}
 				}
 			}
-			
+			//RenderHitCrossHair
+			if(EntityBullet.hitCrossHair)
+			{
+				tickcount = 20;
+				EntityBullet.hitCrossHair = false;
+			}
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			ItemStack currentHeldItem = player.getCurrentEquippedItem();
+			if(tickcount > 0 && FlansMod.hitCrossHairEnable == true && currentHeldItem != null && currentHeldItem.getItem() instanceof ItemGun)
+			{
+				ItemStack stack = mc.thePlayer.inventory.getCurrentItem();
+				ItemGun gunItem = (ItemGun)stack.getItem();
+				GunType gunType = gunItem.type;
+				FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
+				GL11.glEnable(3042 /* GL_BLEND */);
+				GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+				GL11.glDepthMask(false);
+				GL11.glBlendFunc(770, 771);
+				GL11.glColor4f(
+						FlansMod.hitCrossHairColor[1],
+						FlansMod.hitCrossHairColor[2],
+						FlansMod.hitCrossHairColor[3],
+						FlansMod.hitCrossHairColor[0] * (float)tickcount / 20);
+				GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+				//Custom hit marker GUI if set in gun config
+				if(gunType.hitTexture != null)
+				{
+					mc.renderEngine.bindTexture(FlansModResourceHandler.getAuxiliaryTexture(gunType.hitTexture));
+				}
+				//Default hit marker GUI
+				else if (FlansMod.hdHitCrosshair == true)
+				{
+					mc.renderEngine.bindTexture(new ResourceLocation("flansmod", "gui/HDCrossHair.png"));
+				}
+				else
+				{
+					mc.renderEngine.bindTexture(new ResourceLocation("flansmod", "gui/CrossHair.png"));
+				}
+				
+				tessellator.startDrawingQuads();
+				tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+				tessellator.draw();
+				GL11.glDepthMask(true);
+				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
+				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
+				GL11.glColor4f(1F, 1F, 1F, 1F);
+			}
+
+			if(mc.thePlayer.hurtTime > 0)
+			{
+				tickcountWounded = 40;
+			}
+			if(tickcountWounded > 0)
+			{
+				FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
+				GL11.glEnable(3042 /* GL_BLEND */);
+				GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+				GL11.glDepthMask(false);
+				GL11.glBlendFunc(770, 771);
+				GL11.glColor4f(
+						FlansMod.hitCrossHairColor[1],
+						FlansMod.hitCrossHairColor[2],
+						FlansMod.hitCrossHairColor[3],
+						FlansMod.hitCrossHairColor[0] * (float)tickcountWounded / 20);
+				GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+
+				mc.renderEngine.bindTexture(new ResourceLocation("flansmod", "gui/Blood.png"));
+
+				tessellator.startDrawingQuads();
+				tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+				tessellator.draw();
+				GL11.glDepthMask(true);
+				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
+				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
+				GL11.glColor4f(1F, 1F, 1F, 1F);
+			}
+
+
+
 			//DEBUG vehicles
-			if(FlansMod.DEBUG && mc.thePlayer.ridingEntity instanceof EntitySeat)
+			if(mc.thePlayer.ridingEntity instanceof EntitySeat)
 			{
 				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
-				mc.fontRenderer.drawString("MotionX : " + ent.motionX, 2, 2, 0xffffff);
-				mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
-				mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
-				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
-				mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+				float speed = (float) (ent.motionX * ent.motionX + ent.motionY * ent.motionY + ent.motionZ * ent.motionZ);
+				int healthP = (int)((float)ent.getDriveableData().parts.get(EnumDriveablePart.core).health / (float)ent.getDriveableData().parts.get(EnumDriveablePart.core).maxHealth * 100);
+				int colour = 0;
+				if(healthP > 75){
+					colour = 0xffffff;
+				} else if (healthP < 75 && healthP > 50){
+					colour = 0x00ff00;
+				} else if (healthP < 50 && healthP > 25){
+					colour = 0xdaa520;
+				} else {
+					colour = 0xff0000;
+				}
+				mc.fontRenderer.drawString(String.format("Throttle : %.0f%%", ent.throttle*100), 2, 2, 0xffffff);
+//				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 2, 0xffffff);
+				//mc.fontRenderer.drawString("Health : " + ent.getDriveableData().parts.get(EnumDriveablePart.core).health+ " / " +ent.getDriveableData().parts.get(EnumDriveablePart.core).maxHealth, 2, 12, 0xffffff);
+				mc.fontRenderer.drawString("Health : " + healthP + "%" , 2, 12, colour);
+				mc.fontRenderer.drawString(String.format("Speed : %.2f", Math.sqrt(speed)), 2, 22, 0xffffff);
+				mc.fontRenderer.drawString(String.format("Yaw : %.0f%%", ((EntitySeat)mc.thePlayer.ridingEntity).looking.getYaw()), 92, 2, 0xffffff);
+				mc.fontRenderer.drawString(String.format("Pitch : %.0f%%", ((EntitySeat)mc.thePlayer.ridingEntity).looking.getPitch()), 92, 12, 0xffffff);
+				if(ent instanceof EntityPlane)
+				{
+					EntityDriveable entP = (EntityDriveable)ent;
+					if(entP.getDriveableType().hasFlare)
+					{
+						if(entP.ticksFlareUsing <= 0 && entP.flareDelay <= 0)
+							mc.fontRenderer.drawString("Flare : READY"  , 2, 32, 0x00ff00);
+	
+						if(entP.ticksFlareUsing > 0)
+							mc.fontRenderer.drawString("Flare : Deploying"  , 2, 42, 0xff0000);
+	
+						if(entP.flareDelay > 0)
+							mc.fontRenderer.drawString("Flare : Reloading"  , 2, 52, 0xdaa520);
+					}
+					Vector3f up2 = (Vector3f)entP.axes.getYAxis().normalise();
+					mc.fontRenderer.drawString(String.format("Lift : %.0f%%", (float)entP.getSpeedXYZ()*(float)entP.getSpeedXYZ()*up2.y), 92, 22, 0xffffff);
 
+				}
+				if(ent instanceof EntityVehicle)
+				{
+					EntityDriveable entP = (EntityDriveable)ent;
+					if(entP.getDriveableType().hasFlare)
+					{
+						if(entP.ticksFlareUsing <= 0 && entP.flareDelay <= 0)
+							mc.fontRenderer.drawString("Smoke : READY"  , 2, 32, 0x00ff00);
+	
+						if(entP.ticksFlareUsing > 0)
+							mc.fontRenderer.drawString("Smoke : Deploying"  , 2, 42, 0xff0000);
+	
+						if(entP.flareDelay > 0)
+							mc.fontRenderer.drawString("Smoke : Reloading"  , 2, 52, 0xdaa520);
+					}
+					
+					if(((EntityVehicle)ent).getVehicleType().shootWithOpenDoor)
+					{
+						if(((EntityVehicle)ent).varDoor){
+							mc.fontRenderer.drawString("Weapon : READY"  , 2, 62, 0x00ff00);
+							mc.fontRenderer.drawString("["+ Keyboard.getKeyName(KeyInputHandler.doorKey.getKeyCode())+ " to disable]", 100, 62, 0x00ff00);
+						}
+
+						if(!((EntityVehicle)ent).varDoor){
+							mc.fontRenderer.drawString("Weapon : DISABLED"  , 2, 62, 0xff0000);
+							mc.fontRenderer.drawString("["+ Keyboard.getKeyName(KeyInputHandler.doorKey.getKeyCode())+ " to activate]", 100, 62, 0xff0000);
+						}
+					}
+				}
+
+				if(FlansMod.DEBUG)
+				{
+					mc.fontRenderer.drawString("MotionX : " + ent.motionX, 2, 32, 0xffffff);
+					mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 42, 0xffffff);
+					mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 52, 0xffffff);
+					mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 62, 0xffffff);
+				}
 			}
 	    }
 	}
-	
+
 	@SubscribeEvent
 	public void renderTick(TickEvent.RenderTickEvent event)
 	{
@@ -353,9 +540,9 @@ public class TickHandlerClient
 		case END :
 			renderTickEnd(Minecraft.getMinecraft());
 			break;
-		}	
+		}
 	}
-	
+
 	@SubscribeEvent
 	public void clientTick(TickEvent.ClientTickEvent event)
 	{
@@ -367,17 +554,25 @@ public class TickHandlerClient
 		case END :
 			clientTickEnd(Minecraft.getMinecraft());
 			break;
-		}	
+		}
 	}
-	
-	/** Handle flashlight block light override */	
+
+	/** Handle flashlight block light override */
 	public void clientTickStart(Minecraft mc)
 	{
+		if(tickcount > 0)
+		{
+			tickcount--;
+		}
+		if(tickcountWounded > 0)
+		{
+			tickcountWounded--;
+		}
 		if(FlansMod.ticker % lightOverrideRefreshRate == 0 && mc.theWorld != null)
 		{
 			//Check graphics setting and adjust refresh rate
 			lightOverrideRefreshRate = mc.gameSettings.fancyGraphics ? 10 : 20;
-			
+
 			//Reset old light values
 			for(Vector3i v : blockLightOverrides)
 			{
@@ -385,7 +580,7 @@ public class TickHandlerClient
 			}
 			//Clear the list
 			blockLightOverrides.clear();
-			
+
 			//Find all flashlights
 			for(Object obj : mc.theWorld.playerEntities)
 			{
@@ -428,15 +623,16 @@ public class TickHandlerClient
 					}
 				}
 			}
-			
+
 			for(Object obj : mc.theWorld.loadedEntityList)
 			{
 				if(obj instanceof EntityBullet)
 				{
 					EntityBullet bullet = (EntityBullet)obj;
+					//IDynamicLightSource iDynamicLightSource = new AddFlansLightSource((Entity)bullet,15);
 					if(!bullet.isDead && bullet.type.hasLight)
 					{
-						int x = MathHelper.floor_double(bullet.posX);
+						/*int x = MathHelper.floor_double(bullet.posX);
 						int y = MathHelper.floor_double(bullet.posY);
 						int z = MathHelper.floor_double(bullet.posZ);
 						blockLightOverrides.add(new Vector3i(x, y, z));
@@ -446,7 +642,10 @@ public class TickHandlerClient
 						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
 						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y, z);
 						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);*/
+						//DynamicLights.addLightSource(iDynamicLightSource);
+					}else if(bullet.isDead && bullet.type.hasLight){
+						//DynamicLights.removeLightSource(iDynamicLightSource);
 					}
 				}
 				else if(obj instanceof EntityMecha)
@@ -486,6 +685,20 @@ public class TickHandlerClient
 				}
 			}
 		}
+		
+		if(FlansMod.ticker % vehicleLightOverrideRefreshRate == 0 && mc.theWorld != null)
+		{
+			//Check graphics setting and adjust refresh rate
+			vehicleLightOverrideRefreshRate = mc.gameSettings.fancyGraphics ? 1 : 2;
+
+			//Reset old light values
+			for(Vector3i v : vehicleLightOverrides)
+			{
+				mc.theWorld.updateLightByType(EnumSkyBlock.Block, v.x, v.y, v.z);
+			}
+			//Clear the list
+			vehicleLightOverrides.clear();
+		}
 	}
 
 	public void clientTickEnd(Minecraft minecraft)
@@ -501,8 +714,7 @@ public class TickHandlerClient
 		RenderFlag.angle += 2F;
 		FlansModClient.tick();
 	}
-	
-	
+
 	public void renderTickStart(Minecraft mc, float smoothing)
 	{
 		// CAPTURE MOUSE INPUT!
@@ -517,17 +729,73 @@ public class TickHandlerClient
 				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
 			}
 		}
-		
 		FlansModClient.renderTick(smoothing);
+
+		if(mc.currentScreen instanceof GuiDriveableController)
+		{
+			guiDriveableController = mc.currentScreen;
+			mc.currentScreen = null;
+		}
+		else
+		{
+			guiDriveableController = null;
+		}
 	}
 
 	public void renderTickEnd(Minecraft mc)
 	{
+		if(mc.currentScreen==null && guiDriveableController!=null)
+		{
+			mc.currentScreen = guiDriveableController;
+			guiDriveableController = null;
+		}
+		
+		Tessellator tessellator = Tessellator.instance;
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		int i = scaledresolution.getScaledWidth();
+		int j = scaledresolution.getScaledHeight();
+
+		//FlashBan
+		if(FlansModClient.isInFlash){
+			isInFlash = true;
+			flashTime = FlansModClient.flashTime;
+			tickcountflash = 0;
+			FlansModClient.isInFlash = false;
+			FlansModClient.flashTime = 0;
+		}
+		if(isInFlash && tickcountflash < flashTime){
+			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
+			GL11.glEnable(3042 /* GL_BLEND */);
+			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+			GL11.glDepthMask(false);
+			GL11.glBlendFunc(770, 771);
+			GL11.glColor4f(1F, 1F, 1F, 1.0F);
+			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+
+			mc.renderEngine.bindTexture(new ResourceLocation("flansmod", "gui/flash.png"));
+
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+			tessellator.draw();
+			GL11.glDepthMask(true);
+			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
+			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			//System.out.println(mc.gameSettings.hideGUI);
+			tickcountflash++;
+		}else{
+			isInFlash = false;
+			flashTime = 0;
+			tickcountflash = 0;
+		}
 		/*
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
-		
+
 		String overlayTexture = null;
 		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
 		{
@@ -541,7 +809,7 @@ public class TickHandlerClient
 				overlayTexture = ((ItemTeamArmour)stack.getItem()).type.overlay;
 			}
 		}
-		
+
 		if(overlayTexture != null)
 		{
 			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
@@ -568,7 +836,7 @@ public class TickHandlerClient
 		}
 		*/
 	}
-	
+
 	private void drawSlotInventory(FontRenderer fontRenderer, ItemStack itemstack, int i, int j)
 	{
 		if(itemstack == null || itemstack.getItem() == null)
@@ -576,7 +844,7 @@ public class TickHandlerClient
 		itemRenderer.renderItemIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 	}
-		
+
 	public static void addKillMessage(boolean headshot, InfoType infoType, String killer, String killed)
 	{
 		for(KillMessage killMessage : killMessages)
@@ -587,10 +855,10 @@ public class TickHandlerClient
 		}
 		killMessages.add(new KillMessage(headshot, infoType, killer, killed));
 	}
-	
+
 	private static RenderItem itemRenderer = new RenderItem();
 	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
-	
+
 	private static class KillMessage
 	{
 		public KillMessage(boolean head, InfoType infoType, String killer, String killed)
@@ -602,7 +870,7 @@ public class TickHandlerClient
 			line = 0;
 			timer = 200;
 		}
-		
+
 		public String killerName;
 		public String killedName;
 		public InfoType weapon;

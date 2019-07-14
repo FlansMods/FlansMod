@@ -1,12 +1,12 @@
 package com.flansmod.client.gui;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
@@ -124,10 +124,10 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.displayGuiScreen(new GuiChat("/"));
 		}
-		if(i == KeyInputHandler.debugKey.getKeyCode())
+		/*if(i == KeyInputHandler.debugKey.getKeyCode())
 		{
 			FlansMod.DEBUG = !FlansMod.DEBUG;
-		}
+		}*/
 		if(i == KeyInputHandler.reloadModelsKey.getKeyCode())
 		{
 			FlansModClient.reloadModels(false);
@@ -139,6 +139,7 @@ public class GuiDriveableController extends GuiScreen
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
 			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
+		
 		else mc.renderViewEntity = mc.thePlayer;
 	}
 	
@@ -233,6 +234,10 @@ public class GuiDriveableController extends GuiScreen
 			//{
 			//	plane.pressKey(16, player);
 			//}				
+			if(FlansMod.proxy.keyDown(KeyInputHandler.flareKey.getKeyCode()))
+			{
+				plane.pressKey(18, player);
+			}				
 	
 		}
 		else

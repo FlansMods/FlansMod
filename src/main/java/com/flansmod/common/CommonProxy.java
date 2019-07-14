@@ -7,14 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.flansmod.common.guns.boxes.ContainerGunBox;
+import com.flansmod.common.types.InfoType;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.driveables.ContainerDriveableInventory;
 import com.flansmod.common.driveables.ContainerDriveableMenu;
 import com.flansmod.common.driveables.DriveablePart;
@@ -27,6 +32,8 @@ import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.ContainerGunModTable;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBreakSound;
+import com.flansmod.common.paintjob.ContainerPaintjobTable;
+import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.ArmourBoxType;
@@ -97,8 +104,18 @@ public class CommonProxy
 	{
 		return false;
 	}
+	public EntityPlayer getThePlayer()
+	{
+		return null;
+	}
 	
-	public void buyGun(GunBoxType type, int gun)
+	
+	public boolean isOnSameTeamClientPlayer(EntityLivingBase entity)
+	{
+		return false;
+	}
+	
+	public void buyGun(GunBoxType type, InfoType gun)
 	{
 	}
 
@@ -111,6 +128,15 @@ public class CommonProxy
 	{
 		return null;
 	}
+	
+	public HashMap<EntityLivingBase, GunAnimations> getAnimations(boolean left)
+	{
+		if(left)
+		{
+			return FlansMod.gunAnimationsLeft;
+		}
+		else return FlansMod.gunAnimationsRight;
+	}
 
 	/** Gets the container for the specified GUI */
 	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
@@ -122,7 +148,7 @@ public class CommonProxy
 		case 2: return new ContainerGunModTable(player.inventory, world);
 		case 3: return new ContainerDriveableMenu(player.inventory, world);
 		case 4: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
-		case 5 : return null; //Gun box. No server side
+		case 5: return new ContainerGunBox(player.inventory, world);
 		//Plane inventory screens
 		case 6: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
 		case 7: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
@@ -131,6 +157,7 @@ public class CommonProxy
 		case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
 		case 11 : return null; //Armour box. No server side
 		case 12 : return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
+		case 13: return new ContainerPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(x, y, z));
 		}
 		return null;
 	}
@@ -140,7 +167,21 @@ public class CommonProxy
 	{
 		FlansMod.packetHandler.sendToAll(new PacketBreakSound(x, y, z, blockHit));
 	}
+
+	public void addItem(EntityPlayer player, int id){
+		ItemStack item = new ItemStack(Item.getItemById(id),1, 4);
+		player.inventory.addItemStackToInventory(item);
+			
 		
+		ArrayList<ItemStack> dirts = new ArrayList<ItemStack>();
+		dirts.add(0, new ItemStack(Item.getItemById(3)));
+		CraftingInstance crafting = new CraftingInstance(player.inventory, dirts, new ItemStack(Item.getItemById(id)));
+		if(crafting.canCraft())
+		{
+			crafting.craft(player.inventory.player);
+		}
+	}
+
 	public void craftDriveable(EntityPlayer player, DriveableType type)
 	{
 		//Create a temporary copy of the player inventory for backup purposes
@@ -150,7 +191,7 @@ public class CommonProxy
 		//This becomes false if some recipe element is not found on the player
 		boolean canCraft = true;
 		//Iterate over rows then columns
-		for(ItemStack recipeStack : type.recipe)
+		for(ItemStack recipeStack : type.driveableRecipe)
 		{
 			//The total amount of items found that match this recipe stack
 			int totalAmountFound = 0;
@@ -361,5 +402,17 @@ public class CommonProxy
 	public void buyArmour(String shortName, int piece, ArmourBoxType type) 
 	{
 
+	}
+
+	public void spawnParticle(String p_72869_1_,
+			double p_72869_2_, double p_72869_4_, double p_72869_6_,
+			double p_72869_8_, double p_72869_10_, double p_72869_12_)
+	{
+		
+	}
+	
+	public float getMouseSensitivity()
+	{
+		return 0.5F;
 	}
 }

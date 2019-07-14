@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 
-public class InfoType
+public abstract class InfoType
 {
 	/** infoTypes */
 	public static List<InfoType> infoTypes = new ArrayList<InfoType>();
@@ -21,7 +25,6 @@ public class InfoType
 	public String contentPack;
 	public Item item;
 	public int colour = 0xffffff;
-	public int itemID;
 	public String iconPath;
 	public Object[] recipe;
 	public String[] recipeLine;
@@ -36,10 +39,13 @@ public class InfoType
 	public float modelScale = 1F;
 	/** If this is set to false, then this item cannot be dropped */
 	public boolean canDrop = true;
+
+	public final String packName;
 	
 	public InfoType(TypeFile file)
 	{
 		contentPack = file.name;
+		packName = file.pack;
 		infoTypes.add(this);
 	}
 	
@@ -63,21 +69,21 @@ public class InfoType
 	}
 	
 	/** Method for performing actions prior to reading the type file */
-	protected void preRead(TypeFile file) {}
+	protected abstract void preRead(TypeFile file);
 	
 	/** Method for performing actions after reading the type file */
-	protected void postRead(TypeFile file) {}
+	protected abstract void postRead(TypeFile file);
 
 	/** Pack reader */
 	protected void read(String[] split, TypeFile file)
 	{
 		try
 		{
-			if(split[0].toLowerCase().equals("model"))
+			if(split[0].equals("Model"))
 				modelString = split[1];
-			if(split[0].toLowerCase().equals("modelscale"))
+			if(split[0].equals("ModelScale"))
 				modelScale = Float.parseFloat(split[1]);
-			if (split[0].toLowerCase().equals("name"))
+			if (split[0].equals("Name"))
 			{
 				name = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -85,7 +91,7 @@ public class InfoType
 					name = name + " " + split[i + 2];
 				}
 			}
-			if (split[0].toLowerCase().equals("description"))
+			if (split[0].equals("Description"))
 			{
 				description = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -93,17 +99,13 @@ public class InfoType
 					description = description + " " + split[i + 2];
 				}
 			}
-			if (split[0].toLowerCase().equals("shortname"))
+			if (split[0].equals("ShortName"))
 			{
 				shortName = split[1];
 			}
 			if (split[0].equals("Colour") || split[0].equals("Color"))
 			{
 				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
-			}
-			if (split[0].equals("ItemID"))
-			{
-				itemID = Integer.parseInt(split[1]);
 			}
 			if (split[0].equals("Icon"))
 			{
@@ -258,7 +260,10 @@ public class InfoType
 		} catch (Exception e)
 		{
 			FlansMod.log("Failed to add recipe for : " + shortName);
-			e.printStackTrace();
+			if(FlansMod.printStackTrace)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -317,6 +322,21 @@ public class InfoType
 		return null;
 	}
 	
+	/** Return a dye damage value from a string name */
+	protected int getDyeDamageValue(String dyeName)
+	{
+		int damage = -1;
+		for(int i = 0; i < ItemDye.field_150923_a.length; i++)
+		{
+			if(ItemDye.field_150923_a[i].equals(dyeName))
+				damage = i;
+		}
+		if(damage == -1)
+			FlansMod.log("Failed to find dye colour : " + dyeName + " while adding " + contentPack);
+
+		return damage;
+	}
+	
 	/** To be overriden by subtypes for model reloading */
 	public void reloadModel()
 	{
@@ -337,7 +357,12 @@ public class InfoType
 	{
 		
 	}
+	
+	public abstract float GetRecommendedScale();
 
+	@SideOnly(Side.CLIENT)
+	public abstract ModelBase GetModel();
+	
 	public static InfoType getType(ItemStack itemStack) 
 	{
 		if(itemStack == null)

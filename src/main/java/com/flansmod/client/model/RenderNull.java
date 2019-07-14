@@ -16,7 +16,7 @@ public class RenderNull extends Render
 
     public RenderNull()
     {
-        shadowSize = 0.5F;
+        shadowSize = 0;
     }
 
     public void func_157_a(Entity entity, double d, double d1, double d2, 

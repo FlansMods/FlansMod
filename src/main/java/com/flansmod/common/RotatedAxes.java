@@ -186,6 +186,19 @@ public class RotatedAxes
 		mat.rotate(rotationYaw * 3.14159265F / 180F, new Vector3f(0F, 1F, 0F));
 		return new Vector3f(mat.m00, mat.m10, mat.m20);
 	}
+	public Vector3f findLocalVectorGloballyYaw(Vector3f in)
+	{
+		//Create a new matrix and use the first column to store the vector we are rotating
+		Matrix4f mat = new Matrix4f();
+		mat.m00 = in.x;
+		mat.m10 = in.y;
+		mat.m20 = in.z;
+		//Do the rotations used to obtain this basis
+//		mat.rotate(rotationRoll * 3.14159265F / 180F, new Vector3f(1F, 0F, 0F));
+//		mat.rotate(rotationPitch * 3.14159265F / 180F, new Vector3f(0F, 0F, 1F));
+		mat.rotate(rotationYaw * 3.14159265F / 180F, new Vector3f(0F, 1F, 0F));
+		return new Vector3f(mat.m00, mat.m10, mat.m20);
+	}
 
 	private void convertAnglesToMatrix()
 	{

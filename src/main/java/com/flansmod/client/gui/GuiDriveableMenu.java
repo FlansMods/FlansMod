@@ -63,6 +63,9 @@ public class GuiDriveableMenu extends GuiContainer
 		
 		//Repair button
 		buttonList.add(new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair"));
+		
+		//GuiButton testButton = new GuiButton(6, width / 2 - 160, height / 2 - 71, 58, 20, "Targeting");
+		//buttonList.add(testButton);
 	}
 	
 	@Override
@@ -98,6 +101,12 @@ public class GuiDriveableMenu extends GuiContainer
         {
         	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(1));
         	//inventory.player.openGui(FlansMod.INSTANCE, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        }
+        if(button.id == 6)
+        {
+           	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(1));
+        	//inventory.player.openGui(FlansMod.INSTANCE, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+
         }
 
     }

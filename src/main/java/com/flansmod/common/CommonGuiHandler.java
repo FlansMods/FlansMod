@@ -1,16 +1,8 @@
 package com.flansmod.common;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import com.flansmod.client.gui.GuiGunBox;
-import com.flansmod.common.guns.boxes.GunBoxType;
 
 public class CommonGuiHandler implements IGuiHandler
 {
@@ -25,11 +17,11 @@ public class CommonGuiHandler implements IGuiHandler
      {
           return FlansMod.proxy.getClientGui(ID, player, world, x, y, z);
      }
-     
- 	@SideOnly(Side.CLIENT)
- 	public static void openGunBoxGui(EntityPlayer player, GunBoxType type) 
- 	{
- 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().func_152612_a(player.getCommandSenderName());
- 		FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, type));
- 	}
+
+// 	@SideOnly(Side.CLIENT)
+// 	public static void openGunBoxGui(EntityPlayer player, GunBoxType type)
+// 	{
+// 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().func_152612_a(player.getCommandSenderName());
+// 		FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, type, world));
+// 	}
 }

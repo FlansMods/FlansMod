@@ -3,13 +3,17 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.client.model.ModelAAGun;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class AAGunType extends InfoType
 {
@@ -37,6 +41,10 @@ public class AAGunType extends InfoType
 	/** If true, then all barrels share the same ammo slot */
 	public boolean shareAmmo = false;
 	
+	public boolean canShootHomingMissile = false;
+	public int countExplodeAfterShoot = -1;
+	public boolean isDropThis = true;
+
 	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 
 	public AAGunType(TypeFile file)
@@ -45,6 +53,16 @@ public class AAGunType extends InfoType
 		infoTypes.add(this);
 	}
 
+	@Override
+	protected void preRead(TypeFile file) 
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file) 
+	{		
+	}
+	
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
@@ -151,6 +169,13 @@ public class AAGunType extends InfoType
 			{
 				targetRange = Float.parseFloat(split[1]);
 			}
+			if(split[0].equals("CanShootHomingMissile"))
+				canShootHomingMissile = Boolean.parseBoolean(split[1]);
+			if (split[0].equals("CountExplodeAfterShoot"))
+				countExplodeAfterShoot = Integer.parseInt(split[1]);
+			if(split[0].equals("IsDropThis"))
+				isDropThis = Boolean.parseBoolean(split[1]);
+
 		} catch (Exception e)
 		{
 			FlansMod.log("" + e);
@@ -182,5 +207,18 @@ public class AAGunType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
+	}
+
+	@Override
+	public float GetRecommendedScale() 
+	{
+		return 50.0f;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBase GetModel()
+	{
+		return model;
 	}
 }

@@ -26,6 +26,22 @@ public class Seat
 	public Vector3f rotatedOffset = new Vector3f();
 	/** Where the bullets come from */
 	public Vector3f gunOrigin = new Vector3f();
+    /** Yaw/Pitch rotation speeds (Yaw/Pitch/z) where Z is ignored*/
+    public Vector3f aimingSpeed = new Vector3f(2f, 2f, 0f);
+	/** Toggle legacy aiming mode */
+    public boolean legacyAiming = false;
+    /** Traverse Yaw before pitching */
+    public boolean yawBeforePitch = false;
+   
+    /**Does the turret have traverse sounds?*/
+    public boolean traverseSounds = false;
+	/** Pitches gun at the last second */
+	public boolean latePitch = true;
+   
+    public String yawSound;
+    public int yawSoundLength;
+    public String pitchSound;
+    public int pitchSoundLength;
 	
 	/** Type file constructor. Line from type file should be of one of the following forms
 	 * Passenger ID x y z

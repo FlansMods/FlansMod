@@ -39,10 +39,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -62,6 +58,11 @@ import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.network.PacketVoting;
 import com.flansmod.common.types.InfoType;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+
 public class TeamsManager
 {
 	/** Overall switch for teams mod */
@@ -73,7 +74,7 @@ public class TeamsManager
 	// Player changeable stuff
 	public static boolean voting = false, explosions = true, driveablesBreakBlocks = true,
 			bombsEnabled = true, shellsEnabled = true, missilesEnabled = true, bulletsEnabled = true, forceAdventureMode = true, canBreakGuns = true, canBreakGlass = true,
-			armourDrops = true, vehiclesNeedFuel = true, overrideHunger = true;
+			armourDrops = true, vehiclesNeedFuel = true, overrideHunger = true, allowVehicleZoom = false;
 	
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	//Life of certain entity types. 0 is eternal.
@@ -118,6 +119,8 @@ public class TeamsManager
 	//public Team[] teams;
 	//public List<RotationEntry> rotation;
 	//public int currentRotationEntry;
+	public static int bulletSnapshotMin = 0;
+	public static int bulletSnapshotDivisor = 50;
 	
 	public TeamsManager()
 	{
@@ -223,7 +226,23 @@ public class TeamsManager
 			//If the timer is finished, start the next round
 			if(interRoundTimeLeft == 0)
 			{
-				startNextRound();
+				if(currentRound.isNextRoundOn)
+				{
+					startNextRound();
+				}
+				else
+				{
+					/*try{
+						if(FMLClientHandler.instance().getSide().equals(Side.CLIENT)){
+							GuiTeamSelect.teamChoices = null;
+						}
+					}catch(NoClassDefFoundError e){
+						System.out.println("Round is successfully finished!");
+					}*/
+					//enabled = false;
+					/*enabled = true;
+					enabled = false;*/
+				}
 			}
 		}
 		
@@ -634,7 +653,7 @@ public class TeamsManager
 	{
 		if(!enabled)
 			return;
-		if(event.action == Action.LEFT_CLICK_BLOCK && !event.entityPlayer.capabilities.allowEdit && !event.entityPlayer.capabilities.isCreativeMode)
+		if(event.action == Action.LEFT_CLICK_BLOCK && !event.entityPlayer.capabilities.allowEdit /*&& !event.entityPlayer.capabilities.isCreativeMode*/)
 		{
 			event.setCanceled(true);
 			return;	
@@ -705,11 +724,11 @@ public class TeamsManager
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemShootable)
 				{
 					ShootableType bulletType = ((ItemShootable)ammoItemstack.getItem()).type;
-					if(gunType.isAmmo(bulletType))
+					if(gunType.isAmmo(bulletType, gunEntity.getEntityItem()))
 					{
 						gunEntity.ammoStacks.add(ammoItemstack.copy());
 						ammoItemstack.stackSize = 0;
-					}	
+					}
 				}
 			}
 		}

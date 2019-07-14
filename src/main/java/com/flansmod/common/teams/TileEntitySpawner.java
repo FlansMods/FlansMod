@@ -65,6 +65,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     {
     	if(worldObj.isRemote)
     		return;
+    	
     	//updateChunkLoading();
 		//If the base was loaded after the spawner, check to see if the base has now been loaded
 		if(baseID >= 0 && base == null)
@@ -94,7 +95,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 		}
 		if(currentDelay == 0)
 		{
-			currentDelay = spawnDelay;
+			currentDelay = spawnDelay > 0?  spawnDelay: 20;
 			for(int i = 0; i < stacksToSpawn.size(); i++)
 			{
 				if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 2)
@@ -148,6 +149,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     {
 		super.readFromNBT(nbt);
 		currentDelay = spawnDelay = nbt.getInteger("delay");
+		if(currentDelay < 20)
+			currentDelay = 20;
 		baseID = nbt.getInteger("Base");
 		dimension = nbt.getInteger("dim");
 		setBase(TeamsManager.getInstance().getBase(baseID));

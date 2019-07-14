@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -21,15 +22,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.paintjob.IPaintableItem;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
-public class ItemMecha extends Item implements IFlanItem
+public class ItemMecha extends Item implements IPaintableItem
 {
 	public MechaType type;
 
+	public IIcon[] icons;
+	
 	public ItemMecha(MechaType type1)
 	{
 		maxStackSize = 1;
@@ -42,6 +47,10 @@ public class ItemMecha extends Item implements IFlanItem
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			lines.add(type.packName);
+		}
 		if(type.description != null)
 		{
             Collections.addAll(lines, type.description.split("_"));
@@ -108,7 +117,7 @@ public class ItemMecha extends Item implements IFlanItem
 	
     public DriveableData getData(ItemStack itemstack, World world)
     {
-		return new DriveableData(getTagCompound(itemstack, world));
+		return new DriveableData(getTagCompound(itemstack, world), itemstack.getItemDamage());
     }
    
     @Override
@@ -137,13 +146,32 @@ public class ItemMecha extends Item implements IFlanItem
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
+    public void registerIcons(IIconRegister icon)
     {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	icons = new IIcon[type.paintjobs.size()];
+    	
+        itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	for(int i = 0; i < type.paintjobs.size(); i++)
+    	{
+    		icons[i] = icon.registerIcon("FlansMod:" + type.paintjobs.get(i).iconName);
+    	}
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex(ItemStack stack)
+    {
+        return icons[stack.getItemDamage()];
     }
     
 	@Override
 	public InfoType getInfoType() 
+	{
+		return type;
+	}
+
+	@Override
+	public PaintableType GetPaintableType() 
 	{
 		return type;
 	}

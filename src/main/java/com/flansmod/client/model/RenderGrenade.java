@@ -19,7 +19,7 @@ public class RenderGrenade extends Render implements IItemRenderer
 {
 	public RenderGrenade()
 	{
-		shadowSize = 0.5F;
+		shadowSize = 0.1F;
 	}
 
 	public void render(EntityGrenade grenade, double d, double d1, double d2, float f, float f1)

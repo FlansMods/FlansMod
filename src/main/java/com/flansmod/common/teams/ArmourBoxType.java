@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
@@ -39,9 +40,13 @@ public class ArmourBoxType extends InfoType
 	}
 	
 	@Override
+	public void preRead(TypeFile file)
+	{
+	}
+	
+	@Override
 	public void postRead(TypeFile file)
 	{
-    	super.postRead(file);
 		boxes.put(shortName, this);
 	}
 	
@@ -125,5 +130,18 @@ public class ArmourBoxType extends InfoType
 	public static ArmourBoxType getBox(String boxShortName) 
 	{
 		return boxes.get(boxShortName);
+	}
+
+	@Override
+	public float GetRecommendedScale() 
+	{
+		return 50.0f;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBase GetModel() 
+	{
+		return null;
 	}
 }

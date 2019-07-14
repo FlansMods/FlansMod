@@ -1,5 +1,7 @@
 package com.flansmod.common.guns;
 
+import com.flansmod.common.paintjob.Paintjob;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -21,37 +23,35 @@ public class ContainerGunModTable extends Container
 		world = w;
 		
 		//Gun slot
-		SlotGun gunSlot = new SlotGun(inventory, 0, 80, 110, null);
+		SlotGun gunSlot = new SlotGun(inventory, 0, 184, 37, null);
 		addSlotToContainer(gunSlot);
 		
 		//Attachment Slots
-		addSlotToContainer(new SlotGun(inventory, 1, 54, 110, gunSlot));
-		addSlotToContainer(new SlotGun(inventory, 2, 80, 84, gunSlot));
-		addSlotToContainer(new SlotGun(inventory, 3, 106, 110, gunSlot));
-		addSlotToContainer(new SlotGun(inventory, 4, 80, 136, gunSlot));
-		
-		for(int row = 0; row < 4; row++)
+		for(int k = 0; k < 8; k++)
 		{
-			for(int col = 0; col < 2; col++)
+			addSlotToContainer(new SlotGun(inventory, k + 1, 17 + (k * 18), 89, gunSlot));
+		}
+
+		//Generic Attachment Slots
+		for(int col = 0; col < 8; col++)
+		{
+			addSlotToContainer(new SlotGun(inventory, 9 + col, 17 + (col * 18), 115 + (col * 18), gunSlot));
+		}
+
+		//Main inventory slots
+		for(int row = 0; row < 3; row++)
+		{
+			for(int col = 0; col < 9; col++)
 			{
-				addSlotToContainer(new SlotGun(inventory, 5 + row * 2 + col, 10 + col * 18, 83 + row * 18, gunSlot));
+				addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 154 + row * 18));
 			}
 		}
-		
-		//Main inventory slots
-        for(int row = 0; row < 3; row++)
-        {
-            for(int col = 0; col < 9; col++)
-            {
-            	addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 176 + row * 18));
-            }
 
-        }
 		//Quickbar slots
-        for(int col = 0; col < 9; col++)
-        {
-        	addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 234));
-        }
+		for(int col = 0; col < 9; col++)
+		{
+			addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 212));
+		}
 	}
 	
 	@Override
@@ -78,13 +78,13 @@ public class ContainerGunModTable extends Container
             ItemStack slotStack = currentSlot.getStack();
             stack = slotStack.copy();
             
-            if(slotID >= 13)
+            if(slotID >= 17)
             {
             	return null;
             }
             else 
             {
-            	if(!mergeItemStack(slotStack, 13, inventorySlots.size(), true))
+            	if(!mergeItemStack(slotStack, 17, inventorySlots.size(), true))
             	{
             		return null;
             	}
@@ -115,13 +115,13 @@ public class ContainerGunModTable extends Container
 		//Nope.
 	}
 	
-	public void clickPaintjob(String name)
+	public void clickPaintjob(int id)
 	{
 		ItemStack gunStack = inventory.getStackInSlot(0);
         if(gunStack != null && gunStack.getItem() instanceof ItemGun)
         {
         	GunType gunType = ((ItemGun)gunStack.getItem()).type;
-        	clickPaintjob(gunType.getPaintjob(name));
+        	clickPaintjob(gunType.getPaintjob(id));
         }
 	}
 	
@@ -131,9 +131,9 @@ public class ContainerGunModTable extends Container
         if(gunStack != null && gunStack.getItem() instanceof ItemGun)
         {
         	GunType gunType = ((ItemGun)gunStack.getItem()).type;
-	        	
+
 			int numDyes = paintjob.dyesNeeded.length;
-	    	
+
 	    	if(!playerInv.player.capabilities.isCreativeMode)
 	    	{
 	    		//Calculate which dyes we have in our inventory
@@ -152,7 +152,7 @@ public class ContainerGunModTable extends Container
 					if(amountNeeded > 0)
 						return;
 	        	}
-	    	
+
 	        	for(int n = 0; n < numDyes; n++)
 	        	{
 	        		int amountNeeded = paintjob.dyesNeeded[n].stackSize;
@@ -169,9 +169,10 @@ public class ContainerGunModTable extends Container
 	        		}
 	        	}
 	    	}
-	    	
+
 	    	//Paint the gun. This line is only reached if the player is in creative or they have had their dyes taken already
-			gunStack.stackTagCompound.setString("Paint", paintjob.iconName);
+			//gunStack.stackTagCompound.setString("Paint", paintjob.iconName);
+			gunStack.setItemDamage(paintjob.ID);
 		}
 	}
 }

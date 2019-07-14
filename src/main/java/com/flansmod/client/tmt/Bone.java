@@ -476,6 +476,10 @@ public class Bone
         vector.yCoord = yVec;
         vector.zCoord = zVec;
 	}
+	
+	public void setParent(Bone parent){
+		attachBone(parent);
+	}
 
 	protected void addVector(Vec3 destVec, Vec3 srcVec)
 	{

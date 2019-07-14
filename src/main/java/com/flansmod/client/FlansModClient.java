@@ -1,10 +1,30 @@
 package com.flansmod.client;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 
+import com.flansmod.api.IControllable;
+import com.flansmod.client.gui.GuiDriveableController;
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.model.GunAnimations;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.IScope;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
+import com.flansmod.common.teams.Team;
+import com.flansmod.common.types.InfoType;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -43,6 +63,7 @@ import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -50,27 +71,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiDriveableController;
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.model.GunAnimations;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.IScope;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.network.PacketTeamInfo;
-import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
-import com.flansmod.common.teams.Team;
-import com.flansmod.common.types.InfoType;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import net.minecraftforge.common.config.Property;
 
 public class FlansModClient extends FlansMod
 {
@@ -83,17 +84,18 @@ public class FlansModClient extends FlansMod
 	public static int controlModeSwitchTimer = 20;
 	
 	/** The delay between shots / reloading */
-	public static int shootTimeLeft, shootTimeRight;
+	public static float shootTimeLeft, shootTimeRight;
 	
 	//Recoil variables
 	/** The recoil applied to the player view by shooting */
-	public static float playerRecoil;
+	public static float playerRecoilPitch;
+	public static float playerRecoilYaw;
 	/** The amount of compensation to apply to the recoil in order to bring it back to normal */
-	public static float antiRecoil;
-	
-	//Gun animations
-	/** Gun animation variables for each entity holding a gun. Currently only applicable to the player */
-	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<EntityLivingBase, GunAnimations>(), gunAnimationsLeft = new HashMap<EntityLivingBase, GunAnimations>();
+	public static float antiRecoilPitch;
+	public static float antiRecoilYaw;
+
+	public static int lastBulletReload = 0;
+	public static int shotState = -1;
 	
 	//Scope variables
 	/** A delayer on the scope button to avoid repeat presses */
@@ -102,6 +104,7 @@ public class FlansModClient extends FlansMod
 	public static IScope currentScope = null;
 	/** The transition variable for zooming in / out with a smoother. 0 = unscoped, 1 = scoped */
 	public static float zoomProgress = 0F, lastZoomProgress = 0F;
+	public static float stanceProgress = 0F, lastStanceProgress = 0F;
 	/** The zoom level of the last scope used, for transitioning out of being scoped, even after the scope is forgotten */
 	public static float lastZoomLevel = 1F, lastFOVZoomLevel = 1F;
     
@@ -120,6 +123,11 @@ public class FlansModClient extends FlansMod
 	public static PacketTeamInfo teamInfo;
 	/** When a round ends, the teams score GUI is locked for this length of time */
 	public static int teamsScoreGUILock = 0;	
+	
+	public static AimType aimType;
+	public static FlanMouseButton fireButton;
+	public static FlanMouseButton aimButton;
+	public static float fov;
 	
 	public void load()
 	{		
@@ -249,7 +257,7 @@ public class FlansModClient extends FlansMod
 
 	}
 	
-	public static int shootTime(boolean left)
+	public static float shootTime(boolean left)
 	{
 		return left ? shootTimeLeft : shootTimeRight;
 	}
@@ -281,13 +289,17 @@ public class FlansModClient extends FlansMod
 			shootTimeRight--;
 		if(scopeTime > 0)
 			scopeTime--;
-		if (playerRecoil > 0)
-			playerRecoil *= 0.8F;
-		minecraft.thePlayer.rotationPitch -= playerRecoil;
-		antiRecoil += playerRecoil;
+		if (playerRecoilPitch > 0)
+			playerRecoilPitch *= 0.8F;
+		minecraft.thePlayer.rotationPitch -= playerRecoilPitch;
+		minecraft.thePlayer.rotationYaw -= playerRecoilYaw;
+		antiRecoilPitch += playerRecoilPitch;
+		antiRecoilYaw += playerRecoilYaw;
 
-		minecraft.thePlayer.rotationPitch += antiRecoil * 0.2F;
-		antiRecoil *= 0.8F;
+		minecraft.thePlayer.rotationPitch += antiRecoilPitch * 0.2F;
+		minecraft.thePlayer.rotationYaw += antiRecoilYaw * 0.2F;
+		antiRecoilPitch *= 0.8F;
+		antiRecoilYaw *= 0.8F;
 		
 		//Update gun animations for the gun in hand
 		for(GunAnimations g : gunAnimationsRight.values())
@@ -309,7 +321,11 @@ public class FlansModClient extends FlansMod
 					player.clearItemInUse();
 				else
 				{
-					player.setItemInUse(currentItem, 100);
+					if( currentItem.getItemUseAction() == EnumAction.bow ||
+						currentItem.getItemUseAction() == EnumAction.block)
+					{
+						player.setItemInUse(currentItem, 100);
+					}
 				}
 			}
 		}
@@ -337,7 +353,16 @@ public class FlansModClient extends FlansMod
 		{
 			zoomProgress = 1F - (1F - zoomProgress) * 0.66F; 
 		}
-		
+		lastStanceProgress = stanceProgress;
+		if(!inPlane)
+		{
+			stanceProgress *= 0.66F;
+		}
+		else
+		{
+			stanceProgress = 1F - (1F - stanceProgress) * 0.66F; 
+		}
+		//System.out.println(zoomProgress);
 		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
 			inPlane = true;
@@ -655,4 +680,29 @@ public class FlansModClient extends FlansMod
 		}
 		return animations;
 	}
+	
+	public static void setAimType(AimType aimInputType)
+	{
+		Property cw = FlansMod.configFile.get("Settings", "Aim Type", "toggle", "The type of aiming that you want to use 'toggle' or 'hold'");
+		cw.set(aimInputType.toString());
+		FlansMod.configFile.save();
+		aimType = aimInputType;
+	}
+	
+	public static void setAimButton(FlanMouseButton buttonInput)
+	{
+		Property cw = FlansMod.configFile.get("Settings", "Aim Button", "left", "The mouse button used to aim a gun 'left' or 'right'");
+		cw.set(buttonInput.toString());
+		FlansMod.configFile.save();
+		aimButton = buttonInput;
+	}
+	
+	public static void setFireButton(FlanMouseButton buttonInput)
+	{
+		Property cw = FlansMod.configFile.get("Settings", "Fire Button", "right", "The mouse button used to fire a gun 'left' or 'right'");
+		cw.set(buttonInput.toString());
+		FlansMod.configFile.save();
+		fireButton = buttonInput;
+	}
+	
 }

@@ -4,6 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 /** Adds access to the InventoryPlayer stack combination methods for arbitrary inventories */
 public class InventoryHelper 
@@ -165,5 +166,10 @@ public class InventoryHelper
         
         return -1;
     }
+
+	public static void dropInventoryItems(World worldIn, int x, int y, int z, IInventory tileentity) 
+	{
+		
+	}
 	
 }

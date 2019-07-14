@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,9 +13,12 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.paintjob.Paintjob;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PlayerClass extends InfoType
 {
@@ -88,12 +92,17 @@ public class PlayerClass extends InfoType
 			}
 		}
 	}
+
+	
+	@Override
+	protected void preRead(TypeFile file) 
+	{
+	}
 	
 	/** This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once */
 	@Override
 	protected void postRead(TypeFile file) 
 	{
-    	super.postRead(file);
 		onWorldLoad(null);
 	}
 	
@@ -159,6 +168,11 @@ public class PlayerClass extends InfoType
 				    			case stock : tagName = "stock"; break;
 				    			case grip : tagName = "grip"; break;
 				    			case generic : tagName = "generic_" + genericID++; break;
+				    			// TODO: Implement new attachments to classes
+							    case accessory: break;
+							    case gadget: break;
+							    case pump: break;
+							    case slide: break;
 				    		}
 				    		NBTTagCompound specificAttachmentTags = new NBTTagCompound();
 				    		new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
@@ -191,6 +205,19 @@ public class PlayerClass extends InfoType
 			if(playerClass.shortName.equals(s))
 				return playerClass;
 		}
+		return null;
+	}
+
+	@Override
+	public float GetRecommendedScale() 
+	{
+		return 50.0f;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBase GetModel() 
+	{
 		return null;
 	}
 }

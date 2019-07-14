@@ -3,15 +3,21 @@ package com.flansmod.common;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -22,10 +28,17 @@ import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EntityDamageSourceGun;
+import com.flansmod.common.guns.EntityGrenade;
+import com.flansmod.common.guns.EntityShootable;
+import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.network.PacketRequestDebug;
 import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler
 {
+	private static final Random rand = new Random();
 	public static Map<String, PlayerData> serverSideData = new HashMap<String, PlayerData>();
 	public static Map<String, PlayerData> clientSideData = new HashMap<String, PlayerData>();
 	public static ArrayList<String> clientsToRemoveAfterThisRound = new ArrayList<String>();
@@ -43,6 +56,48 @@ public class PlayerHandler
 		if(event instanceof LivingAttackEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
 		{
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public void onLivingHurtEvent(LivingHurtEvent event)
+	{
+		float damage = event.ammount;
+		if(damage > 0 && event.source instanceof EntityDamageSourceGun)
+		{
+			EntityDamageSourceGun source = (EntityDamageSourceGun)event.source;
+			
+			ShootableType shootableType = null;
+			Entity damageSouceEntity = source.getDamageSourceEntity();
+			if(damageSouceEntity instanceof EntityBullet)
+			{
+				shootableType = ((EntityBullet)damageSouceEntity).type;
+			}
+			if(damageSouceEntity instanceof EntityGrenade)
+			{
+				shootableType = ((EntityGrenade)damageSouceEntity).type;
+			}
+			if(shootableType!=null && shootableType.ignoreArmorProbability > 0 && rand.nextFloat() < shootableType.ignoreArmorProbability)
+			{
+				EntityLivingBase entity = event.entityLiving;
+				float f1 = damage;
+				damage = Math.max(damage - entity.getAbsorptionAmount(), 0.0F);
+				entity.setAbsorptionAmount(entity.getAbsorptionAmount() - (f1 - damage));
+				
+				damage *= shootableType.ignoreArmorDamageFactor;
+
+				if (damage != 0.0F)
+				{
+					float health = entity.getHealth();
+					entity.setHealth(health - damage);
+					entity.func_110142_aN().func_94547_a(source, health, damage);
+					entity.setAbsorptionAmount(entity.getAbsorptionAmount() - damage);
+					
+//					FlansMod.log("Ignore armor damage = " + damage);
+				}
+
+				event.setCanceled(true);
+			}
 		}
 	}
 	
@@ -117,6 +172,11 @@ public class PlayerHandler
 	{
 		if(event instanceof PlayerLoggedInEvent)
 		{
+			if(event.player instanceof EntityPlayerMP)
+			{
+				FlansMod.packetHandler.sendTo(new PacketRequestDebug(false), (EntityPlayerMP)event.player);
+			}
+			
 			EntityPlayer player = event.player;
 			String username = player.getCommandSenderName();
 			if(!serverSideData.containsKey(username))

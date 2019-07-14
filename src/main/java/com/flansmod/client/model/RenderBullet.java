@@ -15,7 +15,7 @@ public class RenderBullet extends Render
 {
 	public RenderBullet()
 	{
-		shadowSize = 0.5F;
+		shadowSize = 0;
 	}
 
 	public void render(EntityBullet bullet, double d, double d1, double d2, float f, float f1)

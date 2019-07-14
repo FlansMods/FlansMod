@@ -2,11 +2,14 @@ package com.flansmod.client;
 
 import org.lwjgl.input.Keyboard;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import com.flansmod.api.IControllable;
+import com.flansmod.client.gui.GuiModOptions;
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.gui.GuiTeamSelect;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketGunMode;
+import com.flansmod.common.network.PacketReload;
+import com.flansmod.common.network.PacketRequestDebug;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -14,16 +17,15 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.gui.GuiTeamSelect;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketReload;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
-{  
+{
 	//public static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W, "Flan's Mod");
 	//public static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S, "Flan's Mod");
 	//public static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A, "Flan's Mod");
@@ -36,6 +38,7 @@ public class KeyInputHandler
 	public static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_B, "Flan's Mod");
 	public static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C, "Flan's Mod");
 	public static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R, "Flan's Mod");
+	public static KeyBinding gunModeKey = new KeyBinding("Gun Mode key", Keyboard.KEY_F, "Flan's Mod");
 	public static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G, "Flan's Mod");
 	public static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H, "Flan's Mod");
 	public static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z, "Flan's Mod");
@@ -43,13 +46,16 @@ public class KeyInputHandler
     public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
     public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
     public static KeyBinding modeKey = new KeyBinding("Mode Switch Key", Keyboard.KEY_J, "Flan's Mod");
+    public static KeyBinding flareKey = new KeyBinding("Flare Key", Keyboard.KEY_N, "Flan's Mod");
     //public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
     public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
     public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
+	public static KeyBinding secondaryKey = new KeyBinding("Select Gun Underbarrel", Keyboard.KEY_K, "Flan's Mod");
     //public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
+    public static KeyBinding optionsKey = new KeyBinding("Mod Options", Keyboard.KEY_SEMICOLON, "Flan's Mod");
 
 	Minecraft mc;
-	
+
 	public KeyInputHandler()
 	{
 		//ClientRegistry.registerKeyBinding(accelerateKey);
@@ -64,6 +70,7 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(gunKey);
 		ClientRegistry.registerKeyBinding(controlSwitchKey);
 		ClientRegistry.registerKeyBinding(reloadKey);
+		ClientRegistry.registerKeyBinding(gunModeKey);
 		ClientRegistry.registerKeyBinding(teamsMenuKey);
 		ClientRegistry.registerKeyBinding(teamsScoresKey);
 		ClientRegistry.registerKeyBinding(leftRollKey);
@@ -71,23 +78,26 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(gearKey);
 		ClientRegistry.registerKeyBinding(doorKey);
 		ClientRegistry.registerKeyBinding(modeKey);
+		ClientRegistry.registerKeyBinding(flareKey);
 		//ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
+		ClientRegistry.registerKeyBinding(optionsKey);
 		//ClientRegistry.registerKeyBinding(zoomKey);
-		
+		ClientRegistry.registerKeyBinding(secondaryKey);
+
 		mc = Minecraft.getMinecraft();
 	}
-	
+
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event)
 	{
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
 			return;
-		
+
 		EntityPlayer player = mc.thePlayer;
 		Entity ridingEntity = player.ridingEntity;
-		
+
 		//Handle universal keys
 		if(teamsMenuKey.isPressed())
 		{
@@ -104,15 +114,35 @@ public class KeyInputHandler
 			FlansMod.getPacketHandler().sendToServer(new PacketReload(false));
 			return;
 		}
+		if(gunModeKey.isPressed())
+		{
+			FlansMod.getPacketHandler().sendToServer(new PacketGunMode(1));
+			return;
+		}
+		if(secondaryKey.isPressed())
+		{
+			FlansMod.getPacketHandler().sendToServer(new PacketGunMode(2));
+			return;
+		}
 		if(debugKey.isPressed())
 		{
-			FlansMod.DEBUG = !FlansMod.DEBUG;
+			if(FlansMod.DEBUG)
+				FlansMod.DEBUG = false;
+			else
+			{
+				FlansMod.packetHandler.sendToServer(new PacketRequestDebug());
+			}
 		}
 		if(reloadModelsKey.isPressed())
 		{
 			FlansModClient.reloadModels(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT));
 		}
 		
+		if(optionsKey.isPressed())
+		{
+			mc.displayGuiScreen(new GuiModOptions());
+		}
+
 		//Handle driving keys
 		if(ridingEntity instanceof IControllable)
 		{
@@ -151,7 +181,9 @@ public class KeyInputHandler
 				riding.pressKey(15, player);
 			//if(trimKey.isPressed())
 			//	riding.pressKey(16, player);
-			
+			if(flareKey.isPressed())
+				riding.pressKey(18, player);
+
 			/*
 			for(KeyBinding key : mc.gameSettings.keyBindings )
 			{

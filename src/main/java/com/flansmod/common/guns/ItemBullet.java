@@ -36,6 +36,11 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 		}
 	}
 
+	public boolean isRepairable()
+	{
+		return canRepair;
+	}
+
     @SideOnly(Side.CLIENT)
     @Override
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
@@ -53,6 +58,10 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			lines.add(type.packName);
+		}
 		if(type.description != null)
 		{
             Collections.addAll(lines, type.description.split("_"));

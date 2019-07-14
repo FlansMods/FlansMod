@@ -21,7 +21,9 @@ public class TeamsRound implements Comparable<TeamsRound>
 	/** Number of rounds since it was offered as an option in the vote. Used to pick vote options */
 	public int roundsSincePlayed;
 	
-	public TeamsRound(TeamsMap map2, Gametype gametype2, Team[] teams2, int timeLimit, int scoreLimit) 
+	public boolean isNextRoundOn = false;
+
+	public TeamsRound(TeamsMap map2, Gametype gametype2, Team[] teams2, int timeLimit, int scoreLimit, boolean isNext)
 	{
 		map = map2;
 		gametype = gametype2;
@@ -29,6 +31,8 @@ public class TeamsRound implements Comparable<TeamsRound>
 		this.timeLimit = timeLimit;
 		this.scoreLimit = scoreLimit;
 		popularity = 0.5F;
+
+		isNextRoundOn = isNext;
 	}
 	
 	public TeamsRound(NBTTagCompound tags)
@@ -45,6 +49,7 @@ public class TeamsRound implements Comparable<TeamsRound>
 		}
 		
 		popularity = tags.getFloat("Pop");
+		isNextRoundOn = tags.getBoolean("NextRound");
 	}
 
 	public void writeToNBT(NBTTagCompound tags) 
@@ -61,6 +66,7 @@ public class TeamsRound implements Comparable<TeamsRound>
 		}
 		
 		tags.setFloat("Pop", popularity);
+		tags.setBoolean("NextRound", isNextRoundOn);
 	}
 	
 	public int getTeamID(Team team)

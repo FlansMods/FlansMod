@@ -5,13 +5,51 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import com.flansmod.common.types.InfoType;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.EntityBlockDustFX;
+import net.minecraft.client.particle.EntityBreakingFX;
+import net.minecraft.client.particle.EntityBubbleFX;
+import net.minecraft.client.particle.EntityCloudFX;
+import net.minecraft.client.particle.EntityCritFX;
+import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.EntityDropParticleFX;
+import net.minecraft.client.particle.EntityEnchantmentTableParticleFX;
+import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityFireworkSparkFX;
+import net.minecraft.client.particle.EntityFishWakeFX;
+import net.minecraft.client.particle.EntityFlameFX;
+import net.minecraft.client.particle.EntityFootStepFX;
+import net.minecraft.client.particle.EntityHeartFX;
+import net.minecraft.client.particle.EntityHugeExplodeFX;
+import net.minecraft.client.particle.EntityLargeExplodeFX;
+import net.minecraft.client.particle.EntityLavaFX;
+import net.minecraft.client.particle.EntityNoteFX;
+import net.minecraft.client.particle.EntityPortalFX;
+import net.minecraft.client.particle.EntityReddustFX;
+import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.particle.EntitySnowShovelFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
+import net.minecraft.client.particle.EntitySplashFX;
+import net.minecraft.client.particle.EntitySuspendFX;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -38,6 +76,7 @@ import com.flansmod.client.gui.GuiDriveableRepair;
 import com.flansmod.client.gui.GuiGunBox;
 import com.flansmod.client.gui.GuiGunModTable;
 import com.flansmod.client.gui.GuiMechaInventory;
+import com.flansmod.client.gui.GuiPaintjobTable;
 import com.flansmod.client.model.RenderAAGun;
 import com.flansmod.client.model.RenderBullet;
 import com.flansmod.client.model.RenderFlag;
@@ -59,6 +98,7 @@ import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EntityWheel;
+import com.flansmod.common.driveables.EnumPlaneMode;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
@@ -74,7 +114,9 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBuyArmour;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
+import com.flansmod.common.network.PacketGiveItem;
 import com.flansmod.common.network.PacketRepairDriveable;
+import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.EntityFlag;
@@ -203,13 +245,14 @@ public class ClientProxy extends CommonProxy
 			player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.getKeyCode()) + " to open the menu"));
 			player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) + " to get out"));
 			player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.getKeyCode()) + " to switch controls"));
-            player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch VTOL mode"));
 			if (entityType instanceof EntityPlane)
 			{
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasGear)
 					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.gearKey.getKeyCode()) + " to switch the gear"));
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasDoor)
 					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.doorKey.getKeyCode()) + " to switch the doors"));
+				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).mode == EnumPlaneMode.VTOL)
+					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch VTOL mode"));					
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasWing)
 					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch the wings"));
 			}
@@ -243,7 +286,7 @@ public class ClientProxy extends CommonProxy
 		case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
 		case 1: return new GuiDriveableRepair(player);
 		case 2: return new GuiGunModTable(player.inventory, world);
-		case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlock(x, y, z)).type);
+		case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlock(x, y, z)).type, world);
 		case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
 		case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
 		case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
@@ -251,9 +294,10 @@ public class ClientProxy extends CommonProxy
 		case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
 		case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlock(x, y, z)).type);
 		case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
-		}
-		return null;
-	}
+		case 13: return new GuiPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(x, y, z));
+ 		}
+ 		return null;
+ 	}
 	
 	/** Called when the player presses the plane inventory key. Opens menu client side */
 	@Override
@@ -298,7 +342,10 @@ public class ClientProxy extends CommonProxy
 		catch(Exception e)
 		{
 			FlansMod.log("Failed to load model : " + shortName + " (" + s + ")");
-			e.printStackTrace();
+			if(FlansMod.printStackTrace)
+			{
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -317,19 +364,24 @@ public class ClientProxy extends CommonProxy
 	{
 		return player == FMLClientHandler.instance().getClient().thePlayer;
 	}
+
+	@Override
+	public EntityPlayer getThePlayer()
+	{
+		return FMLClientHandler.instance().getClient().thePlayer;
+	}
+	
+	@Override
+	public boolean isOnSameTeamClientPlayer(EntityLivingBase entity)
+	{
+		return FMLClientHandler.instance().getClient().thePlayer.isOnSameTeam(entity);
+	}
 	
 	/* Gun and armour box crafting methods */
 	@Override
-	public void buyGun(GunBoxType type, int gun)
+	public void buyGun(GunBoxType type, InfoType gun)
 	{
-		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(type, 0, gun));
-		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
-	}
-
-	@Override
-	public void buyAmmo(GunBoxType box, int ammo, int type)
-	{
-		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(box, type, ammo));
+		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(type, gun));
 		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
 	}
 	
@@ -338,6 +390,13 @@ public class ClientProxy extends CommonProxy
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyArmour(box.shortName, shortName, piece));
 		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
+	}
+	
+	@Override
+	public void addItem(EntityPlayer player, int id){
+		super.addItem(player, id);
+		if(player.worldObj.isRemote)
+			FlansMod.getPacketHandler().sendToServer(new PacketGiveItem(57));
 	}
 	
 	@Override
@@ -395,5 +454,340 @@ public class ClientProxy extends CommonProxy
 	{
 	   	boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
     	return state;
+	}
+	
+	@Override
+	public void spawnParticle(String s,
+			double x, double y, double z,
+			double mx, double my, double mz)
+	{
+		try
+		{
+			this.doSpawnParticle(s, x, y, z, mx, my, mz);
+		}
+		catch (Throwable throwable)
+		{
+			throwable.printStackTrace();
+		}
+	}
+	
+	private static EntityFX doSpawnParticle(String p_72726_1_, double p_72726_2_, double p_72726_4_, double p_72726_6_, double p_72726_8_, double p_72726_10_, double p_72726_12_)
+	{
+		Minecraft mc = Minecraft.getMinecraft();
+		World theWorld = mc.theWorld;
+		if (mc != null && mc.renderViewEntity != null && mc.effectRenderer != null)
+		{
+			int i = mc.gameSettings.particleSetting;
+
+			if (i == 1 && theWorld.rand.nextInt(3) == 0)
+			{
+				i = 2;
+			}
+
+			double d6 = mc.renderViewEntity.posX - p_72726_2_;
+			double d7 = mc.renderViewEntity.posY - p_72726_4_;
+			double d8 = mc.renderViewEntity.posZ - p_72726_6_;
+			EntityFX entityfx = null;
+
+			if (p_72726_1_.equals("hugeexplosion"))
+			{
+				mc.effectRenderer.addEffect(entityfx = new EntityHugeExplodeFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_));
+			}
+			
+			else if (p_72726_1_.equals("largeexplode"))
+			{
+				mc.effectRenderer.addEffect(entityfx = new EntityLargeExplodeFX(mc.renderEngine, theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_));
+			}
+			
+			else if (p_72726_1_.equals("fireworksSpark"))
+			{
+				mc.effectRenderer.addEffect(entityfx = new EntityFireworkSparkFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_, mc.effectRenderer));
+			}
+
+			if (entityfx != null)
+			{
+				return (EntityFX)entityfx;
+			}
+			else
+			{
+				double d9 = 160.0D;
+
+				if (d6 * d6 + d7 * d7 + d8 * d8 > d9 * d9)
+				{
+					return null;
+				}
+				else if (i > 1)
+				{
+					return null;
+				}
+				else
+				{
+					// FlansMod only
+					if (p_72726_1_.equals("flansmod.flare"))
+					{
+						entityfx = new EntityFlare(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+
+					if (p_72726_1_.equals("flansmod.smoker"))
+					{
+						entityfx = new EntitySmokeGrenade(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.flash"))
+					{
+						entityfx = new EntityFlash(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.smokeburst"))
+					{
+						entityfx = new EntitySmokeBurst(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.bigsmoke"))
+					{
+						entityfx = new EntityBigSmoke(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.debris1"))
+					{
+						entityfx = new EntityDebris1(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.fmflame"))
+					{
+						entityfx = new EntityFMFlame(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.fmtracer"))
+					{
+						entityfx = new EntityFMTracer(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.fmtracergreen"))
+					{
+						entityfx = new EntityFMTracerGreen(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.fmtracerred"))
+					{
+						entityfx = new EntityFMTracerRed(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					
+					if (p_72726_1_.equals("flansmod.afterburn"))
+					{
+						entityfx = new EntityAfterburn(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.fmsmoke"))
+					{
+						entityfx = new EntityFMSmoke(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("flansmod.rocketexhaust"))
+					{
+						entityfx = new EntityRocketexhaust(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					
+					if (p_72726_1_.equals("bubble"))
+					{
+						entityfx = new EntityBubbleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("suspended"))
+					{
+						entityfx = new EntitySuspendFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("depthsuspend"))
+					{
+						entityfx = new EntityAuraFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("townaura"))
+					{
+						entityfx = new EntityAuraFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("crit"))
+					{
+						entityfx = new EntityCritFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("magicCrit"))
+					{
+						entityfx = new EntityCritFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+						((EntityFX)entityfx).setRBGColorF(((EntityFX)entityfx).getRedColorF() * 0.3F, ((EntityFX)entityfx).getGreenColorF() * 0.8F, ((EntityFX)entityfx).getBlueColorF());
+						((EntityFX)entityfx).nextTextureIndexX();
+					}
+					else if (p_72726_1_.equals("smoke"))
+					{
+						entityfx = new EntitySmokeFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("mobSpell"))
+					{
+						entityfx = new EntitySpellParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, 0.0D, 0.0D, 0.0D);
+						((EntityFX)entityfx).setRBGColorF((float)p_72726_8_, (float)p_72726_10_, (float)p_72726_12_);
+					}
+					else if (p_72726_1_.equals("mobSpellAmbient"))
+					{
+						entityfx = new EntitySpellParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, 0.0D, 0.0D, 0.0D);
+						((EntityFX)entityfx).setAlphaF(0.15F);
+						((EntityFX)entityfx).setRBGColorF((float)p_72726_8_, (float)p_72726_10_, (float)p_72726_12_);
+					}
+					else if (p_72726_1_.equals("spell"))
+					{
+						entityfx = new EntitySpellParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("instantSpell"))
+					{
+						entityfx = new EntitySpellParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+						((EntitySpellParticleFX)entityfx).setBaseSpellTextureIndex(144);
+					}
+					else if (p_72726_1_.equals("witchMagic"))
+					{
+						entityfx = new EntitySpellParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+						((EntitySpellParticleFX)entityfx).setBaseSpellTextureIndex(144);
+						float f = theWorld.rand.nextFloat() * 0.5F + 0.35F;
+						((EntityFX)entityfx).setRBGColorF(1.0F * f, 0.0F * f, 1.0F * f);
+					}
+					else if (p_72726_1_.equals("note"))
+					{
+						entityfx = new EntityNoteFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("portal"))
+					{
+						entityfx = new EntityPortalFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("enchantmenttable"))
+					{
+						entityfx = new EntityEnchantmentTableParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("explode"))
+					{
+						entityfx = new EntityExplodeFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("flame"))
+					{
+						entityfx = new EntityFlameFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("lava"))
+					{
+						entityfx = new EntityLavaFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_);
+					}
+					else if (p_72726_1_.equals("footstep"))
+					{
+						entityfx = new EntityFootStepFX(mc.renderEngine, theWorld, p_72726_2_, p_72726_4_, p_72726_6_);
+					}
+					else if (p_72726_1_.equals("splash"))
+					{
+						entityfx = new EntitySplashFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("wake"))
+					{
+						entityfx = new EntityFishWakeFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("largesmoke"))
+					{
+						entityfx = new EntitySmokeFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_, 2.5F);
+					}
+					else if (p_72726_1_.equals("cloud"))
+					{
+						entityfx = new EntityCloudFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("reddust"))
+					{
+						entityfx = new EntityReddustFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, (float)p_72726_8_, (float)p_72726_10_, (float)p_72726_12_);
+					}
+					else if (p_72726_1_.equals("snowballpoof"))
+					{
+						entityfx = new EntityBreakingFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, Items.snowball);
+					}
+					else if (p_72726_1_.equals("dripWater"))
+					{
+						entityfx = new EntityDropParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, Material.water);
+					}
+					else if (p_72726_1_.equals("dripLava"))
+					{
+						entityfx = new EntityDropParticleFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, Material.lava);
+					}
+					else if (p_72726_1_.equals("snowshovel"))
+					{
+						entityfx = new EntitySnowShovelFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("slime"))
+					{
+						entityfx = new EntityBreakingFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, Items.slime_ball);
+					}
+					else if (p_72726_1_.equals("heart"))
+					{
+						entityfx = new EntityHeartFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+					}
+					else if (p_72726_1_.equals("angryVillager"))
+					{
+						entityfx = new EntityHeartFX(theWorld, p_72726_2_, p_72726_4_ + 0.5D, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+						((EntityFX)entityfx).setParticleTextureIndex(81);
+						((EntityFX)entityfx).setRBGColorF(1.0F, 1.0F, 1.0F);
+					}
+					else if (p_72726_1_.equals("happyVillager"))
+					{
+						entityfx = new EntityAuraFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_);
+						((EntityFX)entityfx).setParticleTextureIndex(82);
+						((EntityFX)entityfx).setRBGColorF(1.0F, 1.0F, 1.0F);
+					}
+					else
+					{
+						int k;
+						String[] astring;
+
+						if (p_72726_1_.startsWith("iconcrack_"))
+						{
+							astring = p_72726_1_.split("_", 3);
+							int j = Integer.parseInt(astring[1]);
+
+							if (astring.length > 2)
+							{
+								k = Integer.parseInt(astring[2]);
+								entityfx = new EntityBreakingFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_, Item.getItemById(j), k);
+							}
+							else
+							{
+								entityfx = new EntityBreakingFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_, Item.getItemById(j), 0);
+							}
+						}
+						else
+						{
+							Block block;
+
+							if (p_72726_1_.startsWith("blockcrack_"))
+							{
+								astring = p_72726_1_.split("_", 3);
+								block = Block.getBlockById(Integer.parseInt(astring[1]));
+								k = Integer.parseInt(astring[2]);
+								entityfx = (new EntityDiggingFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_, block, k)).applyRenderColor(k);
+							}
+							else if (p_72726_1_.startsWith("blockdust_"))
+							{
+								astring = p_72726_1_.split("_", 3);
+								block = Block.getBlockById(Integer.parseInt(astring[1]));
+								k = Integer.parseInt(astring[2]);
+								entityfx = (new EntityBlockDustFX(theWorld, p_72726_2_, p_72726_4_, p_72726_6_, p_72726_8_, p_72726_10_, p_72726_12_, block, k)).applyRenderColor(k);
+							}
+						}
+					}
+
+					if (entityfx != null)
+					{
+						mc.effectRenderer.addEffect((EntityFX)entityfx);
+					}
+
+					return (EntityFX)entityfx;
+				}
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public float getMouseSensitivity()
+	{
+		return Minecraft.getMinecraft().gameSettings.mouseSensitivity;
 	}
 }

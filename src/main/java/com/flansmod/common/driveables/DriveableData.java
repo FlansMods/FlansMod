@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
@@ -27,7 +28,18 @@ public class DriveableData implements IInventory
 	public float fuelInTank;
 	/** Each driveable part has a small class that holds its current status */
 	public HashMap<EnumDriveablePart, DriveablePart> parts;
-		
+	
+	public boolean inventoryChanged = false;;
+	
+	/** Paintjob index */
+	public int paintjobID;	
+	
+	public DriveableData(NBTTagCompound tags, int paintjobID)
+	{
+		this(tags);
+		this.paintjobID = paintjobID;
+	}
+	
 	public DriveableData(NBTTagCompound tags)
 	{
 		parts = new HashMap<EnumDriveablePart, DriveablePart>();
@@ -48,6 +60,7 @@ public class DriveableData implements IInventory
 		numMissiles = dType.numMissileSlots;
 		numGuns = dType.ammoSlots();
 		engine = PartType.getPart(tag.getString("Engine"));
+		paintjobID = tag.getInteger("Paint");
 		ammo = new ItemStack[numGuns];
 		bombs = new ItemStack[numBombs];
 		missiles = new ItemStack[numMissiles];
@@ -80,6 +93,7 @@ public class DriveableData implements IInventory
     {
 		tag.setString("Type", type);
 		tag.setString("Engine", engine.shortName);
+		tag.setInteger("Paint", paintjobID);
 		for(int i = 0; i < ammo.length; i++)
 		{
 			if(ammo[i] != null)
@@ -146,6 +160,8 @@ public class DriveableData implements IInventory
     @Override
 	public ItemStack decrStackSize(int i, int j) 
 	{
+//    	FlansMod.log("decr Slot:"+i + ":  "+j);
+    	
 		//Find the correct inventory
 		ItemStack[] inv = ammo;
 		if(i >= ammo.length)
@@ -203,6 +219,16 @@ public class DriveableData implements IInventory
     @Override
 	public void setInventorySlotContents(int i, ItemStack stack) 
 	{ 
+		if(stack!=null)
+		{
+			inventoryChanged = true;
+//			FlansMod.log("Slot:"+i + ":  "+stack.getDisplayName()+" ("+stack.stackSize+"");
+		}
+		else
+		{
+//			FlansMod.log("Slot:"+i + ":  null");
+		}
+		
 		//Find the correct inventory
 		ItemStack[] inv = ammo;
 		if(i >= ammo.length)
@@ -250,10 +276,10 @@ public class DriveableData implements IInventory
 		return true; 
 	}
 
-    @Override
+	@Override
 	public void openInventory() {}
 
-    @Override
+	@Override
 	public void closeInventory() {}
 	
 	public int getAmmoInventoryStart()

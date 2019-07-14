@@ -78,6 +78,7 @@ public class PacketTeamInfo extends PacketBase
     	data.writeBoolean(TeamsManager.canBreakGlass);
     	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
     	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+    	data.writeBoolean(TeamsManager.allowVehicleZoom);
     	
 		if(TeamsManager.getInstance().currentRound == null)
     	{
@@ -184,6 +185,7 @@ public class PacketTeamInfo extends PacketBase
 		TeamsManager.canBreakGlass = data.readBoolean();
 		TeamsManager.vehiclesNeedFuel = data.readBoolean();
 		TeamsManager.driveablesBreakBlocks = data.readBoolean();
+		TeamsManager.allowVehicleZoom = data.readBoolean();
 		gametype = readUTF(data);
 		if(gametype.equals("No Gametype"))
 		{

@@ -5,11 +5,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartType extends InfoType {
 	/** Category (TODO : Replace with Enum) */
@@ -44,6 +48,13 @@ public class PartType extends InfoType {
 		parts.add(this);
 	}
 
+	@Override
+	protected void preRead(TypeFile file) 
+	{
+		
+	}
+
+	
 	@Override
 	public void postRead(TypeFile file) 
 	{
@@ -153,5 +164,18 @@ public class PartType extends InfoType {
 		if (s.equals("Misc"))
 			return 10;
 		return 10;
+	}
+
+	@Override
+	public float GetRecommendedScale() 
+	{
+		return 50.0f;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBase GetModel() 
+	{
+		return null;
 	}
 }

@@ -1,13 +1,12 @@
 package com.flansmod.common.driveables;
 
-import com.flansmod.common.vector.Vector3f;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.flansmod.common.vector.Vector3f;
+
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,11 +24,18 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	/** The ID of the vehicle this wheel is part of, for client-server syncing */
 	private int vehicleID;
 	
+	public boolean onDeck = false;
+	
+	private int invulnerableUnmountCount;
+	
+	public int timeLimitDriveableNull = 0;
+
 	public EntityWheel(World world) 
 	{
 		super(world);
 		setSize(1F, 1F);
 		stepHeight = 1.0F;
+		invulnerableUnmountCount = 0;
 	}
 
 	public EntityWheel(World world, EntityDriveable entity,  int i) 
@@ -56,11 +62,13 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
     protected void fall(float k)
     {
+		/*
 		if(vehicle == null || k <= 0) 
         	return;
         int i = MathHelper.ceiling_float_int(k - 3F);
-        if(i > 0)
+        if(i > 0 && invulnerableUnmountCount==0)
         	vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.fall, i);
+        */
     }
 
 	@Override
@@ -88,6 +96,15 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//prevPosY = posY;
 		//prevPosZ = posZ;
 		
+		if(this.ridingEntity != null)
+		{
+			invulnerableUnmountCount = 20 * 4;
+		}
+		else if(invulnerableUnmountCount > 0)
+		{
+			invulnerableUnmountCount--;
+		}
+
 		//If on the client and the vehicle parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundVehicle)
 		{
@@ -101,6 +118,19 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		if(vehicle == null)
 			return;
 		
+
+		EntityDriveable entD;
+		entD = (EntityDriveable)worldObj.getEntityByID(vehicleID);
+		if(entD == null){
+			this.timeLimitDriveableNull++;
+		}else{
+			this.timeLimitDriveableNull = 0;
+		}
+
+		if(timeLimitDriveableNull > 60*20){
+			this.setDead();
+		}
+
 		if(!addedToChunk)
 			worldObj.spawnEntityInWorld(this);
 		/*
@@ -158,6 +188,11 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	public double getSpeedXZ()
 	{
 		return Math.sqrt(motionX * motionX + motionZ * motionZ);
+	}
+	
+	public double getSpeedXYZ()
+	{
+		return Math.cbrt(motionX * motionX + motionZ * motionZ + motionY * motionY);
 	}
 	
 	@Override

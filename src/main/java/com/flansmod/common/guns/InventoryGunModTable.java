@@ -8,7 +8,7 @@ public class InventoryGunModTable extends InventoryBasic
 {
 	public InventoryGunModTable() 
 	{
-		super("Gun Modification Table", true, 13);
+		super("Gun Modification Table", true, 17);
 	}
 
 	public ItemStack lastGunStack;
@@ -27,19 +27,19 @@ public class InventoryGunModTable extends InventoryBasic
 			return;
 		
 		gunType = ((ItemGun)gunStack.getItem()).type;
+		String[] tags = {"barrel", "scope", "stock", "grip", "gadget", "slide", "pump", "accessory"};
 		
 		//If we changed the gun (i.e. a new gun has been placed in the table)
 		if(gunStack != lastGunStack)
 		{
 			busy = true;
 			NBTTagCompound attachmentTags = gunStack.stackTagCompound.getCompoundTag("attachments");
-			setInventorySlotContents(1, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("barrel"))); 
-			setInventorySlotContents(2, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("scope"))); 
-			setInventorySlotContents(3, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("stock"))); 
-			setInventorySlotContents(4, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("grip")));
+			for(int i = 0; i < 8; i++)
+				setInventorySlotContents(i + 1, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag(tags[i])));
+
 			genericScroll = 0;
 			for(int i = 0; i < Math.min(gunType.numGenericAttachmentSlots, 8); i++)
-				setInventorySlotContents(5 + i, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("generic_" + i)));
+				setInventorySlotContents(tags.length + i + 1, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("generic_" + i)));
 			busy = false;
 		}
 		//Else we changed an attachment
@@ -54,18 +54,15 @@ public class InventoryGunModTable extends InventoryBasic
 			
 			//Add each attachment from the inventory to our gun stack
 	    	NBTTagCompound attachmentTags = new NBTTagCompound();
-	
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(1), "barrel");
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(2), "scope");
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(3), "stock");
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(4), "grip");
+			for(int i = 0; i < 8; i++)
+				writeAttachmentTags(attachmentTags, getStackInSlot(i + 1), tags[i]);
 	
 	       	//Change all the attachments that we are looking at, but copy in the old ones
 	       	for(int i = 0; i < gunType.numGenericAttachmentSlots; i++)
 	       	{
 	       		if(i >= genericScroll * 4 && i < genericScroll * 4 + 8)
 	       		{
-	       			writeAttachmentTags(attachmentTags, getStackInSlot(i - genericScroll * 4 + 5), "generic_" + i);
+	       			writeAttachmentTags(attachmentTags, getStackInSlot(i - genericScroll * 4 + tags.length + 1), "generic_" + i);
 	       		}
 	       		else attachmentTags.setTag("generic_" + i, getStackInSlot(0).stackTagCompound.getTag("generic_" + i));
 	       	}

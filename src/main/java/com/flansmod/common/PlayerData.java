@@ -13,7 +13,6 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
-import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.vector.Vector3f;
@@ -42,7 +41,7 @@ public class PlayerData
 	/** The MG this player is using */
 	public EntityMG mountingGun;
 	/** Tickers to stop shooting too fast */
-	public int shootTimeRight, shootTimeLeft;
+	public float shootTimeRight, shootTimeLeft;
 	/** Stops player shooting immediately after swapping weapons */
 	public int shootClickDelay;
 	/** True if this player is shooting */
@@ -62,6 +61,8 @@ public class PlayerData
 	/** When the player shoots a burst fire weapon, one shot is fired immediately and this counter keeps track of how many more should be fired */
 	public int burstRoundsRemainingLeft = 0, burstRoundsRemainingRight = 0;
 	
+	public boolean isAmmoEmpty;
+
 	public Vector3f[] lastMeleePositions;
 	
 	//Teams related fields

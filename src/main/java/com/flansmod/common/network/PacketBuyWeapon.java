@@ -1,5 +1,6 @@
 package com.flansmod.common.network;
 
+import com.flansmod.common.types.InfoType;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -15,39 +16,35 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 public class PacketBuyWeapon extends PacketBase
 {
 	public String boxShortName;
-	public int purchaseType; //0 = Gun, 1 = Ammo, 2 = AltAmmo
-	public int weaponID;
+	public String itemShortName;
 	
 	public PacketBuyWeapon() {}
 	
-	public PacketBuyWeapon(GunBoxType box, int type, int wepID)
+	public PacketBuyWeapon(GunBoxType box, InfoType type)
 	{
 		boxShortName = box.shortName;
-		purchaseType = type;
-		weaponID = wepID;
+		itemShortName = type.shortName;
 	}
 		
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
     	writeUTF(data, boxShortName);
-    	data.writeInt(purchaseType);
-    	data.writeInt(weaponID);
+		writeUTF(data, itemShortName);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		boxShortName = readUTF(data);
-		purchaseType = data.readInt();
-		weaponID = data.readInt();
+		itemShortName = readUTF(data);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		GunBoxType box = GunBoxType.getBox(boxShortName);
-		box.block.purchaseItem(purchaseType, weaponID, playerEntity.inventory, box);
+		box.block.buyGun(InfoType.getType(itemShortName), playerEntity.inventory, box);
 	}
 
 	@Override

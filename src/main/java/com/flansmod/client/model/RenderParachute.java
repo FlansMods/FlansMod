@@ -14,7 +14,7 @@ public class RenderParachute extends Render
 {
 	public RenderParachute()
 	{
-		shadowSize = 0.5F;
+		shadowSize = 2.0F;
 	}
 	
 	@Override

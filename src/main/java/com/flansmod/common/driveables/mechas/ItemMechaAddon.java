@@ -31,6 +31,10 @@ public class ItemMechaAddon extends Item implements IFlanItem
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			list.add(type.packName);
+		}
 		if(type.description != null)
 		{
             Collections.addAll(list, type.description.split("_"));

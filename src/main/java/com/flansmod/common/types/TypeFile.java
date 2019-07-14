@@ -7,6 +7,7 @@ public class TypeFile
 {
 	public EnumType type;
 	public String name;
+	public final String pack;
 	public ArrayList<String> lines;
 	public static HashMap<EnumType, ArrayList<TypeFile>> files;
 	private int readerPosition = 0;
@@ -21,15 +22,16 @@ public class TypeFile
 		
 	}
 	
-	public TypeFile(EnumType t, String s)
+	public TypeFile(EnumType t, String s, String packName)
 	{
-		this(t, s, true);
+		this(t, s, packName, true);
 	}
 	
-	public TypeFile(EnumType t, String s, boolean addToTypeFileList)
+	public TypeFile(EnumType t, String s, String packName, boolean addToTypeFileList)
 	{
 		type = t;
 		name = s;
+		pack = packName;
 		lines = new ArrayList<String>();
 		if(addToTypeFileList)
 			files.get(type).add(this);

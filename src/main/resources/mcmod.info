@@ -1,15 +1,15 @@
 [
 {
-  "modid": "flansmod",
-  "name": "Flan's Mod",
-  "description": "Guns, planes and other vehicles in Minecraft.",
+  "modid": "examplemod",
+  "name": "Example Mod",
+  "description": "Example placeholder mod.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "http://www.flansmod.com",
+  "url": "",
   "updateUrl": "",
-  "authorList": ["jamioflan"],
-  "credits": "All code contributors.",
-  "logoFile": "flansmod.png",
+  "authorList": ["ExampleDude"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
   "screenshots": [],
   "dependencies": []
 }

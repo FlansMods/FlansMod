@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.model.ModelBase;
 
 import com.flansmod.client.model.ModelMechaTool;
 import com.flansmod.common.FlansMod;
@@ -58,6 +59,16 @@ public class MechaItemType extends InfoType
 	public MechaItemType(TypeFile file)
 	{
 		super(file);
+	}
+	
+	@Override
+	protected void preRead(TypeFile file) 
+	{		
+	}
+
+	@Override
+	protected void postRead(TypeFile file) 
+	{		
 	}
 	
     @Override
@@ -154,6 +165,19 @@ public class MechaItemType extends InfoType
 	{
 		if(modelString != null)
 			model = FlansMod.proxy.loadModel(modelString, shortName, ModelMechaTool.class);
+	}
+
+	@Override
+	public float GetRecommendedScale() 
+	{
+		return 0.0f;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBase GetModel() 
+	{
+		return null;
 	}
 
 }
