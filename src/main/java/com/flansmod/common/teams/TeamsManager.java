@@ -1237,6 +1237,7 @@ public class TeamsManager
 	
 	private void savePerWorldData(Event event, WorldServer world)
 	{
+		// TODO: Move to WorldSavedData saving
 		if(!createTeamsFile(world)){
 			return;
 		}
