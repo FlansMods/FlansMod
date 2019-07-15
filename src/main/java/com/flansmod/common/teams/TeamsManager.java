@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -33,6 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -48,6 +51,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -1187,31 +1192,33 @@ public class TeamsManager
 	{
 		if(event.getWorld().isRemote)
 			return;
+		
+		WorldServer world = (WorldServer) event.getWorld();
 		if(event instanceof WorldEvent.Load)
 		{
-			loadPerWorldData(event, event.getWorld());
-			savePerWorldData(event, event.getWorld());
+			loadPerWorldData(event, world);
+			savePerWorldData(event, world);
 		}
 		if(event instanceof WorldEvent.Save)
 		{
-			savePerWorldData(event, event.getWorld());
+			savePerWorldData(event, world);
 		}
 	}
 	
-	private void loadPerWorldData(Event event, World world)
+	private void loadPerWorldData(Event event, WorldServer world)
 	{
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionType().getName() + ".dat");
-		if(!checkFileExists(file))
+		if(!getTeamsFile(world).exists())
+		{
 			return;
+		}
+		
 		try
 		{
-			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
-			
+			NBTTagCompound tags = CompressedStreamTools.readCompressed(new FileInputStream(getTeamsFile(world)));
 			ReadFromNBT(tags, world);
-			
 			//Start the rotation
 			if(enabled && rounds.size() > 0)
 				start();
@@ -1228,19 +1235,19 @@ public class TeamsManager
 			type.onWorldLoad(world);
 	}
 	
-	private void savePerWorldData(Event event, World world)
+	private void savePerWorldData(Event event, WorldServer world)
 	{
-		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionType().getName() + ".dat");
-		checkFileExists(file);
+		if(!createTeamsFile(world)){
+			return;
+		}
+		
+		NBTTagCompound tags = new NBTTagCompound();
+		WriteToNBT(tags);
 		try
 		{
-			NBTTagCompound tags = new NBTTagCompound();
-			
-			WriteToNBT(tags);
-			
-			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
+			CompressedStreamTools.writeCompressed(tags, new FileOutputStream(getTeamsFile(world)));
 		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			FlansMod.log.error("Failed to save to teams.dat");
 			FlansMod.log.throwing(e);
@@ -1358,25 +1365,45 @@ public class TeamsManager
 		tags.setBoolean("BreakBlocks", driveablesBreakBlocks);
 	}
 	
-	
-	private boolean checkFileExists(File file)
+	/**
+	 * Attempts to create a teams file for the given world.
+	 * @return True if a new file was created, False if not.
+	 */
+	private static boolean createTeamsFile(WorldServer world)
 	{
-		if(!file.exists())
+		String worldName = world.provider.getDimensionType().getName();
+		File file = getTeamsFile(world);
+		
+		// Backwards compatibility (added v5.6)
+		File oldFile = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionType().getName() + ".dat");
+		if(oldFile.exists())
 		{
-			try
+			if(oldFile.renameTo(file))
 			{
-				file.createNewFile();
-				FlansMod.log.info("Created new file");
+				FlansMod.log.info("Updated teams data to new save location for world: " + worldName);
 			}
-			catch(Exception e)
+			else
 			{
-				FlansMod.log.error("Failed to create file");
-				FlansMod.log.error(file.getAbsolutePath());
-				FlansMod.log.throwing(e);
+				FlansMod.log.error("Failed to update teams data to new save location for world: " + worldName);
 			}
-			return false;
 		}
-		return true;
+		
+		try {
+			if(file.createNewFile()) {
+				FlansMod.log.info("Created teams file for world: " + worldName + " " + file.getAbsolutePath());
+				return true;
+			}
+		}
+		catch(IOException e)
+		{
+			FlansMod.log.error("Failed to create teams file for world: " + worldName);
+			FlansMod.log.throwing(e);
+		}
+		return false;
+	}
+	
+	private static File getTeamsFile(WorldServer world) {
+		return new File(world.getChunkSaveLocation(), "teams.dat");
 	}
 	
 	//------------------------------------------------------------------------------
@@ -1476,6 +1503,7 @@ public class TeamsManager
 		return null;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public void SelectTeam(Team team)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
