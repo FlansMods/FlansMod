@@ -131,7 +131,7 @@ public class ClientEventHandler
 		renderHooks.renderItemFrame(event);
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void renderHeldItem(RenderSpecificHandEvent event)
 	{
 		renderHooks.renderHeldItem(event);
