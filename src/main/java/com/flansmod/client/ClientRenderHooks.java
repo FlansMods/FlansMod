@@ -155,7 +155,7 @@ public class ClientRenderHooks
 			if(customRenderers[typeType.ordinal()] != null && type.GetModel() != null)
 			{
 				// Cancel the hand render event so that we can do our own.
-				event.setCanceled(true);
+				//event.setCanceled(true);
 				
 				float partialTicks = event.getPartialTicks();
 				EntityRenderer renderer = mc.entityRenderer;
