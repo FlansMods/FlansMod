@@ -1,7 +1,5 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.common.network.PacketTeamInfo.TeamData;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
