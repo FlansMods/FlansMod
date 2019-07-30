@@ -6,7 +6,6 @@ import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 import java.util.List;
 import java.util.Optional;
 
-import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -23,6 +22,7 @@ import com.flansmod.common.network.PacketHitMarker;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.teams.TeamsRound;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
@@ -189,13 +189,19 @@ public class ShotHandler
 			{
 				EntityPlayerMP player = optionalPlayer.get();
 				
-				if(FlansModClient.teamInfo != null)
+				if(TeamsManager.getInstance() != null)
 				{
-					Team shooterTeam = FlansModClient.teamInfo.getTeam(player);
-					Team victimTeam = FlansModClient.teamInfo.getTeam(playerHit.hitbox.player);
-					if(shooterTeam == null || shooterTeam != victimTeam)
+					TeamsRound round = TeamsManager.getInstance().currentRound;
+					
+					if (round != null)
 					{
-						FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+						Optional<Team> shooterTeam = round.getTeam(player);
+						Optional<Team> victimTeam = round.getTeam(playerHit.hitbox.player);
+					
+						if (!shooterTeam.isPresent() || !victimTeam.isPresent() || !shooterTeam.get().equals(victimTeam.get()))
+						{
+							FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+						}
 					}
 				}
 				else // No teams mod, just add marker
@@ -264,7 +270,7 @@ public class ShotHandler
 			
 			for (EntityPlayer player : world.playerEntities)
 			{
-				//Checks if the player is in a radius of 300 Blocks (300² = 90000)
+				//Checks if the player is in a radius of 300 Blocks (300 squared = 90000)
 				if (player.getDistanceSq(pos) < 90000)
 				{
 					FlansMod.getPacketHandler().sendTo(new PacketBlockHitEffect(hit, bulletDir, pos, faceing), (EntityPlayerMP) player);

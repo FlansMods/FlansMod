@@ -540,8 +540,6 @@ public class ItemGun extends Item implements IPaintableItem
 						FlansModClient.playerRecoil += recoil;
 						animations.recoil += recoil;
 						
-						boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
-						playShotSound(world, rayTraceOrigin, silenced);
 					} else
 					{
 						Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
@@ -562,7 +560,8 @@ public class ItemGun extends Item implements IPaintableItem
 							handler.shooting(false);
 						}
 						
-						//TODO make server based sound
+						boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
+						playShotSound(world, rayTraceOrigin, silenced);
 					}
 				int gunSlot = player.inventory.currentItem;
 				if(type.consumeGunUponUse)
