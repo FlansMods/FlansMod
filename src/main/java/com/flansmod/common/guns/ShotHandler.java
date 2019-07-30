@@ -6,7 +6,6 @@ import static com.flansmod.common.guns.raytracing.FlansModRaytracer.Raytrace;
 import java.util.List;
 import java.util.Optional;
 
-import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -194,11 +193,15 @@ public class ShotHandler
 				{
 					TeamsRound round = TeamsManager.getInstance().currentRound;
 					
-					Team shooterTeam = round.getTeam(player);
-					Team victimTeam = round.getTeam(playerHit.hitbox.player);
-					
+					if (round != null)
 					{
-						FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+						Optional<Team> shooterTeam = round.getTeam(player);
+						Optional<Team> victimTeam = round.getTeam(playerHit.hitbox.player);
+					
+						if (!shooterTeam.isPresent() || !victimTeam.isPresent() || !shooterTeam.get().equals(victimTeam.get()))
+						{
+							FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
+						}
 					}
 				}
 				else // No teams mod, just add marker

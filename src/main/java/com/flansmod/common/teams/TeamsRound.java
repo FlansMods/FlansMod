@@ -1,5 +1,7 @@
 package com.flansmod.common.teams;
 
+import java.util.Optional;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -114,7 +116,7 @@ public class TeamsRound implements Comparable<TeamsRound>
 		return teams[0];
 	}
 	
-	public Team getTeam(EntityPlayer player)
+	public Optional<Team> getTeam(EntityPlayer player)
 	{
 		String username = player.getName();
 		for(Team team : teams)
@@ -123,11 +125,11 @@ public class TeamsRound implements Comparable<TeamsRound>
 			{
 				if (username.equals(name))
 				{
-					return team;
+					return Optional.of(team);
 				}
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	public float getWeight()
