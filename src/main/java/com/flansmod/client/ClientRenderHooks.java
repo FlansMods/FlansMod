@@ -64,6 +64,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
@@ -625,10 +626,8 @@ public class ClientRenderHooks
 			{
 				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(),
 						(float)event.getRenderPartialTicks());
-				// If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle
-				// is disorientating at best, so we disable the roll component for these vehicles
-				if(seat.driveable != null && seat.driveable.getDriveableType().canRoll ||
-						(mc.gameSettings.thirdPersonView == 1 && !FlansMod.proxy.mouseControlEnabled()))
+				// Roll is disorientating when the player is not controlling it or is in third person
+				if(!(seat.driveable instanceof EntityPlane) || mc.gameSettings.thirdPersonView == 1)
 				{
 					roll = 0F;
 				}
