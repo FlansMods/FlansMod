@@ -163,6 +163,28 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					modVehicle.renderDrillBit(vehicle, f1);
 					
 					GL11.glPopMatrix();
+
+					Vector3f newRot = Interpolate(vehicle.doorRot, vehicle.prevDoorRot, f1);
+					Vector3f newPos = Interpolate(vehicle.doorPos, vehicle.prevDoorPos, f1);
+					
+					GL11.glPushMatrix();
+					GL11.glTranslatef(modVehicle.doorAttach.x + newPos.x/16, modVehicle.doorAttach.y + newPos.y/16, -modVehicle.doorAttach.z + newPos.z/16);
+					GL11.glRotatef(newRot.x, 1F, 0F, 0F);
+					GL11.glRotatef(-newRot.y, 0F, 1F, 0F);
+					GL11.glRotatef(newRot.z, 0F, 0F, 1F);
+					modVehicle.renderDoor(vehicle, 0.0625F);
+					GL11.glPopMatrix();
+					
+					Vector3f newRot2 = Interpolate(vehicle.door2Rot, vehicle.prevDoor2Rot, f1);
+					Vector3f newPos2 = Interpolate(vehicle.door2Pos, vehicle.prevDoor2Pos, f1);
+					
+					GL11.glPushMatrix();
+					GL11.glTranslatef(modVehicle.door2Attach.x + newPos2.x/16, modVehicle.door2Attach.y + newPos2.y/16, -modVehicle.door2Attach.z + newPos2.z/16);
+					GL11.glRotatef(newRot2.x, 1F, 0F, 0F);
+					GL11.glRotatef(-newRot2.y, 0F, 1F, 0F);
+					GL11.glRotatef(newRot2.z, 0F, 0F, 1F);
+					modVehicle.renderDoor2(vehicle, 0.0625F);
+					GL11.glPopMatrix();
 				}
 			}
 			GL11.glPopMatrix();

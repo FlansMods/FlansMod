@@ -65,6 +65,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public boolean mouseHeld;
 	public boolean wasShooting;
 	
+	public int shootcnt = 1;
+	public int shootTimeCount = 0;
+
 	//Sentry stuff
 	/**
 	 * Stops the sentry shooting whoever placed it or their teammates
@@ -102,7 +105,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		this(world);
 		placer = p;
-		placerName = p.getName();
+		placerName = p.getCommandSenderName();
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -116,7 +119,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		posZ = d2;
 		float f = width / 2.0F;
 		float f1 = height;
-		setEntityBoundingBox(new AxisAlignedBB(d - f, (d1 - yOffset), d2 - f, d + f, (d1 - yOffset) + f1, d2 + f));
+		setEntityBoundingBox(new AxisAlignedBB(d - f, (d1 - yOffset) + ySize, d2 - f, d + f, (d1 - yOffset) + ySize + f1, d2 + f));
 	}
 	
 	@Override
@@ -147,7 +150,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) 
 	{
 		
 	}
@@ -235,6 +238,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		super.onUpdate();
 		
+		if(type==null)
+		{
+			FlansMod.log("EntityAAGun.onUpdate() Error: AAGunType is null ("+this+")");
+			setDead();
+			return;
+		}
+		
 		prevGunYaw = gunYaw;
 		prevGunPitch = gunPitch;
 		
@@ -282,7 +292,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				
 				if(distanceToTarget > type.targetRange)
 					target = null;
-				else
+				else if(!type.canShootHomingMissile)
 				{
 					float newYaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159F;
 					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F;
@@ -291,6 +301,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					
 					gunYaw += (newYaw - gunYaw) * turnSpeed;
 					gunPitch += (newPitch - gunPitch) * turnSpeed;
+				}else{
+					float newYaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159F;
+					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F;
+					gunYaw = newYaw;
+					gunPitch = newPitch;
 				}
 			}
 		}
@@ -366,9 +381,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 		
+		if(shootcnt > 0 && shootcnt < 10)
+			shootcnt++;
+		
 		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
-			Boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
+			boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
 			
 			if (target != null || shootPlayer)
 			{
@@ -407,6 +425,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin), shootingDirection);
 						
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
+
+						if(shootTimeCount >= type.countExplodeAfterShoot -1 && type.countExplodeAfterShoot != -1 && !worldObj.isRemote){
+							/*new FlansModExplosion(worldObj, this, placer, type, posX, posY, posZ,
+				        			3, TeamsManager.explosions,
+				        			5, 5, 0, 0);*/
+							this.setDead();
+						}
+						shootTimeCount++;
 					}
 				}
 				currentBarrel = (currentBarrel + 1) % type.numBarrels;
@@ -420,7 +446,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	
 	public boolean isSentry()
 	{
-		return type.targetMobs || type.targetPlayers;
+		return type.targetMobs || type.targetPlayers || type.targetPlanes || type.targetVehicles || type.targetMechas;
 	}
 	
 	public Entity getValidTarget()
@@ -433,14 +459,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			Entity candidateEntity = (Entity)obj;
 			
-			if((type.targetMobs && candidateEntity instanceof EntityMob) || (type.targetPlayers && candidateEntity instanceof EntityPlayer))
+			if((type.targetMobs && candidateEntity instanceof EntityMob) || (type.targetPlayers && candidateEntity instanceof EntityPlayer) || (type.targetPlanes && candidateEntity instanceof EntityPlane) || (type.targetVehicles && candidateEntity instanceof EntityVehicle))
 			{
 				//Check that this entity is actually in range and visible
 				if(candidateEntity.getDistanceSq(this) < type.targetRange * type.targetRange)
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
-						if(candidateEntity == placer || candidateEntity.getName().equals(placerName))
+						if(candidateEntity == placer || candidateEntity.getCommandSenderName().equals(placerName))
 							continue;
 						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
@@ -482,7 +508,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		// Drop gun
 		if(world.isRemote)
 			return;
-		dropItem(type.getItem(), 1);
+		if(type.isDropThis)
+			dropItem(type.getItem(), 1);
 		// Drop ammo boxes
 		for(ItemStack stack : ammo)
 		{
@@ -512,6 +539,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
+		if(type==null)
+		{
+			FlansMod.log("EntityAAGun.writeEntityToNBT() Error: AAGunType is null ("+this+")");
+			setDead();
+			return;
+		}
+		
 		nbttagcompound.setString("Type", type.shortName);
 		nbttagcompound.setInteger("Health", health);
 		nbttagcompound.setFloat("RotationYaw", rotationYaw);
@@ -521,13 +555,20 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if(ammo[i] != null)
 				nbttagcompound.setTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
 		}
-		nbttagcompound.setString("Placer", placer.getName());
+		nbttagcompound.setString("Placer", placer.getCommandSenderName());
 	}
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		type = AAGunType.getAAGun(nbttagcompound.getString("Type"));
+		if(type==null)
+		{
+			FlansMod.log("EntityAAGun.readEntityFromNBT() Error: AAGunType is null ("+this+")");
+			setDead();
+			return;
+		}
+		
 		initType();
 		health = nbttagcompound.getInteger("Health");
 		rotationYaw = nbttagcompound.getFloat("RotationYaw");
@@ -539,6 +580,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		placerName = nbttagcompound.getString("Placer");
 	}
 	
+	@Override
+	public float getShadowSize()
+	{
+		return 0.0F;
+	}
+
 	@Override
 	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) //interact : change back when Forge updates
 	{
@@ -614,10 +661,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public boolean canRiderInteract()
-	{
-		return false;
-	}
+    public boolean canRiderInteract()
+    {
+        return false;
+    }
 	
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)

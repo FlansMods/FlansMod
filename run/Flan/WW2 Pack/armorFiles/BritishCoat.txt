@@ -1,7 +1,0 @@
-Name British WW2 Coat
-ShortName britishCoat
-Icon BritishCoat
-Colour 255 255 255
-Type Body
-Defence 0.1
-ArmourTexture British

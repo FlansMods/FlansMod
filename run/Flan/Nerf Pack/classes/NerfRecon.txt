@@ -1,6 +1,0 @@
-Name Scout
-ShortName nerfReconClass
-AddItem nerfRecon
-AddItem nerfMaverick
-AddItem 6DartClip 3
-AddItem whistlerDart 12

@@ -1,5 +1,11 @@
 package com.flansmod.client;
 
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.vector.Vector3f;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -45,8 +51,21 @@ public class EntityCamera extends EntityLivingBase
 		
 		setPosition(posX + dX * lerpAmount, posY + dY * lerpAmount, posZ + dZ * lerpAmount);
 		
-		rotationYaw = driveable.axes.getYaw() - 90;
-		rotationPitch = driveable.axes.getPitch();
+		if(FlansMod.proxy.mouseControlEnabled())
+		{
+			rotationYaw = driveable.axes.getYaw() - 90F;
+			rotationPitch = driveable.axes.getPitch();
+		}
+		else
+		{
+			Entity player = FlansMod.proxy.getThePlayer();
+			if(player != null)
+			{
+				rotationYaw		= player.rotationYaw;
+				rotationPitch	= player.rotationPitch;
+			}
+		}
+		
 		
 		while(rotationYaw - prevRotationYaw >= 180F)
 		{

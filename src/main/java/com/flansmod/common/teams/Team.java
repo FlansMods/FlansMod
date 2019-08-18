@@ -18,6 +18,9 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class Team extends InfoType
 {
 	public static List<Team> teams = new ArrayList<>();
@@ -39,7 +42,7 @@ public class Team extends InfoType
 	
 	public Team(String s, String s1, int teamCol, char textCol)
 	{
-		super(new TypeFile("NoPack", EnumType.team, s, false));
+		super(new TypeFile(EnumType.team, s, "", false));
 		shortName = s;
 		name = s1;
 		teamColour = teamCol;
@@ -51,6 +54,18 @@ public class Team extends InfoType
 	{
 		super(file);
 		teams.add(this);
+	}
+	
+
+	@Override
+	protected void preRead(TypeFile file) 
+	{
+	}
+	
+
+	@Override
+	protected void postRead(TypeFile file) 
+	{
 	}
 	
 	@Override
@@ -190,7 +205,7 @@ public class Team extends InfoType
 	
 	public void removePlayer(EntityPlayer player)
 	{
-		removePlayer(player.getName());
+		removePlayer(player.getCommandSenderName());
 	}
 	
 	public String removePlayer(String username)
@@ -203,7 +218,7 @@ public class Team extends InfoType
 	
 	public EntityPlayer addPlayer(EntityPlayer player)
 	{
-		addPlayer(player.getName());
+		addPlayer(player.getCommandSenderName());
 		return player;
 	}
 	

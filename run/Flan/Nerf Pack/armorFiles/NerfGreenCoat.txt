@@ -1,9 +1,0 @@
-Name Green Nerf Vest
-ShortName nerfGreenVest
-Icon NerfGreenVest
-Colour 255 255 255
-Type Body
-Defence 0.1
-ArmourTexture NerfGreen
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

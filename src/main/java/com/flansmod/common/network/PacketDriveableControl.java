@@ -59,22 +59,22 @@ public class PacketDriveableControl extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
-		data.writeInt(entityId);
-		data.writeDouble(posX);
-		data.writeDouble(posY);
-		data.writeDouble(posZ);
-		data.writeFloat(yaw);
-		data.writeFloat(pitch);
-		data.writeFloat(roll);
-		data.writeDouble(motX);
-		data.writeDouble(motY);
-		data.writeDouble(motZ);
-		data.writeFloat(avelx);
-		data.writeFloat(avely);
-		data.writeFloat(avelz);
-		data.writeFloat(throttle);
-		data.writeFloat(fuelInTank);
-		data.writeFloat(steeringYaw);
+    	data.writeInt(entityId);
+    	data.writeDouble(posX);
+    	data.writeDouble(posY);
+    	data.writeDouble(posZ);
+    	data.writeFloat(yaw);
+    	data.writeFloat(pitch);
+    	data.writeFloat(roll);
+    	data.writeDouble(motX);
+    	data.writeDouble(motY);
+    	data.writeDouble(motZ);
+    	data.writeFloat(avelx);
+    	data.writeFloat(avely);
+    	data.writeFloat(avelz);
+    	data.writeFloat(throttle);
+    	data.writeFloat(fuelInTank);
+    	data.writeFloat(steeringYaw);
 	}
 	
 	@Override

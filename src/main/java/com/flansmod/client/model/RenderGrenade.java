@@ -28,12 +28,12 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 	public void doRender(EntityGrenade grenade, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(grenade);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)d, (float)d1, (float)d2);
-		if(grenade.stuck)
-		{
-			GL11.glRotatef(180F - grenade.axes.getYaw(), 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(grenade.axes.getPitch(), 0.0F, 0.0F, 1.0F);
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        if(grenade.stuck)
+        {
+	        GL11.glRotatef(180F - grenade.axes.getYaw(), 0.0F, 1.0F, 0.0F);
+	        GL11.glRotatef(grenade.axes.getPitch(), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(grenade.axes.getRoll(), 1.0F, 0.0F, 0.0F);
 		}
 		else
@@ -62,7 +62,7 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 			GL11.glRotatef(180F - grenade.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(grenade.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(grenade.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-		}
+        }
 		ModelBase model = grenade.type.model;
 		if(model != null)
 			model.render(grenade, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);

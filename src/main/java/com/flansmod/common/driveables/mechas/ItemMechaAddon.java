@@ -28,6 +28,10 @@ public class ItemMechaAddon extends Item implements IFlanItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			list.add(type.packName);
+		}
 		if(type.description != null)
 		{
 			Collections.addAll(lines, type.description.split("_"));

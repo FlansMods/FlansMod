@@ -1,7 +1,0 @@
-Name Russian WW2 Helmet
-ShortName russianHelmet
-Icon RussianHelmet
-Colour 255 255 255
-Type Helmet
-Defence 0.1
-ArmourTexture Russian

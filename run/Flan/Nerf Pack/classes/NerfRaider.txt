@@ -1,6 +1,0 @@
-Name Light Assault
-ShortName nerfRaiderClass
-AddItem nerfRaider
-AddItem nerfMaverick
-AddItem 35DartDrum
-AddItem whistlerDart 12

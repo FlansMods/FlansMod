@@ -82,7 +82,7 @@ public class TeamsManager
 	// Player changeable stuff
 	public static boolean voting = false, explosions = true, driveablesBreakBlocks = true,
 		bombsEnabled = true, shellsEnabled = true, missilesEnabled = true, bulletsEnabled = true, forceAdventureMode = true, canBreakGuns = true, canBreakGlass = true,
-		armourDrops = true, vehiclesNeedFuel = true, overrideHunger = true;
+		armourDrops = true, vehiclesNeedFuel = true, overrideHunger = true, allowVehicleZoom = false;
 	
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	//Life of certain entity types. 0 is eternal.
@@ -160,6 +160,8 @@ public class TeamsManager
 	//public Team[] teams;
 	//public List<RotationEntry> rotation;
 	//public int currentRotationEntry;
+	public static int bulletSnapshotMin = 0;
+	public static int bulletSnapshotDivisor = 50;
 	
 	public TeamsManager()
 	{
@@ -167,10 +169,10 @@ public class TeamsManager
 		MinecraftForge.EVENT_BUS.register(this);
 		
 		//Init arrays
-		bases = new ArrayList<>();
-		objects = new ArrayList<>();
-		maps = new HashMap<>();
-		rounds = new ArrayList<>();
+		bases = new ArrayList<ITeamBase>();
+		objects = new ArrayList<ITeamObject>();
+		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 		//currentMap = TeamsMap.def;
@@ -194,10 +196,10 @@ public class TeamsManager
 		
 		currentRound = null;
 		
-		bases = new ArrayList<>();
-		objects = new ArrayList<>();
-		maps = new HashMap<>();
-		rounds = new ArrayList<>();
+		bases = new ArrayList<ITeamBase>();
+		objects = new ArrayList<ITeamObject>();
+		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 	}
@@ -264,7 +266,23 @@ public class TeamsManager
 			//If the timer is finished, start the next round
 			if(interRoundTimeLeft == 0)
 			{
-				startNextRound();
+				if(currentRound.isNextRoundOn)
+				{
+					startNextRound();
+				}
+				else
+				{
+					/*try{
+						if(FMLClientHandler.instance().getSide().equals(Side.CLIENT)){
+							GuiTeamSelect.teamChoices = null;
+						}
+					}catch(NoClassDefFoundError e){
+						System.out.println("Round is successfully finished!");
+					}*/
+					//enabled = false;
+					/*enabled = true;
+					enabled = false;*/
+				}
 			}
 		}
 		
@@ -369,18 +387,23 @@ public class TeamsManager
 	
 	public void displayScoreboardGUI()
 	{
-		/*
 		for(EntityPlayer player : getPlayers())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player);
 			if(!data.builder)
 				sendPacketToPlayer(new PacketRoundFinished(scoreDisplayTime), (EntityPlayerMP)player);
 		}
-		*/
 	}
 	
 	public void displayVotingGUI()
 	{
+		
+		for(EntityPlayer player : getPlayers())
+		{
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(!data.builder)
+				sendPacketToPlayer(new PacketVoting(this), (EntityPlayerMP)player);
+		}
 	}
 	
 	public void pickVoteOptions()
@@ -552,14 +575,21 @@ public class TeamsManager
 				.clickedEntity(event.getEntityPlayer().world, event.getEntityPlayer(), event.getTarget());
 	}
 	
-	/**
-	 * Stop damage being taken when it shouldn't N - NoTeam, S - Spectator, 1 - Team 1, 2 - Team 2, O - Other (mobs and
-	 * world inflicted damage etc)
-	 * <p>
-	 * | N S O 1 2 ------------ N| y n y n n S| n n n n n O| y n y y y 1| n n y G G 2| n n y G G
-	 * <p>
-	 * y - yes, can hurt n - no, can't hurt G - decided by gametype
-	 */
+	/** Stop damage being taken when it shouldn't 
+	 * N - NoTeam, S - Spectator, 1 - Team 1, 2 - Team 2, O - Other (mobs and world inflicted damage etc)
+	 * 
+	 *   | N S O 1 2 
+	 *  ------------
+	 *  N| y n y n n
+	 *  S| n n n n n
+	 *  O| y n y y y
+	 *  1| n n y G G
+	 *  2| n n y G G
+	 * 
+	 * y - yes, can hurt
+	 * n - no, can't hurt
+	 * G - decided by gametype
+	 * */
 	@SubscribeEvent
 	public void onEntityHurt(LivingAttackEvent event)
 	{
@@ -618,7 +648,7 @@ public class TeamsManager
 			else
 			{
 				//Not being attacked by a player, so this is fine
-			}
+            }
 			
 		}
 	}
@@ -778,7 +808,7 @@ public class TeamsManager
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemShootable)
 				{
 					ShootableType bulletType = ((ItemShootable)ammoItemstack.getItem()).type;
-					if(gunType.isAmmo(bulletType))
+					if(gunType.isAmmo(bulletType, gunEntity.getEntityItem()))
 					{
 						gunEntity.ammoStacks.add(ammoItemstack.copy());
 						ammoItemstack.setCount(0);
@@ -949,7 +979,7 @@ public class TeamsManager
 		boolean playerIsOp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
 			.canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
-		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
+        System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
 		
 		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams, info), player);
@@ -961,7 +991,7 @@ public class TeamsManager
 		if(team == null)
 		{
 			sendTeamsMenuToPlayer(player);
-		}
+        }
 		else if(team != Team.spectators && team.classes.size() > 0)
 		{
 			sendPacketToPlayer(new PacketTeamSelect(team.classes.toArray(new PlayerClass[team.classes.size()])),
@@ -1100,7 +1130,7 @@ public class TeamsManager
 		//2 : Player switched team
 		else if(data.team != null && data.team != data.newTeam)
 		{
-			messageAll(player.getName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
+			messageAll(player.getCommandSenderName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
 			currentRound.gametype.playerDefected(player, data.team, data.newTeam);
 			setPlayersNextSpawnpoint(player);
 			player.attackEntityFrom(DamageSource.GENERIC, 10000F);

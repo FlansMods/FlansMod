@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ContainerMechaInventory extends Container
 {
 	public InventoryPlayer inventory;
-	public World world;
+    public World world;
 	public EntityMecha mecha;
 	public int numItems;
 	public int maxScroll;
@@ -69,10 +69,10 @@ public class ContainerMechaInventory extends Container
 			
 		}
 		//Quickbar slots
-		for(int col = 0; col < 9; col++)
-		{
-			addSlotToContainer(new Slot(inventory, col, 182 + col * 18, 156));
-		}
+        for(int col = 0; col < 9; col++)
+        {
+        	addSlotToContainer(new Slot(inventory, col, 182 + col * 18, 156));
+        }
 	}
 	
 	@Override

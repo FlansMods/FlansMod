@@ -1,7 +1,0 @@
-Name Japanese WW2 Coat
-ShortName japaneseCoat
-Icon JapaneseCoat
-Colour 255 255 255
-Type Body
-Defence 0.1
-ArmourTexture Japanese

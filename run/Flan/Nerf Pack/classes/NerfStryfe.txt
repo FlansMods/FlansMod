@@ -1,6 +1,0 @@
-Name Support
-ShortName nerfStryfeClass
-AddItem nerfStryfe
-AddItem nerfStrongarm
-AddItem 18DartEliteClip 2
-AddItem eliteDart 12

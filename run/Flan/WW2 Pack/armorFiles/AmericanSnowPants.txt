@@ -1,7 +1,0 @@
-Name American WW2 Snow Pants
-ShortName americanSnowPants
-Icon AmericanSnowPants
-Colour 255 255 255
-Type Pants
-Defence 0.1
-ArmourTexture AmericanSnow

@@ -154,11 +154,13 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
-	{
+    public void readFromNBT(NBTTagCompound nbt)
+    {
 		super.readFromNBT(nbt);
 		isSpawner = nbt.getBoolean("isSpawner");
 		currentDelay = spawnDelay = nbt.getInteger("delay");
+		if(currentDelay < 20)
+			currentDelay = 20;
 		baseID = nbt.getInteger("Base");
 		dimension = nbt.getInteger("dim");
 		setBase(TeamsManager.getInstance().getBase(baseID));

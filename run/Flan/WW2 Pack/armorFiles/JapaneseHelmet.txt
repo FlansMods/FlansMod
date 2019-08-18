@@ -1,7 +1,0 @@
-Name Japanese WW2 Helmet
-ShortName japaneseHelmet
-Icon JapaneseHelmet
-Colour 255 255 255
-Type Helmet
-Defence 0.1
-ArmourTexture Japanese

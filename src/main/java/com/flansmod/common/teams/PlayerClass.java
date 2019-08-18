@@ -15,7 +15,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.paintjob.Paintjob;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
@@ -141,7 +141,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 			}
 		}
 	}
-	
+
 	/**
 	 * This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once
 	 */
@@ -220,6 +220,11 @@ public class PlayerClass extends InfoType implements IPlayerClass
 									break;
 								case generic: tagName = "generic_" + genericID++;
 									break;
+								// TODO: Implement new attachments to classes
+							    case accessory: break;
+							    case gadget: break;
+							    case pump: break;
+							    case slide: break;
 							}
 							NBTTagCompound specificAttachmentTags = new NBTTagCompound();
 							new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);

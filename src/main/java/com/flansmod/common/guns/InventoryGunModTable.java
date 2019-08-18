@@ -39,6 +39,10 @@ public class InventoryGunModTable extends InventoryBasic
 			setInventorySlotContents(2, new ItemStack(attachmentTags.getCompoundTag("scope")));
 			setInventorySlotContents(3, new ItemStack(attachmentTags.getCompoundTag("stock")));
 			setInventorySlotContents(4, new ItemStack(attachmentTags.getCompoundTag("grip")));
+			setInventorySlotContents(5, new ItemStack(attachmentTags.getCompoundTag("gadget")));
+			setInventorySlotContents(6, new ItemStack(attachmentTags.getCompoundTag("slide")));
+			setInventorySlotContents(7, new ItemStack(attachmentTags.getCompoundTag("pump")));
+			setInventorySlotContents(8, new ItemStack(attachmentTags.getCompoundTag("accessory")));
 			genericScroll = 0;
 			for(int i = 0; i < Math.min(gunType.numGenericAttachmentSlots, 8); i++)
 				setInventorySlotContents(5 + i, new ItemStack(attachmentTags.getCompoundTag("generic_" + i)));
@@ -61,13 +65,17 @@ public class InventoryGunModTable extends InventoryBasic
 			writeAttachmentTags(attachmentTags, getStackInSlot(2), "scope");
 			writeAttachmentTags(attachmentTags, getStackInSlot(3), "stock");
 			writeAttachmentTags(attachmentTags, getStackInSlot(4), "grip");
+			writeAttachmentTags(attachmentTags, getStackInSlot(5), "gadget");
+			writeAttachmentTags(attachmentTags, getStackInSlot(6), "slide");
+			writeAttachmentTags(attachmentTags, getStackInSlot(7), "pump");
+			writeAttachmentTags(attachmentTags, getStackInSlot(8), "accessory");
 			
 			//Change all the attachments that we are looking at, but copy in the old ones
 			for(int i = 0; i < gunType.numGenericAttachmentSlots; i++)
 			{
 				if(i >= genericScroll * 4 && i < genericScroll * 4 + 8)
 				{
-					writeAttachmentTags(attachmentTags, getStackInSlot(i - genericScroll * 4 + 5), "generic_" + i);
+					writeAttachmentTags(attachmentTags, getStackInSlot(i - genericScroll * 4 + 8 + 1), "generic_" + i);
 				}
 				else attachmentTags.setTag("generic_" + i, getStackInSlot(0).getTagCompound().getTag("generic_" + i));
 			}
@@ -85,7 +93,7 @@ public class InventoryGunModTable extends InventoryBasic
 		NBTTagCompound tags = new NBTTagCompound();
 		if(attachmentStack != null)
 			attachmentStack.writeToNBT(tags);
-		attachmentTags.setTag(attachmentName, tags);
+        attachmentTags.setTag(attachmentName, tags);
 	}
 	
 	@Override

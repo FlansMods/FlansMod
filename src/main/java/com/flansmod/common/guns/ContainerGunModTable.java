@@ -25,10 +25,10 @@ public class ContainerGunModTable extends Container
 		addSlotToContainer(gunSlot);
 		
 		//Attachment Slots
-		addSlotToContainer(new SlotGun(inventory, 1, 54, 110, gunSlot));
-		addSlotToContainer(new SlotGun(inventory, 2, 80, 84, gunSlot));
-		addSlotToContainer(new SlotGun(inventory, 3, 106, 110, gunSlot));
-		addSlotToContainer(new SlotGun(inventory, 4, 80, 136, gunSlot));
+		for(int k = 0; k < 8; k++)
+		{
+			addSlotToContainer(new SlotGun(inventory, k + 1, 17 + (k * 18), 89, gunSlot));
+		}
 		
 		for(int row = 0; row < 4; row++)
 		{
@@ -37,7 +37,7 @@ public class ContainerGunModTable extends Container
 				addSlotToContainer(new SlotGun(inventory, 5 + row * 2 + col, 10 + col * 18, 83 + row * 18, gunSlot));
 			}
 		}
-		
+
 		//Main inventory slots
 		for(int row = 0; row < 3; row++)
 		{
@@ -55,8 +55,8 @@ public class ContainerGunModTable extends Container
 	}
 	
 	@Override
-	public void onContainerClosed(EntityPlayer player)
-	{
+    public void onContainerClosed(EntityPlayer player)
+    {
 		if(inventory.getStackInSlot(0) != null)
 			player.dropItem(inventory.getStackInSlot(0), false);
 	}

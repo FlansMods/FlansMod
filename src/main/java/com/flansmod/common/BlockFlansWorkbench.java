@@ -16,6 +16,9 @@ import net.minecraft.world.World;
 
 public class BlockFlansWorkbench extends Block
 {
+	private IIcon side;
+	private IIcon[] top;
+	
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
 	public BlockFlansWorkbench(int j, int k)

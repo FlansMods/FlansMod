@@ -1,7 +1,0 @@
-Name Russian WW2 Trousers
-ShortName russianPants
-Icon RussianPants
-Colour 255 255 255
-Type Pants
-Defence 0.1
-ArmourTexture Russian

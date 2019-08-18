@@ -27,7 +27,7 @@ public abstract class ShootableType extends InfoType
 	 * Trail particles given off by this while being thrown
 	 */
 	public String trailParticleType = "smoke";
-	
+
 	//Item Stuff
 	/**
 	 * The maximum number of grenades that can be stacked together
@@ -63,17 +63,26 @@ public abstract class ShootableType extends InfoType
 	 * Hit box size
 	 */
 	public float hitBoxSize = 0.5F;
-	
+
 	//Damage to hit entities
 	/**
 	 * Amount of damage to impart upon various entities
 	 */
-	public float damageVsLiving = 1, damageVsDriveable = 1;
+	public float damageVsPlayer    = 1.0F;
+	public float damageVsEntity    = 1.0F;
+	public float damageVsLiving    = 1.0F;
+	public float damageVsVehicles  = 1.0F;
+	public float damageVsPlanes    = 1.0F;
+	public boolean readDamageVsPlayer = false;
+	public boolean readDamageVsEntity = false;
+	public boolean readDamageVsPlanes = false;
 	/**
 	 * Whether this grenade will break glass when thrown against it
 	 */
 	public boolean breaksGlass = false;
-	
+	public float ignoreArmorProbability = 0;
+	public float ignoreArmorDamageFactor = 0;
+
 	//Detonation Conditions
 	/**
 	 * If 0, then the grenade will last until some other detonation condition is met, else the grenade will detonate after this time (in ticks)
@@ -87,7 +96,7 @@ public abstract class ShootableType extends InfoType
 	 * If true, then this will explode upon hitting something
 	 */
 	public boolean explodeOnImpact = false;
-	
+
 	//Detonation Stuff
 	/**
 	 * The radius in which to spread fire
@@ -101,31 +110,66 @@ public abstract class ShootableType extends InfoType
 	 * Whether the explosion can destroy blocks
 	 */
 	public boolean explosionBreaksBlocks = true;
-	/**
-	 * The name of the item to drop upon detonating
-	 */
+	
+	/** Explosion damage vs various classes of entities */
+	public float explosionDamageVsLiving  = 1.0F;
+	public float explosionDamageVsPlayer  = 1.0F;
+	public float explosionDamageVsPlane   = 1.0F;
+	public float explosionDamageVsVehicle = 1.0F;
+	/** The name of the item to drop upon detonating */
 	public String dropItemOnDetonate = null;
 	/**
 	 * Sound to play upon detonation
 	 */
 	public String detonateSound = "";
 	
-	/**
-	 * The static list of all shootable types
-	 */
-	public static HashMap<Integer, ShootableType> shootables = new HashMap<>();
+	public boolean hasSubmunitions = false;
 	
+	public String submunition = "";
+	
+	public int numSubmunitions = 0;
+	
+	public int subMunitionTimer = 0;
+	
+	public float submunitionSpread = 1;
+	
+	public boolean destroyOnDeploySubmunition = false;
+
+	public int smokeParticleCount = 0;
+	public int debrisParticleCount = 0;
+
+	/** The static list of all shootable types */
+	public static HashMap<String, ShootableType> shootables = new HashMap<String, ShootableType>();
+
 	public ShootableType(TypeFile file)
 	{
 		super(file);
+	}
+
+	@Override
+	protected void preRead(TypeFile file) 
+	{
 	}
 	
 	@Override
 	public void postRead(TypeFile file)
 	{
 		shootables.put(shortName.hashCode(), this);
+
+		if(readDamageVsPlayer==false)
+		{
+			damageVsPlayer = damageVsLiving;
+		}
+		if(readDamageVsEntity==false)
+		{
+			damageVsEntity = damageVsVehicles;
+		}
+		if(readDamageVsPlanes==false)
+		{
+			damageVsPlanes = damageVsVehicles;
+		}
 	}
-	
+
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
@@ -135,8 +179,8 @@ public abstract class ShootableType extends InfoType
 			//Model and Texture
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
-				
-				//Item Stuff
+
+			//Item Stuff
 			else if(split[0].equals("StackSize") || split[0].equals("MaxStackSize"))
 				maxStackSize = Integer.parseInt(split[1]);
 			else if(split[0].equals("DropItemOnShoot"))
@@ -161,18 +205,35 @@ public abstract class ShootableType extends InfoType
 				hitBoxSize = Float.parseFloat(split[1]);
 				
 				//Hit stuff
-			else if(split[0].equals("HitEntityDamage") || split[0].equals("DamageVsLiving") || split[0].equals("DamageVsPlayer"))
+			else if(split[0].equals("DamageVsLiving"))
 				damageVsLiving = Float.parseFloat(split[1]);
+			else if(split[0].equals("DamageVsPlayer"))
+			{
+				damageVsPlayer = Float.parseFloat(split[1]);
+				readDamageVsPlayer = true;
+			}
+			else if(split[0].equals("DamageVsEntity"))
+			{
+				damageVsEntity = Float.parseFloat(split[1]);
+				readDamageVsEntity = true;
+			}
 			else if(split[0].equals("DamageVsVehicles"))
-				damageVsDriveable = Float.parseFloat(split[1]);
+			{
+				damageVsVehicles = Float.parseFloat(split[1]);
+			}
+			else if(split[0].equals("DamageVsPlanes"))
+			{
+				damageVsPlanes = Float.parseFloat(split[1]);
+				readDamageVsPlanes = true;
+			}
 			else if(split[0].equals("Damage"))
 			{
-				damageVsLiving = damageVsDriveable = Float.parseFloat(split[1]);
+				damageVsLiving = damageVsPlayer = damageVsDriveable = damageVsPlanes = damageVsVehicles = Float.parseFloat(split[1]);
 			}
 			else if(split[0].equals("BreaksGlass"))
 				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
 				
-				//Detonation conditions etc
+			//Detonation conditions etc
 			else if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
 			else if(split[0].equals("DespawnTime"))
@@ -180,13 +241,22 @@ public abstract class ShootableType extends InfoType
 			else if(split[0].equals("ExplodeOnImpact") || split[0].equals("DetonateOnImpact"))
 				explodeOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
 				
-				//Detonation
+			//Detonation
 			else if(split[0].equals("FireRadius") || split[0].equals("Fire"))
 				fireRadius = Float.parseFloat(split[1]);
 			else if(split[0].equals("ExplosionRadius") || split[0].equals("Explosion"))
 				explosionRadius = Float.parseFloat(split[1]);
 			else if(split[0].equals("ExplosionBreaksBlocks"))
 				explosionBreaksBlocks = Boolean.parseBoolean(split[1].toLowerCase());
+			else if(split[0].equals("ExplosionDamageVsLiving"))
+				explosionDamageVsLiving = Float.parseFloat(split[1]);
+			else if(split[0].equals("ExplosionDamageVsPlayer"))
+				explosionDamageVsPlayer = Float.parseFloat(split[1]);
+			else if(split[0].equals("ExplosionDamageVsPlane"))
+				explosionDamageVsPlane = Float.parseFloat(split[1]);
+			else if(split[0].equals("ExplosionDamageVsVehicle"))
+				explosionDamageVsVehicle = Float.parseFloat(split[1]);
+
 			else if(split[0].equals("DropItemOnDetonate"))
 				dropItemOnDetonate = split[1];
 			else if(split[0].equals("DetonateSound"))
@@ -195,6 +265,23 @@ public abstract class ShootableType extends InfoType
 				FlansMod.proxy.loadSound(contentPack, shortName, split[1]);
 			}
 			
+			//Submunitions
+			else if(split[0].equals("HasSubmunitions"))
+				hasSubmunitions = Boolean.parseBoolean(split[1].toLowerCase());	
+			else if(split[0].equals("Submunition"))
+				submunition = split[1];
+			else if(split[0].equals("NumSubmunitions"))
+				numSubmunitions = Integer.parseInt(split[1]);	
+			else if(split[0].equals("SubmunitionDelay"))
+				subMunitionTimer = Integer.parseInt(split[1]);
+			else if(split[0].equals("SubmunitionSpread"))
+				submunitionSpread = Float.parseFloat(split[1]);
+			
+			else if(split[0].equals("FlareParticleCount"))
+				smokeParticleCount = Integer.parseInt(split[1]);
+			else if(split[0].equals("DebrisParticleCount"))
+				debrisParticleCount = Integer.parseInt(split[1]);
+
 			//Particles
 			else if(split[0].equals("TrailParticles") || split[0].equals("SmokeTrail"))
 				trailParticles = Boolean.parseBoolean(split[1].toLowerCase());
@@ -203,8 +290,20 @@ public abstract class ShootableType extends InfoType
 		}
 		catch(Exception e)
 		{
-			FlansMod.log.error("Reading grenade file failed: " + shortName);
-			FlansMod.log.throwing(e);
+			if(split!=null)
+			{
+				String msg = " : ";
+				for(String s : split) msg = msg +" "+ s;
+				System.out.println("Reading grenade file failed. " + file.name + msg);
+			}
+			else
+			{
+				System.out.println("Reading grenade file failed. " + file.name);
+			}
+			if(FlansMod.printStackTrace)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -222,10 +321,10 @@ public abstract class ShootableType extends InfoType
 	protected void preRead(TypeFile file)
 	{
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBase GetModel()
+	public ModelBase GetModel() 
 	{
 		return model;
 	}

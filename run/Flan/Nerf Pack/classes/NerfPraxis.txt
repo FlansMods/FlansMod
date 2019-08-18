@@ -1,6 +1,0 @@
-Name Scout
-ShortName nerfPraxisClass
-AddItem nerfPraxis
-AddItem nerfMaverick
-AddItem 10DiscClip 3
-AddItem whistlerDart 12

@@ -1,7 +1,0 @@
-Name U.S. Marine Bodyarmour
-ShortName marineBody
-Icon MarineBody
-Colour 255 255 255
-Type Chest
-Defence 0.1
-ArmourTexture Marine

@@ -1,5 +1,0 @@
-Name Skeleton
-ShortName flanSkeleton
-Icon Skeleton
-Texture GroundSkeleton
-Model apocalypse.GroundSkeleton

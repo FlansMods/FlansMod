@@ -10,17 +10,17 @@ import net.minecraft.world.World;
 public class ContainerDriveableInventory extends Container
 {
 	public InventoryPlayer inventory;
-	public World world;
+    public World world;
 	public EntityDriveable plane;
 	public int numItems;
 	public int screen;
 	public int maxScroll;
 	public int scroll;
 	
-	public ContainerDriveableInventory(InventoryPlayer inventoryplayer, World worldy, EntityDriveable entPlane, int i)
-	{
+    public ContainerDriveableInventory(InventoryPlayer inventoryplayer, World worldy, EntityDriveable entPlane, int i)
+    {
 		inventory = inventoryplayer;
-		world = worldy;
+        world = worldy;
 		plane = entPlane;
 		screen = i;
 		//Find the number of items in the inventory
@@ -103,11 +103,11 @@ public class ContainerDriveableInventory extends Container
 			
 		}
 		//Quickbar slots
-		for(int col = 0; col < 9; col++)
-		{
-			addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 156));
-		}
-	}
+        for(int col = 0; col < 9; col++)
+        {
+        	addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 156));
+        }
+    }
 	
 	public void updateScroll(int scrololol)
 	{
@@ -148,10 +148,10 @@ public class ContainerDriveableInventory extends Container
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer)
-	{
+    public boolean canInteractWith(EntityPlayer entityplayer)
+    {
 		return true;
-	}
+    }
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)

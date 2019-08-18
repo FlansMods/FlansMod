@@ -44,7 +44,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public int reloadTimer;
 	public int soundDelay;
 	public float shootDelay;
-	public static List<EntityMG> mgs = new ArrayList<>();
+	public static List<EntityMG> mgs = new ArrayList<EntityMG>();
 	public EntityPlayer gunner;
 	//Server side
 	public boolean isShooting;
@@ -90,6 +90,12 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		super.onUpdate();
 		
+		if(type==null)
+		{
+			FlansMod.log("EntityMG.onUpdate() Error: GunType is null ("+this+")");
+			setDead();
+			return;
+		}
 		prevPosX = posX = blockX + 0.5f;
 		prevPosY = posY = blockY;
 		prevPosZ = posZ = blockZ + 0.5f;
@@ -351,7 +357,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		if(!world.isRemote)
 		{
 			if(TeamsManager.weaponDrops == 2)
-			{
+		{
 				EntityGunItem gunEntity = new EntityGunItem(world, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(ammo));
 				world.spawnEntity(gunEntity);
 			}
@@ -372,6 +378,13 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
+		if(type==null)
+		{
+			FlansMod.log("EntityMG.writeEntityToNBT() Error: GunType is null ("+this+")");
+			setDead();
+			return;
+		}
+
 		nbttagcompound.setString("Type", type.shortName);
 		nbttagcompound.setTag("Ammo", ammo.writeToNBT(new NBTTagCompound()));
 		nbttagcompound.setInteger("BlockX", blockX);
@@ -384,6 +397,13 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		type = GunType.getGun(nbttagcompound.getString("Type"));
+		if(type==null)
+		{
+			FlansMod.log("EntityMG.readEntityFromNBT() Error: GunType is null ("+this+")");
+			setDead();
+			return;
+		}
+
 		blockX = nbttagcompound.getInteger("BlockX");
 		blockY = nbttagcompound.getInteger("BlockY");
 		blockZ = nbttagcompound.getInteger("BlockZ");

@@ -36,7 +36,21 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		this(w);
 		type = t;
-		setPosition(player.posX, player.posY, player.posZ);
+		if(canUseParachute(player))
+		{
+			player.posY -= 1D;
+			setPosition(player.posX, player.posY-1.5D, player.posZ);
+		}
+		else
+		{
+			setDead();
+		}
+	}
+
+	public static boolean canUseParachute(Entity player)
+	{
+		List list = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.expand(0, 3, 0));
+		return list.size() == 0;
 	}
 	
 	@Override
@@ -52,11 +66,11 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(getControllingPassenger() != null)
 			getControllingPassenger().fallDistance = 0F;
 		
-		motionY = -0.1D;
+		motionY = -0.3D;
 		
 		if(getControllingPassenger() != null && getControllingPassenger() instanceof EntityLivingBase)
 		{
-			float speedMultiplier = 0.002F;
+			float speedMultiplier = 0.025F;
 			double moveForwards = ((EntityLivingBase)this.getControllingPassenger()).moveForward;
 			double moveStrafing = ((EntityLivingBase)this.getControllingPassenger()).moveStrafing;
 			double sinYaw = -Math.sin((getControllingPassenger().rotationYaw * (float)Math.PI / 180.0F));
@@ -68,8 +82,8 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			rotationYaw = getControllingPassenger().rotationYaw;
 		}
 		
-		motionX *= 0.8F;
-		motionZ *= 0.8F;
+		motionX *= 0.93F;
+		motionZ *= 0.93F;
 		
 		move(MoverType.SELF, motionX, motionY, motionZ);
 		
@@ -83,7 +97,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	public void fall(float par1, float k)
 	{
 		//Ignore fall damage
-	}
+    }
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float f)

@@ -39,9 +39,9 @@ public class PacketBreakSound extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(x);
-		data.writeInt(y);
-		data.writeInt(z);
-		data.writeInt(blockID);
+    	data.writeInt(y);
+    	data.writeInt(z);
+    	data.writeInt(blockID);
 	}
 	
 	@Override

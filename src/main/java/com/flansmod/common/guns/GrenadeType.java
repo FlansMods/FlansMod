@@ -17,7 +17,7 @@ public class GrenadeType extends ShootableType
 	 * The damage imparted by smacking someone over the head with this grenade
 	 */
 	public int meleeDamage = 1;
-	
+
 	//Throwing
 	/**
 	 * The delay between subsequent grenade throws
@@ -35,7 +35,7 @@ public class GrenadeType extends ShootableType
 	 * Whether you can throw this grenade by right clicking
 	 */
 	public boolean canThrow = true;
-	
+
 	//Physics
 	/**
 	 * Upon hitting a block or entity, the grenade will be deflected and its motion will be multiplied by this constant
@@ -57,7 +57,36 @@ public class GrenadeType extends ShootableType
 	 * If true, then the grenade will stick to the player that threw it. Used to make delayed self destruct weapons
 	 */
 	public boolean stickToThrower = false;
-	
+
+	public boolean stickToEntity = false;
+	public boolean stickToDriveable = false;
+	public boolean stickToEntityAfter = false;
+	public boolean allowStickSound = false;
+	public int stickSoundRange = 10;
+	public String stickSound;
+
+	public boolean flashBang = false;
+	public int flashTime = 200;
+	public int flashRange = 8;
+
+	public boolean flashSoundEnable = false;
+	public int flashSoundRange = 16;
+	public String flashSound;
+
+	public boolean flashDamageEnable = false;
+	public float flashDamage;
+
+	public boolean flashEffects = false;
+	public int flashEffectsID;
+	public int flashEffectsDuration;
+	public int flashEffectsLevel;
+
+	public boolean motionSensor = false;
+	public float motionSensorRange = 5.0F;
+	public float motionSoundRange = 20.0F;
+	public String motionSound;
+	public int motionTime = 20;
+
 	//Conditions for detonation
 	/**
 	 * If > 0 this will act like a mine and explode when a living entity comes within this radius of the grenade
@@ -79,7 +108,7 @@ public class GrenadeType extends ShootableType
 	 * How much damage to deal to the entity that triggered it
 	 */
 	public float damageToTriggerer = 0F;
-	
+
 	//Detonation
 	/**
 	 * Explosion damage vs various classes of entities
@@ -89,7 +118,7 @@ public class GrenadeType extends ShootableType
 	 * Detonation will not occur until after this time
 	 */
 	public int primeDelay = 0;
-	
+
 	//Aesthetics
 	/**
 	 * Particles given off in the detonation
@@ -100,7 +129,7 @@ public class GrenadeType extends ShootableType
 	 * Whether the grenade should spin when thrown. Generally false for mines or things that should lie flat
 	 */
 	public boolean spinWhenThrown = true;
-	
+
 	//Smoke
 	/**
 	 * Time to remain after detonation
@@ -118,7 +147,7 @@ public class GrenadeType extends ShootableType
 	 * The radius for smoke effects to take place in
 	 */
 	public float smokeRadius = 5F;
-	
+
 	//Deployed bag functionality
 	/**
 	 * If true, then right clicking this "grenade" will give the player health or buffs or ammo as defined below
@@ -207,6 +236,26 @@ public class GrenadeType extends ShootableType
 			
 			else if(split[0].equals("StickToThrower"))
 				stickToThrower = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("StickToEntity"))
+				stickToEntity = Boolean.parseBoolean(split[1]);
+
+			else if(split[0].equals("StickToDriveable"))
+				stickToDriveable = Boolean.parseBoolean(split[1]);
+
+			else if(split[0].equals("StickToEntityAfter"))
+				stickToEntityAfter = Boolean.parseBoolean(split[1]);
+
+			else if(split[0].equals("AllowStickSound"))
+				allowStickSound = Boolean.parseBoolean(split[1]);
+
+			else if(split[0].equals("StickSoundRange"))
+				stickSoundRange = Integer.parseInt(split[1]);
+
+			else if(split[0].equals("StickSound"))
+			{
+				stickSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "sound", split[1]);
+			}
 			
 			else if(split[0].equals("ExplosionDamageVsLiving"))
 				explosionDamageVsLiving = Float.parseFloat(split[1]);
@@ -230,6 +279,48 @@ public class GrenadeType extends ShootableType
 				spinWhenThrown = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("Remote"))
 				remote = Boolean.parseBoolean(split[1].toLowerCase());
+			else if(split[0].equals("FlashBang"))
+				flashBang = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("FlashTime"))
+				flashTime = Integer.parseInt(split[1]);
+			else if(split[0].equals("FlashRange"))
+				flashRange = Integer.parseInt(split[1]);
+			else if(split[0].equals("FlashSoundEnable"))
+				flashSoundEnable = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("FlashSoundRange"))
+				flashSoundRange = Integer.parseInt(split[1]);
+			else if(split[0].equals("FlashSound"))
+			{
+				flashSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "sound", split[1]);
+			}
+			else if(split[0].equals("FlashDamageEnable"))
+				flashDamageEnable = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("FlashDamage"))
+				flashDamage = Float.parseFloat(split[1]);
+			else if(split[0].equals("FlashEffects"))
+				flashEffects = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("FlashEffectsID"))
+				flashEffectsID = Integer.parseInt(split[1]);
+			else if(split[0].equals("FlashEffectsDuration"))
+				flashEffectsDuration = Integer.parseInt(split[1]);
+			else if(split[0].equals("FlashEffectsLevel"))
+				flashEffectsLevel = Integer.parseInt(split[1]);
+
+			else if(split[0].equals("MotionSensor"))
+				motionSensor = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("MotionSensorRange"))
+				motionSensorRange = Float.parseFloat(split[1]);
+			else if(split[0].equals("MotionSoundRange"))
+				motionSoundRange = Float.parseFloat(split[1]);
+			else if(split[0].equals("MotionSound"))
+			{
+				motionSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "sound", split[1]);
+			}
+			else if(split[0].equals("MotionTime"))
+				motionTime = Integer.parseInt(split[1]);
+
 				
 				//Deployable Bag Stuff
 			else if(split[0].equals("DeployableBag"))
@@ -249,7 +340,7 @@ public class GrenadeType extends ShootableType
 			FlansMod.log.throwing(e);
 		}
 	}
-	
+
 	public static GrenadeType getGrenade(String s)
 	{
 		for(GrenadeType grenade : grenades)

@@ -1,7 +1,0 @@
-Name German WW2 Forest Boots
-ShortName germanForestBoots
-Icon GermanForestBoots
-Colour 255 255 255
-Type Boots
-Defence 0.1
-ArmourTexture GermanForest

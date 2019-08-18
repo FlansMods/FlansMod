@@ -1,9 +1,0 @@
-Name Orange Nerf Kneepads
-ShortName nerfOrangeKnees
-Icon NerfOrangeKnees
-Colour 255 255 255
-Type Pants
-Defence 0.1
-ArmourTexture NerfOrange
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

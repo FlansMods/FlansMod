@@ -17,6 +17,8 @@ import com.flansmod.common.FlansMod;
 
 public class PacketRequestDebug extends PacketBase
 {
+	private boolean debug;
+	
 	public PacketRequestDebug()
 	{
 	}
@@ -24,11 +26,13 @@ public class PacketRequestDebug extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
+		data.writeByte(this.debug? 1: 0);
 	}
 	
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
+		this.debug = data.readByte()!=0;
 	}
 	
 	@Override
@@ -41,7 +45,7 @@ public class PacketRequestDebug extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-		FlansMod.DEBUG = true;
+		FlansMod.DEBUG = this.debug;
 	}
 	
 }

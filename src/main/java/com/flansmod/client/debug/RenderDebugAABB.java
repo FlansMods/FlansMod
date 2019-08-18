@@ -4,6 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -37,8 +39,8 @@ public class RenderDebugAABB extends Render<EntityDebugAABB>
 		renderOffsetAABB(new AxisAlignedBB(ent.offset.x, ent.offset.y, ent.offset.z, ent.offset.x + ent.vector.x, ent.offset.y + ent.vector.y, ent.offset.z + ent.vector.z), 0, 0, 0);
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+	    GL11.glEnable(GL11.GL_TEXTURE_2D);
+	    GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 	
 	@Override

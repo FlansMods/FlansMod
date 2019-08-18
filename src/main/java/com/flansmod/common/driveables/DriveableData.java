@@ -61,7 +61,7 @@ public class DriveableData implements IInventory
 	}
 	
 	public void readFromNBT(NBTTagCompound tag)
-	{
+    {
 		if(tag == null)
 			return;
 		if(!tag.hasKey("Type"))
@@ -135,7 +135,7 @@ public class DriveableData implements IInventory
 		{
 			part.writeToNBT(tag);
 		}
-	}
+    }
 	
 	@Override
 	public int getSizeInventory()
@@ -262,12 +262,12 @@ public class DriveableData implements IInventory
 	public void markDirty()
 	{
 	}
-	
+
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player)
-	{
-		return true;
-	}
+	public void openInventory() {}
+
+	@Override
+	public void closeInventory() {}
 	
 	public int getAmmoInventoryStart()
 	{

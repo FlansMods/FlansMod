@@ -1,7 +1,13 @@
 package com.flansmod.common.tools;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,15 +31,20 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.DriveableType.ShootParticle;
+import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.network.PacketFlak;
-import com.flansmod.common.types.IFlanItem;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class ItemTool extends ItemFood implements IFlanItem
+public class ItemTool extends ItemFood 
 {
 	public ToolType type;
 	
+    private static final String CHAR_LIST = 
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    private static final int RANDOM_STRING_LENGTH = 10;
+
+
 	public ItemTool(ToolType t)
 	{
 		super(t.foodness, false);
@@ -55,10 +66,24 @@ public class ItemTool extends ItemFood implements IFlanItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			lines.add(type.packName);
+		}
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
+		if(stack.stackTagCompound != null)
+		{
+			lines.add(stack.stackTagCompound.getString("key"));
+		}
+	}
+
+	public void onCreated(ItemStack itemStack, World world, EntityPlayer player)
+	{
+	    itemStack.stackTagCompound = new NBTTagCompound();
+	    itemStack.stackTagCompound.setString("key", generateRandomString());
 	}
 	
 	@Override
@@ -70,8 +95,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 		
 		else if(type.parachute)
 		{
-			//Create a parachute, spawn it and put the player in it
-			if(!world.isRemote)
+			if(EntityParachute.canUseParachute(entityplayer))
 			{
 				EntityParachute parachute = new EntityParachute(world, type, entityplayer);
 				world.spawnEntity(parachute);
@@ -90,6 +114,15 @@ public class ItemTool extends ItemFood implements IFlanItem
 		else if(type.remote)
 		{
 			PlayerData data = PlayerHandler.getPlayerData(entityplayer, world.isRemote ? Side.CLIENT : Side.SERVER);
+			Iterator<EntityGrenade> i = data.remoteExplosives.iterator();
+			while (i.hasNext())
+			{
+				EntityGrenade grenade = i.next();
+				if(grenade.isDead)
+				{
+					i.remove();
+				}
+			}
 			//If we have some remote explosives out there
 			if(data.remoteExplosives.size() > 0)
 			{
@@ -205,9 +238,79 @@ public class ItemTool extends ItemFood implements IFlanItem
 					return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 				}
 			}
+
+			if(!world.isRemote && type.key)
+			{
+				for(int i = 0; i < world.loadedEntityList.size(); i++)
+				{
+					Object obj = world.loadedEntityList.get(i);
+					if(obj instanceof EntityDriveable)
+					{
+						EntityDriveable driveable = (EntityDriveable)obj;
+						//Raytrace
+						DriveablePart part = driveable.raytraceParts(new Vector3f(posVec), Vector3f.sub(new Vector3f(lookVec), new Vector3f(posVec), null));
+						//If we hit something that is healable
+						if(part != null && part.maxHealth > 0)
+						{
+							if (part.owner.locked)
+							{
+								if(itemstack.stackTagCompound == null)
+								{
+								    itemstack.stackTagCompound = new NBTTagCompound();
+								    itemstack.stackTagCompound.setString("key", generateRandomString());
+								}
+								part.owner.unlock(itemstack.stackTagCompound.getString("key"), entityplayer);
+								return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+							}
+							else if (!part.owner.locked)
+							{
+								if(itemstack.stackTagCompound == null)
+								{
+								    itemstack.stackTagCompound = new NBTTagCompound();
+								    itemstack.stackTagCompound.setString("key", generateRandomString());
+								}
+								part.owner.lock(itemstack.stackTagCompound.getString("key"), entityplayer);
+								return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+							}
+						}
+					}
+				}
+	        }
 		}
 		return new ActionResult<>(EnumActionResult.FAIL, itemstack);
 	}
+	
+    public String generateRandomString()
+    {
+        
+        StringBuffer randStr = new StringBuffer();
+        for(int i=0; i<RANDOM_STRING_LENGTH; i++)
+        {
+            int number = getRandomNumber();
+            char ch = CHAR_LIST.charAt(number);
+            randStr.append(ch);
+        }
+        return randStr.toString();
+    }
+     
+    /**
+     * This method generates random numbers
+     * @return int
+     */
+    private int getRandomNumber()
+    {
+        int randomInt = 0;
+        Random randomGenerator = new Random();
+        randomInt = randomGenerator.nextInt(CHAR_LIST.length());
+        if (randomInt - 1 == -1)
+        {
+            return randomInt;
+        }
+        else
+        {
+            return randomInt - 1;
+        }
+    }
 	
 	@Override
 	public String toString()

@@ -2,7 +2,7 @@ package com.flansmod.common.driveables;
 
 public enum EnumPlaneMode
 {
-	PLANE, VTOL, HELI;
+	PLANE, VTOL, HELI, SIXDOF;
 	
 	public static EnumPlaneMode getMode(String s)
 	{

@@ -34,7 +34,7 @@ public class ItemPart extends Item implements IFlanItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
-		if(type.category == EnumPartCategory.FUEL)
+		if(type.category == 9)
 		{
 			lines.add("Fuel Stored: " + (type.fuel - stack.getItemDamage()) + " / " + type.fuel);
 		}

@@ -1,7 +1,0 @@
-Name Russian WW2 Boots
-ShortName russianBoots
-Icon RussianBoots
-Colour 255 255 255
-Type Boots
-Defence 0.1
-ArmourTexture Russian

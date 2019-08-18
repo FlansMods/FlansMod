@@ -35,12 +35,12 @@ public class SlotMecha extends Slot
 	}
 	
 	@Override
-	public void putStack(ItemStack stack)
-	{
+    public void putStack(ItemStack stack)
+    {
 		if(!isItemValid(stack))
 			return;
-		inventory.setInventorySlotContents(slotType.ordinal(), stack);
-		onSlotChanged();
-	}
+        inventory.setInventorySlotContents(slotType.ordinal(), stack);
+        onSlotChanged();
+    }
 
 }

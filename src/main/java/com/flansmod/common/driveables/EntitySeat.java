@@ -50,9 +50,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	private int driveableID;
 	private int seatID;
 	public EntityDriveable driveable;
-	
+
+	@SideOnly(Side.CLIENT)
 	public float playerRoll, prevPlayerRoll;
-	
+
 	public Seat seatInfo;
 	public boolean driver;
 	public RotatedAxes playerLooking;
@@ -97,10 +98,19 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
 	private float prevPlayerYaw, prevPlayerPitch;
 	private boolean shooting;
+
+	public Entity lastRiddenByEntity;
 	
-	/**
-	 * Default constructor for spawning client side Should not be called server side EVER
-	 */
+	public float targetYaw = 0;
+	
+	public float targetPitch = 0;
+	
+	public boolean artillery = false;
+
+	public int timeLimitDriveableNull = 0;
+
+	/** Default constructor for spawning client side
+	 * Should not be called server side EVER */
 	public EntitySeat(World world)
 	{
 		super(world);
@@ -109,6 +119,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		looking = new RotatedAxes();
 		playerLooking = new RotatedAxes();
 		prevPlayerLooking = new RotatedAxes();
+		lastRiddenByEntity = null;
 	}
 	
 	/**
@@ -129,7 +140,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		prevLooking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 	}
-	
+
 	@Override
 	public void onUpdate()
 	{
@@ -156,13 +167,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(pitchSoundDelay > 0)
 			pitchSoundDelay--;
 		
-		if(playYawSound && yawSoundDelay == 0 && seatInfo.traverseSounds)
+		if(playYawSound && yawSoundDelay == 0 && seatInfo.traverseSounds && !driveable.disabled)
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, seatInfo.yawSound, false);
 			yawSoundDelay = seatInfo.yawSoundLength;
 		}
 		
-		if(playPitchSound && pitchSoundDelay == 0 && seatInfo.traverseSounds)
+		if(playPitchSound && pitchSoundDelay == 0 && seatInfo.traverseSounds && !driveable.disabled)
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, seatInfo.pitchSound, false);
 			pitchSoundDelay = seatInfo.pitchSoundLength;
@@ -210,10 +221,18 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					FlansMod.log.error("Failed to reset player's floating state.", e);
 				}
 			}
+
+			if(lastRiddenByEntity instanceof EntityPlayer && riddenByEntity==null && FlansModClient.proxy.isThePlayer((EntityPlayer)lastRiddenByEntity))
+			{
+				FlansMod.getPacketHandler().sendToServer(new PacketSeatCheck(this));
+			}
+		}
 		}
 		
 		minigunSpeed *= 0.95F;
 		minigunAngle += minigunSpeed;
+
+		lastRiddenByEntity = entityInThisSeat;
 	}
 	
 	/**
@@ -239,7 +258,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevPlayerPosX = playerPosX;
 		prevPlayerPosY = playerPosY;
 		prevPlayerPosZ = playerPosZ;
-		
+
 		prevPlayerYaw = playerYaw;
 		prevPlayerPitch = playerPitch;
 		prevPlayerRoll = playerRoll;
@@ -250,9 +269,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		// Rotate the offset vector by the turret yaw
 		if(driveable != null && driveable.getSeat(0) != null && driveable.getSeat(0).looking != null)
 		{
-			RotatedAxes yawOnlyLooking = new RotatedAxes(driveable.getSeat(0).looking.getYaw(), 0F, 0F);
+			RotatedAxes yawOnlyLooking = new RotatedAxes(driveable.getSeat(0).looking.getYaw(), (driveable.seats[0].seatInfo.part == EnumDriveablePart.barrel) ? driveable.seats[0].looking.getPitch() : 0F, 0F);
 			Vector3f rotatedOffset = yawOnlyLooking.findLocalVectorGlobally(seatInfo.rotatedOffset);
-			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
+			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, (driveable.seats[0].seatInfo.part == EnumDriveablePart.barrel)?rotatedOffset.y:0F, rotatedOffset.z), localPosition);
 		}
 		
 		// Get the position of this seat globally, but positionally relative to the driveable
@@ -285,7 +304,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			// Set the player's rotation based on this
 			playerYaw = -90F + globalLookAxes.getYaw();
 			playerPitch = globalLookAxes.getPitch();
-			
+
 			double dYaw = playerYaw - prevPlayerYaw;
 			if(dYaw > 180)
 				prevPlayerYaw += 360F;
@@ -302,8 +321,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}
 			
 			// If the entity is a player, roll its view accordingly
-			if(world.isRemote)
 			{
+				prevPlayerRoll = playerRoll;
 				playerRoll = -globalLookAxes.getRoll();
 			}
 		}
@@ -317,16 +336,22 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean canBeCollidedWith()
-	{
-		return !isDead;
-	}
-	
+    public boolean canBeCollidedWith()
+    {
+        return !isDead;
+    }
+
 	@Override
-	protected void entityInit()
-	{
-	}
-	
+    protected void entityInit()
+    {
+    }
+
+	@Override
+    public float getShadowSize()
+    {
+        return 4.0F;
+    }
+
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
@@ -355,13 +380,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		tags.setString("DriveableType", driveable == null ? "" : driveable.getDriveableType().shortName);
 		tags.setInteger("Index", seatID);
 	}
-	
+
 	@Override
-	public boolean writeToNBTOptional(NBTTagCompound tags)
-	{
-		return false;
-	}
-	
+    public boolean writeToNBTOptional(NBTTagCompound tags)
+    {
+        return false;
+    }
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void onMouseMoved(int deltaX, int deltaY)
@@ -388,7 +413,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			// Calculate the new pitch and consider pitch limiters
 			float newPlayerPitch = playerLooking.getPitch() -
-					deltaY / lookSpeed * mc.gameSettings.mouseSensitivity;
+					deltaY / lookSpeed * FlansMod.proxy.getMouseSensitivity();
 			if(newPlayerPitch > -seatInfo.minPitch)
 				newPlayerPitch = -seatInfo.minPitch;
 			if(newPlayerPitch < -seatInfo.maxPitch)
@@ -396,7 +421,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			// Calculate new yaw and consider yaw limiters
 			float newPlayerYaw = playerLooking.getYaw() +
-					deltaX / lookSpeed * mc.gameSettings.mouseSensitivity;
+					deltaX / lookSpeed * FlansMod.proxy.getMouseSensitivity();
 			// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
 			float otherNewPlayerYaw = newPlayerYaw - 360F;
 			if(newPlayerYaw < 0)
@@ -441,9 +466,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			
 			// Consider new Yaw and Yaw limiters
+			if(driveable.disabled) return;
 			
+			float targetX;
 			
-			float targetX = playerLooking.getYaw();
+			if(FlansModClient.controlModeMouse || !driver ||(driveable instanceof EntityPlane))
+			targetX = playerLooking.getYaw();
+			else targetX = targetYaw;
 			
 			float yawToMove = (targetX - looking.getYaw());
 			while(yawToMove > 180F)
@@ -474,7 +503,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			if(seatInfo.legacyAiming || (signDeltaX == 0 && deltaX == 0))
 			{
-				newYaw = playerLooking.getYaw();
+				newYaw = targetX;
 			}
 			else
 			{
@@ -516,6 +545,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			// Calculate the new pitch and consider pitch limiters
 			float targetY = playerLooking.getPitch();
 			
+			if(!FlansModClient.controlModeMouse && driver && !(driveable instanceof EntityPlane))
+				targetY = targetPitch;
+
 			float pitchToMove = (targetY - looking.getPitch());
 			while(pitchToMove > 180F)
 			{
@@ -563,9 +595,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			if(seatInfo.legacyAiming || (signDeltaY == 0 && deltaY == 0))
 			{
-				newPitch = playerLooking.getPitch();
+				newPitch = targetY;
 			}
-			else if(!seatInfo.yawBeforePitch && currentYawToMove < minYawToMove)
+			else if(!seatInfo.yawBeforePitch && currentYawToMove < minYawToMove || !FlansModClient.controlModeMouse)
 			{
 				newPitch = looking.getPitch() + signDeltaY * seatInfo.aimingSpeed.y;
 			}
@@ -573,7 +605,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			{
 				newPitch = looking.getPitch() + signDeltaY * seatInfo.aimingSpeed.y;
 			}
-			else if(seatInfo.yawBeforePitch)
+			else if(seatInfo.yawBeforePitch && signDeltaX != 0)
 			{
 				newPitch = looking.getPitch();
 			}
@@ -588,8 +620,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				newPitch = -seatInfo.maxPitch;
 			
 			// Now set the new angles
-			looking.setAngles(newYaw, newPitch, 0F);
-			
+			if((driveable instanceof EntityVehicle && ((EntityVehicle)driveable).target == null) || !(driveable instanceof EntityVehicle))
+				looking.setAngles(newYaw, newPitch, 0F);
+
 			FlansMod.getPacketHandler().sendToServer(new PacketSeatUpdates(this));
 			
 			playYawSound = signDeltaX != 0 && seatInfo.traverseSounds;
@@ -599,9 +632,15 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				playPitchSound = true;
 			}
 			else playPitchSound = signDeltaY != 0 && seatInfo.yawBeforePitch && signDeltaX == 0;
+
+			if((driveable instanceof EntityVehicle && ((EntityVehicle)driveable).target != null))
+			{
+				playPitchSound = false;
+				playYawSound = false;
+			}
 		}
 	}
-	
+
 	@Override
 	public void updateKeyHeldState(int key, boolean held)
 	{
@@ -718,7 +757,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean processInitialInteract(EntityPlayer entityplayer,
 										  EnumHand hand) //interact : change back when Forge updates
@@ -732,6 +771,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		// If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
 		if(currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+			return true;
+		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.key)
 			return true;
 		if(currentItem.getItem() instanceof ItemLead)
 		{
@@ -771,9 +812,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}
 			return true;
 		}
-		return false;
-	}
-	
+        return false;
+    }
+
 	@Override
 	public Entity getControllingEntity()
 	{
@@ -848,6 +889,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public float getPlayerRoll()
 	{
+		for(; playerRoll - prevPlayerRoll > 180F; playerRoll -= 360F) ;
+		for(; playerRoll - prevPlayerRoll < -180F; playerRoll += 360F) ;
 		return playerRoll;
 	}
 	
@@ -856,13 +899,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		return prevPlayerRoll;
 	}
-	
+
 	@Override
 	public float getCameraDistance()
 	{
 		return driveable != null && seatID == 0 ? driveable.getDriveableType().cameraDistance * 2.0f : 5F;
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float f)
 	{

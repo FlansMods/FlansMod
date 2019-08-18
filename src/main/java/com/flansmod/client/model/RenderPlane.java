@@ -85,6 +85,9 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		ModelPlane model = (ModelPlane)type.model;
 		if(model != null)
 		{
+	        GL11.glPushMatrix();
+			GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
+			
 			model.render(entityPlane, f1);
 			// Render helicopter main rotors
 			for(int i = 0; i < model.heliMainRotorModels.length; i++)
@@ -113,6 +116,84 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 				model.renderTailRotor(entityPlane, 0.0625F, i);
 				GL11.glPopMatrix();
 			}
+			
+			Vector3f wingPos = getRenderPosition(entityPlane.wingPos, entityPlane.prevWingPos, f1);
+			Vector3f wingRot = getRenderPosition(entityPlane.wingRot, entityPlane.prevWingRot, f1);
+			if(entityPlane.initiatedAnim){
+				AnimationController cont = entityPlane.anim;
+				AnimationPart p = cont.getCorePart();
+				renderAnimPart(p, new Vector3f(0,0,0), model, entityPlane, 0.0625F, f1);
+			}
+			
+			//Rotate/Render left wing
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.leftWingAttach.x + wingPos.x/16, model.leftWingAttach.y + wingPos.y/16, -model.leftWingAttach.z + wingPos.z/16);
+			GL11.glRotatef(wingRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(wingRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(wingRot.z, 0F, 0F, 1F);
+			model.renderLeftWing(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			
+			//Rotate/Render right wing
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.rightWingAttach.x + wingPos.x/16, model.rightWingAttach.y + wingPos.y/16, -model.rightWingAttach.z + wingPos.z/16);
+			GL11.glRotatef(-wingRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(-wingRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(wingRot.z, 0F, 0F, 1F);
+			model.renderRightWing(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			//Rotate/Render left wing wheel
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.leftWingWheelAttach.x + entityPlane.wingWheelPos.x/16, model.leftWingWheelAttach.y+ entityPlane.wingWheelPos.y/16, -model.leftWingWheelAttach.z + entityPlane.wingWheelPos.z/16);
+			GL11.glRotatef(entityPlane.wingWheelRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(entityPlane.wingWheelRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(entityPlane.wingWheelRot.z, 0F, 0F, 1F);
+			model.renderLeftWingWheel(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			//Rotate/Render right wing wheel
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.rightWingWheelAttach.x + entityPlane.wingWheelPos.x/16, model.rightWingWheelAttach.y + entityPlane.wingWheelPos.y/16, -model.rightWingWheelAttach.z + entityPlane.wingWheelPos.z/16);
+			GL11.glRotatef(-entityPlane.wingWheelRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(-entityPlane.wingWheelRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(entityPlane.wingWheelRot.z, 0F, 0F, 1F);
+			model.renderRightWingWheel(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			//Rotate/Render core wheel
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.bodyWheelAttach.x + entityPlane.coreWheelPos.x/16, model.bodyWheelAttach.y + entityPlane.coreWheelPos.y/16, model.bodyWheelAttach.z + entityPlane.coreWheelPos.z/16);
+			GL11.glRotatef(entityPlane.coreWheelRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(entityPlane.coreWheelRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(entityPlane.coreWheelRot.z, 0F, 0F, 1F);
+			model.renderCoreWheel(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			//Rotate/Render tail wheel
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.tailWheelAttach.x + entityPlane.tailWheelPos.x/16, model.tailWheelAttach.y + entityPlane.tailWheelPos.y/16, model.tailWheelAttach.z + entityPlane.tailWheelPos.z/16);
+			GL11.glRotatef(entityPlane.tailWheelRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(entityPlane.tailWheelRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(entityPlane.tailWheelRot.z, 0F, 0F, 1F);
+			model.renderTailWheel(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			Vector3f doorPos = getRenderPosition(entityPlane.doorPos, entityPlane.prevDoorPos, f1);
+			Vector3f doorRot = getRenderPosition(entityPlane.doorRot, entityPlane.prevDoorRot, f1);
+
+			
+			//Rotate/Render door
+			GL11.glPushMatrix();
+			GL11.glTranslatef(model.doorAttach.x + doorPos.x/16, model.doorAttach.y + doorPos.y/16, model.doorAttach.z + doorPos.z/16);
+			GL11.glRotatef(doorRot.x, 1F, 0F, 0F);
+			GL11.glRotatef(doorRot.y, 0F, 1F, 0F);
+			GL11.glRotatef(doorRot.z, 0F, 0F, 1F);
+			model.renderDoor(entityPlane, 0.0625F);
+			GL11.glPopMatrix();
+			
+			GL11.glPopMatrix();
 		}
 		
 		if(FlansMod.DEBUG)
@@ -176,7 +257,15 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		}
 		GL11.glPopMatrix();
 	}
-	
+
+	public Vector3f getRenderPosition(Vector3f current, Vector3f previous, float f)
+    {
+    	Vector3f diff = new Vector3f(current.x - previous.x, current.y - previous.y, current.z - previous.z);
+    	
+    	Vector3f corrected = new Vector3f(previous.x + (diff.x*f),previous.y + (diff.y*f), previous.z + (diff.z*f));
+    	return corrected;
+    }
+
 	@Override
 	public boolean shouldRender(EntityPlane entity, ICamera camera, double camX, double camY, double camZ)
 	{

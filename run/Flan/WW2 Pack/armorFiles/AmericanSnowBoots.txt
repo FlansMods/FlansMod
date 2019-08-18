@@ -1,7 +1,0 @@
-Name American WW2 Snow Boots
-ShortName americanSnowBoots
-Icon AmericanSnowBoots
-Colour 255 255 255
-Type Boots
-Defence 0.1
-ArmourTexture AmericanSnow

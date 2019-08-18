@@ -31,8 +31,8 @@ public class PacketMGMount extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(playerEntityId);
-		data.writeInt(mgEntityId);
-		data.writeBoolean(mounting);
+    	data.writeInt(mgEntityId);
+    	data.writeBoolean(mounting);
 	}
 	
 	@Override

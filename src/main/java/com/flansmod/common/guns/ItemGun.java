@@ -93,6 +93,15 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean lastRightMouseHeld;
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
+	public static boolean crouching = false;
+	public static boolean sprinting = false;
+	public static boolean shooting = false;
+	public int soundDelay;
+	public int lockOnSoundDelay;
+
+	public int impactX = 0;
+	public int impactY = 0;
+	public int impactZ = 0;
 	
 	private static boolean GetMouseHeld(EnumHand hand)
 	{
@@ -131,19 +140,26 @@ public class ItemGun extends Item implements IPaintableItem
 			gun.setTagCompound(new NBTTagCompound());
 			return ItemStack.EMPTY.copy();
 		}
+
+		String s;
+		if(type.getSecondaryFire(gun))
+			s = "secondaryAmmo";
+		else
+			s = "ammo";
+
 		//If the gun has no ammo tags, give it some
-		if(!gun.getTagCompound().hasKey("ammo"))
+		if(!gun.getTagCompound().hasKey(s))
 		{
 			NBTTagList ammoTagsList = new NBTTagList();
-			for(int i = 0; i < type.numAmmoItemsInGun; i++)
+			for(int i = 0; i < type.getNumAmmoItemsInGun(gun); i++)
 			{
 				ammoTagsList.appendTag(new NBTTagCompound());
 			}
-			gun.getTagCompound().setTag("ammo", ammoTagsList);
+			gun.getTagCompound().setTag(s, ammoTagsList);
 			return ItemStack.EMPTY.copy();
 		}
 		//Take the list of ammo tags
-		NBTTagList ammoTagsList = gun.getTagCompound().getTagList("ammo", Constants.NBT.TAG_COMPOUND);
+		NBTTagList ammoTagsList = gun.getTagCompound().getTagList(s, Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
 		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
 		return new ItemStack(ammoTags);
@@ -159,18 +175,25 @@ public class ItemGun extends Item implements IPaintableItem
 		{
 			gun.setTagCompound(new NBTTagCompound());
 		}
+
+		String s;
+		if(type.getSecondaryFire(gun))
+			s = "secondaryAmmo";
+		else
+			s = "ammo";
+
 		//If the gun has no ammo tags, give it some
-		if(!gun.getTagCompound().hasKey("ammo"))
+		if(!gun.getTagCompound().hasKey(s))
 		{
 			NBTTagList ammoTagsList = new NBTTagList();
-			for(int i = 0; i < type.numAmmoItemsInGun; i++)
+			for(int i = 0; i < type.getNumAmmoItemsInGun(gun); i++)
 			{
 				ammoTagsList.appendTag(new NBTTagCompound());
 			}
-			gun.getTagCompound().setTag("ammo", ammoTagsList);
+			gun.getTagCompound().setTag(s, ammoTagsList);
 		}
 		//Take the list of ammo tags
-		NBTTagList ammoTagsList = gun.getTagCompound().getTagList("ammo", Constants.NBT.TAG_COMPOUND);
+		NBTTagList ammoTagsList = gun.getTagCompound().getTagList(s, Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
 		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
 		//Represent empty slots by nulltypes
@@ -331,12 +354,17 @@ public class ItemGun extends Item implements IPaintableItem
 			hold = false;
 		
 		//TODO idle sound should be done on the server side
-		// Play idle sounds
-		if(soundDelay <= 0 && type.idleSound != null)
+		//Play idle sounds
+		if (soundDelay <= 0 && type.idleSound != null)
 		{
-			PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.idleSound, false);
+			PacketPlaySound.sendSoundPacket(entity.posX, entity.posY, entity.posZ, type.idleSoundRange, entity.dimension, type.idleSound, false);
 			soundDelay = type.idleSoundLength;
 		}
+
+		//If crouching, translate weapon model (zoom)
+		crouching = player.isSneaking();
+		//If running, reposition the gun
+		sprinting = player.isSprinting();
 		
 		if (gunCantBeHandeled(type, player))
 			return;
@@ -449,6 +477,7 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			if (!world.isRemote && shootTime > 0f)
 			{
+				// TODO: FM+ WHAT THE HECK IS THIS?
 				//data.addToQueue(hand);
 				//Hacky code
 				//This essentially skips ticks for a smoother client experience
@@ -784,7 +813,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(world.isRemote)
 			onUpdateClient(itemstack, world, pEnt, i, flag);
 		else onUpdateServer(itemstack, world, pEnt, i, flag);
-		
+
 		if(pEnt instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)pEnt;
@@ -807,18 +836,18 @@ public class ItemGun extends Item implements IPaintableItem
 					Vector3f nextPos = type.meleePath.get((data.meleeProgress + 1) % type.meleePath.size());
 					Vector3f nextAngles = type.meleePathAngles.get((data.meleeProgress + 1) % type.meleePathAngles.size());
 					RotatedAxes nextAxes = new RotatedAxes().rotateGlobalRoll(-nextAngles.x).rotateGlobalPitch(-nextAngles.z).rotateGlobalYaw(-nextAngles.y);
-					
+
 					Vector3f nextPosInGunCoords = nextAxes.findLocalVectorGlobally(meleeDamagePoint);
 					Vector3f.add(nextPos, nextPosInGunCoords, nextPosInGunCoords);
 					Vector3f.add(new Vector3f(0F, 0F, 0F), nextPosInGunCoords, nextPosInGunCoords);
 					Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw + 90F, player.rotationPitch, 0F).findLocalVectorGlobally(nextPosInGunCoords);
-					
-					
+
+
 					if(!FlansMod.proxy.isThePlayer(player))
 						nextPosInPlayerCoords.y += 1.6F;
-					
+
 					Vector3f nextPosInWorldCoords = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
-					
+
 					Vector3f dPos = data.lastMeleePositions[k] == null ? new Vector3f() : Vector3f.sub(nextPosInWorldCoords, data.lastMeleePositions[k], null);
 					
 					if(player.world.isRemote && FlansMod.DEBUG)
@@ -828,7 +857,7 @@ public class ItemGun extends Item implements IPaintableItem
 					{
 						//Create a list for all bullet hits
 						ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
-										
+
 						//Iterate over all entities
 						for(int j = 0; j < world.loadedEntityList.size(); j++)
 						{
@@ -850,14 +879,14 @@ public class ItemGun extends Item implements IPaintableItem
 									int snapshotToTry = player instanceof EntityPlayerMP ? ((EntityPlayerMP)player).ping / 50 : 0;
 									if(snapshotToTry >= otherData.snapshots.length)
 										snapshotToTry = otherData.snapshots.length - 1;
-									
+
 									PlayerSnapshot snapshot = otherData.snapshots[snapshotToTry];
 									if(snapshot == null)
 										snapshot = otherData.snapshots[0];
-									
+
 									//DEBUG
 									//snapshot = new PlayerSnapshot(player);
-									
+
 									//Check one last time for a null snapshot. If this is the case, fall back to normal hit detection
 									if(snapshot == null)
 										shouldDoNormalHitDetect = true;
@@ -868,7 +897,7 @@ public class ItemGun extends Item implements IPaintableItem
 										hits.addAll(playerHits);
 									}
 								}
-								
+
 								//If we couldn't get a snapshot, use normal entity hitbox calculations
 								if(otherData == null || shouldDoNormalHitDetect)
 								{
@@ -885,7 +914,7 @@ public class ItemGun extends Item implements IPaintableItem
 											hitLambda = hitPoint.z / dPos.z;
 										if(hitLambda < 0)
 											hitLambda = -hitLambda;
-										
+
 										hits.add(new PlayerBulletHit(new PlayerHitbox(otherPlayer, new RotatedAxes(), new Vector3f(), new Vector3f(), new Vector3f(), EnumHitboxType.BODY), hitLambda));
 									}
 								}
@@ -908,21 +937,21 @@ public class ItemGun extends Item implements IPaintableItem
 											hitLambda = hitPoint.z / dPos.z;
 										if(hitLambda < 0)
 											hitLambda = -hitLambda;
-										
+
 										hits.add(new EntityHit(entity, hitLambda));
 									}
 								}
 							}
 						}
-						
+
 						//We hit something
 						if(!hits.isEmpty())
 						{
 							//Sort the hits according to the intercept position
 							Collections.sort(hits);
-							
+
 							float swingDistance = dPos.length();
-							
+
 							for(BulletHit bulletHit : hits)
 							{
 								if(bulletHit instanceof PlayerBulletHit)
@@ -931,7 +960,7 @@ public class ItemGun extends Item implements IPaintableItem
 									float damageMultiplier = 1F;
 									switch(playerHit.hitbox.type)
 									{
-									case LEFTITEM : case RIGHTITEM : //Hit a shield. Stop the swing. 
+									case LEFTITEM : case RIGHTITEM : //Hit a shield. Stop the swing.
 									{
 										data.meleeProgress = data.meleeLength = 0;
 										return;
@@ -940,14 +969,14 @@ public class ItemGun extends Item implements IPaintableItem
 									case RIGHTARM : case LEFTARM : damageMultiplier = 0.6F; break;
 									default :
 									}
-									
+
 									if(playerHit.hitbox.player.attackEntityFrom(getMeleeDamage(player), swingDistance * type.meleeDamage))
 									{
 										//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
 										playerHit.hitbox.player.arrowHitTimer++;
 										playerHit.hitbox.player.hurtResistantTime = playerHit.hitbox.player.maxHurtResistantTime / 2;
 									}
-									
+
 									if(FlansMod.DEBUG)
 										world.spawnEntity(new EntityDebugDot(world, new Vector3f(data.lastMeleePositions[k].x + dPos.x * playerHit.intersectTime, data.lastMeleePositions[k].y + dPos.y * playerHit.intersectTime, data.lastMeleePositions[k].z + dPos.z * playerHit.intersectTime), 1000, 1F, 0F, 0F));
 								}
@@ -961,18 +990,18 @@ public class ItemGun extends Item implements IPaintableItem
 										living.arrowHitTimer++;
 										living.hurtResistantTime = living.maxHurtResistantTime / 2;
 									}
-									
+
 									if(FlansMod.DEBUG)
 										world.spawnEntity(new EntityDebugDot(world, new Vector3f(data.lastMeleePositions[k].x + dPos.x * entityHit.intersectTime, data.lastMeleePositions[k].y + dPos.y * entityHit.intersectTime, data.lastMeleePositions[k].z + dPos.z * entityHit.intersectTime), 1000, 1F, 0F, 0F));
 								}
-							}	
+							}
 						}
 					}
 					//End raytrace
-					
+
 					data.lastMeleePositions[k] = nextPosInWorldCoords;
 				}
-				
+
 				//Increment the progress meter
 				data.meleeProgress++;
 				//If we are done, reset the counters
@@ -1030,7 +1059,7 @@ public class ItemGun extends Item implements IPaintableItem
 	// Minecraft base item overrides
 	// _____________________________________________________________________________
 	
-	@Override
+@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
@@ -1054,16 +1083,16 @@ public class ItemGun extends Item implements IPaintableItem
 			}
 		}
 		for(int i = 0; i < type.numAmmoItemsInGun; i++)
-		{
-			ItemStack bulletStack = getBulletItemStack(stack, i);
-			if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet)
 			{
-				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
+				ItemStack bulletStack = getBulletItemStack(stack, i);
+				if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet)
+				{
+					BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
 				//String line = bulletType.name + (bulletStack.getMaxDamage() == 1 ? "" : " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage());
-				String line = bulletType.name + " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
-				lines.add(line);
+					String line = bulletType.name + " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+					lines.add(line);
+				}
 			}
-		}
 	}
 	
 	@Override
@@ -1083,7 +1112,7 @@ public class ItemGun extends Item implements IPaintableItem
 		IBlockState state = world.getBlockState(new BlockPos(i, j, k));
 		return state.getMaterial().isSolid() && state.isOpaqueCube();
 	}
-	
+
 	//Stop damage being done to entities when scoping etc.
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
@@ -1109,7 +1138,7 @@ public class ItemGun extends Item implements IPaintableItem
 	{
 		return true;
 	}
-	
+
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
@@ -1133,7 +1162,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 		return type.secondaryFunction != EnumSecondaryFunction.MELEE;
 	}
-	
+
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
 	{
@@ -1157,7 +1186,7 @@ public class ItemGun extends Item implements IPaintableItem
 	{
 		return true;
 	}
-	
+
 	// ----------------- Paintjobs -----------------
 	
 	@Override

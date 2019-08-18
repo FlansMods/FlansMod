@@ -1,9 +1,0 @@
-Name Orange Nerf Vest
-ShortName nerfOrangeVest
-Icon NerfOrangeVest
-Colour 255 255 255
-Type Body
-Defence 0.1
-ArmourTexture NerfOrange
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

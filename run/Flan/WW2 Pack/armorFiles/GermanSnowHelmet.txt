@@ -1,7 +1,0 @@
-Name German WW2 Snow Helmet
-ShortName germanSnowHelmet
-Icon GermanSnowHelmet
-Colour 255 255 255
-Type Helmet
-Defence 0.1
-ArmourTexture GermanSnow

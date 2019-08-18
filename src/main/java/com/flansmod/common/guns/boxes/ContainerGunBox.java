@@ -32,12 +32,12 @@ public class ContainerGunBox extends Container
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
-	{
+    {
 		ItemStack stack = ItemStack.EMPTY.copy();
 		Slot currentSlot = inventorySlots.get(slotID);
 
 		if(currentSlot != null && currentSlot.getHasStack())
-		{
+        {
 			ItemStack slotStack = currentSlot.getStack();
 			stack = slotStack.copy();
 
@@ -46,40 +46,34 @@ public class ContainerGunBox extends Container
 				if(!mergeItemStack(slotStack, 0, 1, false))
 				{
 					return ItemStack.EMPTY.copy();
-				}
-			}
-			else
-			{
-				if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
-				{
-					return ItemStack.EMPTY.copy();
-				}
-			}
+                }
+            }
+            else
+            {
+                if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
+                {
+                    return null;
+                }
+            }
 
-			if(slotStack.getCount() == 0)
-			{
-				currentSlot.putStack(ItemStack.EMPTY.copy());
-			}
-			else
-			{
-				currentSlot.onSlotChanged();
-			}
+            if (slotStack.stackSize == 0)
+            {
+                currentSlot.putStack(null);
+            }
+            else
+            {
+                currentSlot.onSlotChanged();
+            }
 
-			if(slotStack.getCount() == stack.getCount())
-			{
-				return null;
-			}
+            if (slotStack.stackSize == stack.stackSize)
+            {
+                return null;
+            }
 
-			currentSlot.onTake(player, slotStack);
-		}
+            currentSlot.onPickupFromSlot(player, slotStack);
+        }
 
-		return stack;
-	}
-
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer)
-	{
-		return true;
-	}
+        return stack;
+    }
 
 }

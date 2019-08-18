@@ -44,7 +44,7 @@ public class GuiGunBox extends GuiContainer
 	private int scroll;
 	private GuiButton craftLeft, craftRight, categoryLeft, categoryRight;
 	private GuiButton[] categories = new GuiButton[numCategories];
-	
+
 	public GuiGunBox(InventoryPlayer inventory, GunBoxType type)
 	{
 		super(new ContainerGunBox(inventory));
@@ -313,7 +313,7 @@ public class GuiGunBox extends GuiContainer
 		{
 			drawSlotInventory(entry.requiredParts.get(i + 4), x + 6 + 20 * i, y + 65);
 		}
-	}
+		}
 
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{

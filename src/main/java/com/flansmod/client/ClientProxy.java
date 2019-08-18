@@ -1,20 +1,53 @@
 package com.flansmod.client;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import com.flansmod.common.types.InfoType;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.EntityBlockDustFX;
+import net.minecraft.client.particle.EntityBreakingFX;
+import net.minecraft.client.particle.EntityBubbleFX;
+import net.minecraft.client.particle.EntityCloudFX;
+import net.minecraft.client.particle.EntityCritFX;
+import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.EntityDropParticleFX;
+import net.minecraft.client.particle.EntityEnchantmentTableParticleFX;
+import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityFireworkSparkFX;
+import net.minecraft.client.particle.EntityFishWakeFX;
+import net.minecraft.client.particle.EntityFlameFX;
+import net.minecraft.client.particle.EntityFootStepFX;
+import net.minecraft.client.particle.EntityHeartFX;
+import net.minecraft.client.particle.EntityHugeExplodeFX;
+import net.minecraft.client.particle.EntityLargeExplodeFX;
+import net.minecraft.client.particle.EntityLavaFX;
+import net.minecraft.client.particle.EntityNoteFX;
+import net.minecraft.client.particle.EntityPortalFX;
+import net.minecraft.client.particle.EntityReddustFX;
+import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.particle.EntitySnowShovelFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
+import net.minecraft.client.particle.EntitySplashFX;
+import net.minecraft.client.particle.EntitySuspendFX;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -35,6 +68,19 @@ import net.minecraftforge.fml.common.discovery.ModCandidate;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ReportedException;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLModContainer;
+import cpw.mods.fml.common.MetadataCollection;
+import cpw.mods.fml.common.discovery.ContainerType;
+import cpw.mods.fml.common.discovery.ModCandidate;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -61,8 +107,6 @@ import com.flansmod.client.model.RenderFlag;
 import com.flansmod.client.model.RenderFlagpole;
 import com.flansmod.client.model.RenderGrenade;
 import com.flansmod.client.model.RenderGun;
-import com.flansmod.client.model.RenderGunItem;
-import com.flansmod.client.model.RenderItemHolder;
 import com.flansmod.client.model.RenderMG;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.model.RenderNull;
@@ -70,7 +114,6 @@ import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
 import com.flansmod.common.CommonProxy;
-import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -82,6 +125,7 @@ import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EntityWheel;
+import com.flansmod.common.driveables.EnumPlaneMode;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.EntityAAGun;
@@ -89,12 +133,14 @@ import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.guns.GrenadeType;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.boxes.BlockGunBox;
-import com.flansmod.common.guns.boxes.BoxType;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBuyArmour;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
+import com.flansmod.common.network.PacketGiveItem;
 import com.flansmod.common.network.PacketRepairDriveable;
 import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.teams.ArmourBoxType;
@@ -315,7 +361,9 @@ public class ClientProxy extends CommonProxy
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasGear)
 					player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.gearKey.getKeyCode()) + " to switch the gear"));
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasDoor)
-					player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.doorKey.getKeyCode()) + " to switch the doors"));
+					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.doorKey.getKeyCode()) + " to switch the doors"));
+				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).mode == EnumPlaneMode.VTOL)
+					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch VTOL mode"));					
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasWing)
 					player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch the wings"));
 			}
@@ -448,6 +496,18 @@ public class ClientProxy extends CommonProxy
 	{
 		return player == FMLClientHandler.instance().getClient().player;
 	}
+
+	@Override
+	public EntityPlayer getThePlayer()
+	{
+		return FMLClientHandler.instance().getClient().thePlayer;
+	}
+	
+	@Override
+	public boolean isOnSameTeamClientPlayer(EntityLivingBase entity)
+	{
+		return FMLClientHandler.instance().getClient().thePlayer.isOnSameTeam(entity);
+	}
 	
 	/* Gun and armour box crafting methods */
 	@Override
@@ -464,6 +524,13 @@ public class ClientProxy extends CommonProxy
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyArmour(box.shortName, shortName, piece));
 		PlayerData data = PlayerHandler.getPlayerData(Minecraft.getMinecraft().player);
 		data.shootTimeLeft = data.shootTimeRight = 10;
+	}
+	
+	@Override
+	public void addItem(EntityPlayer player, int id){
+		super.addItem(player, id);
+		if(player.worldObj.isRemote)
+			FlansMod.getPacketHandler().sendToServer(new PacketGiveItem(57));
 	}
 	
 	@Override

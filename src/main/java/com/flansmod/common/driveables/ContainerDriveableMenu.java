@@ -15,10 +15,10 @@ public class ContainerDriveableMenu extends Container
 		this(inventoryplayer, worldy, false, null);
 	}
 	
-	public ContainerDriveableMenu(InventoryPlayer inventoryplayer, World worldy, boolean fuel, EntityDriveable planey)
-	{
+    public ContainerDriveableMenu(InventoryPlayer inventoryplayer, World worldy, boolean fuel, EntityDriveable planey)
+    {
 		inventory = inventoryplayer;
-		world = worldy;
+        world = worldy;
 		plane = planey;
 		isFuel = fuel;
 		
@@ -99,5 +99,5 @@ public class ContainerDriveableMenu extends Container
 	public EntityDriveable plane;
 	public boolean isFuel;
 	public InventoryPlayer inventory;
-	public World world;
+    public World world;
 }

@@ -36,6 +36,8 @@ public class ArmourType extends InfoType
 	 * If true, then the player gets a night vision buff every couple of seconds
 	 */
 	public boolean nightVision = false;
+	/** If true, then the player gets a invisiblity buff every couple of seconds */
+	public boolean invisible = false;
 	/**
 	 * The overlay to display when using this helmet. Textures are pulled from the scopes directory
 	 */
@@ -48,10 +50,20 @@ public class ArmourType extends InfoType
 	 * If ture, the player will not receive fall damage
 	 */
 	public boolean negateFallDamage = false;
-	
+	/** If true, the player will not receive fire damage */
+	public boolean fireResistance = false;
+	/** If true, the player can breath under water */
+	public boolean waterBreathing = false;
+	/** If true, the player can walk on water */
+	public boolean onWaterWalking = false;
+	/** If true, the armor has durability */
+	public boolean hasDurability = false;
+	/** The durability for the piece of armor */
+	public int durability = 0;
+
 	@SideOnly(Side.CLIENT)
 	public ModelCustomArmour model;
-	
+
 	public ArmourType(TypeFile file)
 	{
 		super(file);
@@ -83,6 +95,7 @@ public class ArmourType extends InfoType
 			
 			defence = Read(split, "DamageReduction", defence);
 			defence = Read(split, "Defence", defence);
+			invisible = Read(split, "Invisible", invisible);
 			moveSpeedModifier = Read(split, "MoveSpeedModifier", moveSpeedModifier);
 			moveSpeedModifier = Read(split, "Slowness", moveSpeedModifier);
 			jumpModifier = Read(split, "JumpModifier", jumpModifier);

@@ -1,5 +1,7 @@
 package com.flansmod.common.driveables;
 
+import java.util.ArrayList;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.flansmod.common.guns.BulletType;
@@ -18,6 +20,7 @@ public class DriveablePart
 	 * Keeps track of whether death code has been called or not
 	 */
 	public boolean dead;
+	public EntityDriveable owner;
 	
 	public DriveablePart(EnumDriveablePart e, CollisionBox b)
 	{
@@ -39,6 +42,7 @@ public class DriveablePart
 			health = 0;
 			dead = true;
 		}
+		this.owner = driveable;
 	}
 	
 	public void writeToNBT(NBTTagCompound tags)
@@ -152,22 +156,194 @@ public class DriveablePart
 		{
 			if(origin.y < box.y) //Check face y = o.y
 			{
-				float intersectTime = (box.y - origin.y) / motion.y;
-				float intersectX = origin.x + motion.x * intersectTime;
-				float intersectZ = origin.z + motion.z * intersectTime;
+				float intersectTime = (box.y - origin.y);
+				float intersectX = origin.x * intersectTime;
+				float intersectZ = origin.z * intersectTime;
 				if(intersectX >= box.x && intersectX <= box.x + box.w && intersectZ >= box.z && intersectZ <= box.z + box.d)
 					return new DriveableHit(driveable, type, intersectTime);
 			}
 			else if(origin.y > box.y + box.h) //Check face x = box.y + box.h
 			{
-				float intersectTime = (box.y + box.h - origin.y) / motion.y;
-				float intersectX = origin.x + motion.x * intersectTime;
-				float intersectZ = origin.z + motion.z * intersectTime;
+				float intersectTime = (box.y + box.h - origin.y);
+				float intersectX = origin.x * intersectTime;
+				float intersectZ = origin.z * intersectTime;
 				if(intersectX >= box.x && intersectX <= box.x + box.w && intersectZ >= box.z && intersectZ <= box.z + box.d)
 					return new DriveableHit(driveable, type, intersectTime);
 			}
 		}
 		
+		return null;
+	}
+
+	
+	public RidingEntityPosition rayTraceRider(EntityDriveable driveable, CollisionTest tester)
+	{
+		if(box == null || health <= 0 || dead)
+			return null;
+		if(!driveable.canHitPart(type))
+			return null;
+		
+		double distance = 10;
+		Vector3f collisionPoint = new Vector3f(0,0,0);
+		int surface = 0;
+		
+		Vector3f pos = new Vector3f(driveable.posX, driveable.posY, driveable.posZ);
+		
+		RotatedAxes shift = driveable.axes;
+
+		//Define box verticies, where z > 0 is right. See shapeboxes in the toolbox for a visual reference
+		Vector3f p1 = shift.findLocalVectorGlobally(new Vector3f(box.x + box.w, box.y + box.h, box.z)); //Front upper left
+		Vector3f p2 = shift.findLocalVectorGlobally(new Vector3f(box.x + box.w, box.y + box.h, box.z + box.d)); //Front upper right
+		Vector3f p3 = shift.findLocalVectorGlobally(new Vector3f(box.x, box.y + box.h, box.z + box.d)); //Rear upper right
+		Vector3f p4 = shift.findLocalVectorGlobally(new Vector3f(box.x, box.y+ box.h, box.z)); //Rear upper left
+		Vector3f p5 = shift.findLocalVectorGlobally(new Vector3f(box.x + box.w, box.y, box.z)); //Front lower left
+		Vector3f p6 = shift.findLocalVectorGlobally(new Vector3f(box.x + box.w, box.y, box.z + box.d)); //Front lower right
+		Vector3f p7 = shift.findLocalVectorGlobally(new Vector3f(box.x, box.y, box.z + box.d)); //Rear lower right
+		Vector3f p8 = shift.findLocalVectorGlobally(new Vector3f(box.x, box.y, box.z)); //Rear lower left
+		
+		if(type == EnumDriveablePart.turret && driveable.seats[0] != null)
+		{
+			//Define box verticies, where z > 0 is right. See shapeboxes in the toolbox for a visual reference
+			p1 = driveable.getPositionOnTurret(new Vector3f(box.x + box.w, box.y + box.h, box.z), false); //Front upper left
+			p2 = driveable.getPositionOnTurret(new Vector3f(box.x + box.w, box.y + box.h, box.z + box.d), false); //Front upper right
+			p3 = driveable.getPositionOnTurret(new Vector3f(box.x, box.y + box.h, box.z + box.d), false); //Rear upper right
+			p4 = driveable.getPositionOnTurret(new Vector3f(box.x, box.y+ box.h, box.z), false); //Rear upper left
+			p5 = driveable.getPositionOnTurret(new Vector3f(box.x + box.w, box.y, box.z), false); //Front lower left
+			p6 = driveable.getPositionOnTurret(new Vector3f(box.x + box.w, box.y, box.z + box.d), false); //Front lower right
+			p7 = driveable.getPositionOnTurret(new Vector3f(box.x, box.y, box.z + box.d), false); //Rear lower right
+			p8 = driveable.getPositionOnTurret(new Vector3f(box.x, box.y, box.z), false); //Rear lower left
+		}
+		
+		//Check top face
+		double topFaceDist = 100;
+
+		tester.checkTriangle(tester, p3, p2, p1);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			collisionPoint = tester.intersectionPoint;
+			surface = 1;
+			tester.part = type;
+		}
+			
+		tester.checkTriangle(tester, p4, p3, p1);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			collisionPoint = tester.intersectionPoint;
+			surface = 1;
+			tester.part = type;
+		}
+		
+		if(tester.didCollide){
+			tester.isOnTop = true;
+			topFaceDist = tester.nearestDistance;
+		}
+		
+		
+		//Check front face
+		tester.checkTriangle(tester, p1, p2, p6);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 2;
+			tester.part = type;
+		}
+		tester.checkTriangle(tester, p1, p6, p5);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 2;
+			tester.part = type;
+		}
+		
+		//Check rear face
+		tester.checkTriangle(tester, p3, p4, p8);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 3;
+			tester.part = type;
+		}
+		tester.checkTriangle(tester, p4, p8, p7);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 3;
+			tester.part = type;
+		}
+		
+		//Check Left Face
+		tester.checkTriangle(tester, p4, p1, p5);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 4;
+			tester.part = type;
+		}
+		tester.checkTriangle(tester, p1, p5, p8);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 4;
+			tester.part = type;
+		}
+		
+		//Check right face
+		tester.checkTriangle(tester, p2, p3, p7);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 5;
+			tester.part = type;
+		}
+		tester.checkTriangle(tester, p3, p7, p6);
+		if(tester.didCollide && tester.nearestDistance < distance)
+		{
+			distance = tester.nearestDistance;
+			collisionPoint = tester.intersectionPoint;
+			surface = 5;
+			tester.part = type;
+		}
+		
+		if(tester.nearestDistance < topFaceDist) tester.isOnTop = false;
+		
+		if(surface == 1) tester.isOnTop = true;
+		/*
+		Vector3f.add(p1, pos, p1);
+		Vector3f.add(p2, pos, p2);
+		Vector3f.add(p3, pos, p3);
+		Vector3f.add(p4, pos, p4);
+		Vector3f.add(p5, pos, p5);
+		Vector3f.add(p6, pos, p6);
+		Vector3f.add(p7, pos, p7);
+		Vector3f.add(p8, pos, p8);
+		
+		boolean muff = false;
+		String wank = "crit";
+		
+		if(muff)
+		{
+			driveable.worldObj.spawnParticle(wank, p1.x,p1.y,p1.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p2.x,p2.y,p2.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p3.x,p3.y,p3.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p4.x,p4.y,p4.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p5.x,p5.y,p5.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p6.x,p6.y,p6.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p7.x,p7.y,p7.z, 0,0,0);
+			driveable.worldObj.spawnParticle(wank, p8.x,p8.y,p8.z, 0,0,0);
+		}
+		**/
+		
+		if(tester.didCollide)
+		{
+			return new RidingEntityPosition(collisionPoint.x, collisionPoint.y, collisionPoint.z, 1, distance, type);
+		}
 		return null;
 	}
 	
@@ -177,11 +353,21 @@ public class DriveablePart
 	public void hitByBullet(BulletType type, float damage)
 	{
 		//Perform damage code
-		health -= damage * type.damageVsDriveable;
-		if(type.setEntitiesOnFire)
+		if(bullet != null)
 		{
-			fireTime = 20;
-			onFire = true;
+			if(hit.driveable instanceof EntityPlane)
+			{
+				health -= bullet.damage * bullet.type.damageVsPlanes;
+			}
+			else
+			{
+				health -= bullet.damage * bullet.type.damageVsVehicles;
+			}
+			if(bullet.type.setEntitiesOnFire)
+			{
+				fireTime = 20;
+				onFire = true;
+			}
 		}
 	}
 	
@@ -239,6 +425,10 @@ public class DriveablePart
 		{
 			fireTime = 20;
 			onFire = true;
+		}
+		if(health<0)
+		{
+			health = 0;
 		}
 		return health <= 0;
 	}

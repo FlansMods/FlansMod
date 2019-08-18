@@ -59,7 +59,7 @@ public class BlockGunBox extends Block
 				if(numMatchingStuff < check.getCount())
 				{
 					canBuy = false;
-				}
+			}
 			}
 			if(canBuy)
 			{
@@ -72,8 +72,8 @@ public class BlockGunBox extends Block
 						if(amountLeft > 0 && stack != null && !stack.isEmpty() && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
 						{
 							amountLeft -= inventory.decrStackSize(j, amountLeft).getCount();
-						}
 					}
+				}
 				}
 				ItemStack gunStack = new ItemStack(entry.type.item);
 				if(entry.type instanceof GunType)
@@ -104,7 +104,34 @@ public class BlockGunBox extends Block
 			}
 		}
 	}
-	
+
+	private GunBoxEntry searchFor(InfoType item)
+	{
+		for(GunPage page: type.gunPages)
+		{
+			for(GunBoxEntry entry: page.gunList)
+			{
+				if(entry.type == item)
+				{
+					return entry;
+				}
+				else
+				{
+					if(!entry.isAmmoNullOrEmpty())
+					{
+						for(GunBoxEntry ammoEntry: entry.ammoEntryList)
+						{
+							if(ammoEntry.type == item)
+								return ammoEntry;
+						}
+					}
+				}
+			}
+		}
+
+		return null; //No InfoType was found
+	}
+
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float par7, float par8, float par9)
 	{

@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageCodec;
+import java.util.EnumMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -70,11 +70,11 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			FlansMod.log.warn("Tried to register packet " + cl.getCanonicalName() + " after mod initialisation.");
 			return false;
 		}
-		
+
 		packets.add(cl);
 		return true;
 	}
-	
+
 	@Override
 	protected void encode(ChannelHandlerContext ctx, PacketBase msg, List<Object> out) throws Exception
 	{
@@ -183,7 +183,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	public void initialise()
 	{
 		channels = NetworkRegistry.INSTANCE.newChannel("FlansMod", this);
-		
+
 		registerPacket(PacketAAGunAngles.class);
 		registerPacket(PacketBaseEdit.class);
 		registerPacket(PacketBreakSound.class);
@@ -196,18 +196,25 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketDriveableKey.class);
 		registerPacket(PacketDriveableKeyHeld.class);
 		registerPacket(PacketFlak.class);
+		registerPacket(PacketExplosion.class);
 		registerPacket(PacketGunFire.class);	
+		registerPacket(PacketGunMode.class);
 		registerPacket(PacketGunPaint.class);
+		registerPacket(PacketGunSpread.class);
 		registerPacket(PacketKillMessage.class);
 		registerPacket(PacketMechaControl.class);
 		registerPacket(PacketMGFire.class);
 		registerPacket(PacketMGMount.class);
+		registerPacket(PacketOffHandGunInfo.class);
+		registerPacket(PacketParticle.class);
 		registerPacket(PacketPlaneControl.class);
 		registerPacket(PacketPlaySound.class);
 		registerPacket(PacketReload.class);
 		registerPacket(PacketRepairDriveable.class);
 		registerPacket(PacketRoundFinished.class);
 		registerPacket(PacketSeatUpdates.class);
+		registerPacket(PacketSeatCheck.class);
+		registerPacket(PacketSelectOffHandGun.class);
 		registerPacket(PacketTeamInfo.class);
 		registerPacket(PacketTeamSelect.class);
 		registerPacket(PacketVehicleControl.class);
@@ -221,6 +228,12 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketBulletTrail.class);
 		registerPacket(PacketHitMarker.class);
 		registerPacket(PacketBlockHitEffect.class);
+		registerPacket(PacketFlashBang.class);
+		registerPacket(PacketImpactPoint.class);
+		registerPacket(PacketModConfig.class);
+		registerPacket(PacketGunRecoil.class);
+		registerPacket(PacketGunState.class);
+		// TODO FM+ Alphabetise
 	}
 	
 	/**
@@ -231,7 +244,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	{
 		if(modInitialised)
 			return;
-		
+
 		modInitialised = true;
 		//Define our comparator on the fly and apply it to our list
 		packets.sort((c1, c2) ->
@@ -242,7 +255,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			return com;
 		});
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private EntityPlayer getClientPlayer()
 	{
@@ -296,7 +309,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		channels.get(Side.CLIENT).writeAndFlush(packet);
 	}
-	
+
 	//Vanilla packets follow
 	
 	/**

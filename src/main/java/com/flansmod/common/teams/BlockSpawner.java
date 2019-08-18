@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.flansmod.common.FlansMod;
 
-public class BlockSpawner extends BlockContainer
+public class BlockSpawner extends BlockContainer 
 {
 	protected static final AxisAlignedBB CARPET_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D);
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);

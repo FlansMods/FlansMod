@@ -7,15 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.flansmod.common.guns.boxes.ContainerGunBox;
+import com.flansmod.common.types.InfoType;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.driveables.ContainerDriveableInventory;
 import com.flansmod.common.driveables.ContainerDriveableMenu;
 import com.flansmod.common.driveables.DriveablePart;
@@ -116,8 +121,22 @@ public class CommonProxy
 	{
 		return false;
 	}
+	public EntityPlayer getThePlayer()
+	{
+		return null;
+	}
+	
+	
+	public boolean isOnSameTeamClientPlayer(EntityLivingBase entity)
+	{
+		return false;
+	}
 	
 	public void buyGun(GunBoxType type, InfoType gun)
+	{
+	}
+
+	public void buyAmmo(GunBoxType box, int ammo, int type)
 	{
 	}
 	
@@ -230,7 +249,7 @@ public class CommonProxy
 			{
 				PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 				//Check its an engine
-				if(partType.category == EnumPartCategory.ENGINE && partType.worksWith.contains(EnumType.getFromObject(type)))
+				if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(type)))
 				{
 					//If we already have engines of this type, add these ones to the stack
 					if(engines.containsKey(partType))
@@ -383,5 +402,10 @@ public class CommonProxy
 	public void buyArmour(String shortName, int piece, ArmourBoxType type)
 	{
 	
+	}
+
+	public float getMouseSensitivity()
+	{
+		return 0.5F;
 	}
 }

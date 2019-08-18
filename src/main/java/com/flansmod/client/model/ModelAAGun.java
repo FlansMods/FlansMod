@@ -15,7 +15,7 @@ public class ModelAAGun extends ModelBase
 		{
 			aBaseModel.render(f5);
 		}
-	}
+    }
 	
 	public void renderGun(float f, float f1, float f2, float f3, float f4, float f5, EntityAAGun aa)
 	{
@@ -45,10 +45,10 @@ public class ModelAAGun extends ModelBase
 				barrelModel[i][j].rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
 				barrelModel[i][j].render(f5);
 			}
-		}
+        }
 		
 		for(int i = 0; i < ammoModel.length; i++)
-		{
+        {
 			if(aa.ammo[i] != null)
 			{
 				for(int j = 0; j < ammoModel[i].length; j++)
@@ -104,13 +104,13 @@ public class ModelAAGun extends ModelBase
 			}
 		}
 	}
-	
-	public ModelRendererTurbo baseModel[] = new ModelRendererTurbo[0];        //The base which stays put
-	public ModelRendererTurbo seatModel[] = new ModelRendererTurbo[0];            //The bit which swivels around the yaw axis, but which does not pitch
-	public ModelRendererTurbo gunModel[] = new ModelRendererTurbo[0];            //The bit of the gun that points where you look, but doesn't move
-	public ModelRendererTurbo barrelModel[][] = new ModelRendererTurbo[0][0];        //The end of the barrel that recoils
-	public ModelRendererTurbo ammoModel[][] = new ModelRendererTurbo[0][0];        //The magazines for each barrel.
-	public ModelRendererTurbo gunsightModel[] = new ModelRendererTurbo[0];    //The gunsight for the Gun.
-	
+
+    public ModelRendererTurbo baseModel[] = new ModelRendererTurbo[0];		//The base which stays put
+	public ModelRendererTurbo seatModel[] = new ModelRendererTurbo[0];			//The bit which swivels around the yaw axis, but which does not pitch
+	public ModelRendererTurbo gunModel[] = new ModelRendererTurbo[0];			//The bit of the gun that points where you look, but doesn't move
+	public ModelRendererTurbo barrelModel[][] = new ModelRendererTurbo[0][0];		//The end of the barrel that recoils
+	public ModelRendererTurbo ammoModel[][] = new ModelRendererTurbo[0][0];		//The magazines for each barrel.
+	public ModelRendererTurbo gunsightModel[] = new ModelRendererTurbo[0];	//The gunsight for the Gun.
+
 	public int barrelX, barrelY, barrelZ;
 }

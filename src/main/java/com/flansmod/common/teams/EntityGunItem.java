@@ -69,16 +69,16 @@ public class EntityGunItem extends EntityItemCustomRender
 	}
 	
 	@Override
-	public boolean canBeCollidedWith()
-	{
-		return true;
-	}
+    public boolean canBeCollidedWith()
+    {
+        return true;
+    }
 	
 	@Override
-	protected boolean canTriggerWalking()
-	{
-		return true;
-	}
+    protected boolean canTriggerWalking()
+    {
+        return true;
+    }
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox()

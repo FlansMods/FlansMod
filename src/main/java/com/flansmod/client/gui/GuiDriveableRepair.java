@@ -1,6 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -49,7 +48,6 @@ public class GuiDriveableRepair extends GuiScreen
 	
 	public GuiDriveableRepair(EntityPlayer player)
 	{
-		super();
 		driver = player;
 		driving = ((EntitySeat)player.getRidingEntity()).driveable;
 		for(DriveablePart part : driving.getDriveableData().parts.values())
@@ -63,7 +61,7 @@ public class GuiDriveableRepair extends GuiScreen
 		}
 	}
 	
-	@Override
+    @Override
 	public void initGui()
 	{
 		super.initGui();
@@ -73,10 +71,10 @@ public class GuiDriveableRepair extends GuiScreen
 		}
 		itemRenderer = mc.getRenderItem();
 	}
-
+    
 	@Override
 	protected void actionPerformed(GuiButton button)
-	{
+    {
 		FlansMod.proxy.repairDriveable(driver, driving, partsToDraw.get(button.id));
 	}
 
@@ -207,8 +205,8 @@ public class GuiDriveableRepair extends GuiScreen
 			y += broken ? 40 : 20;
 		}
 		super.drawScreen(i, j, f);
-	}
-
+    }	
+    
 	@Override
 	protected void mouseClicked(int i, int j, int k) throws IOException
 	{
@@ -235,7 +233,7 @@ public class GuiDriveableRepair extends GuiScreen
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
 	}
-
+        
 	@Override
 	public boolean doesGuiPauseGame()
 	{

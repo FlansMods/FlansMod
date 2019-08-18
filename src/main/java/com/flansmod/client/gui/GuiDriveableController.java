@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,19 +32,19 @@ public class GuiDriveableController extends GuiScreen
 	public void initGui()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
+		mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
 	}
 	
 	@Override
 	public void onGuiClosed()
-	{
+    {
 		mc.mouseHelper.ungrabMouseCursor();
 		mc.setRenderViewEntity(mc.player);
 	}
 	
 	@Override
-	public void handleMouseInput()
-	{
+    public void handleMouseInput()
+    {
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
 		if(player != mc.player)
 		{
@@ -87,9 +88,20 @@ public class GuiDriveableController extends GuiScreen
 	
 	@Override
 	protected void keyTyped(char c, int i)
-	{
-
-		
+    {
+		if(i == 1)
+		{
+            mc.displayGuiScreen(null);
+			mc.displayInGameMenu();		
+		}
+		if(i == 59)
+		{
+			mc.gameSettings.hideGUI = !mc.gameSettings.hideGUI;
+		}
+		if(i == 61)
+		{
+			mc.gameSettings.showDebugInfo = !mc.gameSettings.showDebugInfo;
+		}
 		if(i == 63)
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
@@ -97,10 +109,30 @@ public class GuiDriveableController extends GuiScreen
 				mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
 			else mc.setRenderViewEntity(mc.player);
 		}
-		if(i == KeyInputHandler.debugKey.getKeyCode())
+		if(i == 66)
+		{
+			mc.gameSettings.smoothCamera = !mc.gameSettings.smoothCamera;
+		}
+		if(i == mc.gameSettings.keyBindInventory.getKeyCode())
+		{
+			mc.displayGuiScreen(new GuiInventory(mc.thePlayer));
+		}
+		if(i == mc.gameSettings.keyBindDrop.getKeyCode())
+		{
+			//mc.thePlayer.dropCurrentItem();
+		}
+		if(i == mc.gameSettings.keyBindChat.getKeyCode())
+		{
+			mc.displayGuiScreen(new GuiChat());
+		}
+		if(i == mc.gameSettings.keyBindCommand.getKeyCode())
+		{
+			mc.displayGuiScreen(new GuiChat("/"));
+		}
+		/*if(i == KeyInputHandler.debugKey.getKeyCode())
 		{
 			FlansMod.DEBUG = !FlansMod.DEBUG;
-		}
+		}*/
 		if(i == KeyInputHandler.reloadModelsKey.getKeyCode())
 		{
 			FlansModClient.reloadModels(false);
@@ -117,9 +149,9 @@ public class GuiDriveableController extends GuiScreen
 		else mc.setRenderViewEntity(mc.player);
 	}
 	
-	@Override
+    @Override
 	public void handleInput()
-	{
+    {
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
 		if(player != mc.player)
 		{
@@ -142,7 +174,7 @@ public class GuiDriveableController extends GuiScreen
 			{
 			}
 		}
-		
+
 		int l = Mouse.getDX();
 		int m = Mouse.getDY();
 		
@@ -212,19 +244,33 @@ public class GuiDriveableController extends GuiScreen
 			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.modeKey.getKeyCode()))
 			{
-				plane.pressKey(15, player, true);
-			}
-			
+				plane.pressKey(15, player);
+			}				
+			//if(FlansMod.proxy.keyDown(KeyInputHandler.trimKey.getKeyCode()))
+			//{
+			//	plane.pressKey(16, player);
+			//}				
+			if(FlansMod.proxy.keyDown(KeyInputHandler.flareKey.getKeyCode()))
+			{
+				plane.pressKey(18, player);
+			}				
+	
 		}
 		else
 		{
-			mc.displayGuiScreen(null);
-		}
-	}
-	
+            mc.displayGuiScreen(null);
+        }
+    }
+	   
 	@Override
+	public void drawBackground(int i)
+    {
+		//Plane gauges overlay
+    }
+
+    @Override
 	public boolean doesGuiPauseGame()
-	{
-		return false;
-	}
+    {
+        return false;
+    }
 }

@@ -86,6 +86,8 @@ public class PlayerData
 	 * When the player shoots a burst fire weapon, one shot is fired immediately and this counter keeps track of how many more should be fired
 	 */
 	public int burstRoundsRemainingLeft = 0, burstRoundsRemainingRight = 0;
+
+	public boolean isAmmoEmpty;
 	
 	// Handed getters and setters
 	public float GetShootTime(EnumHand hand)
@@ -186,7 +188,7 @@ public class PlayerData
 		}
 		
 		//Move all snapshots along one place
-		System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
+        System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
 	}

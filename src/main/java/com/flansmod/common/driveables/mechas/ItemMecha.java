@@ -45,9 +45,13 @@ public class ItemMecha extends Item implements IPaintableItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			lines.add(type.packName);
+		}
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
 		NBTTagCompound tags = getTagCompound(stack, world);
 		String engineName = tags.getString("Engine");
@@ -62,7 +66,7 @@ public class ItemMecha extends Item implements IPaintableItem
 	{
 		return true;
 	}
-	
+
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
 		if(stack.getTagCompound() == null)
@@ -73,7 +77,7 @@ public class ItemMecha extends Item implements IPaintableItem
 				stack.setTagCompound(tags);
 				tags.setString("Type", type.shortName);
 				tags.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
-			}
+		}
 		}
 		return stack.getTagCompound();
 	}
@@ -146,7 +150,7 @@ public class ItemMecha extends Item implements IPaintableItem
 	}
 
 	@Override
-	public PaintableType GetPaintableType()
+	public PaintableType GetPaintableType() 
 	{
 		return type;
 	}

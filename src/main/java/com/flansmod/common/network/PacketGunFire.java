@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 
 public class PacketGunFire extends PacketBase

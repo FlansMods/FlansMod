@@ -38,9 +38,9 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 {
 	public VehicleType type;
 	
-	public ItemVehicle(VehicleType type1)
-	{
-		maxStackSize = 1;
+    public ItemVehicle(VehicleType type1)
+    {
+        maxStackSize = 1;
 		type = type1;
 		type.item = this;
 		setRegistryName(type.shortName);
@@ -53,7 +53,7 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 	{
 		return true;
 	}
-	
+
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
 		if(stack.getTagCompound() == null)
@@ -70,21 +70,21 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 		}
 		return stack.getTagCompound();
 	}
-	
+
 	private NBTTagCompound getOldTagCompound(ItemStack stack, World world)
-	{
+    {
 		try
 		{
 			File file1 = world.getSaveHandler().getMapFileFromName("vehicle_" + stack.getItemDamage());
-			FileInputStream fileinputstream = new FileInputStream(file1);
-			NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
-			for(EnumDriveablePart part : EnumDriveablePart.values())
-			{
-				tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-				tags.setBoolean(part.getShortName() + "_Fire", false);
-			}
-			fileinputstream.close();
-			return tags;
+	        FileInputStream fileinputstream = new FileInputStream(file1);
+	        NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
+	    	for(EnumDriveablePart part : EnumDriveablePart.values())
+	    	{
+	    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+	    		tags.setBoolean(part.getShortName() + "_Fire", false);
+	    	}
+	        fileinputstream.close();
+	        return tags;
 		}
 		catch(IOException e)
 		{
@@ -92,14 +92,14 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 			FlansMod.log.throwing(e);
 			return null;
 		}
-	}
-	
+    }
+
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
 		NBTTagCompound tags = getTagCompound(stack, world);
 		String engineName = tags.getString("Engine");
@@ -142,8 +142,23 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 				{
 					itemstack.setCount(itemstack.getCount() - 1);
 				}
+
+				return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+			if(!type.placeableOnLand && type.placeableOnSponge && block instanceof BlockSponge)
+            {
+            	if(!world.isRemote)
+	            {
+					world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
+	            }
+				if(!entityplayer.capabilities.isCreativeMode)
+				{
+					itemstack.stackSize--;
+				}
+
+				return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+            }
+			
 		}
 		return new ActionResult<>(EnumActionResult.PASS, itemstack);
 	}

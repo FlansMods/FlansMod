@@ -36,10 +36,10 @@ import com.flansmod.common.types.PaintableType;
 public class ItemPlane extends Item implements IPaintableItem
 {
 	public PlaneType type;
-	
-	public ItemPlane(PlaneType type1)
-	{
-		maxStackSize = 1;
+
+    public ItemPlane(PlaneType type1)
+    {
+        maxStackSize = 1;
 		type = type1;
 		type.item = this;
 		setRegistryName(type.shortName);
@@ -52,7 +52,7 @@ public class ItemPlane extends Item implements IPaintableItem
 	{
 		return true;
 	}
-	
+
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
 		if(stack.getTagCompound() == null)
@@ -69,23 +69,23 @@ public class ItemPlane extends Item implements IPaintableItem
 		}
 		return stack.getTagCompound();
 	}
-	
+
 	private NBTTagCompound getOldTagCompound(ItemStack stack, World world)
-	{
+    {
 		try
 		{
 			File file1 = world.getSaveHandler().getMapFileFromName("plane_" + stack.getItemDamage());
 			if(file1 != null && file1.exists())
 			{
-				FileInputStream fileinputstream = new FileInputStream(file1);
-				NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
-				for(EnumDriveablePart part : EnumDriveablePart.values())
-				{
-					tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-					tags.setBoolean(part.getShortName() + "_Fire", false);
-				}
-				fileinputstream.close();
-				return tags;
+		        FileInputStream fileinputstream = new FileInputStream(file1);
+		        NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
+		    	for(EnumDriveablePart part : EnumDriveablePart.values())
+		    	{
+		    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+		    		tags.setBoolean(part.getShortName() + "_Fire", false);
+		    	}
+		        fileinputstream.close();
+		        return tags;
 			}
 		}
 		catch(IOException e)
@@ -100,13 +100,26 @@ public class ItemPlane extends Item implements IPaintableItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
-		NBTTagCompound tags = getTagCompound(stack, world);
-		String engineName = tags.getString("Engine");
-		PartType part = PartType.getPart(engineName);
-		if(part != null)
-			lines.add(part.name);
+		String paintName = type.getPaintjob(stack.getItemDamage()).displayName;		
+		if(!paintName.equals("default") && !paintName.isEmpty())
+			lines.add("\u00a7b\u00a7o" + paintName);
+
+		if(!type.packName.isEmpty())
+		{
+			lines.add("\u00a7o" + type.packName);
+		}
+		if(type.description != null)
+		{
+            Collections.addAll(lines, type.description.split("_"));
+		}
+
+		lines.add("");
+		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
+		PartType engine = PartType.getPart(tags.getString("Engine"));
+		if(engine != null)
+			lines.add("\u00a79Engine" + "\u00a77: " + engine.name);
 	}
-	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
 	{
@@ -146,6 +159,21 @@ public class ItemPlane extends Item implements IPaintableItem
 				
 				return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 			}
+			if(!type.placeableOnLand && type.placeableOnSponge && block instanceof BlockSponge)
+            {
+	            if(!world.isRemote)
+	            {
+	            	DriveableData data = getPlaneData(itemstack, world);
+	            	if(data != null)
+	            		world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
+	            }
+				if(!entityplayer.capabilities.isCreativeMode)
+				{
+					itemstack.stackSize--;
+				}
+
+				return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+            }
 		}
 		return new ActionResult<>(EnumActionResult.PASS, itemstack);
 	}

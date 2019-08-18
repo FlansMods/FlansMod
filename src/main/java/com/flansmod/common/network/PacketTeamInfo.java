@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
@@ -78,12 +78,13 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
-		data.writeBoolean(TeamsManager.canBreakGlass);
-		data.writeBoolean(TeamsManager.vehiclesNeedFuel);
-		data.writeBoolean(TeamsManager.driveablesBreakBlocks);
-		
+    	data.writeBoolean(TeamsManager.canBreakGlass);
+    	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
+    	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+    	data.writeBoolean(TeamsManager.allowVehicleZoom);
+    	
 		if(TeamsManager.getInstance().currentRound == null)
-		{
+    	{
 			writeUTF(data, "No Gametype");
 			data.writeInt(0);
 		}
@@ -212,6 +213,7 @@ public class PacketTeamInfo extends PacketBase
 			TeamsManager.canBreakGlass = data.readBoolean();
 			TeamsManager.vehiclesNeedFuel = data.readBoolean();
 			TeamsManager.driveablesBreakBlocks = data.readBoolean();
+			TeamsManager.allowVehicleZoom = data.readBoolean();
 			gametype = readUTF(data);
 			if(gametype.equals("No Gametype"))
 			{

@@ -1,7 +1,0 @@
-Name German WW2 Forest Helmet
-ShortName germanForestHelmet
-Icon GermanForestHelmet
-Colour 255 255 255
-Type Helmet
-Defence 0.1
-ArmourTexture GermanForest

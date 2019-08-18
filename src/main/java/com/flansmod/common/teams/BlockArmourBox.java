@@ -16,7 +16,7 @@ import com.flansmod.common.CraftingInstance;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
 
-public class BlockArmourBox extends Block
+public class BlockArmourBox extends Block 
 {
 	public ArmourBoxType type;
 	
@@ -61,7 +61,7 @@ public class BlockArmourBox extends Block
 	{
 		if(entityplayer.isSneaking())
 			return false;
-		entityplayer.openGui(FlansMod.INSTANCE, 11, world, pos.getX(), pos.getY(), pos.getZ());
+		entityplayer.openGui(FlansMod.INSTANCE, 11, world, i, j, k);
 		return true;
 	}
 }

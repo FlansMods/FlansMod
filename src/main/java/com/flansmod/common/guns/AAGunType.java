@@ -49,12 +49,26 @@ public class AAGunType extends InfoType
 	 */
 	public boolean shareAmmo = false;
 	
-	public static List<AAGunType> infoTypes = new ArrayList<>();
+	public boolean canShootHomingMissile = false;
+	public int countExplodeAfterShoot = -1;
+	public boolean isDropThis = true;
+
+	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 	
 	public AAGunType(TypeFile file)
 	{
 		super(file);
 		infoTypes.add(this);
+	}
+	
+	@Override
+	protected void preRead(TypeFile file) 
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file) 
+	{		
 	}
 	
 	@Override
@@ -131,6 +145,12 @@ public class AAGunType extends InfoType
 				gunnerY = Integer.parseInt(split[2]);
 				gunnerZ = Integer.parseInt(split[3]);
 			}
+			if(split[0].equals("CanShootHomingMissile"))
+				canShootHomingMissile = Boolean.parseBoolean(split[1]);
+			if (split[0].equals("CountExplodeAfterShoot"))
+				countExplodeAfterShoot = Integer.parseInt(split[1]);
+			if(split[0].equals("IsDropThis"))
+				isDropThis = Boolean.parseBoolean(split[1]);
 		}
 		catch(Exception e)
 		{
@@ -167,7 +187,13 @@ public class AAGunType extends InfoType
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
 	}
-	
+
+	@Override
+	public float GetRecommendedScale() 
+	{
+		return 50.0f;
+	}
+
 	@Override
 	public void addLoot(LootTableLoadEvent event)
 	{

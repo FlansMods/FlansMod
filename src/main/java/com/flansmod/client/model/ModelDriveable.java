@@ -2,18 +2,23 @@ package com.flansmod.client.model;
 
 import java.util.HashMap;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.OpenGlHelper;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelDriveable extends ModelBase
 {
 	public static final float pi = 3.14159265F;
 	public static final float tau = 2 * pi;
 	
-	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<>();
+	
+	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
 	public ModelRendererTurbo bodyModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
@@ -58,15 +63,15 @@ public class ModelDriveable extends ModelBase
 		gunModels.put(name, gunModel);
 	}
 	
-	protected void flip(ModelRendererTurbo[] model)
-	{
-		for(ModelRendererTurbo part : model)
+    protected void flip(ModelRendererTurbo[] model)
+    {
+    	for(ModelRendererTurbo part : model)
 		{
 			part.doMirror(false, true, true);
 			part.setRotationPoint(part.rotationPointX, -part.rotationPointY, -part.rotationPointZ);
 		}
-	}
-
+    }
+    
 	public void flipAll()
 	{
 		flip(bodyModel);

@@ -1,6 +1,7 @@
 package com.flansmod.common.guns.boxes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class GunBoxType extends BoxType
+public class GunBoxType extends InfoType
 {
 	public BlockGunBox block;
 	
@@ -31,6 +32,15 @@ public class GunBoxType extends BoxType
 	private GunBoxPage currentPage;
 	
 	public GunBoxPage defaultPage;
+
+	/** Custom GUI variables. Use an unsigned hex code for colors.*/
+	public String guiTexturePath;
+	public String gunBoxTextColor = "404040";
+	public String itemListTextColor = "404040";
+	public String itemTextColor= "404040";
+	public String pageTextColor = "FFFFFF";
+	public String buttonTextColor = "FFFFFF";
+	public String buttonTextHoverColor = "FFFFA0";
 	
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<>();
@@ -150,7 +160,7 @@ public class GunBoxType extends BoxType
 		}
 		return null;
 	}
-	
+
 	/* Reimported from old code
 	@Override
 	public void addRecipe(Item par1Item)

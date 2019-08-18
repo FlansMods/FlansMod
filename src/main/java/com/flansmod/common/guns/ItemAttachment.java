@@ -32,9 +32,17 @@ public class ItemAttachment extends Item implements IPaintableItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
+		String paintName = type.getPaintjob(stack.getItemDamage()).displayName;		
+		if(!paintName.equals("default") && !paintName.isEmpty())
+			lines.add("\u00a7b\u00a7o" + paintName);
+
+		if(!type.packName.isEmpty())
+		{
+			lines.add(type.packName);
+		}
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 	

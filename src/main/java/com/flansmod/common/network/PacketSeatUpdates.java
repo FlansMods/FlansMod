@@ -16,6 +16,7 @@ public class PacketSeatUpdates extends PacketBase
 {
 	public int entityId, seatId;
 	public float yaw, pitch;
+	public float playerYaw, playerPitch;
 	
 	public PacketSeatUpdates()
 	{
@@ -27,15 +28,19 @@ public class PacketSeatUpdates extends PacketBase
 		seatId = seat.seatInfo.id;
 		yaw = seat.looking.getYaw();
 		pitch = seat.looking.getPitch();
+		playerYaw = seat.playerLooking.getYaw();
+		playerPitch = seat.playerLooking.getPitch();
 	}
 	
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(entityId);
-		data.writeInt(seatId);
-		data.writeFloat(yaw);
-		data.writeFloat(pitch);
+    	data.writeInt(seatId);
+    	data.writeFloat(yaw);
+    	data.writeFloat(pitch);
+    	data.writeFloat(playerYaw);
+    	data.writeFloat(playerPitch);
 	}
 	
 	@Override
@@ -45,6 +50,8 @@ public class PacketSeatUpdates extends PacketBase
 		seatId = data.readInt();
 		yaw = data.readFloat();
 		pitch = data.readFloat();
+		playerYaw = data.readFloat();
+		playerPitch = data.readFloat();
 	}
 	
 	@Override
@@ -62,8 +69,10 @@ public class PacketSeatUpdates extends PacketBase
 		if(driveable != null)
 		{
 			driveable.getSeat(seatId).prevLooking = driveable.getSeat(seatId).looking.clone();
-			driveable.getSeat(seatId).looking.setAngles(yaw, pitch, 0F);
-			//If on the server, update all surrounding players with these new angles
+    		driveable.getSeat(seatId).looking.setAngles(yaw, pitch, 0F);
+			driveable.getSeat(seatId).prevPlayerLooking = driveable.getSeat(seatId).playerLooking.clone();
+    		driveable.getSeat(seatId).playerLooking.setAngles(playerYaw, playerPitch, 0F);
+    		//If on the server, update all surrounding players with these new angles
 			FlansMod.getPacketHandler().sendToAllAround(this, driveable.posX, driveable.posY, driveable.posZ, FlansMod.soundRange, driveable.dimension);
 		}
 	}
@@ -82,13 +91,16 @@ public class PacketSeatUpdates extends PacketBase
 				break;
 			}
 		}
+		
 		if(driveable != null)
 		{
 			//If this is the player who sent the packet in the first place, don't read it
 			if(driveable.getSeat(seatId) == null || driveable.getSeat(seatId).getControllingPassenger() == clientPlayer)
 				return;
 			driveable.getSeat(seatId).prevLooking = driveable.getSeat(seatId).looking.clone();
-			driveable.getSeat(seatId).looking.setAngles(yaw, pitch, 0F);
+    		driveable.getSeat(seatId).looking.setAngles(yaw, pitch, 0F);
+			driveable.getSeat(seatId).prevPlayerLooking = driveable.getSeat(seatId).playerLooking.clone();
+    		driveable.getSeat(seatId).playerLooking.setAngles(playerYaw, playerPitch, 0F);
 		}
 	}
 }

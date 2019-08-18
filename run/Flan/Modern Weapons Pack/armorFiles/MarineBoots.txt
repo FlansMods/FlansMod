@@ -1,7 +1,0 @@
-Name U.S. Marine Boots
-ShortName marineBoots
-Icon MarineBoots
-Colour 255 255 255
-Type Boots
-Defence 0.1
-ArmourTexture Marine

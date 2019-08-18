@@ -27,6 +27,10 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanItem
 {
 	public ArmourType type;
@@ -38,6 +42,14 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		type = t;
 		type.item = this;
 		setRegistryName(type.shortName);
+		if(t.durability > 0)
+		{
+			setMaxDamage(t.durability);
+		}
+		else if(FlansMod.breakableArmor == 1)
+		{
+			setMaxDamage(FlansMod.defaultArmorDurability);
+		}
 		setCreativeTab(FlansMod.tabFlanTeams);
 	}
 	
@@ -61,7 +73,12 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	@Override
 	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot)
 	{
-		//Do nothing to the armour. It should not break as that would leave the player's team ambiguous
+		//0 = Non-breakable, 1 = All breakable, 2 = Refer to armor config
+		int breakType = FlansMod.breakableArmor;
+		if(breakType == 2 && type.hasDurability || breakType == 1)
+		{
+			stack.damageItem(damage, entity);
+		}
 	}
 	
 	@Override
@@ -69,7 +86,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		return "flansmod:armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped defaultModel)
@@ -82,7 +99,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
 		if(Math.abs(type.jumpModifier - 1F) > 0.01F)
 			lines.add("\u00a73+" + (int)((type.jumpModifier - 1F) * 100F) + "% Jump Height");
@@ -90,8 +107,14 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 			lines.add("\u00a72+Smoke Protection");
 		if(type.nightVision)
 			lines.add("\u00a72+Night Vision");
+		if(type.invisible)
+			lines.add("\u00a72+Invisiblity");
 		if(type.negateFallDamage)
-			lines.add("\u00a72+Negates Fall Damage");
+			lines.add("\u00a72+Negates Fire Damage");
+		if(type.fireResistance)
+			lines.add("\u00a72+Fire Resistance");
+		if(type.waterBreathing)
+			lines.add("\u00a72+Water Breathing");
 	}
 	
 	protected static final UUID KNOCKBACK_RESIST_MODIFIER = UUID.fromString("77777777-645C-4F38-A497-9C13A33DB5CF");
@@ -127,15 +150,30 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		return type;
 	}
-	
+
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
-	{
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+    {
 		if(type.nightVision && FlansMod.ticker % 25 == 0)
 			player.addPotionEffect(new PotionEffect(Potion.getPotionById(16), 250)); // 16 = night vision
+		if(type.invisible && FlansMod.ticker % 25 == 0)
+			player.addPotionEffect(new PotionEffect(Potion.invisibility.id, 250));
 		if(type.jumpModifier > 1.01F && FlansMod.ticker % 25 == 0)
 			player.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 250, (int)((type.jumpModifier - 1F) * 2F), true, false)); // 8 = jump boost
 		if(type.negateFallDamage)
 			player.fallDistance = 0F;
-	}
+		if(type.fireResistance && FlansMod.ticker % 25 == 0)
+			player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 250));
+		if(type.waterBreathing && FlansMod.ticker % 25 == 0)
+			player.addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 250));
+		if(type.onWaterWalking)
+		{
+			if(player.isInWater())
+			{
+				player.capabilities.allowFlying = true;
+			}else{
+				player.capabilities.isFlying = false;
+			}
+		}
+    }
 }

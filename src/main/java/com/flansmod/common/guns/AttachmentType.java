@@ -40,6 +40,8 @@ public class AttachmentType extends PaintableType implements IScope
 	 * Flashlight strength between 0 and 15
 	 */
 	public int flashlightStrength = 12;
+	/** If true, disable the muzzle flash model */
+	public boolean disableMuzzleFlash = false;
 	
 	// Gun behaviour modifiers
 	/**
@@ -68,17 +70,42 @@ public class AttachmentType extends PaintableType implements IScope
 	 * tick
 	 */
 	public float reloadTimeMultiplier = 1F;
-	/**
-	 * If set to anything other than null, then this attachment will override
-	 * the weapon's default firing mode
-	 */
-	public EnumFireMode modeOverride = null;
 	
-	// Scope variables (These variables only come into play for scope
-	// attachments)
-	/**
-	 * The zoomLevel of this scope
-	 */
+	/** Movement speed modifier */
+	public float moveSpeedMultiplier = 1F;
+	/** If set to anything other than null, then this attachment will override the weapon's default firing mode */
+	public EnumFireMode modeOverride = null;
+
+	//Underbarrel functions
+	/** This variable controls whether the underbarrel is enabled */
+	public boolean secondaryFire = false;
+	/** The list of bullet types that can be used in the secondary mode */
+	public List<String> secondaryAmmo = new ArrayList<String>();
+	/** The delay between shots in ticks (1/20ths of seconds) */
+	public float secondaryDamage = 1;
+	/** The delay between shots in ticks (1/20ths of seconds) */
+	public float secondarySpread = 1;
+	/** The speed of bullets upon leaving this gun */
+	public float secondarySpeed = 5.0F;
+	/** The time (in ticks) it takes to reload this gun */
+	public int secondaryReloadTime = 1;
+	/** The delay between shots in ticks (1/20ths of seconds) */
+	public int secondaryShootDelay = 1;
+	/** The sound played upon shooting */
+	public String secondaryShootSound;
+	/** The sound to play upon reloading */
+	public String secondaryReloadSound;
+	/** The firing mode of the gun. One of semi-auto, full-auto, minigun or burst */
+	public EnumFireMode secondaryFireMode = EnumFireMode.SEMIAUTO;
+	/** The sound to play if toggling between primary and underbarrel */
+	public String toggleSound;
+	/** The number of bullet entities created by each shot */
+	public int secondaryNumBullets = 1;
+	/** The number of bullet stacks in the magazine */
+	public int numSecAmmoItems = 1;
+
+	//Scope variables (These variables only come into play for scope attachments)
+	/** The zoomLevel of this scope */
 	public float zoomLevel = 1F;
 	/**
 	 * The FOV zoom level of this scope
@@ -92,6 +119,8 @@ public class AttachmentType extends PaintableType implements IScope
 	 * Whether to overlay a texture or not
 	 */
 	public boolean hasScopeOverlay = false;
+	/** If true, then this scope will active night vision potion effect*/
+	public boolean hasNightVision = false;
 	
 	@SideOnly(Side.CLIENT)
 	/** Model. Only applicable when the attachment is added to 3D guns */
@@ -102,6 +131,9 @@ public class AttachmentType extends PaintableType implements IScope
 	 * The max stack size in the inventory
 	 */
 	public int maxStackSize = 1;
+
+	/** Default spread of the underbarrel. Do not modify. */
+	public float secondaryDefaultSpread = 0F;
 	
 	public AttachmentType(TypeFile file)
 	{
@@ -124,8 +156,10 @@ public class AttachmentType extends PaintableType implements IScope
 			
 			else if(split[0].equals("Silencer"))
 				silencer = Boolean.parseBoolean(split[1].toLowerCase());
-				
-				// Flashlight settings
+			else if(split[0].equals("DisableMuzzleFlash") || split[0].equals("DisableFlash"))
+				disableMuzzleFlash = Boolean.parseBoolean(split[1].toLowerCase());
+			
+			//Flashlight settings
 			else if(split[0].equals("Flashlight"))
 				flashlight = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("FlashlightRange"))
@@ -135,8 +169,47 @@ public class AttachmentType extends PaintableType implements IScope
 				// Mode override
 			else if(split[0].equals("ModeOverride"))
 				modeOverride = EnumFireMode.getFireMode(split[1]);
-				
-				// Multipliers
+
+			//Secondary Stuff
+			else if(split[0].equals("SecondaryMode"))
+				secondaryFire = Boolean.parseBoolean(split[1].toLowerCase());
+			else if(split[0].equals("SecondaryAmmo"))
+				secondaryAmmo.add(split[1]);
+			else if(split[0].equals("SecondaryDamage"))
+				secondaryDamage = Float.parseFloat(split[1]);
+			else if(split[0].equals("SecondarySpread") || split[0].equals("SecondaryAccuracy"))
+				secondarySpread = secondaryDefaultSpread = Float.parseFloat(split[1]);
+			else if(split[0].equals("SecondaryBulletSpeed"))
+				secondarySpeed = Float.parseFloat(split[1]);
+			else if(split[0].equals("SecondaryShootDelay"))
+				secondaryShootDelay = Integer.parseInt(split[1]);
+			else if(split[0].equals("SecondaryReloadTime"))
+				secondaryReloadTime = Integer.parseInt(split[1]);
+			else if(split[0].equals("SecondaryShootDelay"))
+				secondaryShootDelay = Integer.parseInt(split[1]);
+			else if(split[0].equals("SecondaryNumBullets"))
+				secondaryNumBullets = Integer.parseInt(split[1]);
+			else if(split[0].equals("LoadSecondaryIntoGun"))
+				numSecAmmoItems = Integer.parseInt(split[1]);
+			else if(split[0].equals("SecondaryFireMode"))
+				secondaryFireMode = EnumFireMode.getFireMode(split[1]);
+			else if(split[0].equals("SecondaryShootSound"))
+			{
+				secondaryShootSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			else if(split[0].equals("SecondaryReloadSound"))
+			{
+				secondaryReloadSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			else if(split[0].equals("ModeSwitchSound"))
+			{
+				toggleSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			
+			//Multipliers
 			else if(split[0].equals("MeleeDamageMultiplier"))
 				meleeDamageMultiplier = Float.parseFloat(split[1]);
 			else if(split[0].equals("DamageMultiplier"))
@@ -149,7 +222,9 @@ public class AttachmentType extends PaintableType implements IScope
 				bulletSpeedMultiplier = Float.parseFloat(split[1]);
 			else if(split[0].equals("ReloadTimeMultiplier"))
 				reloadTimeMultiplier = Float.parseFloat(split[1]);
-				// Scope Variables
+			else if(split[0].equals("MovementSpeedMultiplier"))
+				moveSpeedMultiplier = Float.parseFloat(split[1]);
+			//Scope Variables
 			else if(split[0].equals("ZoomLevel"))
 				zoomLevel = Float.parseFloat(split[1]);
 			else if(split[0].equals("FOVZoomLevel"))
@@ -162,6 +237,8 @@ public class AttachmentType extends PaintableType implements IScope
 				else
 					zoomOverlay = split[1];
 			}
+			else if(split[0].equals("HasNightVision"))
+				hasNightVision = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch(Exception e)
 		{

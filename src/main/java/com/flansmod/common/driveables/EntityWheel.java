@@ -27,11 +27,18 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	 */
 	private int vehicleID;
 	
-	public EntityWheel(World world)
+	public boolean onDeck = false;
+	
+	private int invulnerableUnmountCount;
+	
+	public int timeLimitDriveableNull = 0;
+
+	public EntityWheel(World world) 
 	{
 		super(world);
 		setSize(1F, 1F);
 		stepHeight = 1.0F;
+		invulnerableUnmountCount = 0;
 	}
 	
 	public EntityWheel(World world, EntityDriveable entity, int i)
@@ -59,11 +66,13 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void fall(float k, float l)
 	{
+		/*
 		if(vehicle == null || k <= 0)
 			return;
 		int i = MathHelper.ceil(k - 3F);
 		if(i > 0)
 			vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.FALL, i);
+		*/
 	}
 	
 	@Override
@@ -104,6 +113,15 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void onUpdate()
 	{
+		if(this.ridingEntity != null)
+		{
+			invulnerableUnmountCount = 20 * 4;
+		}
+		else if(invulnerableUnmountCount > 0)
+		{
+			invulnerableUnmountCount--;
+		}
+	
 		if(vehicle == null || isDead)
 		{
 			if(getRidingEntity() instanceof EntityDriveable)
@@ -143,6 +161,11 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		return Math.sqrt(motionX * motionX + motionZ * motionZ);
 	}
 	
+	public double getSpeedXYZ()
+	{
+		return Math.cbrt(motionX * motionX + motionZ * motionZ + motionY * motionY);
+	}
+	
 	@Override
 	public void setPositionAndRotationDirect(double d, double d1, double d2, float f, float f1, int i, boolean b)
 	{
@@ -162,8 +185,9 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		ID = data.readInt();
 		if(world.getEntityByID(vehicleID) instanceof EntityDriveable)
 			vehicle = (EntityDriveable)world.getEntityByID(vehicleID);
-		
-		setPosition(posX, posY, posZ);
+			
+		if(vehicle != null)
+			setPosition(posX, posY, posZ);
 	}
 	
 	public int getExpectedWheelID()

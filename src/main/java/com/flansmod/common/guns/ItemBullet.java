@@ -32,13 +32,22 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 			default: setCreativeTab(FlansMod.tabFlanGuns);
 		}
 	}
+
+	public boolean isRepairable()
+	{
+		return canRepair;
+	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
+		if(!type.packName.isEmpty())
+		{
+			lines.add(type.packName);
+		}
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 	

@@ -1,10 +1,7 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -40,9 +37,9 @@ public class GuiMechaInventory extends GuiContainer
 	private int anim = 0;
 	private long lastTime;
 	
-	public GuiMechaInventory(InventoryPlayer inventoryplayer, World world1, EntityMecha entMecha)
-	{
-		super(new ContainerMechaInventory(inventoryplayer, world1, entMecha));
+    public GuiMechaInventory(InventoryPlayer inventoryplayer, World world1, EntityMecha entMecha)
+    {
+        super(new ContainerMechaInventory(inventoryplayer, world1, entMecha));
 		mecha = entMecha;
 		inventory = inventoryplayer;
 		world = world1;
@@ -101,7 +98,7 @@ public class GuiMechaInventory extends GuiContainer
 		if(fuelInTank > 0)
 			drawTexturedModalRect(width / 2 - 18, height / 2 + 45 - (int)((94 * fuelInTank) / fuelTankSize), 350, 20, 15, (int)((94 * fuelInTank) / fuelTankSize));
 		
-		MechaType type = mecha.getMechaType();
+        MechaType type = mecha.getMechaType();
 		//Render rotating mecha model
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -142,15 +139,15 @@ public class GuiMechaInventory extends GuiContainer
 		buttonList.add(new GuiButton(1, width / 2 - 68, height / 2 + 63, 68, 20, "Repair"));
 	}
 	
-	@Override
-	protected void actionPerformed(GuiButton button)
-	{
-		if(button.id == 0)
-		{
-			inventory.player.openGui(FlansMod.INSTANCE, 6, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
-		}
-		if(button.id == 1)
-		{
+    @Override
+    protected void actionPerformed(GuiButton button)
+    {
+    	if(button.id == 0)
+    	{
+    		inventory.player.openGui(FlansMod.INSTANCE, 6, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
+    	}
+    	if(button.id == 1)
+    	{
 			inventory.player.openGui(FlansMod.INSTANCE, 1, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
 		}
 	}

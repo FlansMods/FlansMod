@@ -63,6 +63,7 @@ public class ToolType extends InfoType
 	 * If > 0, then the player can eat this and recover this much hunger
 	 */
 	public int foodness = 0;
+	public boolean key = false;
 	
 	public ToolType(TypeFile file)
 	{
@@ -90,6 +91,8 @@ public class ToolType extends InfoType
 				parachute = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("ExplosiveRemote"))
 				remote = Boolean.parseBoolean(split[1].toLowerCase());
+			else if(split[0].equals("Key"))
+				key = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("Heal") || split[0].equals("HealPlayers"))
 				healPlayers = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("Repair") || split[0].equals("RepairVehicles"))

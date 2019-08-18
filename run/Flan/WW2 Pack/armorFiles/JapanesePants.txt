@@ -1,7 +1,0 @@
-Name Japanese WW2 Trousers
-ShortName japanesePants
-Icon JapanesePants
-Colour 255 255 255
-Type Pants
-Defence 0.1
-ArmourTexture Japanese

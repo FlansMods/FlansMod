@@ -1,9 +1,0 @@
-Name Yellow Nerf Vest
-ShortName nerfYellowVest
-Icon NerfYellowVest
-Colour 255 255 255
-Type Body
-Defence 0.1
-ArmourTexture NerfYellow
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

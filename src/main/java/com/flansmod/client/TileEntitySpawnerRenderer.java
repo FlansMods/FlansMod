@@ -1,6 +1,13 @@
 package com.flansmod.client;
 
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 import com.flansmod.client.util.WorldRenderer;

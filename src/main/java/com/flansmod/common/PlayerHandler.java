@@ -4,12 +4,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -24,6 +27,12 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EntityDamageSourceGun;
+import com.flansmod.common.guns.EntityGrenade;
+import com.flansmod.common.guns.EntityShootable;
+import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.network.PacketRequestDebug;
 import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler
@@ -55,6 +64,48 @@ public class PlayerHandler
 		{
 			//TODO Set Drivable damage
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public void onLivingHurtEvent(LivingHurtEvent event)
+	{
+		float damage = event.ammount;
+		if(damage > 0 && event.source instanceof EntityDamageSourceGun)
+		{
+			EntityDamageSourceGun source = (EntityDamageSourceGun)event.source;
+			
+			ShootableType shootableType = null;
+			Entity damageSouceEntity = source.getDamageSourceEntity();
+			if(damageSouceEntity instanceof EntityBullet)
+			{
+				shootableType = ((EntityBullet)damageSouceEntity).type;
+			}
+			if(damageSouceEntity instanceof EntityGrenade)
+			{
+				shootableType = ((EntityGrenade)damageSouceEntity).type;
+			}
+			if(shootableType!=null && shootableType.ignoreArmorProbability > 0 && rand.nextFloat() < shootableType.ignoreArmorProbability)
+			{
+				EntityLivingBase entity = event.entityLiving;
+				float f1 = damage;
+				damage = Math.max(damage - entity.getAbsorptionAmount(), 0.0F);
+				entity.setAbsorptionAmount(entity.getAbsorptionAmount() - (f1 - damage));
+				
+				damage *= shootableType.ignoreArmorDamageFactor;
+
+				if (damage != 0.0F)
+				{
+					float health = entity.getHealth();
+					entity.setHealth(health - damage);
+					entity.func_110142_aN().func_94547_a(source, health, damage);
+					entity.setAbsorptionAmount(entity.getAbsorptionAmount() - damage);
+					
+//					FlansMod.log("Ignore armor damage = " + damage);
+				}
+
+				event.setCanceled(true);
+			}
 		}
 	}
 	
@@ -134,6 +185,12 @@ public class PlayerHandler
 	{
 		if(event instanceof PlayerLoggedInEvent)
 		{
+		// TODO FM+
+			if(event.player instanceof EntityPlayerMP)
+			{
+				FlansMod.packetHandler.sendTo(new PacketRequestDebug(false), (EntityPlayerMP)event.player);
+			}
+			
 			EntityPlayer player = event.player;
 			String username = player.getName();
 			

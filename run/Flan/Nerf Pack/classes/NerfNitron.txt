@@ -1,6 +1,0 @@
-Name Support
-ShortName nerfNitronClass
-AddItem nerfNitron
-AddItem nerfMaverick
-AddItem 20DiscClip 2
-AddItem whistlerDart 12
