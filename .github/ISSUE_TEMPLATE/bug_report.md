@@ -6,6 +6,10 @@ labels: bug
 assignees: ''
 
 ---
+<!-- BEFORE POSTING AN ISSUE: Please search existing issues for your problem
+and avoid posting duplicate issues -->
+<!-- Please stick to the issue template and give as much information
+as you can -->
 
 **Describe the bug**
 <!-- A clear and concise description of what the bug is. -->
@@ -23,7 +27,7 @@ Steps to reproduce the behaviour:
 **Screenshots**
 <!-- If applicable, add screenshots to help explain your problem. -->
 
-**Versions (please complete the following information):**
+**Versions (please complete the following information)**
  - Forge: 
  - Flan's Mod: 
 
