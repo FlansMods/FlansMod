@@ -1,9 +1,8 @@
 package com.flansmod.client.gui.teams;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -96,9 +95,9 @@ public class GuiLandingPage extends GuiTeamsBase
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		guiOriginX = w / 2 - WIDTH / 2;
 		guiOriginY = h / 2 - HEIGHT / 2;
 		

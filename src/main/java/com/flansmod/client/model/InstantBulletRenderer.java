@@ -102,7 +102,7 @@ public class InstantBulletRenderer
 			double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * partialTicks;
 			double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * partialTicks;
 			
-			GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
+			GlStateManager.translate(-(float)x, -(float)y, -(float)z);
 			
 			float parametric = ((float)(ticksExisted) + partialTicks) * bulletSpeed;
 			
@@ -138,6 +138,9 @@ public class InstantBulletRenderer
 			worldrenderer.addVertexWithUV(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z, 0.0f, 1.0f);
 			worldrenderer.addVertexWithUV(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z, 1.0f, 1.0f);
 			worldrenderer.addVertexWithUV(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z, 1.0f, 0.0f);
+			
+//			worldrenderer.addVertexWithUV(endPos.x + trailTangent.x*10, endPos.y + trailTangent.y*10, endPos.z + trailTangent.z*10, 1.0f, 0.0f);
+			
 			worldrenderer.draw();
 			
 			GlStateManager.disableRescaleNormal();

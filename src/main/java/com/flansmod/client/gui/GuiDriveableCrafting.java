@@ -114,10 +114,10 @@ public class GuiDriveableCrafting extends GuiScreen
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		//Bind the background texture
 		mc.renderEngine.bindTexture(texture);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		guiOriginX = w / 2 - 88;
 		guiOriginY = h / 2 - 99;
 		//Draw the background
@@ -168,10 +168,10 @@ public class GuiDriveableCrafting extends GuiScreen
 		if(selectedType != null)
 		{
 			//Render rotating driveable model
-			GL11.glPushMatrix();
+			GlStateManager.pushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glTranslatef(w / 2 - 46, h / 2 - 10, 100);
+			GlStateManager.translate(w / 2 - 46, h / 2 - 10, 100);
 			
 			//Do lights
 			GlStateManager.disableLighting();
@@ -183,16 +183,16 @@ public class GuiDriveableCrafting extends GuiScreen
 			GlStateManager.enableRescaleNormal();
 			
 			if(selectedType instanceof MechaType)
-				GL11.glTranslatef(0, 15, 0);
-			GL11.glScalef(-50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance);
-			GL11.glRotatef(180F, 0F, 0F, 1F);
-			GL11.glRotatef(30F, 1F, 0F, 0F);
-			GL11.glRotatef(spinner / 5F, 0F, 1F, 0F);
+				GlStateManager.translate(0, 15, 0);
+			GlStateManager.scale(-50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance);
+			GlStateManager.rotate(180F, 0F, 0F, 1F);
+			GlStateManager.rotate(30F, 1F, 0F, 0F);
+			GlStateManager.rotate(spinner / 5F, 0F, 1F, 0F);
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
 			selectedType.model.render(selectedType);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 			
 			recipeName = selectedType.name;
 			if(recipeName.length() > 16)

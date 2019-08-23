@@ -1,12 +1,12 @@
 package com.flansmod.client.model.mw;
 
-import org.lwjgl.opengl.GL11;
-
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
+
+import net.minecraft.client.renderer.GlStateManager;
 
 public class ModelMinigun extends ModelGun
 {
@@ -259,11 +259,11 @@ public class ModelMinigun extends ModelGun
 	@Override
 	public void renderCustom(float f, GunAnimations anims)
 	{
-		GL11.glPushMatrix();
-		GL11.glTranslatef(spinnerOrigin.x, spinnerOrigin.y, spinnerOrigin.z);
-		GL11.glRotatef(anims.minigunBarrelRotation, 0F, 0F, 1F);
-		GL11.glTranslatef(-spinnerOrigin.x, -spinnerOrigin.y, -spinnerOrigin.z);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(spinnerOrigin.x, spinnerOrigin.y, spinnerOrigin.z);
+		GlStateManager.rotate(anims.minigunBarrelRotation, 0F, 0F, 1F);
+		GlStateManager.translate(-spinnerOrigin.x, -spinnerOrigin.y, -spinnerOrigin.z);
 		render(spinnerModel, f);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }

@@ -13,7 +13,6 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -273,8 +272,6 @@ public class ClientProxy extends CommonProxy
 	public void registerRenderers()
 	{
 		FlansMod.log.info("Registering Renderers");
-		
-		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade.Factory());

@@ -1,11 +1,10 @@
 package com.flansmod.client.gui.teams;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.client.teams.ClientTeamsData;
@@ -54,12 +53,12 @@ public class GuiVoting extends GuiScreen
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		
 		mc.renderEngine.bindTexture(texture);
 		
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = k / 2 - 128;
 		int n = l / 2 - guiHeight / 2;
 		

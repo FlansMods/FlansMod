@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
@@ -82,9 +81,9 @@ public class GuiBaseEditor extends GuiScreen
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		mc.renderEngine.bindTexture(texture);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 128;
 		int n = guiOriginY = l / 2 - 94;
 		drawTexturedModalRect(m, n, 0, 0, 256, 189);

@@ -56,7 +56,7 @@ public class GuiDriveableInventory extends GuiContainer
 		fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor3f(1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F);
 		if(screen == 0)
 		{
 			int slotsDone = 0;
@@ -89,7 +89,7 @@ public class GuiDriveableInventory extends GuiContainer
 				}
 			}
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -129,7 +129,7 @@ public class GuiDriveableInventory extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
 	{
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		mc.renderEngine.bindTexture(texture);
 

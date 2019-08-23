@@ -161,8 +161,8 @@ public class ClientRenderHooks
 				EntityRenderer renderer = mc.entityRenderer;
 				float farPlaneDistance = mc.gameSettings.renderDistanceChunks * 16F;
 				ItemRenderer itemRenderer = mc.getItemRenderer();
-				
-				GlStateManager.clear(256);
+				//Unknown function. But definitely messes up the render pipeline, causing other mods and shaders to break
+				//GlStateManager.clear(256);
 				GlStateManager.matrixMode(5889);
 				GlStateManager.loadIdentity();
 				
@@ -817,12 +817,12 @@ public class ClientRenderHooks
 				&& (teamInfo.numTeams > 0 || !teamInfo.sortedByTeam)
 				&& PacketTeamInfo.getPlayerScoreData(FlansModClient.minecraft.player.getName()) != null)
 		{
-			GL11.glEnable(3042 /* GL_BLEND */);
-			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+			GlStateManager.enableBlend();
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(770, 771);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			
 			mc.renderEngine.bindTexture(GuiTeamScores.texture);
 			
@@ -847,7 +847,7 @@ public class ClientRenderHooks
 				
 				// Draw team 1 colour bit
 				int colour = teamInfo.teamData[0].team.teamColour;
-				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F,
+				GlStateManager.color(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F,
 						1.0F);
 				worldrenderer.startDrawingQuads();
 				worldrenderer.addVertexWithUV(i / 2d - 43, 27, -90D, 0D / 256D, 125D / 256D);
@@ -857,7 +857,7 @@ public class ClientRenderHooks
 				worldrenderer.draw();
 				// Draw team 2 colour bit
 				colour = teamInfo.teamData[1].team.teamColour;
-				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F,
+				GlStateManager.color(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F,
 						1.0F);
 				worldrenderer.startDrawingQuads();
 				worldrenderer.addVertexWithUV(i / 2d + 19, 27, -90D, 62D / 256D, 125D / 256D);
@@ -867,9 +867,9 @@ public class ClientRenderHooks
 				worldrenderer.draw();
 				
 				GL11.glDepthMask(true);
-				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
-				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GL11.glEnable(GL11.GL_DEPTH_TEST);
+				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				
 				// Draw the team scores
 				if(teamInfo.teamData[0] != null && teamInfo.teamData[1] != null)
@@ -903,9 +903,9 @@ public class ClientRenderHooks
 			
 			
 			GL11.glDepthMask(true);
-			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
-			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			String playerUsername = FlansModClient.minecraft.player.getName();
 			
 			PlayerScoreData data = PacketTeamInfo.getPlayerScoreData(playerUsername);
@@ -929,7 +929,7 @@ public class ClientRenderHooks
 		
 		// Draw icons indicated weapons used
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);

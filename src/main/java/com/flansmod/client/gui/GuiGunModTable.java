@@ -55,8 +55,8 @@ public class GuiGunModTable extends GuiContainer
 			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 			if(gunType.model != null)
 			{
-				GL11.glPushMatrix();
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.pushMatrix();
+				GlStateManager.color(1F, 1F, 1F, 1F);
 				
 				GlStateManager.disableLighting();
 				GlStateManager.pushMatrix();
@@ -66,14 +66,14 @@ public class GuiGunModTable extends GuiContainer
 				GlStateManager.popMatrix();
 				GlStateManager.enableRescaleNormal();
 				
-				GL11.glTranslatef(80, 48, 100);
+				GlStateManager.translate(80, 48, 100);
 				
-				GL11.glRotatef(160, 1F, 0F, 0F);
-				GL11.glRotatef(20, 0F, 1F, 0F);
-				GL11.glScalef(-50F, 50F, 50F);
+				GlStateManager.rotate(160, 1F, 0F, 0F);
+				GlStateManager.rotate(20, 0F, 1F, 0F);
+				GlStateManager.scale(-50F, 50F, 50F);
 				//ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
 				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, tempStack);
-				GL11.glPopMatrix();
+				GlStateManager.popMatrix();
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class GuiGunModTable extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
 	{
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		mc.renderEngine.bindTexture(texture);
 		
@@ -192,7 +192,7 @@ public class GuiGunModTable extends GuiContainer
 						haveDyes[n] = true;
 				}
 				
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.color(1F, 1F, 1F, 1F);
 				GL11.glDisable(GL11.GL_LIGHTING);
 				mc.renderEngine.bindTexture(texture);
 				
