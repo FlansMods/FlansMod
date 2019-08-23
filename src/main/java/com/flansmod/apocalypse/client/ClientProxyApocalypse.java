@@ -2,18 +2,13 @@ package com.flansmod.apocalypse.client;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -93,7 +88,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event)
 	{
-		
+		/*
 		Item item = Item.getItemFromBlock(FlansModApocalypse.blockSulphuricAcid);
 		ModelBakery.registerItemVariants(item);
 		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, FlansModApocalypse.sulphuricAcid.getName());
@@ -112,7 +107,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 				return modelResourceLocation;
 			}
 		});
-		
+		*/
 		
 		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockLabStone, 0, new ModelResourceLocation("flansmodapocalypse:itemblocklabstone", "inventory"));
 		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation("flansmodapocalypse:itemblocklabstone"));

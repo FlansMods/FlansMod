@@ -47,8 +47,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 	{
 		bindEntityTexture(entityPlane);
 		PlaneType type = entityPlane.getPlaneType();
-//		GlStateManager.pushMatrix();
-//		GlStateManager.translate((float)d, (float)d1, (float)d2);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(d, d1, d2);
 		float dYaw = (entityPlane.axes.getYaw() - entityPlane.prevRotationYaw);
@@ -78,15 +76,11 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		{
 			dRoll += 360F;
 		}
-//		GlStateManager.rotate(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
-//		GlStateManager.rotate(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
-//		GlStateManager.rotate(entityPlane.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		GlStateManager.rotate(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GlStateManager.rotate(entityPlane.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		
 		float modelScale = type.modelScale;
-//		GlStateManager.scale(modelScale, modelScale, modelScale);
 		GlStateManager.scale(modelScale, modelScale, modelScale);
 		ModelPlane model = (ModelPlane)type.model;
 		if(model != null)
@@ -95,14 +89,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			// Render helicopter main rotors
 			for(int i = 0; i < model.heliMainRotorModels.length; i++)
 			{
-//				GlStateManager.pushMatrix();
-				//GlStateManager.translate(model.heliMainRotorOrigins[i].x, model.heliMainRotorOrigins[i].y, model.heliMainRotorOrigins[i].z);
-				//GlStateManager.rotate((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * model.heliRotorSpeeds[i] * 1440F /3.14159265F, 0.0F, 1.0F, 0.0F);
-				//GlStateManager.translate(-model.heliMainRotorOrigins[i].x, -model.heliMainRotorOrigins[i].y,-model.heliMainRotorOrigins[i].z);
-				//model.renderRotor(entityPlane, 0.0625F, i);
-				//GlStateManager.popMatrix();
-				
-				
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(model.heliMainRotorOrigins[i].x, model.heliMainRotorOrigins[i].y, model.heliMainRotorOrigins[i].z);
 				GlStateManager.rotate((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * model.heliRotorSpeeds[i] * 1440F /3.14159265F, 0.0F, 1.0F, 0.0F);
@@ -113,13 +99,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			// Render helicopter tail rotors
 			for(int i = 0; i < model.heliTailRotorModels.length; i++)
 			{
-				//GlStateManager.pushMatrix();
-				//GlStateManager.translate(model.heliTailRotorOrigins[i].x, model.heliTailRotorOrigins[i].y,model.heliTailRotorOrigins[i].z);
-				//GlStateManager.rotate((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 0.0F, 1.0F);
-				//GlStateManager.translate(-model.heliTailRotorOrigins[i].x, -model.heliTailRotorOrigins[i].y, -model.heliTailRotorOrigins[i].z);
-				//model.renderTailRotor(entityPlane, 0.0625F, i);
-				//GlStateManager.popMatrix();
-				
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(model.heliTailRotorOrigins[i].x, model.heliTailRotorOrigins[i].y, model.heliTailRotorOrigins[i].z);
 				GlStateManager.rotate((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 0.0F, 1.0F);
@@ -188,7 +167,6 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			GlStateManager.disableBlend();
 			GlStateManager.color(1F, 1F, 1F, 1F);
 		}
-		//GlStateManager.popMatrix();
 		GlStateManager.popMatrix();
 	}
 	
@@ -232,17 +210,12 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		//Push
 		GlStateManager.pushMatrix();
 		//Setup lighting
-//		Minecraft.getMinecraft().entityRenderer.enableLightmap();
-//		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-//		GL11.glEnable(GL11.GL_LIGHTING);
-//		GlStateManager.disableBlend();
-		GlStateManager.disableBlend();
-//		GlStateManager.disableCull();
+		Minecraft.getMinecraft().entityRenderer.enableLightmap();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
 		
-//		RenderHelper.disableStandardItemLighting();
-//		RenderHelper.enableStandardItemLighting();
-//		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderHelper.enableStandardItemLighting();
 		
 		GlStateManager.translate(-x, -y, -z);
 		for(Object entity : world.loadedEntityList)
@@ -271,14 +244,10 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		}
 		
 		//Reset Lighting
-//		Minecraft.getMinecraft().entityRenderer.disableLightmap();
-//		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-//		GL11.glDisable(GL11.GL_LIGHTING);
-//		GlStateManager.disableLighting();
-//		GlStateManager.enableCull();
-		GlStateManager.disableBlend();
+		Minecraft.getMinecraft().entityRenderer.disableLightmap();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableLighting();
 		//Pop
-//		GlStateManager.popMatrix();
 		GlStateManager.popMatrix();
 	}
 	
