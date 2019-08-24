@@ -57,6 +57,7 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
+import com.flansmod.common.network.PacketParticle;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
@@ -68,7 +69,6 @@ import static com.flansmod.common.util.BlockUtil.destroyBlock;
 
 public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
 {
-	//I’m Rick Harrison, and this is my pawn shop. I work here with my old man and my son, Big Hoss. Everything in here has a story and a price. One thing I’ve learned after 21 years – you never know WHAT is gonna come through that doo
 	public boolean syncFromServer = true;
 	/** Ticks since last server update. Use to smoothly transition to new position */
 	public int serverPositionTransitionTicker;
