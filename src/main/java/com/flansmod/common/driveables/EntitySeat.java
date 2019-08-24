@@ -38,6 +38,7 @@ import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.network.PacketSeatCheck;
 import com.flansmod.common.network.PacketSeatUpdates;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
@@ -222,11 +223,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				}
 			}
 
-			if(lastRiddenByEntity instanceof EntityPlayer && riddenByEntity==null && FlansModClient.proxy.isThePlayer((EntityPlayer)lastRiddenByEntity))
+			if(lastRiddenByEntity instanceof EntityPlayer && riddenByEntity == null && FlansModClient.proxy.isThePlayer((EntityPlayer)lastRiddenByEntity))
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketSeatCheck(this));
 			}
-		}
 		}
 		
 		minigunSpeed *= 0.95F;

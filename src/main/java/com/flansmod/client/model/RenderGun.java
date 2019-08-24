@@ -5,6 +5,8 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,11 +16,13 @@ import net.minecraft.util.math.MathHelper;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.handlers.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
@@ -455,9 +459,6 @@ public class RenderGun implements CustomItemRenderer
 					break;
 				}
 			}
-			default:
-				break;
-			}
 
 			renderGun(item, gunType, f, model, animations, reloadRotate, type);
 		}
@@ -556,7 +557,6 @@ public class RenderGun implements CustomItemRenderer
 		{
 			Minecraft mc = Minecraft.getMinecraft();
 			renderFirstPersonArm(mc.thePlayer, model, animations);
-		}
 		}
 		
 		//Load texture
@@ -737,7 +737,8 @@ public class RenderGun implements CustomItemRenderer
 						FlansModClient.shotState = -1;
 						if(type.actionSound != null)
 						{
-							Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(FlansModResourceHandler.getSound(type.actionSound), 1.0F));
+							Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord
+								.func_147674_a(FlansModResourceHandler.getSound(type.actionSound), 1.0F));
 						}
 					}
 				}

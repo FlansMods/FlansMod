@@ -6,8 +6,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -15,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -41,7 +44,12 @@ import com.flansmod.client.handlers.KeyInputHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
+import com.flansmod.common.driveables.collisions.CollisionPlane;
+import com.flansmod.common.driveables.collisions.CollisionShapeBox;
+import com.flansmod.common.driveables.collisions.CollisionTest;
 import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EntityDamageSourceGun;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.FireableGun;
 import com.flansmod.common.guns.FiredShot;
@@ -1679,9 +1687,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					getDriveableData().fuelInTank += 2000 * fuelMultiplier;
 					getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
 				}
-			}
-		}
-				}
 				
 				prevPosX = posX;
 				prevPosY = posY;
@@ -1689,6 +1694,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 	}
+	
 	private Vector3f getRandPosInBoundingBox(DriveablePart part)
 	{
 		// Pick a random position within the bounding box and spawn a flame there
@@ -1719,7 +1725,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		DriveableType type = getDriveableType();
 		if(type == null) return;
 
-		if(worldObj.isRemote) return;
+		if(world.isRemote) return;
 
 		if(!driveableData.inventoryChanged) return;
 
@@ -1899,7 +1905,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		if(damagePart)
 		{
 			//This is server side bsns
-			if(!worldObj.isRemote)
+			if(!world.isRemote)
 			{
 //				checkParts();
 				//If it hit, send a damage update packet
@@ -2782,10 +2788,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		DriveablePart part = getDriveableData().parts.get(hit.part);
 		if(bullet != null && hit != null)
-		part.hitByBullet(bullet, hit);
-
+			part.hitByBullet(bullet, hit);
+		
 		//This is server side bsns
-		if(!worldObj.isRemote)
+		if(!worldObj.isRemote);
+	}
+	
 	/**
 	 * Called if the bullet actually hit the part returned by the raytrace
 	 *

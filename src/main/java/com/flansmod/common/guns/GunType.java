@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.model.ModelCasing;
+import com.flansmod.client.model.ModelFlash;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
 import com.flansmod.common.FlansMod;
@@ -399,7 +402,7 @@ public class GunType extends PaintableType implements IScope
 				lockOnToLivings = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("ShowCrosshair"))
 				showCrosshair = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("ItemUseAction")){
+			else if(split[0].equals("ItemUseAction"))
 				itemUseAction = EnumAction.valueOf(split[1].toLowerCase());
 			else if(split[0].equals("MaxRangeLockOn"))
 				maxRangeLockOn = Integer.parseInt(split[1]);
@@ -555,7 +558,6 @@ public class GunType extends PaintableType implements IScope
 				deployableModel = FlansMod.proxy.loadModel(split[1], shortName, ModelMG.class);
 			else if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelGun.class);
-			}
 			else if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("CasingModel")))
 				casingModel = FlansMod.proxy.loadModel(split[1], shortName, ModelCasing.class);
 			else if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("FlashModel")))
@@ -828,9 +830,6 @@ public class GunType extends PaintableType implements IScope
 			attachmentTags.setTag("pump", new NBTTagCompound());
 			attachmentTags.setTag("accessory", new NBTTagCompound());
 
-			gun.stackTagCompound.setTag("attachments", attachmentTags);
-		}
-	}
 			
 			gun.getTagCompound().setTag("attachments", attachmentTags);
 		}
@@ -1176,6 +1175,5 @@ public class GunType extends PaintableType implements IScope
 			return model.pumpTime;
 		
 		return 0;
-	}
 	}
 }
