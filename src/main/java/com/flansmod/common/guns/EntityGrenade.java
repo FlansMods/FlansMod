@@ -198,7 +198,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			if(type.livingProximityTrigger > 0 || type.driveableProximityTrigger > 0)
 			{
 				float checkRadius = Math.max(type.livingProximityTrigger, type.driveableProximityTrigger);
-				List list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(checkRadius, checkRadius, checkRadius));
+				List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(checkRadius, checkRadius, checkRadius));
 				for(Object obj : list)
 				{
 					if(obj == thrower && ticksExisted < 10)
@@ -208,7 +208,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
 						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
 						{
-							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)))
+							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceFlan(type.shortName, this, (EntityPlayer)thrower, type)))
 								continue;
 						}
 						if(type.damageToTriggerer > 0)
@@ -515,7 +515,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	private DamageSource getGrenadeDamage()
 	{
 		if(thrower instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)).setProjectile();
+			return new EntityDamageSourceFlan(type.shortName, this, (EntityPlayer)thrower, type).setProjectile();
 		else return (new EntityDamageSourceIndirect(type.shortName, this, thrower)).setProjectile();
 	}
 	

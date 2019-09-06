@@ -30,7 +30,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
-import com.flansmod.common.guns.EntityDamageSourceGun;
+import com.flansmod.common.guns.EntityDamageSourceFlan;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 
@@ -170,7 +170,7 @@ public class FlansModExplosion extends Explosion
 						double d10 = (1.0D - d12) * d14;
 						if(detonator instanceof EntityPlayer)
 						{
-							entity.attackEntityFrom(new EntityDamageSourceGun(type.shortName, explosive, (EntityPlayer)detonator, type, false),
+							entity.attackEntityFrom(new EntityDamageSourceFlan(type.shortName, explosive, (EntityPlayer)detonator, type),
 									(float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
 						} else {
 							entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
