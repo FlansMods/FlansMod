@@ -188,9 +188,11 @@ public class ShotHandler
 			if (optionalPlayer.isPresent())
 			{
 				EntityPlayerMP player = optionalPlayer.get();
-				TeamsRound round;
-				if(TeamsManager.getInstance() != null && (round = TeamsManager.getInstance().currentRound) != null)
+				
+				if(TeamsManager.getInstance() != null)
 				{
+					TeamsRound round = TeamsManager.getInstance().currentRound;
+					
 					if (round != null)
 					{
 						Optional<Team> shooterTeam = round.getTeam(player);

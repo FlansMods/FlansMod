@@ -18,7 +18,7 @@ public class PlayerDeathEventListener
 	{
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-
+	
 	@EventHandler
 	@SubscribeEvent
 	public void PlayerDied(LivingDeathEvent event)
