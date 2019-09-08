@@ -1,15 +1,19 @@
 buildscript {
-    repositories {
-        jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-    }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+    repositories {
+        jcenter()
+        maven {
+           // location of the maven that hosts the forge files
+          name = "Forge maven"
+          url = "http://files.minecraftforge.net/maven"
+        }
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "5.6"
+version = version_major + "." + version_minor + version_identifier + "." + version_patch
 group = "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -21,7 +25,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
+    version = minecraft_version + "-" + forge_version
     runDir = "run"
 
     replace "@ALLOWED_VERSIONS@", "[5.6, 5.7)"
