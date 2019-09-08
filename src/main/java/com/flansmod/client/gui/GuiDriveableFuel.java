@@ -2,9 +2,8 @@ package com.flansmod.client.gui;
 
 import java.io.IOException;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -49,7 +48,7 @@ public class GuiDriveableFuel extends GuiContainer
 			if(newTime % 5 == 0)
 				anim++;
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		mc.renderEngine.bindTexture(texture);
 

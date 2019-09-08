@@ -29,8 +29,8 @@ public class ModelCustomArmour extends ModelBiped
 	
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
-		GL11.glPushMatrix();
-		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
+		GlStateManager.pushMatrix();
+		GlStateManager.scale(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
 		ItemStack itemstack = ((EntityLivingBase)entity).getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
 		rightArmPose = itemstack.isEmpty() ? ArmPose.EMPTY : ArmPose.ITEM;
@@ -84,7 +84,7 @@ public class ModelCustomArmour extends ModelBiped
 				mod.render(f5);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	public void render(ModelRendererTurbo[] models, ModelRenderer bodyPart, float f5, float scale)

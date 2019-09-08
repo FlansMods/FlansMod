@@ -1,10 +1,9 @@
 package com.flansmod.client.gui.teams;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -90,7 +89,7 @@ public class GuiTeamSelect extends GuiScreen
 	public void drawScreen(int i, int j, float f)
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		drawDefaultBackground();
 		mc.renderEngine.bindTexture(texture);
 		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);

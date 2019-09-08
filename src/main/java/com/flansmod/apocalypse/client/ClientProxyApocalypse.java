@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -173,13 +174,13 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 					if(mc.player.getDistanceSq(nuke) < scale * scale)
 					{
 						FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
-						GL11.glEnable(3042 /* GL_BLEND */);
-						GL11.glDisable(2929 /* GL_DEPTH_TEST */);
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
+						GlStateManager.enableBlend();
+						GL11.glDisable(GL11.GL_DEPTH_TEST);
+						GlStateManager.disableTexture2D();
 						GL11.glDepthMask(false);
 						GL11.glBlendFunc(770, 771);
-						GL11.glColor4f(1F, 1F, 1F, alpha);
-						GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+						GlStateManager.color(1F, 1F, 1F, alpha);
+						GL11.glDisable(GL11.GL_ALPHA_TEST);
 						
 						WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 						worldrenderer.startDrawingQuads();
@@ -189,10 +190,10 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 						worldrenderer.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
 						worldrenderer.draw();
 						GL11.glDepthMask(true);
-						GL11.glEnable(2929 /* GL_DEPTH_TEST */);
-						GL11.glEnable(3008 /* GL_ALPHA_TEST */);
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
-						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+						GL11.glEnable(GL11.GL_DEPTH_TEST);
+						GL11.glEnable(GL11.GL_ALPHA_TEST);
+						GlStateManager.enableTexture2D();
+						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					}
 				}
 			}

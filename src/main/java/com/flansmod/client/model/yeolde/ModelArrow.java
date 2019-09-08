@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
 import com.flansmod.client.FlansModClient;
@@ -35,10 +36,10 @@ public class ModelArrow extends ModelBase
 		float var19 = (10 + var11 * 10) / 32.0F;
 		float var20 = 0.05625F;
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		GL11.glRotatef(90F, 0.0F, 0.0F, 1.0F);
-		GL11.glRotatef(45.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glScalef(var20, var20, var20);
-		GL11.glTranslatef(-4.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(90F, 0.0F, 0.0F, 1.0F);
+		GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
+		GlStateManager.scale(var20, var20, var20);
+		GlStateManager.translate(-4.0F, 0.0F, 0.0F);
 		GL11.glNormal3f(var20, 0.0F, 0.0F);
 		worldrenderer.startDrawingQuads();
 		worldrenderer.addVertexWithUV(-7.0D, -2.0D, -2.0D, var16, var18);
@@ -56,8 +57,8 @@ public class ModelArrow extends ModelBase
 
 		for(int var23 = 0; var23 < 4; ++var23)
 		{
-			GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glNormal3f(0.0F, 0.0F, var20);
+			GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.glNormal3f(0.0F, 0.0F, var20);
 			worldrenderer.startDrawingQuads();
 			worldrenderer.addVertexWithUV(-8.0D, -2.0D, 0.0D, var12, var14);
 			worldrenderer.addVertexWithUV(8.0D, -2.0D, 0.0D, var13, var14);

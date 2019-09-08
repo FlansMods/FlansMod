@@ -240,8 +240,8 @@ public class GuiPaintjobTable extends GuiContainer
 			EnumType eType = EnumType.getFromObject(paintableType);
 			if(paintableType.GetModel() != null)
 			{
-				GL11.glPushMatrix();
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.pushMatrix();
+				GlStateManager.color(1F, 1F, 1F, 1F);
 				
 				//GlStateManager.loadIdentity();
 
@@ -253,14 +253,14 @@ public class GuiPaintjobTable extends GuiContainer
 				GlStateManager.popMatrix();
 				GlStateManager.enableRescaleNormal();
 
-				//GL11.glTranslatef(10f, 10f, -10f);
-				//GL11.glScalef(100f, 100f, 100f);
-				GL11.glTranslatef(renderOrigin.x, renderOrigin.y, renderOrigin.z);
+				//GlStateManager.translate(10f, 10f, -10f);
+				//GlStateManager.scale(100f, 100f, 100f);
+				GlStateManager.translate(renderOrigin.x, renderOrigin.y, renderOrigin.z);
 
-				GL11.glRotatef(180, 1F, 0F, 0F);
-				//GL11.glRotatef(20, 0F, 1F, 0F);
+				GlStateManager.rotate(180, 1F, 0F, 0F);
+				//GlStateManager.rotate(20, 0F, 1F, 0F);
 				float scale = paintableType.GetRecommendedScale();
-				GL11.glScalef(-scale, scale, scale);
+				GlStateManager.scale(-scale, scale, scale);
 				
 				float dYaw = (modelAxes.getYaw() - prevModelAxes.getYaw());
 				while(dYaw > 180.0f) dYaw -= 360.0f;
@@ -305,7 +305,7 @@ public class GuiPaintjobTable extends GuiContainer
 					default: break;
 				}
 				
-				GL11.glPopMatrix();
+				GlStateManager.popMatrix();
 			}
 		}
 	}
@@ -313,7 +313,7 @@ public class GuiPaintjobTable extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
 	{
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.disableDepth();
 		
 		mc.renderEngine.bindTexture(texture);
@@ -380,7 +380,7 @@ public class GuiPaintjobTable extends GuiContainer
 							haveDyes[n] = true;
 					}
 
-					GL11.glColor4f(1F, 1F, 1F, 1F);
+					GlStateManager.color(1F, 1F, 1F, 1F);
 					GL11.glDisable(GL11.GL_LIGHTING);
 					mc.renderEngine.bindTexture(texture);
 

@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
@@ -56,9 +57,9 @@ public class GuiArmourBox extends GuiScreen
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		mc.renderEngine.bindTexture(texture);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 91;
 		drawTexturedModalRect(m, n, 0, 0, 176, 182);
@@ -77,7 +78,7 @@ public class GuiArmourBox extends GuiScreen
 			drawTexturedModalRect(m + 89, n + 87, 186, 0, 10, 10);
 
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 
@@ -110,7 +111,7 @@ public class GuiArmourBox extends GuiScreen
 		ArmourBoxEntry page = type.pages.get(q);
 		if(page != null)
 		{
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			//fontRenderer.drawString(type.guns[q].name, m + 9, n + 22, 0xffffffff);
 			
 			//Iterate over x

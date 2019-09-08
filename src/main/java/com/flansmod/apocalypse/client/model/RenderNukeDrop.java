@@ -1,7 +1,5 @@
 package com.flansmod.apocalypse.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -102,16 +100,16 @@ public class RenderNukeDrop extends Render<EntityNukeDrop>
 		//frustrum.setPosition(x, y, z);
 		
 		//Push
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		//Setup lighting
 		Minecraft.getMinecraft().entityRenderer.enableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
 		
 		RenderHelper.enableStandardItemLighting();
 		
-		GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
+		GlStateManager.translate(-(float)x, -(float)y, -(float)z);
 		for(Object entity : world.loadedEntityList)
 		{
 			if(entity instanceof EntityNukeDrop)
@@ -137,9 +135,9 @@ public class RenderNukeDrop extends Render<EntityNukeDrop>
 		
 		//Reset Lighting
 		Minecraft.getMinecraft().entityRenderer.disableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableLighting();
 		//Pop
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }

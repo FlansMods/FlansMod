@@ -1,8 +1,7 @@
 package com.flansmod.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -25,14 +24,14 @@ public class RenderBullet extends Render<EntityBullet>
 		//if(bullet.owner == Minecraft.getMinecraft().player && bullet.ticksExisted < 1)
 		//	return;
 		bindEntityTexture(bullet);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)d, (float)d1, (float)d2);
-		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(90F - bullet.prevRotationPitch - (bullet.rotationPitch - bullet.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float)d, (float)d1, (float)d2);
+		GlStateManager.rotate(f, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(90F - bullet.prevRotationPitch - (bullet.rotationPitch - bullet.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
 		ModelBase model = bullet.getFiredShot().getBulletType().model;
 		if(model != null)
 			model.render(bullet, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	@Override

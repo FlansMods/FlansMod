@@ -38,7 +38,7 @@ public class ModelMIM23Rocket extends ModelBullet
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
-		//GL11.glScalef(0.5F, 0.5F, 0.5F);
+		//GlStateManager.scale(0.5F, 0.5F, 0.5F);
 		for(ModelRendererTurbo mrt : bulletModel)
 			mrt.render(f5);
 	}

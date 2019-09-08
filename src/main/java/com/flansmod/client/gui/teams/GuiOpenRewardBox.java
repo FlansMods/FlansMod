@@ -222,9 +222,9 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		guiOriginX = w / 2 - WIDTH / 2;
 		guiOriginY = h / 2 - HEIGHT / 2;
 		

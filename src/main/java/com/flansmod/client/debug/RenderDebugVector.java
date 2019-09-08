@@ -2,6 +2,7 @@ package com.flansmod.client.debug;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -23,18 +24,18 @@ public class RenderDebugVector extends Render<EntityDebugVector>
 		if(!FlansMod.DEBUG)
 			return;
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glColor3f(entity.getColorRed(), entity.getColorGreen(), entity.getColorBlue());
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)d0, (float)d1, (float)d2);
-		GL11.glLineWidth(5F);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		GL11.glVertex3f(0F, 0F, 0F);
-		GL11.glVertex3f(entity.getPointingX(), entity.getPointingY(), entity.getPointingZ());
-		GL11.glEnd();
-		GL11.glPopMatrix();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.color(entity.getColorRed(), entity.getColorGreen(), entity.getColorBlue());
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float)d0, (float)d1, (float)d2);
+		GlStateManager.glLineWidth(5F);
+		GlStateManager.glBegin(GL11.GL_LINE_STRIP);
+		GlStateManager.glVertex3f(0F, 0F, 0F);
+		GlStateManager.glVertex3f(entity.getPointingX(), entity.getPointingY(), entity.getPointingZ());
+		GlStateManager.glEnd();
+		GlStateManager.popMatrix();
+		GlStateManager.enableTexture2D();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 	

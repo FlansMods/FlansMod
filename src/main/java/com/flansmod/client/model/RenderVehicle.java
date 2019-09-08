@@ -45,9 +45,9 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	{
 		bindEntityTexture(vehicle);
 		VehicleType type = vehicle.getVehicleType();
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		{
-			GL11.glTranslatef((float)d, (float)d1, (float)d2);
+			GlStateManager.translate((float)d, (float)d1, (float)d2);
 			float dYaw = (vehicle.axes.getYaw() - vehicle.prevRotationYaw);
 			while(dYaw > 180F)
 			{
@@ -75,20 +75,20 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 			{
 				dRoll += 360F;
 			}
-			GL11.glRotatef(180F - vehicle.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(vehicle.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(vehicle.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(180F - vehicle.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(vehicle.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(vehicle.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
 			
 			float modelScale = type.modelScale;
-			GL11.glPushMatrix();
+			GlStateManager.pushMatrix();
 			{
-				GL11.glScalef(modelScale, modelScale, modelScale);
+				GlStateManager.scale(modelScale, modelScale, modelScale);
 				ModelVehicle modVehicle = (ModelVehicle)type.model;
 				if(modVehicle != null)
 					modVehicle.render(vehicle, f1);
 				
-				GL11.glPushMatrix();
+				GlStateManager.pushMatrix();
 				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) &&
 						vehicle.getSeat(0) != null)
 				{
@@ -103,21 +103,21 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					}
 					float yaw = vehicle.getSeat(0).prevLooking.getYaw() + dYaw * f1;
 					
-					GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
-					GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
-					GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
+					GlStateManager.translate(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
+					GlStateManager.rotate(-yaw, 0.0F, 1.0F, 0.0F);
+					GlStateManager.translate(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 					
 					if(modVehicle != null)
 						modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
 					
 					if(FlansMod.DEBUG)
 					{
-						GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
-						GL11.glRotatef(-vehicle.getSeat(0).looking.getPitch(), 0.0F, 0.0F, 1.0F);
-						GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
+						GlStateManager.translate(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
+						GlStateManager.rotate(-vehicle.getSeat(0).looking.getPitch(), 0.0F, 0.0F, 1.0F);
+						GlStateManager.translate(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 						
 						//Render shoot points
-						GL11.glColor4f(0F, 0F, 1F, 0.3F);
+						GlStateManager.color(0F, 0F, 1F, 0.3F);
 						for(ShootPoint point : type.shootPointsPrimary)
 						{
 							DriveablePosition driveablePosition = point.rootPos;
@@ -134,7 +134,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 							}
 						}
 						
-						GL11.glColor4f(0F, 1F, 0F, 0.3F);
+						GlStateManager.color(0F, 1F, 0F, 0.3F);
 						for(ShootPoint point : type.shootPointsSecondary)
 						{
 							DriveablePosition driveablePosition = point.rootPos;
@@ -150,30 +150,30 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 						}
 					}
 				}
-				GL11.glPopMatrix();
+				GlStateManager.popMatrix();
 				if(modVehicle != null)
 				{
-					GL11.glPushMatrix();
+					GlStateManager.pushMatrix();
 					
-					GL11.glTranslatef(modVehicle.drillHeadOrigin.x, modVehicle.drillHeadOrigin.y,
+					GlStateManager.translate(modVehicle.drillHeadOrigin.x, modVehicle.drillHeadOrigin.y,
 							modVehicle.drillHeadOrigin.z);
-					GL11.glRotatef(vehicle.harvesterAngle * 50F, 1.0F, 0.0F, 0.0F);
-					GL11.glTranslatef(-modVehicle.drillHeadOrigin.x, -modVehicle.drillHeadOrigin.y,
+					GlStateManager.rotate(vehicle.harvesterAngle * 50F, 1.0F, 0.0F, 0.0F);
+					GlStateManager.translate(-modVehicle.drillHeadOrigin.x, -modVehicle.drillHeadOrigin.y,
 							-modVehicle.drillHeadOrigin.z);
 					modVehicle.renderDrillBit(vehicle, f1);
 					
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 			}
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 			
 			if(FlansMod.DEBUG)
 			{
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glEnable(GL11.GL_BLEND);
+				GlStateManager.disableTexture2D();
+				GlStateManager.enableBlend();
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
-				GL11.glColor4f(1F, 0F, 0F, 0.3F);
-				GL11.glScalef(1F, 1F, 1F);
+				GlStateManager.color(1F, 0F, 0F, 0.3F);
+				GlStateManager.scale(1F, 1F, 1F);
 				for(DriveablePart part : vehicle.getDriveableData().parts.values())
 				{
 					if(part.box == null)
@@ -184,7 +184,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				}
 				
 				// Render shoot points
-				GL11.glColor4f(0F, 0F, 1F, 0.3F);
+				GlStateManager.color(0F, 0F, 1F, 0.3F);
 				for(ShootPoint point : type.shootPointsPrimary)
 				{
 					DriveablePosition driveablePosition = point.rootPos;
@@ -201,7 +201,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					}
 				}
 				
-				GL11.glColor4f(0F, 1F, 0F, 0.3F);
+				GlStateManager.color(0F, 1F, 0F, 0.3F);
 				for(ShootPoint point : type.shootPointsSecondary)
 				{
 					DriveablePosition driveablePosition = point.rootPos;
@@ -216,13 +216,13 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 							0, 0, 0);
 				}
 				
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GlStateManager.enableTexture2D();
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.disableBlend();
+				GlStateManager.color(1F, 1F, 1F, 1F);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	@Override
@@ -243,7 +243,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	@Override
 	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data)
 	{
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		if(item != null && item.getItem() instanceof ItemVehicle)
 		{
 			VehicleType vehicleType = ((ItemVehicle)item.getItem()).type;
@@ -260,15 +260,15 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					case INVENTORY:
 					{
 						scale = 0.70F;
-						GL11.glTranslatef(0F, -0.05F, 0F);
+						GlStateManager.translate(0F, -0.05F, 0F);
 						break;
 					}
 					case EQUIPPED:
 					{
-						GL11.glRotatef(0F, 0F, 0F, 1F);
-						GL11.glRotatef(270F, 1F, 0F, 0F);
-						GL11.glRotatef(270F, 0F, 1F, 0F);
-						GL11.glTranslatef(0F, 0.25F, 0F);
+						GlStateManager.rotate(0F, 0F, 0F, 1F);
+						GlStateManager.rotate(270F, 1F, 0F, 0F);
+						GlStateManager.rotate(270F, 0F, 1F, 0F);
+						GlStateManager.translate(0F, 0.25F, 0F);
 						scale = 0.5F;
 						break;
 					}
@@ -276,13 +276,13 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					{
 						if(hand == EnumHand.MAIN_HAND)
 						{
-							GL11.glRotatef(45F, 0F, 1F, 0F);
-							GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
+							GlStateManager.rotate(45F, 0F, 1F, 0F);
+							GlStateManager.translate(-0.5F, 0.5F, -0.5F);
 						}
 						else
 						{
-							GL11.glRotatef(45F, 0F, 1F, 0F);
-							GL11.glTranslatef(-0.5F, 0.5F, -2.3F);
+							GlStateManager.rotate(45F, 0F, 1F, 0F);
+							GlStateManager.translate(-0.5F, 0.5F, -2.3F);
 						}
 						
 						break;
@@ -291,14 +291,14 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 						break;
 				}
 				
-				GL11.glScalef(scale / vehicleType.cameraDistance, scale / vehicleType.cameraDistance,
+				GlStateManager.scale(scale / vehicleType.cameraDistance, scale / vehicleType.cameraDistance,
 						scale / vehicleType.cameraDistance);
 				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(vehicleType));
 				ModelDriveable model = vehicleType.model;
 				model.render(vehicleType);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -319,16 +319,16 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		//frustrum.setPosition(x, y, z);
 		
 		//Push
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		//Setup lighting
 		Minecraft.getMinecraft().entityRenderer.enableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.disableBlend();
 		
 		RenderHelper.enableStandardItemLighting();
 		
-		GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
+		GlStateManager.translate(-(float)x, -(float)y, -(float)z);
 		for(Object entity : world.loadedEntityList)
 		{
 			if(entity instanceof EntityVehicle)
@@ -356,10 +356,10 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		
 		//Reset Lighting
 		Minecraft.getMinecraft().entityRenderer.disableLightmap();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		//Pop
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	public static class Factory implements IRenderFactory<EntityVehicle>

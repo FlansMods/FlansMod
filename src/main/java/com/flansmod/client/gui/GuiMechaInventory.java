@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -70,7 +71,7 @@ public class GuiMechaInventory extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
 	{
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		mc.renderEngine.bindTexture(texture);
 		
@@ -103,21 +104,21 @@ public class GuiMechaInventory extends GuiContainer
 		
 		MechaType type = mecha.getMechaType();
 		//Render rotating mecha model
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef(j + 92, k + 105, 100);
-		GL11.glScalef(-50F / type.cameraDistance, 50F / type.cameraDistance, 50F / type.cameraDistance);
-		GL11.glRotatef(180F, 0F, 0F, 1F);
-		GL11.glRotatef(30F, 1F, 0F, 0F);
-		GL11.glRotatef(FlansMod.ticker, 0F, 1F, 0F);
+		GlStateManager.enableLighting();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.translate(j + 92, k + 105, 100);
+		GlStateManager.scale(-50F / type.cameraDistance, 50F / type.cameraDistance, 50F / type.cameraDistance);
+		GlStateManager.rotate(180F, 0F, 0F, 1F);
+		GlStateManager.rotate(30F, 1F, 0F, 0F);
+		GlStateManager.rotate(FlansMod.ticker, 0F, 1F, 0F);
 		mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
 		mechaRenderer.doRender(mecha, 0, 0, 0, 0F, 0F);
 		//type.model.render(type);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	@Override
