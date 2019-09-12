@@ -37,8 +37,6 @@ minecraft {
     replaceIn "FlansModApocalypse.java"
 
     mappings = "stable_39"
-    
-    useDepAts = true
     //if this is required, it should be enabled locally for selected runs. These runs will take about 10 seconds longer
     makeObfSourceJar = false
 }
