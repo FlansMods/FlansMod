@@ -938,7 +938,7 @@ public class ClientRenderHooks
 					i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12,
 					j - 36 - killMessage.line * 16);
 		}
-		GL11.glDisable(3042 /*GL_BLEND*/);
+		GL11.glDisable(GL11.GL_BLEND);
 		RenderHelper.disableStandardItemLighting();
 	}
 	

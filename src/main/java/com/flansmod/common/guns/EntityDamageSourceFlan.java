@@ -14,12 +14,32 @@ public class EntityDamageSourceFlan extends EntityDamageSourceIndirect{
 	
 	private InfoType weapon;
 	private EntityPlayer shooter;
-	
+	private boolean headshot;
+	/**
+	 * @param s        Name of the damage source (Usually the shortName of the gun)
+	 * @param entity   The Entity causing the damage (e.g. Grenade). Can be the same as 'player'
+	 * @param player   The Player responsible for the damage
+	 * @param wep      The InfoType of weapon used
+	 * @param headshot True if this was a headshot, false if not
+	 */	
 	public EntityDamageSourceFlan(String s, Entity entity, EntityPlayer player, InfoType wep)
+	{
+		this(s, entity, player, wep, false);
+	}
+	
+	/**
+	 * @param s        Name of the damage source (Usually the shortName of the gun)
+	 * @param entity   The Entity causing the damage (e.g. Grenade). Can be the same as 'player'
+	 * @param player   The Player responsible for the damage
+	 * @param wep      The InfoType of weapon used
+	 * @param headshot True if this was a headshot, false if not
+	 */
+	public EntityDamageSourceFlan(String s, Entity entity, EntityPlayer player, InfoType wep, boolean headshot)
 	{
 		super(s, entity, player);
 		weapon = wep;
 		shooter = player;
+		this.headshot = headshot;
 	}
 	
 	@Override
@@ -33,13 +53,27 @@ public class EntityDamageSourceFlan extends EntityDamageSourceIndirect{
 		return new TextComponentString("#flansmod");
 	}
 	
+	/**
+	 * @return The weapon (InfoType) used to cause this damage
+	 */
 	public InfoType getWeapon()
 	{
 		return weapon;
 	}
 	
+	/**
+	 * @return The Player responsible for this damage
+	 */
 	public EntityPlayer getCausedPlayer()
 	{
 		return shooter;
+	}
+	
+	/**
+	 * @return True if this is a headshot, false if not
+	 */
+	public boolean isHeadshot()
+	{
+		return headshot;
 	}
 }
