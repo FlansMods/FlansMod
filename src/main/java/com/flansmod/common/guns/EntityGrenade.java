@@ -624,7 +624,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		type = GrenadeType.getGrenade(tags.getString("Type"));
-//		thrower = world.getPlayerEntityByName(tags.getString("Thrower"));
+		thrower = Optional.ofNullable(world.getPlayerEntityByName(tags.getString("Player")));
 		rotationYaw = tags.getFloat("RotationYaw");
 		rotationPitch = tags.getFloat("RotationPitch");
 		axes.setAngles(rotationYaw, rotationPitch, 0F);
@@ -638,9 +638,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		else
 		{
 			tags.setString("Type", type.shortName);
-			if(thrower != null)
-				//TODO DEBUG FIX
-				//tags.setString("Thrower", thrower.getName());
+			if(player != null)
+				tags.setString("Thrower", player.get().getName());
 			tags.setFloat("RotationYaw", axes.getYaw());
 			tags.setFloat("RotationPitch", axes.getPitch());
 		}
@@ -650,8 +649,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public void writeSpawnData(ByteBuf data)
 	{
 		ByteBufUtils.writeUTF8String(data, type.shortName);
-		//TODO DEBUG FIX
-//		data.writeInt(thrower == null ? 0 : thrower.getEntityId());
+		data.writeInt(player.isPresent() ? player.get().getEntityId() : -1);
+		data.writeInt(thrower.isPresent() ? thrower.get().getEntityId() : -1);
 		data.writeFloat(axes.getYaw());
 		data.writeFloat(axes.getPitch());
 	}
@@ -660,8 +659,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public void readSpawnData(ByteBuf data)
 	{
 		type = GrenadeType.getGrenade(ByteBufUtils.readUTF8String(data));
-		//TODO DEBUG FIX
-//		thrower = (EntityLivingBase)world.getEntityByID(data.readInt());
+		{
+			Entity ent = world.getEntityByID(data.readInt());
+			if (ent instanceof EntityPlayer)
+				player = Optional.of((EntityPlayer)ent);
+		}
+		thrower = Optional.ofNullable(world.getEntityByID(data.readInt()));
 		setRotation(data.readFloat(), data.readFloat());
 		prevRotationYaw = rotationYaw;
 		prevRotationPitch = rotationPitch;
