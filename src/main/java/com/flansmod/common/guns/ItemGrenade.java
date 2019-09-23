@@ -72,7 +72,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 			//Delay the next throw / weapon fire / whatnot
 			data.shootTimeRight = type.throwDelay;
 			//Create a new grenade entity
-			EntityGrenade grenade = new EntityGrenade(world, type, player);
+			EntityGrenade grenade = new EntityGrenade(player, this.type);
 			//Spawn the entity server side
 			if(!world.isRemote)
 				world.spawnEntity(grenade);
@@ -106,10 +106,10 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		return type;
 	}
 	
-	public EntityGrenade getGrenade(World world, EntityLivingBase thrower)
+	private EntityGrenade getGrenade(World world, EntityLivingBase thrower)
 	{
 		//Create a new grenade entity
-		EntityGrenade grenade = new EntityGrenade(world, type, thrower);
+		EntityGrenade grenade = new EntityGrenade(thrower, type);
 		//If this can be remotely detonated, add it to the players detonate list
 		if(type.remote && thrower instanceof EntityPlayer)
 			PlayerHandler.getPlayerData((EntityPlayer)thrower).remoteExplosives.add(grenade);

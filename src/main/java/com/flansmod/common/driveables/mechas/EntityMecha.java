@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -46,12 +48,15 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.FireableGun;
 import com.flansmod.common.guns.FiredShot;
+import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemGrenade;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
@@ -64,6 +69,7 @@ import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
+import com.flansmod.common.vector.Vector;
 import com.flansmod.common.vector.Vector3f;
 import com.flansmod.common.vector.Vector3i;
 
@@ -330,12 +336,13 @@ public class EntityMecha extends EntityDriveable
 					}
 					
 					//If no bullet stack was found, reload
+					getDriver().sendMessage(new TextComponentString("TEST BULLETS STACK: "+bulletStack));
 					if(bulletStack == null || bulletStack.isEmpty())
 					{
 						gunItem.Reload(heldStack, world, this, driveableData, left ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND, true, true, (infiniteAmmo() || creative()));
 					}
 					//A bullet stack was found, so try shooting with it
-					else if(bulletStack.getItem() instanceof ItemBullet)
+					else if(bulletStack.getItem() instanceof ItemBullet || bulletStack.getItem() instanceof ItemGrenade)
 					{
 						//Shoot
 						shoot(heldStack, gunType, bulletStack, creative(), left);
@@ -391,10 +398,33 @@ public class EntityMecha extends EntityDriveable
 		if(!world.isRemote)
 		{
 			ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
-			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-			//TODO unchecked cast, grenades will cause an error
-			FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
-			ShotHandler.fireGun(world, shot, gunType.numBullets*bulletType.numBullets, bulletOrigin, armVector);
+			if (shootableType instanceof BulletType)
+			{
+				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+				//TODO unchecked cast, grenades will cause an error
+				//TODO DEBUG REMOVE
+				getDriver().sendMessage(new TextComponentString("TEST SHOOTABLE TYPE: "+shootableType));
+				FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
+				ShotHandler.fireGun(world, shot, gunType.numBullets*bulletType.numBullets, bulletOrigin, armVector);
+			}
+			else if (shootableType instanceof GrenadeType)
+			{
+				//TODO DEBUG REMOVE
+				getDriver().sendMessage(new TextComponentString("TEST ARM VECTOR: "+armVector));
+				
+				Vector3f vec = new Vector3f(armVector);
+//				vec.normalise();
+				//TODO DEBUG REMOVE
+				getDriver().sendMessage(new TextComponentString("TEST ARM VECTOR2: "+vec));
+				
+			    double yaw = Math.atan2(vec.z, vec.x);
+	            double pitch = Math.atan2(Math.sqrt(vec.z * vec.z + vec.x * vec.x), vec.y) - Math.PI/2;
+				Optional<Entity> ent = Optional.of(this);
+				Optional<EntityPlayer> player = Optional.of(getDriver());
+				
+				EntityGrenade grenade = new EntityGrenade(world, new BlockPos(bulletOrigin.toVec3()), (GrenadeType) shootableType, (float)Math.toDegrees(pitch), (float)Math.toDegrees(yaw + Math.PI*1.5), player, ent);
+				world.spawnEntity(grenade);
+				}
 		}
 		
 		if(left)

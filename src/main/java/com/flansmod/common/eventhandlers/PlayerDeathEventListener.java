@@ -35,8 +35,6 @@ public class PlayerDeathEventListener
 			Team killedTeam = PlayerHandler.getPlayerData(died).team;
 			Team killerTeam = PlayerHandler.getPlayerData(source.getCausedPlayer()).team;
 			
-			//TODO DEBUG REMOVE
-			source.getCausedPlayer().sendMessage(new TextComponentString("TEST IS HEADSHOT: "+source.isHeadshot()));
 			FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(source.isHeadshot(), source.getWeapon(), (killedTeam == null ? "f" : killedTeam.textColour) + died.getName(), (killerTeam == null ? "f" : killerTeam.textColour) + source.getCausedPlayer().getName()), died.dimension);
 		}
 	}

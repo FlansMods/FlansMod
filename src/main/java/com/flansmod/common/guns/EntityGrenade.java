@@ -1,6 +1,9 @@
 package com.flansmod.common.guns;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -16,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -48,10 +52,17 @@ import static com.flansmod.common.util.BlockUtil.destroyBlock;
 public class EntityGrenade extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	public GrenadeType type;
+	
 	/**
-	 * The entity that threw them
+	 * Contains the player who is responsible for the thrown grenade
 	 */
-	public EntityLivingBase thrower;
+	private Optional<EntityPlayer> player;
+	
+	/**
+	 * The Entity who has thrown the grenade
+	 */
+	private Optional<Entity> thrower;
+	
 	/**
 	 * This is to avoid players grenades teamkilling after they switch team
 	 */
@@ -92,6 +103,81 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		super(w);
 	}
 	
+	/**
+	 * General constructor. Example usecase: grenades spawned via console command
+	 * 
+	 * @param w             World in which the grenade will spawn in
+	 * @param pos           Position the grenade will spawn at
+	 * @param g             GrenadeType of the grenade
+	 * @param rotationPitch Pitch of the direction the grenade will fly
+	 * @param rotationYaw   Yaw of the direction the grenade will fly
+	 */
+	public EntityGrenade(World w, BlockPos pos, GrenadeType g, float rotationPitch, float rotationYaw)
+	{
+		this(w);
+		setPosition(pos.getX(), pos.getY(), pos.getZ());
+		type = g;
+		numUsesRemaining = type.numUses;
+		setSize(g.hitBoxSize, g.hitBoxSize);
+		//Set the grenade to be facing the way the Pitch and Yaw variables define
+		axes.setAngles(rotationYaw + 90F, g.spinWhenThrown ? rotationPitch : 0F, 0F);
+		this.rotationYaw = prevRotationYaw = g.spinWhenThrown ? rotationYaw + 90F : 0F;
+		this.rotationPitch = prevRotationPitch = rotationPitch;
+		//Give the grenade velocity in the direction the player is looking
+		float speed = 0.5F * type.throwSpeed;
+		motionX = axes.getXAxis().x * speed;
+		motionY = axes.getXAxis().y * speed;
+		motionZ = axes.getXAxis().z * speed;
+		if(type.spinWhenThrown)
+			angularVelocity = new Vector3f(0F, 0F, 10F);
+		if(type.throwSound != null)
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.throwSound, true);
+	}
+	
+	/**
+	 * General constructor for entitys throwing grenades. This should not be used when a player throws the grenade
+	 * 
+	 * @param entity Entity throwing the grenade
+	 * @param g      GrenadeType of the grenade
+	 */
+	public EntityGrenade(EntityLivingBase entity, GrenadeType g)
+	{
+		this(entity.world, entity.getPosition().add(0, entity.getEyeHeight(), 0), g, entity.rotationPitch, entity.rotationYaw);
+		this.thrower = Optional.of(entity);
+	}
+	
+	/**
+	 * When a player throws a grenade directly this constructor should be used
+	 * 
+	 * @param player Player throwing the grenade
+	 * @param g      GrenadeType of the grenade
+	 */
+	public EntityGrenade(EntityPlayer player, GrenadeType g)
+	{
+		this((EntityLivingBase)player, g);
+		this.player = Optional.of(player);
+	}
+	
+	/**
+	 * Constructor for grenades thrown where a player and/or a entity can be associated with.
+	 * E.g. mecha using a grenade launcher. In this case the 'entity' is the mecha and the 'player' the player controlling the mecha
+	 * 
+	 * @param w             World in which the grenade will spawn in
+	 * @param pos           Position the grenade will spawn at
+	 * @param g             GrenadeType of the grenade
+	 * @param rotationPitch Pitch of the direction the grenade will fly
+	 * @param rotationYaw   Yaw of the direction the grenade will fly
+	 * @param player        The player that is responsible for throwing the grenade
+	 * @param entity        The entity throwing the grenade. Can be the same as 'player'
+	 */
+	public EntityGrenade(World w, BlockPos pos, GrenadeType g, float rotationPitch, float rotationYaw, Optional<EntityPlayer> player, Optional<Entity> entity)
+	{
+		this(w, pos, g, rotationPitch, rotationYaw);
+		this.thrower = entity;
+		this.player = player;
+	}
+	//TODO DEBUG REMOVE
+	/*
 	public EntityGrenade(World w, GrenadeType g, EntityLivingBase t)
 	{
 		this(w);
@@ -118,7 +204,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(type.throwSound != null)
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.throwSound, true);
 	}
-	
+	*/
 	@Override
 	public void onUpdate()
 	{
@@ -206,9 +292,9 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					if(obj instanceof EntityLivingBase && getDistanceSq((Entity)obj) < type.livingProximityTrigger * type.livingProximityTrigger)
 					{
 						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
-						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
+						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && player.isPresent())
 						{
-							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceFlan(type.shortName, this, (EntityPlayer)thrower, type)))
+							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceFlan(type.shortName, this, player.get(), type)))
 								continue;
 						}
 						if(type.damageToTriggerer > 0)
@@ -263,7 +349,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					if(!world.isRemote)
 					{
 						WorldServer worldServer = (WorldServer)world;
-						destroyBlock(worldServer, hit.getBlockPos(), thrower, false);
+						//TODO DEBUG INVESTIGATE
+						//destroyBlock(worldServer, hit.getBlockPos(), thrower, false);
 					}
 				}
 				
@@ -385,9 +472,15 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		
 		if(type.stickToThrower)
 		{
-			if(thrower == null || thrower.isDead)
+			if (!thrower.isPresent() || thrower.get().isDead || !(thrower.get() instanceof EntityLivingBase))
+			{
 				setDead();
-			else setPosition(thrower.posX, thrower.posY, thrower.posZ);
+			}
+			else
+			{
+				EntityLivingBase entity = (EntityLivingBase) thrower.get();
+				setPosition(entity.posX, entity.posY, entity.posZ);
+			}
 		}
 		
 		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
@@ -438,7 +531,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Explode
 		if(!world.isRemote && type.explosionRadius > 0.1F)
 		{
-			new FlansModExplosion(world, this, thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
+			new FlansModExplosion(world, this, player, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
 		}
 		
 		//Make fire
@@ -514,9 +607,11 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	
 	private DamageSource getGrenadeDamage()
 	{
-		if(thrower instanceof EntityPlayer)
-			return new EntityDamageSourceFlan(type.shortName, this, (EntityPlayer)thrower, type).setProjectile();
-		else return (new EntityDamageSourceIndirect(type.shortName, this, thrower)).setProjectile();
+		if (player.isPresent())
+		{
+			return new EntityDamageSourceFlan(type.shortName, this, player.get(), type).setProjectile();
+		}
+		return new EntityDamageSource(type.shortName, this).setProjectile();
 	}
 	
 	@Override
@@ -529,7 +624,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		type = GrenadeType.getGrenade(tags.getString("Type"));
-		thrower = world.getPlayerEntityByName(tags.getString("Thrower"));
+//		thrower = world.getPlayerEntityByName(tags.getString("Thrower"));
 		rotationYaw = tags.getFloat("RotationYaw");
 		rotationPitch = tags.getFloat("RotationPitch");
 		axes.setAngles(rotationYaw, rotationPitch, 0F);
@@ -544,7 +639,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		{
 			tags.setString("Type", type.shortName);
 			if(thrower != null)
-				tags.setString("Thrower", thrower.getName());
+				//TODO DEBUG FIX
+				//tags.setString("Thrower", thrower.getName());
 			tags.setFloat("RotationYaw", axes.getYaw());
 			tags.setFloat("RotationPitch", axes.getPitch());
 		}
@@ -554,7 +650,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public void writeSpawnData(ByteBuf data)
 	{
 		ByteBufUtils.writeUTF8String(data, type.shortName);
-		data.writeInt(thrower == null ? 0 : thrower.getEntityId());
+		//TODO DEBUG FIX
+//		data.writeInt(thrower == null ? 0 : thrower.getEntityId());
 		data.writeFloat(axes.getYaw());
 		data.writeFloat(axes.getPitch());
 	}
@@ -563,7 +660,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public void readSpawnData(ByteBuf data)
 	{
 		type = GrenadeType.getGrenade(ByteBufUtils.readUTF8String(data));
-		thrower = (EntityLivingBase)world.getEntityByID(data.readInt());
+		//TODO DEBUG FIX
+//		thrower = (EntityLivingBase)world.getEntityByID(data.readInt());
 		setRotation(data.readFloat(), data.readFloat());
 		prevRotationYaw = rotationYaw;
 		prevRotationPitch = rotationPitch;

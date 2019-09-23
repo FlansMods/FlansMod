@@ -296,7 +296,7 @@ public class ShotHandler
 		
 		if(bulletType.explosionRadius > 0)
 		{
-			new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional().orElse(null), bulletType,
+			new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional(), bulletType,
 					detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
 		}
 		if(bulletType.fireRadius > 0)

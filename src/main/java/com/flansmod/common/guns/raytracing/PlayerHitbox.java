@@ -163,9 +163,6 @@ public class PlayerHitbox
 		}
 		float damageModifier = bulletType.penetratingPower < 0.1F ? penetratingPower / bulletType.penetratingPower : 1;
 		
-		//TODO DEBUG REMOVE
-		player.sendMessage(new TextComponentString("TEST HITBOX BODY TYPE: "+type));
-		
 		switch(type)
 		{
 			case BODY: break;
