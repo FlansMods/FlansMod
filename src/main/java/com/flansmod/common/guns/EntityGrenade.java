@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -41,6 +40,7 @@ import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.util.BlockUtil;
 import com.flansmod.common.vector.Vector3f;
 
 public class EntityGrenade extends EntityShootable implements IEntityAdditionalSpawnData
@@ -301,8 +301,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			//If we hit block
 			if(hit != null && hit.typeOfHit == RayTraceResult.Type.BLOCK)
 			{
-				//Get the blockID and block material
-				Block block = world.getBlockState(hit.getBlockPos()).getBlock();
+				//Get block material
 				Material mat = world.getBlockState(hit.getBlockPos()).getMaterial();
 				
 				//If this grenade detonates on impact, do so
@@ -315,9 +314,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					if(!world.isRemote)
 					{
 						WorldServer worldServer = (WorldServer)world;
-						//TODO DEBUG INVESTIGATE
-						//destroyBlock(worldServer, hit.getBlockPos(), null, false);
-						//destroyBlock
+						BlockUtil.destroyBlock(worldServer, hit.getBlockPos(), player.orElse(null), false);
 					}
 				}
 				
@@ -455,7 +452,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(type.damageVsLiving > 0 && !stuck)
 		{
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
-			List list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox());
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox());
 			for(Object obj : list)
 			{
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)

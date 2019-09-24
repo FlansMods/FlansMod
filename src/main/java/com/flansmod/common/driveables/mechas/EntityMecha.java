@@ -7,9 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
@@ -63,13 +61,10 @@ import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableGUI;
-import com.flansmod.common.network.PacketDriveableKey;
-import com.flansmod.common.network.PacketGunAnimation;
 import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
-import com.flansmod.common.vector.Vector;
 import com.flansmod.common.vector.Vector3f;
 import com.flansmod.common.vector.Vector3i;
 
@@ -401,24 +396,13 @@ public class EntityMecha extends EntityDriveable
 			if (shootableType instanceof BulletType)
 			{
 				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
-				//TODO unchecked cast, grenades will cause an error
-				//TODO DEBUG REMOVE
-				getDriver().sendMessage(new TextComponentString("TEST SHOOTABLE TYPE: "+shootableType));
 				FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, (EntityPlayerMP) getDriver());
 				ShotHandler.fireGun(world, shot, gunType.numBullets*bulletType.numBullets, bulletOrigin, armVector);
 			}
 			else if (shootableType instanceof GrenadeType)
 			{
-				//TODO DEBUG REMOVE
-				getDriver().sendMessage(new TextComponentString("TEST ARM VECTOR: "+armVector));
-				
-				Vector3f vec = new Vector3f(armVector);
-//				vec.normalise();
-				//TODO DEBUG REMOVE
-				getDriver().sendMessage(new TextComponentString("TEST ARM VECTOR2: "+vec));
-				
-			    double yaw = Math.atan2(vec.z, vec.x);
-	            double pitch = Math.atan2(Math.sqrt(vec.z * vec.z + vec.x * vec.x), vec.y) - Math.PI/2;
+				double yaw = Math.atan2(armVector.z, armVector.x);
+				double pitch = Math.atan2(Math.sqrt(armVector.z * armVector.z + armVector.x * armVector.x), armVector.y) - Math.PI/2;
 				Optional<Entity> ent = Optional.of(this);
 				Optional<EntityPlayer> player = Optional.of(getDriver());
 				
