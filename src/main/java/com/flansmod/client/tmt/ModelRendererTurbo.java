@@ -15,6 +15,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -2133,23 +2134,23 @@ public class ModelRendererTurbo extends ModelRenderer
 		}
 		if(rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef(rotationPointX * worldScale, rotationPointY * worldScale, rotationPointZ * worldScale);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(rotationPointX * worldScale, rotationPointY * worldScale, rotationPointZ * worldScale);
 			if(!oldRotateOrder && rotateAngleY != 0.0F)
 			{
-				GL11.glRotatef(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
+				GlStateManager.rotate(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 			}
 			if(rotateAngleZ != 0.0F)
 			{
-				GL11.glRotatef((oldRotateOrder ? -1 : 1) * rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
+				GlStateManager.rotate((oldRotateOrder ? -1 : 1) * rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
 			}
 			if(oldRotateOrder && rotateAngleY != 0.0F)
 			{
-				GL11.glRotatef(-rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
+				GlStateManager.rotate(-rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 			}
 			if(rotateAngleX != 0.0F)
 			{
-				GL11.glRotatef(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
+				GlStateManager.rotate(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
 			}
 			
 			callDisplayList();
@@ -2161,11 +2162,11 @@ public class ModelRendererTurbo extends ModelRenderer
 				}
 				
 			}
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		}
 		else if(rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F)
 		{
-			GL11.glTranslatef(rotationPointX * worldScale, rotationPointY * worldScale, rotationPointZ * worldScale);
+			GlStateManager.translate(rotationPointX * worldScale, rotationPointY * worldScale, rotationPointZ * worldScale);
 			callDisplayList();
 			if(childModels != null)
 			{
@@ -2175,7 +2176,7 @@ public class ModelRendererTurbo extends ModelRenderer
 				}
 				
 			}
-			GL11.glTranslatef(-rotationPointX * worldScale, -rotationPointY * worldScale, -rotationPointZ * worldScale);
+			GlStateManager.translate(-rotationPointX * worldScale, -rotationPointY * worldScale, -rotationPointZ * worldScale);
 		}
 		else
 		{
@@ -2206,22 +2207,22 @@ public class ModelRendererTurbo extends ModelRenderer
 		{
 			compileDisplayList(f);
 		}
-		GL11.glPushMatrix();
-		GL11.glTranslatef(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
 		if(rotateAngleY != 0.0F)
 		{
-			GL11.glRotatef(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 		}
 		if(rotateAngleX != 0.0F)
 		{
-			GL11.glRotatef(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
 		}
 		if(rotateAngleZ != 0.0F)
 		{
-			GL11.glRotatef(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
 		}
 		callDisplayList();
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	@Override
@@ -2241,30 +2242,30 @@ public class ModelRendererTurbo extends ModelRenderer
 		}
 		if(rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F)
 		{
-			GL11.glTranslatef(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
+			GlStateManager.translate(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
 			if(rotateAngleZ != 0.0F)
 			{
-				GL11.glRotatef(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
+				GlStateManager.rotate(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
 			}
 			if(rotateAngleY != 0.0F)
 			{
-				GL11.glRotatef(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
+				GlStateManager.rotate(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 			}
 			if(rotateAngleX != 0.0F)
 			{
-				GL11.glRotatef(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
+				GlStateManager.rotate(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
 			}
 		}
 		else if(rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F)
 		{
-			GL11.glTranslatef(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
+			GlStateManager.translate(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
 		}
 	}
 	
 	private void callDisplayList()
 	{
 		if(useLegacyCompiler)
-			GL11.glCallList(displayList);
+			GlStateManager.callList(displayList);
 		else
 		{
 			TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
@@ -2276,7 +2277,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			{
 				TextureGroup curTexGroup = itr.next();
 				curTexGroup.loadTexture();
-				GL11.glCallList(displayListArray[i]);
+				GlStateManager.callList(displayListArray[i]);
 				if(!defaultTexture.equals(""))
 					renderEngine.bindTexture(new ResourceLocation("", defaultTexture)); //TODO : Check. Not sure about this one
 			}
@@ -2296,7 +2297,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			for(int i = 0; itr.hasNext(); i++)
 			{
 				displayListArray[i] = GLAllocation.generateDisplayLists(1);
-				GL11.glNewList(displayListArray[i], GL11.GL_COMPILE);
+				GlStateManager.glNewList(displayListArray[i], GL11.GL_COMPILE);
 				TmtTessellator tessellator = TmtTessellator.instance;
 				
 				TextureGroup usedGroup = itr.next();
@@ -2305,7 +2306,7 @@ public class ModelRendererTurbo extends ModelRenderer
 					usedGroup.poly.get(j).draw(tessellator, worldScale);
 				}
 				
-				GL11.glEndList();
+				GlStateManager.glEndList();
 			}
 		}
 		
@@ -2315,14 +2316,14 @@ public class ModelRendererTurbo extends ModelRenderer
 	private void compileLegacyDisplayList(float worldScale)
 	{
 		displayList = GLAllocation.generateDisplayLists(1);
-		GL11.glNewList(displayList, GL11.GL_COMPILE);
+		GlStateManager.glNewList(displayList, GL11.GL_COMPILE);
 		TmtTessellator tessellator = TmtTessellator.instance;
 		for(TexturedPolygon face : faces)
 		{
 			face.draw(tessellator, worldScale);
 		}
 		
-		GL11.glEndList();
+		GlStateManager.glEndList();
 	}
 	
 	private PositionTextureVertex vertices[];

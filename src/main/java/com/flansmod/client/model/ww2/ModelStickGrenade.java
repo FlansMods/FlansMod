@@ -9,9 +9,8 @@
 
 package com.flansmod.client.model.ww2;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
@@ -132,7 +131,7 @@ public class ModelStickGrenade extends ModelBase
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		
-		GL11.glScalef(0.2F, 0.2F, 0.2F);
+		GlStateManager.scale(0.2F, 0.2F, 0.2F);
 		
 		for(int i = 0; i < 20; i++)
 		{

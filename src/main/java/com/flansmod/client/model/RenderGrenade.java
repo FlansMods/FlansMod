@@ -1,9 +1,8 @@
 package com.flansmod.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
@@ -28,13 +27,13 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 	public void doRender(EntityGrenade grenade, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(grenade);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)d, (float)d1, (float)d2);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float)d, (float)d1, (float)d2);
 		if(grenade.stuck)
 		{
-			GL11.glRotatef(180F - grenade.axes.getYaw(), 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(grenade.axes.getPitch(), 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(grenade.axes.getRoll(), 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(180F - grenade.axes.getYaw(), 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(grenade.axes.getPitch(), 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(grenade.axes.getRoll(), 1.0F, 0.0F, 0.0F);
 		}
 		else
 		{
@@ -59,14 +58,14 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 			for(; dRoll <= -180F; dRoll += 360F)
 			{
 			}
-			GL11.glRotatef(180F - grenade.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(grenade.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(grenade.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(180F - grenade.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(grenade.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(grenade.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		}
 		ModelBase model = grenade.type.model;
 		if(model != null)
 			model.render(grenade, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	@Override
@@ -92,7 +91,7 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 	@Override
 	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data)
 	{
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		if(item != null && item.getItem() instanceof ItemGrenade)
 		{
 			GrenadeType grenadeType = ((ItemGrenade)item.getItem()).type;
@@ -102,23 +101,23 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 				{
 					case EQUIPPED:
 					{
-						//GL11.glRotatef(35F, 0F, 0F, 1F);
-						//GL11.glRotatef(-5F, 0F, 1F, 0F);
-						//GL11.glTranslatef(0.75F, -0.22F, -0.08F);
-						//GL11.glTranslatef(0F, 0.25F, 0F);
+						//GlStateManager.rotate(35F, 0F, 0F, 1F);
+						//GlStateManager.rotate(-5F, 0F, 1F, 0F);
+						//GlStateManager.translate(0.75F, -0.22F, -0.08F);
+						//GlStateManager.translate(0F, 0.25F, 0F);
 						break;
 					}
 					case EQUIPPED_FIRST_PERSON:
 					{
 						if(hand == EnumHand.MAIN_HAND)
 						{
-							GL11.glTranslatef(-1.25F, 0.8F, 0.1F);
+							GlStateManager.translate(-1.25F, 0.8F, 0.1F);
 						}
 						else
 						{
-							GL11.glRotatef(45F, 0F, 1F, 0F);
-							GL11.glTranslatef(-1F, 0.8F, -2F);
-							GL11.glRotatef(-135F, 0F, 1F, 0F);
+							GlStateManager.rotate(45F, 0F, 1F, 0F);
+							GlStateManager.translate(-1F, 0.8F, -2F);
+							GlStateManager.rotate(-135F, 0F, 1F, 0F);
 						}
 						break;
 					}
@@ -130,7 +129,7 @@ public class RenderGrenade extends Render<EntityGrenade> implements CustomItemRe
 				model.render(null, 0F, 0F, 0F, 0F, 0F, 1F / 16F);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	public static class Factory implements IRenderFactory<EntityGrenade>

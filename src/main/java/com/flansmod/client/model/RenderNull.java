@@ -3,6 +3,7 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -32,24 +33,24 @@ public class RenderNull<E extends Entity> extends Render<E>
 	{
 		if(FlansMod.DEBUG)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float)d, (float)d1, (float)d2);
-			GL11.glRotatef(-entity.rotationYaw, 0F, 1F, 0F);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			//GL11.glEnable(GL11.GL_BLEND);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate((float)d, (float)d1, (float)d2);
+			GlStateManager.rotate(-entity.rotationYaw, 0F, 1F, 0F);
+			GlStateManager.disableTexture2D();
+			//GlStateManager.enableBlend();
 			//GL11.glDisable(GL11.GL_DEPTH_TEST);
 			if(entity instanceof EntitySeat)
 			{
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.color(1F, 1F, 1F, 1F);
 			}
-			else GL11.glColor4f(0F, 0F, 1F, 0.3F);
-			GL11.glScalef(-1F, 1F, -1F);
+			else GlStateManager.color(0F, 0F, 1F, 0.3F);
+			GlStateManager.scale(-1F, 1F, -1F);
 			renderOffsetAABB(new AxisAlignedBB(-1F, -1F, -1F, 1F, 1F, 1F), 0, 0, 0);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GlStateManager.enableTexture2D();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glColor4f(1F, 1F, 1F, 1F);
-			GL11.glPopMatrix();
+			GlStateManager.disableBlend();
+			GlStateManager.color(1F, 1F, 1F, 1F);
+			GlStateManager.popMatrix();
 		}
 	}
 	

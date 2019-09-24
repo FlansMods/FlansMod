@@ -133,10 +133,10 @@ public class GuiTeamsBase extends GuiScreen
 			GunType gunType = ((ItemGun)stack.getItem()).GetType();
 			if(gunType.model != null)
 			{
-				GL11.glPushMatrix();
-				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GlStateManager.pushMatrix();
+				GlStateManager.color(1F, 1F, 1F, 1F);
 				
-				GL11.glTranslatef(x, y, 100);
+				GlStateManager.translate(x, y, 100);
 				
 				GlStateManager.disableLighting();
 				GlStateManager.pushMatrix();
@@ -147,14 +147,14 @@ public class GuiTeamsBase extends GuiScreen
 				GlStateManager.popMatrix();
 				GlStateManager.enableRescaleNormal();
 				
-				GL11.glRotatef(160, 1F, 0F, 0F);
-				GL11.glRotatef(10, 0F, 1F, 0F);
-				GL11.glScalef(-scale, scale, scale);
+				GlStateManager.rotate(160, 1F, 0F, 0F);
+				GlStateManager.rotate(10, 0F, 1F, 0F);
+				GlStateManager.scale(-scale, scale, scale);
 				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, stack);
 				
 				RenderHelper.disableStandardItemLighting();
 				
-				GL11.glPopMatrix();
+				GlStateManager.popMatrix();
 			}
 		}
 	}

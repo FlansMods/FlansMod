@@ -1,7 +1,5 @@
 package com.flansmod.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -9,6 +7,8 @@ import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.vector.Vector3f;
+
+import net.minecraft.client.renderer.GlStateManager;
 
 public class ModelMecha extends ModelDriveable
 {
@@ -64,16 +64,16 @@ public class ModelMecha extends ModelDriveable
 		renderPart(rightFrontFootModel);
 		renderPart(barrelModel);
 		renderPart(headModel);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(mechaType.leftArmOrigin.x / mechaType.modelScale, mechaType.leftArmOrigin.y / mechaType.modelScale, mechaType.leftArmOrigin.z / mechaType.modelScale);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(mechaType.leftArmOrigin.x / mechaType.modelScale, mechaType.leftArmOrigin.y / mechaType.modelScale, mechaType.leftArmOrigin.z / mechaType.modelScale);
 		renderPart(leftArmModel);
 		renderPart(leftHandModel);
-		GL11.glPopMatrix();
-		GL11.glPushMatrix();
-		GL11.glTranslatef(mechaType.rightArmOrigin.x / mechaType.modelScale, mechaType.rightArmOrigin.y / mechaType.modelScale, mechaType.rightArmOrigin.z / mechaType.modelScale);
+		GlStateManager.popMatrix();
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(mechaType.rightArmOrigin.x / mechaType.modelScale, mechaType.rightArmOrigin.y / mechaType.modelScale, mechaType.rightArmOrigin.z / mechaType.modelScale);
 		renderPart(rightArmModel);
 		renderPart(rightHandModel);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	public void render(float f5, EntityMecha mecha, float f)

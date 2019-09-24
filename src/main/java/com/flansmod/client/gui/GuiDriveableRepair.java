@@ -3,11 +3,10 @@ package com.flansmod.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -113,11 +112,11 @@ public class GuiDriveableRepair extends GuiScreen
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GlStateManager.enableBlend();
 		
 		//Bind the background texture
 		mc.renderEngine.bindTexture(texture);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		//Calculate the gui origin
 		guiOriginX = w / 2 - guiWidth / 2;
 		guiOriginY = h / 2 - guiHeight / 2;
@@ -141,7 +140,7 @@ public class GuiDriveableRepair extends GuiScreen
 			
 			//Render the damage bar
 			float percentHealth = (float)part.health / (float)part.maxHealth;
-			GL11.glColor3f(1 - percentHealth, percentHealth, 0F);
+			GlStateManager.color(1 - percentHealth, percentHealth, 0F);
 			drawTexturedModalRect(guiOriginX + 121, guiOriginY + y + 2, 0, 73, (int)(70 * percentHealth), 16);
 			
 			//Write the part name and percent health
