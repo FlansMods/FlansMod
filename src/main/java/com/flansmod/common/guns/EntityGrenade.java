@@ -3,8 +3,6 @@ package com.flansmod.common.guns;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +33,6 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
-import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
@@ -47,8 +43,6 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import static com.flansmod.common.util.BlockUtil.destroyBlock;
-
 public class EntityGrenade extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	public GrenadeType type;
@@ -56,12 +50,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	/**
 	 * Contains the player who is responsible for the thrown grenade
 	 */
-	private Optional<EntityPlayer> player;
+	private Optional<EntityPlayer> player = Optional.empty();
 	
 	/**
 	 * The Entity who has thrown the grenade
 	 */
-	private Optional<Entity> thrower;
+	private Optional<Entity> thrower = Optional.empty();
 	
 	/**
 	 * This is to avoid players grenades teamkilling after they switch team
@@ -176,35 +170,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		this.thrower = entity;
 		this.player = player;
 	}
-	//TODO DEBUG REMOVE
-	/*
-	public EntityGrenade(World w, GrenadeType g, EntityLivingBase t)
-	{
-		this(w);
-		setPosition(t.posX, t.posY + t.getEyeHeight(), t.posZ);
-		type = g;
-		numUsesRemaining = type.numUses;
-		thrower = t;
-		if(thrower instanceof EntityPlayer && PlayerHandler.getPlayerData((EntityPlayer)thrower) != null)
-		{
-			teamOfThrower = PlayerHandler.getPlayerData((EntityPlayer)thrower).team;
-		}
-		setSize(g.hitBoxSize, g.hitBoxSize);
-		//Set the grenade to be facing the way the player is looking
-		axes.setAngles(t.rotationYaw + 90F, g.spinWhenThrown ? t.rotationPitch : 0F, 0F);
-		rotationYaw = prevRotationYaw = g.spinWhenThrown ? t.rotationYaw + 90F : 0F;
-		rotationPitch = prevRotationPitch = t.rotationPitch;
-		//Give the grenade velocity in the direction the player is looking
-		float speed = 0.5F * type.throwSpeed;
-		motionX = axes.getXAxis().x * speed;
-		motionY = axes.getXAxis().y * speed;
-		motionZ = axes.getXAxis().z * speed;
-		if(type.spinWhenThrown)
-			angularVelocity = new Vector3f(0F, 0F, 10F);
-		if(type.throwSound != null)
-			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.throwSound, true);
-	}
-	*/
+	
 	@Override
 	public void onUpdate()
 	{
@@ -245,7 +211,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			//Send flak packet to spawn particles
 			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(posX, posY, posZ, 50, type.smokeParticleType), posX, posY, posZ, 30, dimension);
 			//
-			List list = world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
+			List<Entity> list = world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
 			for(Object obj : list)
 			{
 				EntityLivingBase entity = ((EntityLivingBase)obj);
@@ -350,7 +316,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					{
 						WorldServer worldServer = (WorldServer)world;
 						//TODO DEBUG INVESTIGATE
-						//destroyBlock(worldServer, hit.getBlockPos(), thrower, false);
+						//destroyBlock(worldServer, hit.getBlockPos(), null, false);
+						//destroyBlock
 					}
 				}
 				
@@ -624,7 +591,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		type = GrenadeType.getGrenade(tags.getString("Type"));
-		thrower = Optional.ofNullable(world.getPlayerEntityByName(tags.getString("Player")));
+		player = Optional.ofNullable(world.getPlayerEntityByName(tags.getString("Player")));
 		rotationYaw = tags.getFloat("RotationYaw");
 		rotationPitch = tags.getFloat("RotationPitch");
 		axes.setAngles(rotationYaw, rotationPitch, 0F);
@@ -639,7 +606,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		{
 			tags.setString("Type", type.shortName);
 			if(player != null)
-				tags.setString("Thrower", player.get().getName());
+				tags.setString("Player", player.get().getName());
 			tags.setFloat("RotationYaw", axes.getYaw());
 			tags.setFloat("RotationPitch", axes.getPitch());
 		}
@@ -662,7 +629,13 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		{
 			Entity ent = world.getEntityByID(data.readInt());
 			if (ent instanceof EntityPlayer)
+			{
 				player = Optional.of((EntityPlayer)ent);
+			}
+			else
+			{
+				player = Optional.empty();
+			}
 		}
 		thrower = Optional.ofNullable(world.getEntityByID(data.readInt()));
 		setRotation(data.readFloat(), data.readFloat());
