@@ -170,6 +170,7 @@ public class FlansMod
 	public static ItemBlockManyNames spawnerItem;
 	public static ItemOpStick opStick;
 	public static ItemFlagpole flag;
+	public static Item crosshairsymbol;
 	public static ArrayList<ItemPart> partItems = new ArrayList<>();
 	public static ArrayList<ItemMecha> mechaItems = new ArrayList<>();
 	public static ArrayList<ItemTool> toolItems = new ArrayList<>();
@@ -240,7 +241,7 @@ public class FlansMod
 		paintjobTable = new BlockPaintjobTable();
 		workbenchItem = new ItemBlockManyNames(workbench);
 		spawnerItem = new ItemBlockManyNames(spawner);
-		
+		crosshairsymbol = new Item().setTranslationKey("crosshairsymbol").setRegistryName("crosshairsymbol");
 		
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation("flansmod:teamsSpawner"));
 		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, new ResourceLocation("flansmod:paintjobTable"));
@@ -350,6 +351,7 @@ public class FlansMod
 		
 		event.getRegistry().register(workbenchItem);
 		event.getRegistry().register(spawnerItem);
+		event.getRegistry().register(crosshairsymbol);
 	}
 	
 	@SubscribeEvent

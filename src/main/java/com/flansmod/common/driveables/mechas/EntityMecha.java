@@ -26,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -331,7 +330,6 @@ public class EntityMecha extends EntityDriveable
 					}
 					
 					//If no bullet stack was found, reload
-					getDriver().sendMessage(new TextComponentString("TEST BULLETS STACK: "+bulletStack));
 					if(bulletStack == null || bulletStack.isEmpty())
 					{
 						gunItem.Reload(heldStack, world, this, driveableData, left ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND, true, true, (infiniteAmmo() || creative()));
@@ -406,9 +404,9 @@ public class EntityMecha extends EntityDriveable
 				Optional<Entity> ent = Optional.of(this);
 				Optional<EntityPlayer> player = Optional.of(getDriver());
 				
-				EntityGrenade grenade = new EntityGrenade(world, new BlockPos(bulletOrigin.toVec3()), (GrenadeType) shootableType, (float)Math.toDegrees(pitch), (float)Math.toDegrees(yaw + Math.PI*1.5), player, ent);
+				EntityGrenade grenade = new EntityGrenade(world, bulletOrigin, (GrenadeType) shootableType, (float)Math.toDegrees(pitch), (float)Math.toDegrees(yaw + Math.PI*1.5), player, ent);
 				world.spawnEntity(grenade);
-				}
+			}
 		}
 		
 		if(left)

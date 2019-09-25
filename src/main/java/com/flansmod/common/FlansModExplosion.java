@@ -276,16 +276,6 @@ public class FlansModExplosion extends Explosion
 		return this.playerKnockbackMap;
 	}
 	
-	//TODO INVESTIGATE
-	/**
-	 * Returns either the entity that placed the explosive block, the entity that caused the explosion or null.
-	 /
-	@Override
-	public EntityLivingBase getExplosivePlacedBy()
-	{
-		return detonator;
-	}
-	*/
 	@Override
 	public void clearAffectedBlockPositions()
 	{

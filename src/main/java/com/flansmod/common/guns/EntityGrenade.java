@@ -22,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -106,7 +107,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	 * @param rotationPitch Pitch of the direction the grenade will fly
 	 * @param rotationYaw   Yaw of the direction the grenade will fly
 	 */
-	public EntityGrenade(World w, BlockPos pos, GrenadeType g, float rotationPitch, float rotationYaw)
+	public EntityGrenade(World w, Vector3f pos, GrenadeType g, float rotationPitch, float rotationYaw)
 	{
 		this(w);
 		setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -136,7 +137,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	 */
 	public EntityGrenade(EntityLivingBase entity, GrenadeType g)
 	{
-		this(entity.world, entity.getPosition().add(0, entity.getEyeHeight(), 0), g, entity.rotationPitch, entity.rotationYaw);
+		this(entity.world, new Vector3f(entity.getPositionVector().add(new Vec3d(0, entity.getEyeHeight(), 0))), g, entity.rotationPitch, entity.rotationYaw);
 		this.thrower = Optional.of(entity);
 	}
 	
@@ -164,7 +165,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	 * @param player        The player that is responsible for throwing the grenade
 	 * @param entity        The entity throwing the grenade. Can be the same as 'player'
 	 */
-	public EntityGrenade(World w, BlockPos pos, GrenadeType g, float rotationPitch, float rotationYaw, Optional<EntityPlayer> player, Optional<Entity> entity)
+	public EntityGrenade(World w, Vector3f pos, GrenadeType g, float rotationPitch, float rotationYaw, Optional<EntityPlayer> player, Optional<Entity> entity)
 	{
 		this(w, pos, g, rotationPitch, rotationYaw);
 		this.thrower = entity;
