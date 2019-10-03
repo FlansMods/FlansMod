@@ -105,6 +105,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Current gun variables for alternating weapons */
 	public int currentGunPrimary, currentGunSecondary;
 	
+	/** Whether each mouse button is held */
+	public boolean leftMouseHeld = false, rightMouseHeld = false;
+	
 	/** Angle of harvester aesthetic piece */
 	public float harvesterAngle;
 	
@@ -123,6 +126,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public int animCount = 0;
 	public int animFrame = 0;
+	
+	// Gun recoil
+	public boolean isRecoil = false;
+	public float recoilPos = 0;
+	public float lastRecoilPos = 0;
+	public int recoilTimer = 0;
 	
 	public EntityDriveable(World world)
 	{
@@ -951,6 +960,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 		
+		//Gun recoil
+        if(leftMouseHeld){
+    		tryRecoil();
+    		setRecoilTimer();
+        }
+        lastRecoilPos = recoilPos;
+        
+		if(recoilPos > 180-(180/type.recoilTime))
+		{
+			recoilPos = 0;
+			isRecoil = false;
+		}
+		
+		if(isRecoil)
+		recoilPos = recoilPos + (180/type.recoilTime);
+		
+		if(recoilTimer >= 0)
+		recoilTimer--;
 		
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
@@ -1078,10 +1105,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			throttle *= 0.98F;
 			primaryShootHeld = secondaryShootHeld = false;
-		}
+		} 
 		else if(getDriver() != null && getDriver() == getControllingPassenger())
 		{
 			reportVehicleError();
+		}
+		
+		if(seats[0] != null && seats[0].getRidingEntity() == null)
+		{
+			rightMouseHeld = leftMouseHeld = false;
 		}
 		
 		// Check if shooting
@@ -1173,6 +1205,40 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 			}
 		}
+	}
+	
+	public void tryRecoil()
+	{
+		int slot = -1;
+		DriveableType type = getDriveableType();
+		for(int i = driveableData.getMissileInventoryStart(); i < driveableData.getMissileInventoryStart() + type.numMissileSlots; i++)
+		{
+			ItemStack shell = driveableData.getStackInSlot(i);
+			if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)shell.getItem()).type, EnumWeaponType.SHELL))
+			{
+				slot = i;
+			}
+		}
+
+		if(recoilTimer <= 0 && slot != -1)
+		isRecoil = true;
+	}
+	
+	public void setRecoilTimer()
+	{
+		int slot = -1;
+		DriveableType type = getDriveableType();
+		for(int i = driveableData.getMissileInventoryStart(); i < driveableData.getMissileInventoryStart() + type.numMissileSlots; i++)
+		{
+			ItemStack shell = driveableData.getStackInSlot(i);
+			if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)shell.getItem()).type, EnumWeaponType.SHELL))
+			{
+				slot = i;
+			}
+		}
+
+		if(recoilTimer <= 0 && slot != -1)
+		recoilTimer = getDriveableType().shootDelayPrimary;
 	}
 	
 	private Vector3f getRandPosInBoundingBox(DriveablePart part)

@@ -26,6 +26,10 @@ public class ModelVehicle extends ModelDriveable
 	public ModelRendererTurbo rightTrackWheelModels[] = new ModelRendererTurbo[0];    //These go with the tracks but rotate
 	public ModelRendererTurbo leftTrackWheelModels[] = new ModelRendererTurbo[0];
 	
+	
+	public ModelRendererTurbo fancyTrackModel[] = new ModelRendererTurbo[0];
+	
+	
 	public ModelRendererTurbo leftAnimTrackModel[][] = new ModelRendererTurbo[0][0];  //Unlimited frame track animations
 	public ModelRendererTurbo rightAnimTrackModel[][] = new ModelRendererTurbo[0][0];
 	
@@ -36,6 +40,10 @@ public class ModelVehicle extends ModelDriveable
 	
 	public ModelRendererTurbo drillHeadModel[] = new ModelRendererTurbo[0];        //Drill head. Rotates around
 	public Vector3f drillHeadOrigin = new Vector3f();                                //this point
+	
+	//recoiling barrel part
+	public ModelRendererTurbo animBarrelModel[] = new ModelRendererTurbo[0];
+	public Vector3f barrelAttach = new Vector3f();
 	
 	public int animFrame = 0;
 	
@@ -330,6 +338,16 @@ public class ModelVehicle extends ModelDriveable
 		}
 	}
 	
+	public void renderAnimBarrel(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float dt)
+	{
+        if(vehicle.isPartIntact(EnumDriveablePart.turret))
+        {
+			for (ModelRendererTurbo aAnimBarrelModel : animBarrelModel) {
+				aAnimBarrelModel.render(f5, oldRotateOrder);
+			}
+        }
+	}
+	
 	public void renderDrillBit(EntityVehicle vehicle, float f)
 	{
 		if(vehicle.isPartIntact(EnumDriveablePart.harvester))
@@ -338,6 +356,13 @@ public class ModelVehicle extends ModelDriveable
 			{
 				adrillHeadModel.render(0.0625F, oldRotateOrder);
 			}
+		}
+	}
+	
+	public void renderFancyTracks(EntityVehicle vehicle, float f)
+	{
+		for (ModelRendererTurbo adrillHeadModel : fancyTrackModel) {
+			adrillHeadModel.render(0.0625F, oldRotateOrder);
 		}
 	}
 	
@@ -362,6 +387,7 @@ public class ModelVehicle extends ModelDriveable
 		flip(frontWheelModel);
 		flip(backWheelModel);
 		flip(drillHeadModel);
+		flip(fancyTrackModel);
 		for(ModelRendererTurbo[] latm : leftAnimTrackModel)
 			flip(latm);
 		for(ModelRendererTurbo[] ratm : rightAnimTrackModel)

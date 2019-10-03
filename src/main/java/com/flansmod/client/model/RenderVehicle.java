@@ -25,6 +25,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.ItemVehicle;
@@ -83,14 +84,42 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 			float modelScale = type.modelScale;
 			GlStateManager.pushMatrix();
 			{
+				float recoilDPos = (float)Math.sin(Math.toRadians(vehicle.recoilPos)) - (float)Math.sin(Math.toRadians(vehicle.lastRecoilPos));
+				float recoilPos = (float)Math.sin(Math.toRadians(vehicle.lastRecoilPos)) + recoilDPos*f1;
+				
 				GlStateManager.scale(modelScale, modelScale, modelScale);
 				ModelVehicle modVehicle = (ModelVehicle)type.model;
 				if(modVehicle != null)
 					modVehicle.render(vehicle, f1);
 				
+		        for(int i = 0; i < vehicle.trackLinksLeft.length; i++)
+		        {
+		        	AnimTrackLink link = vehicle.trackLinksLeft[i];
+		        	float rotZ = link.zRot;
+		        	GL11.glPushMatrix();
+		        	GL11.glTranslatef(link.position.x/16F, link.position.y/16F, link.position.z/16F);
+					for(; rotZ > 180F; rotZ -= 360F) {}
+					for(; rotZ <= -180F; rotZ += 360F) {}
+		        	GL11.glRotatef(rotZ * (float)(180/Math.PI), 0, 0, 1);
+		        	modVehicle.renderFancyTracks(vehicle, f1);
+		        	GL11.glPopMatrix();
+		        }
+		        
+		        for(int i = 0; i < vehicle.trackLinksRight.length; i++)
+		        {
+		        	AnimTrackLink link = vehicle.trackLinksRight[i];
+		        	float rotZ = link.zRot;
+					for(; rotZ > 180F; rotZ -= 360F) {}
+					for(; rotZ <= -180F; rotZ += 360F) {}
+		        	GL11.glPushMatrix();
+		        	GL11.glTranslatef(link.position.x/16F, link.position.y/16F, link.position.z/16F);
+		        	GL11.glRotatef(rotZ * (float)(180/Math.PI), 0, 0, 1);
+		        	modVehicle.renderFancyTracks(vehicle, f1);
+		        	GL11.glPopMatrix();
+		        }
+				
 				GlStateManager.pushMatrix();
-				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) &&
-						vehicle.getSeat(0) != null)
+				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.getSeat(0) != null)
 				{
 					dYaw = (vehicle.getSeat(0).looking.getYaw() - vehicle.getSeat(0).prevLooking.getYaw());
 					while(dYaw > 180F)
@@ -109,6 +138,18 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					
 					if(modVehicle != null)
 						modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
+					
+					//rotate and render barrel
+					if(modVehicle != null) {
+						EntitySeat[] seats = vehicle.getSeats();
+						GL11.glTranslatef(modVehicle.barrelAttach.x,modVehicle.barrelAttach.y, -modVehicle.barrelAttach.z);
+						float bPitch = (seats[0].looking.getPitch() - seats[0].prevLooking.getPitch());
+			    		float aPitch = seats[0].prevLooking.getPitch() + bPitch * f1;
+
+						GL11.glRotatef(-aPitch, 0F, 0F, 1F);
+						GL11.glTranslatef(recoilPos*-(5F/16F),0F, 0F);
+						modVehicle.renderAnimBarrel(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
+					}
 					
 					if(FlansMod.DEBUG)
 					{

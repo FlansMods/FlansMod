@@ -1,5 +1,16 @@
 package com.flansmod.common.driveables;
 
+import com.flansmod.api.IExplodeable;
+import com.flansmod.client.model.AnimTankTrack;
+import com.flansmod.client.model.AnimTrackLink;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.network.PacketVehicleControl;
+import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.tools.ItemTool;
+import com.flansmod.common.vector.Vector3f;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -13,15 +24,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.flansmod.api.IExplodeable;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketDriveableKey;
-import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.network.PacketVehicleControl;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.tools.ItemTool;
-import com.flansmod.common.vector.Vector3f;
 
 
 public class EntityVehicle extends EntityDriveable implements IExplodeable
@@ -55,6 +57,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	 */
 	public int toggleTimer = 0;
 	
+	public AnimTankTrack rightTrack;
+	public AnimTankTrack leftTrack;
+	
+	public AnimTrackLink trackLinksLeft[] = new AnimTrackLink[0];
+	public AnimTrackLink trackLinksRight[] = new AnimTrackLink[0];
+	
 	public EntityVehicle(World world)
 	{
 		super(world);
@@ -81,9 +89,32 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		initType(type, true, false);
 	}
 	
+	public void setupTracks(DriveableType type)
+	{
+		rightTrack = new AnimTankTrack(type.rightTrackPoints, type.trackLinkLength);
+		leftTrack = new AnimTankTrack(type.leftTrackPoints, type.trackLinkLength);
+		int numLinks = Math.round(rightTrack.getTrackLength()/ type.trackLinkLength);
+		trackLinksLeft = new AnimTrackLink[numLinks];
+		trackLinksRight = new AnimTrackLink[numLinks];
+        for(int i = 0; i < numLinks; i++)
+        {
+        	float progress = 0.01F + (type.trackLinkLength * i);
+    		int trackPart = leftTrack.getTrackPart(progress);
+        	trackLinksLeft[i] = new AnimTrackLink(progress);
+        	trackLinksRight[i] = new AnimTrackLink(progress);
+        	trackLinksLeft[i].position = leftTrack.getPositionOnTrack(progress);
+        	trackLinksRight[i].position = rightTrack.getPositionOnTrack(progress);
+        	trackLinksLeft[i].rot = new RotatedAxes(0,0,rotateTowards(leftTrack.points.get((trackPart == 0)? leftTrack.points.size()-1:trackPart-1), trackLinksLeft[i].position));
+        	trackLinksRight[i].rot = new RotatedAxes(0,0,rotateTowards(rightTrack.points.get((trackPart == 0)? rightTrack.points.size()-1:trackPart-1), trackLinksRight[i].position));
+        	trackLinksLeft[i].zRot = rotateTowards(leftTrack.points.get((trackPart == 0)? leftTrack.points.size()-1:trackPart-1), trackLinksLeft[i].position);
+        	trackLinksRight[i].zRot = rotateTowards(rightTrack.points.get((trackPart == 0)? rightTrack.points.size()-1:trackPart-1), trackLinksRight[i].position);
+        }
+	}
+	
 	@Override
 	protected void initType(DriveableType type, boolean firstSpawn, boolean clientSide)
 	{
+		setupTracks(type);
 		super.initType(type, firstSpawn, clientSide);
 	}
 	
@@ -252,6 +283,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			FlansMod.log.warn("Vehicle type null. Not ticking vehicle");
 			return;
 		}
+		
+		animateFancyTracks();
 		
 		//Work out if this is the client side and the player is driving
 		boolean thePlayerIsDrivingThis =
@@ -567,6 +600,65 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
 		}
 	}
+	
+    public void animateFancyTracks()
+    {
+    	float funkypart = getVehicleType().trackLinkFix;
+    	boolean funk = getVehicleType().flipLinkFix;
+    	float funk2 = 0;
+        for(int i = 0; i < trackLinksLeft.length; i++)
+        {
+        	trackLinksLeft[i].prevPosition = trackLinksLeft[i].position;
+        	trackLinksLeft[i].prevZRot = trackLinksLeft[i].zRot;
+        	float speed = throttle*1.5F - (wheelsYaw/12);
+        	trackLinksLeft[i].progress += speed;
+    		if(trackLinksLeft[i].progress > leftTrack.getTrackLength()) trackLinksLeft[i].progress -= leftTrack.getTrackLength();
+    		if(trackLinksLeft[i].progress < 0) trackLinksLeft[i].progress += leftTrack.getTrackLength();
+        	trackLinksLeft[i].position = leftTrack.getPositionOnTrack(trackLinksLeft[i].progress);
+			for(; trackLinksLeft[i].zRot > 180F; trackLinksLeft[i].zRot -= 360F) {}
+			for(; trackLinksLeft[i].zRot <= -180F; trackLinksLeft[i].zRot += 360F) {}
+			float newAngle = rotateTowards(leftTrack.points.get(leftTrack.getTrackPart(trackLinksLeft[i].progress)), trackLinksLeft[i].position);			
+			int part = leftTrack.getTrackPart(trackLinksLeft[i].progress);
+			if(funk) funk2 = (speed < 0)?0:1;
+			else funk2 = (speed < 0)?-1:0;
+        	trackLinksLeft[i].zRot = Lerp(trackLinksLeft[i].zRot, newAngle, (part != (funkypart + funk2))?0.5F:1);
+
+        }
+        
+        for(int i = 0; i < trackLinksRight.length; i++)
+        {
+        	trackLinksRight[i].prevPosition = trackLinksRight[i].position;
+        	trackLinksRight[i].prevZRot = trackLinksRight[i].zRot;
+        	float speed = throttle*1.5F + (wheelsYaw/12);
+        	trackLinksRight[i].progress += speed;
+    		if(trackLinksRight[i].progress > rightTrack.getTrackLength()) trackLinksRight[i].progress -= leftTrack.getTrackLength();
+    		if(trackLinksRight[i].progress < 0) trackLinksRight[i].progress += rightTrack.getTrackLength();    		
+        	trackLinksRight[i].position = rightTrack.getPositionOnTrack(trackLinksRight[i].progress);
+			float newAngle = rotateTowards(rightTrack.points.get(rightTrack.getTrackPart(trackLinksRight[i].progress)), trackLinksRight[i].position);
+			int part = rightTrack.getTrackPart(trackLinksRight[i].progress);
+			if(funk) funk2 = (speed < 0)?0:1;
+			else funk2 = (speed < 0)?-1:0;
+        	trackLinksRight[i].zRot = Lerp(trackLinksRight[i].zRot, newAngle, (part != (funkypart + funk2))?0.5F:1);
+        }
+    }
+    
+    public float rotateTowards(Vector3f point, Vector3f original)
+    {
+    	
+    	float angle = (float)Math.atan2(point.y - original.y, point.x - original.x);
+    	return angle;
+    }
+    
+    public float Lerp(float start, float end, float percent)
+    {
+         float result = (start + percent*(end - start));
+         
+         return result;
+    }
+    
+    public static float Clamp(float val, float min, float max) {
+        return Math.max(min, Math.min(max, val));
+    }
 	
 	private float averageAngles(float a, float b)
 	{
