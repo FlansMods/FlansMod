@@ -603,7 +603,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		else
 		{
 			tags.setString("Type", type.shortName);
-			if(player != null)
+			if(player.isPresent())
 				tags.setString("Player", player.get().getName());
 			tags.setFloat("RotationYaw", axes.getYaw());
 			tags.setFloat("RotationPitch", axes.getPitch());
