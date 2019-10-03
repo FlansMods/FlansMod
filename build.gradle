@@ -13,7 +13,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = version_major + "." + version_minor + version_identifier + "." + version_patch
+version = version_major + "." + version_minor + "." + version_patch + version_extra
 group = "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -28,7 +28,7 @@ minecraft {
     version = minecraft_version + "-" + forge_version
     runDir = "run"
 
-    replace "@ALLOWED_VERSIONS@", "[5.6, 5.7)"
+    replace "@ALLOWED_VERSIONS@", "[5.6.0-beta, 5.7)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 
@@ -37,6 +37,8 @@ minecraft {
     replaceIn "FlansModApocalypse.java"
 
     mappings = "stable_39"
+    //if this is required, it should be enabled locally for selected runs. These runs will take about 10 seconds longer
+    makeObfSourceJar = false
 }
 
 processResources {
