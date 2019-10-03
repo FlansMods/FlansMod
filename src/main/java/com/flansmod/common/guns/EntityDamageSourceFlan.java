@@ -20,7 +20,6 @@ public class EntityDamageSourceFlan extends EntityDamageSourceIndirect{
 	 * @param entity   The Entity causing the damage (e.g. Grenade). Can be the same as 'player'
 	 * @param player   The Player responsible for the damage
 	 * @param wep      The InfoType of weapon used
-	 * @param headshot True if this was a headshot, false if not
 	 */	
 	public EntityDamageSourceFlan(String s, Entity entity, EntityPlayer player, InfoType wep)
 	{

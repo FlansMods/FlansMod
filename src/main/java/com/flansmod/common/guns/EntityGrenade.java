@@ -625,14 +625,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		type = GrenadeType.getGrenade(ByteBufUtils.readUTF8String(data));
 		{
 			Entity ent = world.getEntityByID(data.readInt());
-			if (ent instanceof EntityPlayer)
-			{
-				player = Optional.of((EntityPlayer)ent);
-			}
-			else
-			{
-				player = Optional.empty();
-			}
+			player = ent instanceof EntityPlayer ? Optional.of((EntityPlayer) ent) : Optional.empty();
 		}
 		thrower = Optional.ofNullable(world.getEntityByID(data.readInt()));
 		setRotation(data.readFloat(), data.readFloat());
