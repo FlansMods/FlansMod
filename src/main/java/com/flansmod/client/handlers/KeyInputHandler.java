@@ -14,6 +14,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.swing.event.Key;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
@@ -109,6 +110,11 @@ public class KeyInputHandler
 			FlansKeyConflictContext.VEHICLE,
 			Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(),
 			"key.flansmod.category");
+	//added gearchange otherwise planes will not stop between forward and reverse
+	public static KeyBinding changeGear = new KeyBinding("key.changeGear.desc",
+			FlansKeyConflictContext.VEHICLE,
+			Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(),
+			"key.flansmod.category");
 	
 	private Minecraft mc;
 	
@@ -132,6 +138,8 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
 		ClientRegistry.registerKeyBinding(primaryVehicleInteract);
 		ClientRegistry.registerKeyBinding(secondaryVehicleInteract);
+		//see above
+		ClientRegistry.registerKeyBinding(changeGear);
 		
 		mc = Minecraft.getMinecraft();
 	}
@@ -270,6 +278,8 @@ public class KeyInputHandler
 				controllable.pressKey(15, player, true);
 			if(toggleCameraPerspective.isKeyDown())
 				controllable.pressKey(18, player, true);
+			if(changeGear.isPressed())
+				controllable.pressKey(19, player, true);
 		}
 	}
 }

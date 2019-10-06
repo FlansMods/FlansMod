@@ -18,6 +18,7 @@ key.reloadModels.desc=Reload models
 key.toggleCameraPerspective.desc=Toggle camera perspective
 key.primaryVehicleInteract.desc=Primary vehicle interact
 key.secondaryVehicleInteract.desc=Secondary vehicle interact
+key.changeGear.desc=Change vehicle gear
 itemGroup.tabFlan0=Flan's Mod Guns
 itemGroup.tabFlan1=Flan's Mod Vehicles
 itemGroup.tabFlan2=Flan's Mod Parts

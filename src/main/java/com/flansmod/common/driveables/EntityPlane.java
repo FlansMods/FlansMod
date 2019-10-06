@@ -56,6 +56,11 @@ public class EntityPlane extends EntityDriveable
 	 * Current plane mode
 	 */
 	public EnumPlaneMode mode;
+	/**
+	 * Current gear (forwards/backwards)
+	 */
+	public boolean forward = true;
+	
 	
 	public EntityPlane(World world)
 	{
@@ -187,7 +192,7 @@ public class EntityPlane extends EntityDriveable
 		{
 			case 0: //Accelerate : Increase the throttle, up to 1.
 			{
-				if(canThrust || throttle < 0F)
+				if(forward == true && canThrust || throttle < 0F)
 				{
 					throttle += 0.002F;
 					if(throttle > 1F)
@@ -197,7 +202,7 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 1: //Decelerate : Decrease the throttle, down to -1, or 0 if the plane cannot reverse
 			{
-				if(canThrust || throttle > 0F)
+				if(forward == false && canThrust || throttle > 0F)
 				{
 					throttle -= 0.005F;
 					if(throttle < -1F)
@@ -302,6 +307,18 @@ public class EntityPlane extends EntityDriveable
 			case 16: // Trim Button
 			{
 				axes.setAngles(axes.getYaw(), 0, 0);
+				return true;
+			}
+			case 19: // Gear Change
+			{
+				if(forward == true) {			
+					forward = false;
+					player.sendMessage(new TextComponentString("Gear: Reverse"));
+				}
+				else if(forward == false) {
+					forward = true;
+					player.sendMessage(new TextComponentString("Gear: Forward"));
+				}			
 				return true;
 			}
 			default:

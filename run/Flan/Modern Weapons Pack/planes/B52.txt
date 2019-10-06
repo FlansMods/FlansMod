@@ -15,7 +15,7 @@ HasGear True
 Mode Plane
 //Throttle
 MaxThrottle 5.5
-MaxNegativeThrottle 0.0
+MaxNegativeThrottle 0.0001
 //Yaw modifiers
 TurnLeftSpeed 1.5
 TurnRightSpeed 1.5

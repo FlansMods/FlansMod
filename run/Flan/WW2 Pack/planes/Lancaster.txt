@@ -14,7 +14,7 @@ CameraDistance 30.0
 Mode Plane
 //Throttle
 MaxThrottle 2.0
-MaxNegativeThrottle 0.0
+MaxNegativeThrottle 0.5
 //Yaw modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1

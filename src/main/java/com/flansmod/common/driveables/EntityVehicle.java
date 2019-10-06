@@ -54,6 +54,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	 * Delayer for door button
 	 */
 	public int toggleTimer = 0;
+	/**
+	 * Current gear (forwards/backwards)
+	 */
+	public boolean forward = true;
 	
 	public EntityVehicle(World world)
 	{
@@ -167,19 +171,27 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			case 0: // Accelerate : Increase the throttle, up to 1.
 			{
-				throttle += 0.01F;
-				if(throttle > 1F)
-					throttle = 1F;
+				if(forward == true || throttle < 0) {
+					
+					throttle += 0.01F;
+					if(throttle > 1F)
+						throttle = 1F;
+					
+				}
 				return true;
 			}
 			case 1: // Decelerate : Decrease the throttle, down to -1, or 0 if the vehicle cannot reverse
 			{
-				throttle -= 0.01F;
-				if(throttle < -1F)
-					throttle = -1F;
-				if(throttle < 0F && type.maxNegativeThrottle == 0F)
-					throttle = 0F;
-				return true;
+				if(forward == false || throttle > 0) {
+					
+					throttle -= 0.01F;
+					if(throttle < -1F)
+						throttle = -1F;
+					if(throttle < 0F && type.maxNegativeThrottle == 0F)
+						throttle = 0F;
+							
+				}
+				return true;		
 			}
 			case 2: // Left : Yaw the wheels left
 			{
@@ -219,6 +231,19 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					toggleTimer = 10;
 					FlansMod.getPacketHandler().sendToServer(new PacketVehicleControl(this));
 				}
+				return true;
+			}
+			case 19: // Gear Change
+			{
+				if(forward == true) {	
+					forward = false;
+					player.sendMessage(new TextComponentString("Gear: Reverse"));
+				}
+				else if(forward == false) {
+					forward = true;
+					player.sendMessage(new TextComponentString("Gear: Forward"));
+				}
+				
 				return true;
 			}
 			default:
