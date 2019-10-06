@@ -1,10 +1,17 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.jline.utils.Log;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -17,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.datafix.fixes.EntityId;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -1560,8 +1568,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					if(part.health > 0 && !part.dead)
 						killPart(part);
 				}
+				killPlayers();
 			}
 			setDead();
+			killPlayers();
 		}
 		
 	}
@@ -1648,6 +1658,29 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void explode()
 	{
 		
+	}
+	/**
+	* Method for killing players if plane explodes so they dont get stuck mid-air
+	 * @param <T>
+	**/
+	public void killPlayers() {
+		
+		Collection<Entity> entities = getRecursivePassengers();
+		
+		for(Iterator<Entity> iterator = entities.iterator(); iterator.hasNext();) {
+			
+			Entity ent = iterator.next();
+			
+			EntityPlayer player;
+			
+			if(ent instanceof EntityPlayer) {
+				
+				player = (EntityPlayer) ent;
+				
+				player.setHealth(0);
+				
+			}		
+		}
 	}
 	
 	@Override

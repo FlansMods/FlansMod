@@ -2,6 +2,8 @@ package com.flansmod.common.guns;
 
 import java.util.HashMap;
 
+import org.jline.utils.Log;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -138,11 +140,20 @@ public abstract class ShootableType extends InfoType
 				
 				//Item Stuff
 			else if(split[0].equals("StackSize") || split[0].equals("MaxStackSize"))
+			{
 				maxStackSize = Integer.parseInt(split[1]);
+				Log.info(split[1]);
+			}
 			else if(split[0].equals("DropItemOnShoot"))
+			{
 				dropItemOnShoot = split[1];
+				Log.info(split[1]);
+			}
 			else if(split[0].equals("DropItemOnReload"))
+			{
 				dropItemOnReload = split[1];
+				Log.info(split[1]);
+			}	
 			else if(split[0].equals("DropItemOnHit"))
 				dropItemOnHit = split[1];
 			else if(split[0].equals("RoundsPerItem"))

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jline.utils.Log;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.Project;
@@ -330,7 +331,7 @@ public class ClientRenderHooks
 	
 	public void update()
 	{
-		for(Iterator<KillMessage> it = killMessages.iterator(); it.hasNext(); )
+		for(Iterator<KillMessage> it = killMessages.iterator(); it.hasNext();)
 		{
 			KillMessage message = it.next();
 			message.timer--;
@@ -338,6 +339,7 @@ public class ClientRenderHooks
 			{
 				it.remove();
 			}
+			Log.info(message.killerName);
 		}
 		
 		// Update the FOV Modifier
@@ -917,6 +919,7 @@ public class ClientRenderHooks
 		}
 	}
 	
+	//print kill message
 	private void renderKillMessages(int i, int j)
 	{
 		for(KillMessage killMessage : killMessages)

@@ -6,7 +6,7 @@ Icon B52
 Model mw.B52
 Texture SkinB52
 //Third Person Camera Distance
-CameraDistance 50.0
+CameraDistance 70.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
 RestingPitch 0.0
 HasGear True

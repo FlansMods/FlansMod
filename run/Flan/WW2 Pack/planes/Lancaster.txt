@@ -8,7 +8,7 @@ Texture Lancaster
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
 RestingPitch 5.0
 //Third Person Camera Distance
-CameraDistance 20.0
+CameraDistance 30.0
 // ------------------------------------------------------ Movement ------------------------------------------------------
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
 Mode Plane
