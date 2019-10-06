@@ -108,7 +108,8 @@ public class VehicleType extends DriveableType
 	}
 	
 	/**
-	 * Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up
+	 * Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked
+	 * up
 	 */
 	@Override
 	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)

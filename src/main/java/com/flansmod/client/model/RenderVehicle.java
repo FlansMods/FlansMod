@@ -84,42 +84,52 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 			float modelScale = type.modelScale;
 			GlStateManager.pushMatrix();
 			{
-				float recoilDPos = (float)Math.sin(Math.toRadians(vehicle.recoilPos)) - (float)Math.sin(Math.toRadians(vehicle.lastRecoilPos));
-				float recoilPos = (float)Math.sin(Math.toRadians(vehicle.lastRecoilPos)) + recoilDPos*f1;
+				float recoilDPos = (float)Math.sin(Math.toRadians(vehicle.recoilPos)) -
+					(float)Math.sin(Math.toRadians(vehicle.lastRecoilPos));
+				float recoilPos = (float)Math.sin(Math.toRadians(vehicle.lastRecoilPos)) + recoilDPos * f1;
 				
 				GlStateManager.scale(modelScale, modelScale, modelScale);
 				ModelVehicle modVehicle = (ModelVehicle)type.model;
 				if(modVehicle != null)
 					modVehicle.render(vehicle, f1);
 				
-		        for(int i = 0; i < vehicle.trackLinksLeft.length; i++)
-		        {
-		        	AnimTrackLink link = vehicle.trackLinksLeft[i];
-		        	float rotZ = link.zRot;
-		        	GL11.glPushMatrix();
-		        	GL11.glTranslatef(link.position.x/16F, link.position.y/16F, link.position.z/16F);
-					for(; rotZ > 180F; rotZ -= 360F) {}
-					for(; rotZ <= -180F; rotZ += 360F) {}
-		        	GL11.glRotatef(rotZ * (float)(180/Math.PI), 0, 0, 1);
-		        	modVehicle.renderFancyTracks(vehicle, f1);
-		        	GL11.glPopMatrix();
-		        }
-		        
-		        for(int i = 0; i < vehicle.trackLinksRight.length; i++)
-		        {
-		        	AnimTrackLink link = vehicle.trackLinksRight[i];
-		        	float rotZ = link.zRot;
-					for(; rotZ > 180F; rotZ -= 360F) {}
-					for(; rotZ <= -180F; rotZ += 360F) {}
-		        	GL11.glPushMatrix();
-		        	GL11.glTranslatef(link.position.x/16F, link.position.y/16F, link.position.z/16F);
-		        	GL11.glRotatef(rotZ * (float)(180/Math.PI), 0, 0, 1);
-		        	modVehicle.renderFancyTracks(vehicle, f1);
-		        	GL11.glPopMatrix();
-		        }
+				for(int i = 0; i < vehicle.trackLinksLeft.length; i++)
+				{
+					AnimTrackLink link = vehicle.trackLinksLeft[i];
+					float rotZ = link.zRot;
+					GL11.glPushMatrix();
+					GL11.glTranslatef(link.position.x / 16F, link.position.y / 16F, link.position.z / 16F);
+					for(; rotZ > 180F; rotZ -= 360F)
+					{
+					}
+					for(; rotZ <= -180F; rotZ += 360F)
+					{
+					}
+					GL11.glRotatef(rotZ * (float)(180 / Math.PI), 0, 0, 1);
+					modVehicle.renderFancyTracks(vehicle, f1);
+					GL11.glPopMatrix();
+				}
+				
+				for(int i = 0; i < vehicle.trackLinksRight.length; i++)
+				{
+					AnimTrackLink link = vehicle.trackLinksRight[i];
+					float rotZ = link.zRot;
+					for(; rotZ > 180F; rotZ -= 360F)
+					{
+					}
+					for(; rotZ <= -180F; rotZ += 360F)
+					{
+					}
+					GL11.glPushMatrix();
+					GL11.glTranslatef(link.position.x / 16F, link.position.y / 16F, link.position.z / 16F);
+					GL11.glRotatef(rotZ * (float)(180 / Math.PI), 0, 0, 1);
+					modVehicle.renderFancyTracks(vehicle, f1);
+					GL11.glPopMatrix();
+				}
 				
 				GlStateManager.pushMatrix();
-				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.getSeat(0) != null)
+				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) &&
+					vehicle.getSeat(0) != null)
 				{
 					dYaw = (vehicle.getSeat(0).looking.getYaw() - vehicle.getSeat(0).prevLooking.getYaw());
 					while(dYaw > 180F)
@@ -140,14 +150,17 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 						modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
 					
 					//rotate and render barrel
-					if(modVehicle != null) {
+					if(modVehicle != null)
+					{
 						EntitySeat[] seats = vehicle.getSeats();
-						GL11.glTranslatef(modVehicle.barrelAttach.x,modVehicle.barrelAttach.y, -modVehicle.barrelAttach.z);
+						GL11.glTranslatef(modVehicle.barrelAttach.x,
+							modVehicle.barrelAttach.y,
+							-modVehicle.barrelAttach.z);
 						float bPitch = (seats[0].looking.getPitch() - seats[0].prevLooking.getPitch());
-			    		float aPitch = seats[0].prevLooking.getPitch() + bPitch * f1;
-
+						float aPitch = seats[0].prevLooking.getPitch() + bPitch * f1;
+						
 						GL11.glRotatef(-aPitch, 0F, 0F, 1F);
-						GL11.glTranslatef(recoilPos*-(5F/16F),0F, 0F);
+						GL11.glTranslatef(recoilPos * -(5F / 16F), 0F, 0F);
 						modVehicle.renderAnimBarrel(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
 					}
 					
@@ -197,10 +210,10 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					GlStateManager.pushMatrix();
 					
 					GlStateManager.translate(modVehicle.drillHeadOrigin.x, modVehicle.drillHeadOrigin.y,
-							modVehicle.drillHeadOrigin.z);
+						modVehicle.drillHeadOrigin.z);
 					GlStateManager.rotate(vehicle.harvesterAngle * 50F, 1.0F, 0.0F, 0.0F);
 					GlStateManager.translate(-modVehicle.drillHeadOrigin.x, -modVehicle.drillHeadOrigin.y,
-							-modVehicle.drillHeadOrigin.z);
+						-modVehicle.drillHeadOrigin.z);
 					modVehicle.renderDrillBit(vehicle, f1);
 					
 					GlStateManager.popMatrix();
@@ -221,7 +234,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 						continue;
 					
 					renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
-							(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
+						(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 				}
 				
 				// Render shoot points
@@ -333,7 +346,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				}
 				
 				GlStateManager.scale(scale / vehicleType.cameraDistance, scale / vehicleType.cameraDistance,
-						scale / vehicleType.cameraDistance);
+					scale / vehicleType.cameraDistance);
 				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(vehicleType));
 				ModelDriveable model = vehicleType.model;
 				model.render(vehicleType);
@@ -387,11 +400,11 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				render(vehicle,
-						vehicle.prevPosX + (vehicle.posX - vehicle.prevPosX) * event.getPartialTicks(),
-						vehicle.prevPosY + (vehicle.posY - vehicle.prevPosY) * event.getPartialTicks(),
-						vehicle.prevPosZ + (vehicle.posZ - vehicle.prevPosZ) * event.getPartialTicks(),
-						0F,
-						event.getPartialTicks());
+					vehicle.prevPosX + (vehicle.posX - vehicle.prevPosX) * event.getPartialTicks(),
+					vehicle.prevPosY + (vehicle.posY - vehicle.prevPosY) * event.getPartialTicks(),
+					vehicle.prevPosZ + (vehicle.posZ - vehicle.prevPosZ) * event.getPartialTicks(),
+					0F,
+					event.getPartialTicks());
 			}
 		}
 		
