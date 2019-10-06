@@ -8,8 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.EntityBullet;
-import com.flansmod.common.guns.EntityGrenade;
+import com.flansmod.common.guns.EntityDamageSourceFlan;
 import com.flansmod.common.network.PacketKillMessage;
 import com.flansmod.common.teams.Team;
 
@@ -24,49 +23,18 @@ public class PlayerDeathEventListener
 	@SubscribeEvent
 	public void PlayerDied(LivingDeathEvent event)
 	{
-		if((event.getSource().getDamageType().equalsIgnoreCase("explosion") &&
-				((event.getSource().getTrueSource() instanceof EntityGrenade) || (event.getSource().getTrueSource() instanceof EntityBullet)))
-				&& event.getEntityLiving() instanceof EntityPlayer)
+		if (event.getEntity().world.isRemote)
+			return;
+		
+		if (event.getSource() instanceof EntityDamageSourceFlan && event.getEntity() instanceof EntityPlayer)
 		{
-			boolean isGrenade;
-			if(event.getSource().getTrueSource() instanceof EntityGrenade)
-			{
-				isGrenade = true;
-			}
-			else
-			{
-				isGrenade = false;
-			}
-			EntityPlayer killer = null;
-			EntityPlayer killed = (EntityPlayer)event.getEntityLiving();
-			Team killerTeam = null;
-			Team killedTeam = null;
-			if(isGrenade)
-			{
-				killer = (EntityPlayer)((EntityGrenade)event.getSource().getTrueSource()).thrower;
-			}
-			else
-			{
-				killer = (EntityPlayer)((EntityBullet)event.getSource().getTrueSource()).getFiredShot().getPlayerOptional().orElse(null);
-			}
-			killerTeam = PlayerHandler.getPlayerData(killer).team;
-			killedTeam = PlayerHandler.getPlayerData(killed).team;
-			if(event.getEntityLiving() instanceof EntityPlayer && !isGrenade)
-			{
-				FlansMod.getPacketHandler().sendToDimension(
-						new PacketKillMessage(false, ((EntityBullet)event.getSource().getTrueSource()).getFiredShot().getBulletType(),
-								(killedTeam == null ? "f" : killedTeam.textColour) + event.getEntity().getDisplayName().getFormattedText(),
-								(killerTeam == null ? "f" : killedTeam.textColour) + event.getSource().getTrueSource().getDisplayName().getFormattedText()),
-						event.getEntityLiving().dimension);
-			}
-			if(event.getEntityLiving() instanceof EntityPlayer && isGrenade)
-			{
-				FlansMod.getPacketHandler().sendToDimension(
-						new PacketKillMessage(false, ((EntityGrenade)event.getSource().getTrueSource()).type,
-								(killedTeam == null ? "f" : killedTeam.textColour) + event.getEntity().getDisplayName().getFormattedText(),
-								(killerTeam == null ? "f" : killedTeam.textColour) + event.getSource().getTrueSource().getDisplayName().getFormattedText()),
-						event.getEntityLiving().dimension);
-			}
+			EntityDamageSourceFlan source = (EntityDamageSourceFlan) event.getSource();
+			EntityPlayer died = (EntityPlayer) event.getEntity();
+			
+			Team killedTeam = PlayerHandler.getPlayerData(died).team;
+			Team killerTeam = PlayerHandler.getPlayerData(source.getCausedPlayer()).team;
+			
+			FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(source.isHeadshot(), source.getWeapon(), (killedTeam == null ? "f" : killedTeam.textColour) + died.getName(), (killerTeam == null ? "f" : killerTeam.textColour) + source.getCausedPlayer().getName()), died.dimension);
 		}
 	}
 }

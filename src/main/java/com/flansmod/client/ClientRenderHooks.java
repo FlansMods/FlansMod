@@ -921,8 +921,9 @@ public class ClientRenderHooks
 	{
 		for(KillMessage killMessage : killMessages)
 		{
-			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName,
-					i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6,
+			String message = "\u00a7" + killMessage.killerName + (killMessage.headshot ? "         ":"     ") + "\u00a7" + killMessage.killedName;
+			mc.fontRenderer.drawString(message,
+					i - mc.fontRenderer.getStringWidth(message) - 6,
 					j - 32 - killMessage.line * 16, 0xffffff);
 		}
 		
@@ -935,10 +936,14 @@ public class ClientRenderHooks
 		for(KillMessage killMessage : killMessages)
 		{
 			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item, 1, killMessage.paint),
-					i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12,
+					i - mc.fontRenderer.getStringWidth((killMessage.headshot ? "         ":"     ") + killMessage.killedName),
+					j - 36 - killMessage.line * 16);
+		if (killMessage.headshot)
+			drawSlotInventory(mc.fontRenderer, new ItemStack(FlansMod.crosshairsymbol),
+					i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName),
 					j - 36 - killMessage.line * 16);
 		}
-		GL11.glDisable(3042 /*GL_BLEND*/);
+		GL11.glDisable(GL11.GL_BLEND);
 		RenderHelper.disableStandardItemLighting();
 	}
 	
@@ -1022,6 +1027,6 @@ public class ClientRenderHooks
 		public int paint = 0;
 		public int timer = 0;
 		public int line = 0;
-		public boolean headshot = false;
+		public boolean headshot;
 	}
 }

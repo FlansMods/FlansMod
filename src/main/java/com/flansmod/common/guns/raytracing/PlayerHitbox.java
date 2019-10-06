@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -161,6 +162,7 @@ public class PlayerHitbox
 			player.addPotionEffect(new PotionEffect(effect));
 		}
 		float damageModifier = bulletType.penetratingPower < 0.1F ? penetratingPower / bulletType.penetratingPower : 1;
+		
 		switch(type)
 		{
 			case BODY: break;
@@ -181,7 +183,7 @@ public class PlayerHitbox
 			//Calculate the hit damage
 			float hitDamage = damage * shot.getBulletType().damageVsLiving * damageModifier;
 			//Create a damage source object
-			DamageSource damagesource = shot.getDamageSource();
+			DamageSource damagesource = shot.getDamageSource(type.equals(EnumHitboxType.HEAD));
 			
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
 			if(!player.world.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)

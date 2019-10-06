@@ -215,6 +215,7 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(FlansMod.paintjobTable), 0, new ModelResourceLocation("flansmod:paintjobTable", "inventory"));
 		ModelLoader.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable),
 				new ResourceLocation("flansmod:paintjobTable"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.crosshairsymbol, 0, new ModelResourceLocation("flansmod:crosshairsymbol", "inventory"));
 	}
 	
 	/**

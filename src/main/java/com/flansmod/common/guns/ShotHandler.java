@@ -191,15 +191,12 @@ public class ShotHandler
 				TeamsRound round;
 				if(TeamsManager.getInstance() != null && (round = TeamsManager.getInstance().currentRound) != null)
 				{
-					if (round != null)
-					{
-						Optional<Team> shooterTeam = round.getTeam(player);
-						Optional<Team> victimTeam = round.getTeam(playerHit.hitbox.player);
+					Optional<Team> shooterTeam = round.getTeam(player);
+					Optional<Team> victimTeam = round.getTeam(playerHit.hitbox.player);
 					
-						if (!shooterTeam.isPresent() || !victimTeam.isPresent() || !shooterTeam.get().equals(victimTeam.get()))
-						{
-							FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
-						}
+					if (!shooterTeam.isPresent() || !victimTeam.isPresent() || !shooterTeam.get().equals(victimTeam.get()))
+					{
+						FlansMod.getPacketHandler().sendTo(new PacketHitMarker(), player);
 					}
 				}
 				else // No teams mod, just add marker
@@ -299,7 +296,7 @@ public class ShotHandler
 		
 		if(bulletType.explosionRadius > 0)
 		{
-			new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional().orElse(null), bulletType,
+			new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional(), bulletType,
 					detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
 		}
 		if(bulletType.fireRadius > 0)

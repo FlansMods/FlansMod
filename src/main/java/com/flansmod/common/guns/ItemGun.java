@@ -1074,7 +1074,7 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	public DamageSource getMeleeDamage(EntityPlayer attacker)
 	{
-		return new EntityDamageSourceGun(type.shortName, attacker, attacker, type, false);
+		return new EntityDamageSourceFlan(type.shortName, attacker, attacker, type);
 	}
 	
 	private boolean isSolid(World world, int i, int j, int k)

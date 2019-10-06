@@ -2,6 +2,7 @@ package com.flansmod.common;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
-import com.flansmod.common.guns.EntityDamageSourceGun;
+import com.flansmod.common.guns.EntityDamageSourceFlan;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 
@@ -42,7 +43,7 @@ public class FlansModExplosion extends Explosion
 	private final Random random;
 	private final World world;
 	private final double x, y, z;
-	private final EntityLivingBase detonator;
+	private final Optional<? extends EntityPlayer> player;
 	private final Entity explosive;
 	private final float size;
 	private final List<BlockPos> affectedBlockPositions;
@@ -50,14 +51,14 @@ public class FlansModExplosion extends Explosion
 	private final Vec3d position;
 	private final InfoType type; // type of Flan's Mod weapon causing explosion
 	
-	public FlansModExplosion(World world, Entity entity, EntityLivingBase detonator, InfoType type, double x, double y, double z, float size, boolean causesFire, boolean smoking, boolean breaksBlocks)
+	public FlansModExplosion(World world, Entity entity, Optional<? extends EntityPlayer> player, InfoType type, double x, double y, double z, float size, boolean causesFire, boolean smoking, boolean breaksBlocks)
 	{
 		super(world, entity, x, y, z, size, causesFire, smoking);
 		this.random = new Random();
 		this.affectedBlockPositions = Lists.newArrayList();
 		this.playerKnockbackMap = Maps.newHashMap();
 		this.world = world;
-		this.detonator = detonator;
+		this.player = player;
 		this.size = size;
 		this.x = x;
 		this.y = y;
@@ -168,9 +169,9 @@ public class FlansModExplosion extends Explosion
 						d9 /= d13;
 						double d14 = (double)this.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
 						double d10 = (1.0D - d12) * d14;
-						if(detonator instanceof EntityPlayer)
+						if(player.isPresent())
 						{
-							entity.attackEntityFrom(new EntityDamageSourceGun(type.shortName, explosive, (EntityPlayer)detonator, type, false),
+							entity.attackEntityFrom(new EntityDamageSourceFlan(type.shortName, explosive, player.get(), type),
 									(float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
 						} else {
 							entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
@@ -273,15 +274,6 @@ public class FlansModExplosion extends Explosion
 	public Map<EntityPlayer, Vec3d> getPlayerKnockbackMap()
 	{
 		return this.playerKnockbackMap;
-	}
-	
-	/**
-	 * Returns either the entity that placed the explosive block, the entity that caused the explosion or null.
-	 */
-	@Override
-	public EntityLivingBase getExplosivePlacedBy()
-	{
-		return detonator;
 	}
 	
 	@Override
