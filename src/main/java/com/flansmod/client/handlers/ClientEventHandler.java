@@ -1,7 +1,5 @@
 package com.flansmod.client.handlers;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -102,7 +100,7 @@ public class ClientEventHandler
 		if(player.getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
 			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded &&
-					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) &&
+					Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown() &&
 					Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
