@@ -52,7 +52,7 @@ public class CreativeTabFlan extends CreativeTabs
 		list.sort(new ItemSorter());
 	}
 	
-	private class ItemSorter implements Comparator<ItemStack>
+	private static class ItemSorter implements Comparator<ItemStack>
 	{
 		@Override
 		public int compare(ItemStack stackA, ItemStack stackB)
@@ -61,31 +61,36 @@ public class CreativeTabFlan extends CreativeTabs
 			Item itemB = stackB.getItem();
 			boolean invalidA = !(itemA instanceof IFlanItem);
 			boolean invalidB = !(itemB instanceof IFlanItem);
-			
 			if(invalidA)
 			{
 				return invalidB ? 0 : -1;
-			}
-			if(invalidB)
+			} else if(invalidB)
 			{
 				return 1;
 			}
 			
 			InfoType typeA = ((IFlanItem)itemA).getInfoType();
 			InfoType typeB = ((IFlanItem)itemB).getInfoType();
-			
 			if(typeA == null)
+			{
 				return typeB == null ? 0 : -1;
-			if(typeB == null)
+			} else if(typeB == null)
+			{
 				return 1;
+			}
 			
 			int contentPackComparison = typeA.contentPack.compareTo(typeB.contentPack);
 			if(contentPackComparison != 0)
+			{
 				return contentPackComparison;
+			}
 			
-			int shortNameComparison = typeA.shortName.compareTo(typeB.shortName);
+			int classComparison = typeA.getClass().getSimpleName().compareTo(typeB.getClass().getSimpleName());
+			if(classComparison != 0) {
+				return classComparison;
+			}
 			
-			return 0;
+			return typeA.name.compareTo(typeB.name);
 		}
 		
 	}
