@@ -35,7 +35,7 @@ public class FlansModRaytracer
 	public static List<BulletHit> Raytrace(World world, Entity playerToIgnore, boolean canHitSelf, Entity entityToIgnore, Vector3f origin, Vector3f motion, int pingOfShooter, Float gunPenetration)
 	{
 		//Create a list for all bullet hits
-		ArrayList<BulletHit> hits = new ArrayList<>();
+		List<BulletHit> hits = new ArrayList<>();
 		
 		float speed = motion.length();
 		
@@ -155,7 +155,7 @@ public class FlansModRaytracer
 		Vec3d mot = new Vector3f(motion).toVec3();
 		mot = mot.normalize();
 		mot = mot.scale(0.5d);
-		raytraceBlock(world, origin.toVec3(), new Vec3d(0, 0, 0), motion, mot, hits, gunPenetration, null);
+		hits = raytraceBlock(world, origin.toVec3(), new Vec3d(0, 0, 0), motion, mot, hits, gunPenetration, null);
 		
 		//We hit something
 		if(!hits.isEmpty())
@@ -168,20 +168,28 @@ public class FlansModRaytracer
 		return hits;
 	}
 	
-	private static void raytraceBlock(World world, Vec3d posVec, Vec3d previoushot, Vector3f motion,Vec3d normalized_motion, List<BulletHit> hits, Float penetration, BlockPos oldPos)
+	private static List<BulletHit> raytraceBlock(
+			World world,
+			Vec3d posVec,
+			Vec3d previousHit,
+			Vector3f motion,
+			Vec3d normalized_motion,
+			List<BulletHit> hits,
+			Float penetration,
+			BlockPos oldPos)
 	{
 		//Ray trace the bullet by comparing its next position to its current position
-		Vec3d nextPosVec = new Vec3d(posVec.x + motion.x, posVec.y + motion.y, posVec.z + motion.z); 
+		Vec3d nextPosVec = new Vec3d(posVec.x + motion.x, posVec.y + motion.y, posVec.z + motion.z);
 
 		RayTraceResult hit = world.rayTraceBlocks(posVec, nextPosVec, false, true, true);
 		
 		if(hit != null)
 		{
 			Vec3d hitVec = hit.hitVec.subtract(posVec);
-			hitVec = hitVec.add(previoushot);
+			hitVec = hitVec.add(previousHit);
 			
 			BlockPos pos = hit.getBlockPos();
-			IBlockState blockstate = world.getBlockState(hit.getBlockPos());
+			IBlockState blockState = world.getBlockState(hit.getBlockPos());
 			
 			if (!pos.equals(oldPos))
 			{
@@ -197,16 +205,25 @@ public class FlansModRaytracer
 			
 				if(lambda < 0)
 					lambda = -lambda;
-			
-			hits.add(new BlockHit(hit, lambda, blockstate));
-			penetration -= ShotHandler.getBlockPenetrationDecrease(blockstate, pos, world);
+
+				hits.add(new BlockHit(hit, lambda, blockState));
+				penetration -= ShotHandler.getBlockPenetrationDecrease(blockState, pos, world);
 			}
 			
 			if (penetration > 0)
 			{
-				raytraceBlock(world, hit.hitVec.add(normalized_motion), hitVec.add(normalized_motion), motion, normalized_motion, hits, penetration, pos);
+				hits = raytraceBlock(
+						world,
+						hit.hitVec.add(normalized_motion),
+						hitVec.add(normalized_motion),
+						motion,
+						normalized_motion,
+						hits,
+						penetration,
+						pos);
 			}
 		}
+		return hits;
 	}
 	
 	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player, EnumHand hand)

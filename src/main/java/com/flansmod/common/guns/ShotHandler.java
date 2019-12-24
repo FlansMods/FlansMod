@@ -350,8 +350,8 @@ public class ShotHandler
 		vector.z += (float)world.rand.nextGaussian() * spread;
 	}
 	
-	public static Float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)
+	public static float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)
 	{
-		return blockstate.getBlockHardness(world, pos)*2;
+		return blockstate.getBlockHardness(world, pos) * 2;
 	}
 }
