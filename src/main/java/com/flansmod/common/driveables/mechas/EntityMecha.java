@@ -402,7 +402,7 @@ public class EntityMecha extends EntityDriveable
 				double yaw = Math.atan2(armVector.z, armVector.x);
 				double pitch = Math.atan2(Math.sqrt(armVector.z * armVector.z + armVector.x * armVector.x), armVector.y) - Math.PI/2;
 				Optional<Entity> ent = Optional.of(this);
-				Optional<EntityPlayer> player = Optional.of(getDriver());
+				Optional<EntityPlayer> player = Optional.ofNullable(getDriver());
 				
 				EntityGrenade grenade = new EntityGrenade(world, bulletOrigin, (GrenadeType) shootableType, (float)Math.toDegrees(pitch), (float)Math.toDegrees(yaw + Math.PI*1.5), player, ent);
 				world.spawnEntity(grenade);
