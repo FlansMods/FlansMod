@@ -24,6 +24,10 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+dependencies {
+    compile "io.vavr:vavr:0.10.2"
+}
+
 minecraft {
     version = minecraft_version + "-" + forge_version
     runDir = "run"
