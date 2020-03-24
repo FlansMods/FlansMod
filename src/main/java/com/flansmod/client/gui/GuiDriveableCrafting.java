@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import com.flansmod.client.handlers.FlansModResourceHandler;
@@ -33,7 +32,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	 * The background image
 	 */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/driveableCrafting.png");
-	public static final int CRAFT_BUTTON_ID = 0;
+	private static final int CRAFT_BUTTON_ID = 0;
 	private static final int BLUEPRINTS_UP_BUTTON_ID = 1;
 	private static final int BLUEPRINTS_DOWN_BUTTON_ID = 2;
 	private static final int RECIPE_UP_BUTTON_ID = 3;
@@ -47,14 +46,6 @@ public class GuiDriveableCrafting extends GuiScreen
 	 * The Minecraft instance
 	 */
 	private Minecraft mc;
-	/**
-	 * The world in which this crafting table resides
-	 */
-	private World world;
-	/**
-	 * The crafting table co-ordinates
-	 */
-	private int x, y, z;
 	/**
 	 * Gui origin
 	 */
@@ -110,14 +101,10 @@ public class GuiDriveableCrafting extends GuiScreen
 	private ArrowButton recipeUpButton;
 	private ArrowButton blueprintsUpButton;
 
-	public GuiDriveableCrafting(InventoryPlayer playerInventory, World world, int x, int y, int z)
+	public GuiDriveableCrafting(InventoryPlayer playerInventory)
 	{
 		inventory = playerInventory;
 		mc = FMLClientHandler.instance().getClient();
-		this.world = world;
-		this.x = x;
-		this.y = y;
-		this.z = z;
 	}
 
 	@Override
@@ -144,7 +131,6 @@ public class GuiDriveableCrafting extends GuiScreen
 		modelCenterX = guiOriginX + 42;
 		modelCenterY = guiOriginY + 89;
 
-		// todo: remove green outline from around the button
 		buttonList.add(craftButton = new GuiButton(
 				CRAFT_BUTTON_ID,
 				guiOriginX + 110,

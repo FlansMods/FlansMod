@@ -350,7 +350,7 @@ public class ClientProxy extends CommonProxy
 		
 		switch(ID)
 		{
-			case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
+			case 0: return new GuiDriveableCrafting(player.inventory);
 			case 1: return new GuiDriveableRepair(player);
 			case 2: return new GuiGunModTable(player.inventory, world);
 			case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
