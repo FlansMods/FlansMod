@@ -521,7 +521,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if(ammo[i] != null)
 				nbttagcompound.setTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
 		}
-		nbttagcompound.setString("Placer", placer.getName());
+		if (placer != null) {
+			nbttagcompound.setString("Placer", placer.getName());
+		} else if (placerName != null) {
+			nbttagcompound.setString("Placer", placerName);
+		}
 	}
 	
 	@Override
