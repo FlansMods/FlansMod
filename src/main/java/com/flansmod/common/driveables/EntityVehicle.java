@@ -385,13 +385,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheel.motionY -= 0.98F / 20F;
 			
 			//Apply velocity
-			//If the player driving this is in creative, then we can thrust, no matter what
-			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (getSeat(0) != null
-				&& getSeat(0).getControllingPassenger() instanceof EntityPlayer
-				&& ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode);
-			//Otherwise, check the fuel tanks!
-			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
+			EntityPlayer driver = getDriver();
+			if(canThrust(data, driver))
 			{
+				if (!driverIsCreative())
+				{
+					data.fuelInTank -= data.engine.fuelConsumption * throttle;
+				}
+
 				if(getVehicleType().tank)
 				{
 					boolean left = wheel.getExpectedWheelID() == 0 || wheel.getExpectedWheelID() == 3;
@@ -608,7 +609,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
 		}
 	}
-	
+
+	private boolean canThrust(DriveableData data, EntityPlayer driver) {
+		return !TeamsManager.vehiclesNeedFuel
+				|| driverIsCreative()
+				|| data.fuelInTank > data.engine.fuelConsumption * throttle;
+	}
+
 	public void animateFancyTracks()
 	{
 		float funkypart = getVehicleType().trackLinkFix;

@@ -579,10 +579,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
-	private boolean driverIsCreative()
+	public boolean driverIsCreative()
 	{
 		EntityPlayer driver = getDriver();
-		return driver != null && driver.capabilities.isCreativeMode;
+		return driver != null && driver.isCreative();
 	}
 	
 	public EntityPlayer getDriver()
