@@ -187,7 +187,7 @@ public class ItemGun extends Item implements IPaintableItem
 	 */
 	public static void dropItem(World world, Entity entity, String itemName)
 	{
-		if(itemName != null)
+		if(itemName != null && !world.isRemote)
 		{
 			int damage = 0;
 			if(itemName.contains("."))
