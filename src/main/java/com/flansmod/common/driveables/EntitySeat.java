@@ -793,7 +793,17 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public Entity getControllingPassenger()
 	{
-		return getPassengers().isEmpty() ? null : getPassengers().get(0);
+		List<Entity> _passengers = getPassengers();
+		if(_passengers.isEmpty())
+		{
+			setDriverState(false);
+			return null;
+		}
+		else
+		{
+			setDriverState(true);
+			return _passengers.get(0);
+		}
 	}
 	
 	@Override
@@ -816,6 +826,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public EntitySeat getSeat(EntityLivingBase living)
 	{
 		return this;
+	}
+	
+	public void setDriverState(Boolean stat)
+	{
+		driver = stat;
 	}
 	
 	@Override
