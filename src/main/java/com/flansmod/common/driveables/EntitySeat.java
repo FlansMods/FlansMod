@@ -121,7 +121,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveableID = d.getEntityId();
 		seatInfo = driveable.getDriveableType().seats[id];
 		seatID = id;
-		driver = id == 0;
+		checkIsDriverSeat();
 		setPosition(d.posX, d.posY, d.posZ);
 		playerPosX = prevPlayerPosX = posX;
 		playerPosY = prevPlayerPosY = posY;
@@ -501,6 +501,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	protected void entityInit()
 	{
+		checkIsDriverSeat();
 	}
 	
 	@Override
@@ -793,17 +794,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public Entity getControllingPassenger()
 	{
-		List<Entity> _passengers = getPassengers();
-		if(_passengers.isEmpty())
-		{
-			setDriverState(false);
-			return null;
-		}
-		else
-		{
-			setDriverState(true);
-			return _passengers.get(0);
-		}
+		return getPassengers().isEmpty() ? null : getPassengers().get(0);
 	}
 	
 	@Override
@@ -827,10 +818,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		return this;
 	}
-	
-	public void setDriverState(Boolean stat)
+  
+	// Check and update whether currret seat is driver seat
+	public boolean checkIsDriverSeat()
 	{
-		driver = stat;
+		driver = (getExpectedSeatID() == 0);
+		return driver;
 	}
 	
 	@Override
@@ -918,7 +911,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(world.getEntityByID(driveableID) instanceof EntityDriveable)
 			driveable = (EntityDriveable)world.getEntityByID(driveableID);
 		seatID = data.readInt();
-		driver = seatID == 0;
+		checkIsDriverSeat();
 		if(seatID >= 0 && driveable != null)
 		{
 			seatInfo = driveable.getDriveableType().seats[seatID];
