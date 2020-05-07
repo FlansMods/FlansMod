@@ -816,7 +816,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		return this;
 	}
   
-	// Check and update whether currret seat is driver seat
 	public boolean isDriverSeat()
 	{
 		return seatID == 0;
