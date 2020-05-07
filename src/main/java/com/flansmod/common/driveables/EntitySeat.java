@@ -120,7 +120,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveableID = d.getEntityId();
 		seatInfo = driveable.getDriveableType().seats[id];
 		seatID = id;
-		isDriverSeat();
 		setPosition(d.posX, d.posY, d.posZ);
 		playerPosX = prevPlayerPosX = posX;
 		playerPosY = prevPlayerPosY = posY;
