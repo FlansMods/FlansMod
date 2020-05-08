@@ -171,8 +171,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				entityInThisSeat instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)entityInThisSeat);
 		
 		// Reset traverse sounds if player exits the vehicle
-		
-		if(isThePlayer)
+		if(!isThePlayer)
 		{
 			playYawSound = false;
 			playPitchSound = false;
@@ -548,65 +547,73 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevLooking = looking.clone();
 		prevPlayerLooking = playerLooking.clone();
 		
-		// Driver seat should pass input to driveable
-		if(isDriverSeat())
+		try
 		{
-			driveable.onMouseMoved(deltaX, deltaY);
-		}
-		// Other seats should look around, but also the driver seat if mouse control mode is disabled
-		if(!isDriverSeat() || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
-		{
-			float lookSpeed = 4F;
-			
-			// Angle stuff for the player
-			// Calculate the new pitch yaw while considering limiters
-			float newPlayerYaw = playerLooking.getYaw() + deltaX / lookSpeed * mc.gameSettings.mouseSensitivity;
-			float newPlayerPitch = playerLooking.getPitch() - deltaY / lookSpeed * mc.gameSettings.mouseSensitivity;
-			
-			if(newPlayerPitch > -seatInfo.minPitch)
-				newPlayerPitch = -seatInfo.minPitch;
-			if(newPlayerPitch < -seatInfo.maxPitch)
-				newPlayerPitch = -seatInfo.maxPitch;
-
-			// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
-			float otherNewPlayerYaw = newPlayerYaw - 360F;
-			if(newPlayerYaw < 0)
-				otherNewPlayerYaw = newPlayerYaw + 360F;
-			if((newPlayerYaw >= seatInfo.minYaw && newPlayerYaw <= seatInfo.maxYaw) ||
-					(otherNewPlayerYaw >= seatInfo.minYaw && otherNewPlayerYaw <= seatInfo.maxYaw))
+			// Driver seat should pass input to driveable
+			if(isDriverSeat())
 			{
-				//All is well
+				driveable.onMouseMoved(deltaX, deltaY);
 			}
-			else
+			// Other seats should look around, but also the driver seat if mouse control mode is disabled
+			if(!isDriverSeat() || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 			{
-				float newPlayerYawDistFromRange =
-						Math.min(Math.abs(newPlayerYaw - seatInfo.minYaw), Math.abs(newPlayerYaw - seatInfo.maxYaw));
-				float otherPlayerNewYawDistFromRange = Math.min(Math.abs(otherNewPlayerYaw - seatInfo.minYaw),
-						Math.abs(otherNewPlayerYaw - seatInfo.maxYaw));
-				// If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
-				if(newPlayerYawDistFromRange <= otherPlayerNewYawDistFromRange)
+				float lookSpeed = 4F;
+				
+				// Angle stuff for the player
+				// Calculate the new pitch yaw while considering limiters
+				float newPlayerYaw = playerLooking.getYaw() + deltaX / lookSpeed * mc.gameSettings.mouseSensitivity;
+				float newPlayerPitch = playerLooking.getPitch() - deltaY / lookSpeed * mc.gameSettings.mouseSensitivity;
+				
+				if(newPlayerPitch > -seatInfo.minPitch)
+					newPlayerPitch = -seatInfo.minPitch;
+				if(newPlayerPitch < -seatInfo.maxPitch)
+					newPlayerPitch = -seatInfo.maxPitch;
+
+				// Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
+				float otherNewPlayerYaw = newPlayerYaw - 360F;
+				if(newPlayerYaw < 0)
+					otherNewPlayerYaw = newPlayerYaw + 360F;
+				if((newPlayerYaw >= seatInfo.minYaw && newPlayerYaw <= seatInfo.maxYaw) ||
+						(otherNewPlayerYaw >= seatInfo.minYaw && otherNewPlayerYaw <= seatInfo.maxYaw))
 				{
-					if(newPlayerYaw > seatInfo.maxYaw)
-						newPlayerYaw = seatInfo.maxYaw;
-					if(newPlayerYaw < seatInfo.minYaw)
-						newPlayerYaw = seatInfo.minYaw;
+					//All is well
 				}
-				// Else, the otherNewYaw is closer, so move it in
 				else
 				{
-					if(otherNewPlayerYaw > seatInfo.maxYaw)
-						otherNewPlayerYaw = seatInfo.maxYaw;
-					if(otherNewPlayerYaw < seatInfo.minYaw)
-						otherNewPlayerYaw = seatInfo.minYaw;
-					//Then match up the newYaw with the otherNewYaw
-					if(newPlayerYaw < 0)
-						newPlayerYaw = otherNewPlayerYaw - 360F;
-					else newPlayerYaw = otherNewPlayerYaw + 360F;
+					float newPlayerYawDistFromRange =
+							Math.min(Math.abs(newPlayerYaw - seatInfo.minYaw), Math.abs(newPlayerYaw - seatInfo.maxYaw));
+					float otherPlayerNewYawDistFromRange = Math.min(Math.abs(otherNewPlayerYaw - seatInfo.minYaw),
+							Math.abs(otherNewPlayerYaw - seatInfo.maxYaw));
+					// If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
+					if(newPlayerYawDistFromRange <= otherPlayerNewYawDistFromRange)
+					{
+						if(newPlayerYaw > seatInfo.maxYaw)
+							newPlayerYaw = seatInfo.maxYaw;
+						if(newPlayerYaw < seatInfo.minYaw)
+							newPlayerYaw = seatInfo.minYaw;
+					}
+					// Else, the otherNewYaw is closer, so move it in
+					else
+					{
+						if(otherNewPlayerYaw > seatInfo.maxYaw)
+							otherNewPlayerYaw = seatInfo.maxYaw;
+						if(otherNewPlayerYaw < seatInfo.minYaw)
+							otherNewPlayerYaw = seatInfo.minYaw;
+						//Then match up the newYaw with the otherNewYaw
+						if(newPlayerYaw < 0)
+							newPlayerYaw = otherNewPlayerYaw - 360F;
+						else newPlayerYaw = otherNewPlayerYaw + 360F;
+					}
 				}
+				// Now set the new angles
+				playerLooking.setAngles(newPlayerYaw, newPlayerPitch, 0F);
+				
 			}
-			// Now set the new angles
-			playerLooking.setAngles(newPlayerYaw, newPlayerPitch, 0F);
-			
+		}
+		catch(Exception e)
+		{
+			FlansMod.log.error("Error while handling mounted mouse movement!");
+			FlansMod.log.throwing(e);
 		}
 	}
 	
