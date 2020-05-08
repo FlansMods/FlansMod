@@ -54,7 +54,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public float playerRoll, prevPlayerRoll;
 	
 	public Seat seatInfo;
-	public boolean driver;
 	public RotatedAxes playerLooking;
 	public RotatedAxes prevPlayerLooking;
 	/**
@@ -121,7 +120,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveableID = d.getEntityId();
 		seatInfo = driveable.getDriveableType().seats[id];
 		seatID = id;
-		driver = id == 0;
 		setPosition(d.posX, d.posY, d.posZ);
 		playerPosX = prevPlayerPosX = posX;
 		playerPosY = prevPlayerPosY = posY;
@@ -185,7 +183,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		// If on the client
 		if(world.isRemote)
 		{
-			if(driver && isThePlayer && FlansMod.proxy.mouseControlEnabled() && driveable.hasMouseControlMode())
+			if(isDriverSeat() && isThePlayer && FlansMod.proxy.mouseControlEnabled() && driveable.hasMouseControlMode())
 			{
 				looking = new RotatedAxes();
 				playerLooking = new RotatedAxes();
@@ -551,12 +549,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevPlayerLooking = playerLooking.clone();
 		
 		// Driver seat should pass input to driveable
-		if(driver)
+		if(isDriverSeat())
 		{
 			driveable.onMouseMoved(deltaX, deltaY);
 		}
 		// Other seats should look around, but also the driver seat if mouse control mode is disabled
-		if(!driver || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
+		if(!isDriverSeat() || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 		{
 			float lookSpeed = 4F;
 			
@@ -620,7 +618,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKeyHeld(key, held));
 			
 		}
-		if(driver)
+		if(isDriverSeat())
 		{
 			driveable.updateKeyHeldState(key, held);
 		}
@@ -635,7 +633,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public boolean pressKey(int key, EntityPlayer player, boolean isOnTick)
 	{
 		// Driver seat should pass input to driveable
-		if(driver && driveable != null)
+		if(isDriverSeat() && driveable != null)
 		{
 			return driveable.pressKey(key, player, isOnTick);
 		}
@@ -817,6 +815,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		return this;
 	}
+  
+	public boolean isDriverSeat()
+	{
+		return seatID == 0;
+	}
 	
 	@Override
 	public boolean startRiding(Entity riding)
@@ -903,7 +906,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(world.getEntityByID(driveableID) instanceof EntityDriveable)
 			driveable = (EntityDriveable)world.getEntityByID(driveableID);
 		seatID = data.readInt();
-		driver = seatID == 0;
 		if(seatID >= 0 && driveable != null)
 		{
 			seatInfo = driveable.getDriveableType().seats[seatID];

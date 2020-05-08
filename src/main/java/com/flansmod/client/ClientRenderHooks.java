@@ -606,7 +606,7 @@ public class ClientRenderHooks
 			}
 			
 			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
-			if(seat != null && seat.driver && FlansMod.proxy.mouseControlEnabled())
+			if(seat != null && seat.isDriverSeat() && FlansMod.proxy.mouseControlEnabled())
 			{
 				seat.applyOrientationToEntity(mc.player);
 			}
