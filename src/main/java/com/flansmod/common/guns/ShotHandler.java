@@ -352,6 +352,14 @@ public class ShotHandler
 	
 	public static float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)
 	{
-		return blockstate.getBlockHardness(world, pos) * 2;
+		float hardness = blockstate.getBlockHardness(world, pos) * 2;
+		if (hardness < 0)
+		{
+			return 1000; // Some high value for invincible blocks
+		}
+		else
+		{
+			return hardness;
+		}
 	}
 }
