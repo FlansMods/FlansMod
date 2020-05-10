@@ -33,7 +33,7 @@ public class PacketBlockHitEffect extends PacketBase
 	private Integer blockY;
 	private Integer blockZ;
 	
-	private EnumFacing faceing;
+	private EnumFacing facing;
 	
 	public PacketBlockHitEffect() {
 		//default constructor
@@ -44,7 +44,7 @@ public class PacketBlockHitEffect extends PacketBase
 		this(hit.x, hit.y, hit.z, direction.x, direction.y, direction.z, position.getX(), position.getY(), position.getZ(), facing);
 	}
 	
-	public PacketBlockHitEffect(Float x, Float y, Float z, Float directionX, Float directionY, Float directionZ, Integer blockX, Integer blockY, Integer blockZ, EnumFacing faceing)
+	public PacketBlockHitEffect(Float x, Float y, Float z, Float directionX, Float directionY, Float directionZ, Integer blockX, Integer blockY, Integer blockZ, EnumFacing facing)
 	{
 		this.x = x;
 		this.y = y;
@@ -58,7 +58,7 @@ public class PacketBlockHitEffect extends PacketBase
 		this.blockY = blockY;
 		this.blockZ = blockZ;
 		
-		this.faceing = faceing;
+		this.facing = facing;
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class PacketBlockHitEffect extends PacketBase
 		data.writeInt(blockY);
 		data.writeInt(blockZ);
 		
-		data.writeInt(faceing.getIndex());
+		data.writeInt(facing.getIndex());
 	}
 	
 	@Override
@@ -94,7 +94,7 @@ public class PacketBlockHitEffect extends PacketBase
 		blockY = data.readInt();
 		blockZ = data.readInt();
 		
-		faceing = EnumFacing.byIndex(data.readInt());
+		facing = EnumFacing.byIndex(data.readInt());
 	}
 	
 	@Override
@@ -110,16 +110,16 @@ public class PacketBlockHitEffect extends PacketBase
 		World world = clientPlayer.getEntityWorld();
 		BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
-		Vec3i faceingDir = faceing.getDirectionVec();
+		Vec3i facingDir = facing.getDirectionVec();
 		
 		for(int i = 0; i < 2; i++)
 		{
 			// TODO: [1.12] Check why this isn't moving right
 			float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
 			
-			double motionX = (double)faceingDir.getX() * scale + world.rand.nextGaussian() * 0.025d;
-			double motionY = (double)faceingDir.getY() * scale + world.rand.nextGaussian() * 0.025d;
-			double motionZ = (double)faceingDir.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+			double motionX = (double)facingDir.getX() * scale + world.rand.nextGaussian() * 0.025d;
+			double motionY = (double)facingDir.getY() * scale + world.rand.nextGaussian() * 0.025d;
+			double motionZ = (double)facingDir.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 			
 			motionX += directionX;
 			motionY += directionY;
@@ -138,9 +138,9 @@ public class PacketBlockHitEffect extends PacketBase
 		}
 		
 		double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
-		double motionX = (double)faceingDir.getX() * scale + world.rand.nextGaussian() * 0.025d;
-		double motionY = (double)faceingDir.getY() * scale + world.rand.nextGaussian() * 0.025d;
-		double motionZ = (double)faceingDir.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+		double motionX = (double)facingDir.getX() * scale + world.rand.nextGaussian() * 0.025d;
+		double motionY = (double)facingDir.getY() * scale + world.rand.nextGaussian() * 0.025d;
+		double motionZ = (double)facingDir.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 
 		Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), x, y, z, motionX, motionY, motionZ);
 		
