@@ -52,7 +52,7 @@ public class PacketSeatUpdates extends PacketBase
 	{
 		if(playerEntity == null)
 		{
-			FlansMod.log.warn("Recevied packet from a null player, skipping!");
+			FlansMod.log.warn("Received seat update packet from a null player, skipping!");
 			return ;
 		}
 		EntityDriveable driveable = null;
