@@ -134,6 +134,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public float lastRecoilPos = 0;
 	public int recoilTimer = 0;
 	
+	/** Can't break the block with hardness greater than this value 
+	 *  when collided */ 
+	public float collisionForce = 30F;
+
+	/** Damage factor of unbreakable block such as bedrock when collided */
+	public float unbreakableBlockDamage = 100F;
+
 	public EntityDriveable(World world)
 	{
 		super(world);
@@ -1330,16 +1337,27 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				IBlockState state = world.getBlockState(pos);
 				
 				float blockHardness = state.getBlockHardness(world, pos);
-				
+				float damage = (float)speed;
+
+				// unbreakable block
+				if(blockHardness < 0F)
+				{
+					damage *= unbreakableBlockDamage * unbreakableBlockDamage;
+				}
+				else
+				{
+					damage *= blockHardness * blockHardness;
+				}
+
 				// Attack the part
-				if(!attackPart(p.part, DamageSource.IN_WALL,
-					blockHardness * blockHardness * (float)speed) && TeamsManager.driveablesBreakBlocks)
+				if(!attackPart(p.part, DamageSource.IN_WALL, damage) 
+					&& TeamsManager.driveablesBreakBlocks)
 				{
 					// And if it didn't die from the attack, break the block
 					// TODO: [1.12] Heck
 					// playAuxSFXAtEntity(null, 2001, pos, Block.getStateId(state));
 					
-					if(!world.isRemote)
+					if(!world.isRemote && blockHardness <= collisionForce)
 					{
 						WorldServer worldServer = (WorldServer)world;
 						destroyBlock(worldServer, pos, getDriver(), true);
