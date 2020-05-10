@@ -171,8 +171,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				entityInThisSeat instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)entityInThisSeat);
 		
 		// Reset traverse sounds if player exits the vehicle
-		
-		if(isThePlayer)
+		if(!isThePlayer)
 		{
 			playYawSound = false;
 			playPitchSound = false;
