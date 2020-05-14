@@ -610,9 +610,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		// Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
 		Vector3f lookVector = getLookVector(shootPoint);
-		
 		// If its a pilot gun, then it is using a gun type, so do the following
-		if(shootPoint.rootPos instanceof PilotGun)
+		if(shootPoint.rootPos instanceof PilotGun && weaponType == EnumWeaponType.GUN)
 		{
 			PilotGun pilotGun = (PilotGun)shootPoint.rootPos;
 			// Get the gun from the plane type and the ammo from the data

@@ -160,7 +160,7 @@ public class KeyInputHandler
 				controllable.pressKey(4, player, false);
 			if(downKey.isKeyDown())
 				controllable.pressKey(5, player, false);
-			if(secondaryVehicleInteract.isKeyDown())
+			if(secondaryVehicleInteract.isKeyDown() || bombKey.isKeyDown())
 				controllable.pressKey(8, player, false);
 			if(primaryVehicleInteract.isKeyDown())
 				controllable.pressKey(9, player, false);
