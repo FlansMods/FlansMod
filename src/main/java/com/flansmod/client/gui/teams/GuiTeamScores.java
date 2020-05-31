@@ -152,7 +152,7 @@ public class GuiTeamScores extends GuiTeamsBase
 			}
 		}
 		*/
-		GL11.glDisable(3042 /*GL_BLEND*/);
+		GlStateManager.disableBlend();
 	}
 	
 	public void renderDMGUI(PacketTeamInfo teamInfo)
@@ -216,7 +216,7 @@ public class GuiTeamScores extends GuiTeamsBase
 				line++;
 			}
 		}
-		GL11.glDisable(3042 /*GL_BLEND*/);
+		GlStateManager.disableBlend();
 	}
 	
 	@Override

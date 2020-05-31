@@ -38,7 +38,7 @@ public class RenderNull<E extends Entity> extends Render<E>
 			GlStateManager.rotate(-entity.rotationYaw, 0F, 1F, 0F);
 			GlStateManager.disableTexture2D();
 			//GlStateManager.enableBlend();
-			//GL11.glDisable(GL11.GL_DEPTH_TEST);
+			//GlStateManager.disableDepth();
 			if(entity instanceof EntitySeat)
 			{
 				GlStateManager.color(1F, 1F, 1F, 1F);
@@ -47,7 +47,7 @@ public class RenderNull<E extends Entity> extends Render<E>
 			GlStateManager.scale(-1F, 1F, -1F);
 			renderOffsetAABB(new AxisAlignedBB(-1F, -1F, -1F, 1F, 1F, 1F), 0, 0, 0);
 			GlStateManager.enableTexture2D();
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GlStateManager.enableDepth();
 			GlStateManager.disableBlend();
 			GlStateManager.color(1F, 1F, 1F, 1F);
 			GlStateManager.popMatrix();

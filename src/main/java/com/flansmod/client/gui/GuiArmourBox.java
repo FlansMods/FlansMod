@@ -79,7 +79,7 @@ public class GuiArmourBox extends GuiScreen
 
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableRescaleNormal();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 
 		// Fill the gun panels with guns
@@ -97,7 +97,7 @@ public class GuiArmourBox extends GuiScreen
 			drawSlotInventory(inventory.getStackInSlot(col), m + 8 + col * 18, n + 158);
 		}
 
-		GL11.glDisable(3042 /*GL_BLEND*/);
+		GlStateManager.disableBlend();
 	}
 	
 	/**

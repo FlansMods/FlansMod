@@ -175,13 +175,13 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 					{
 						FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
 						GlStateManager.enableBlend();
-						GL11.glDisable(GL11.GL_DEPTH_TEST);
+						GlStateManager.disableDepth();
 						GlStateManager.disableTexture2D();
-						GL11.glDepthMask(false);
-						GL11.glBlendFunc(770, 771);
+						GlStateManager.depthMask(false);
+						GlStateManager.blendFunc(770, 771);
 						GlStateManager.color(1F, 1F, 1F, alpha);
-						GL11.glDisable(GL11.GL_ALPHA_TEST);
-						
+						GlStateManager.disableAlpha();
+
 						WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 						worldrenderer.startDrawingQuads();
 						worldrenderer.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
@@ -189,9 +189,9 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 						worldrenderer.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
 						worldrenderer.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
 						worldrenderer.draw();
-						GL11.glDepthMask(true);
-						GL11.glEnable(GL11.GL_DEPTH_TEST);
-						GL11.glEnable(GL11.GL_ALPHA_TEST);
+						GlStateManager.depthMask(true);
+						GlStateManager.enableDepth();
+						GlStateManager.enableAlpha();
 						GlStateManager.enableTexture2D();
 						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					}

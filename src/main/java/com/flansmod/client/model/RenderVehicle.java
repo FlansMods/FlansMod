@@ -97,17 +97,17 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				{
 					AnimTrackLink link = vehicle.trackLinksLeft[i];
 					float rotZ = link.zRot;
-					GL11.glPushMatrix();
-					GL11.glTranslatef(link.position.x / 16F, link.position.y / 16F, link.position.z / 16F);
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(link.position.x / 16F, link.position.y / 16F, link.position.z / 16F);
 					for(; rotZ > 180F; rotZ -= 360F)
 					{
 					}
 					for(; rotZ <= -180F; rotZ += 360F)
 					{
 					}
-					GL11.glRotatef(rotZ * (float)(180 / Math.PI), 0, 0, 1);
+					GlStateManager.rotate(rotZ * (float)(180 / Math.PI), 0, 0, 1);
 					modVehicle.renderFancyTracks(vehicle, f1);
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 				
 				for(int i = 0; i < vehicle.trackLinksRight.length; i++)
@@ -120,11 +120,11 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					for(; rotZ <= -180F; rotZ += 360F)
 					{
 					}
-					GL11.glPushMatrix();
-					GL11.glTranslatef(link.position.x / 16F, link.position.y / 16F, link.position.z / 16F);
-					GL11.glRotatef(rotZ * (float)(180 / Math.PI), 0, 0, 1);
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(link.position.x / 16F, link.position.y / 16F, link.position.z / 16F);
+					GlStateManager.rotate(rotZ * (float)(180 / Math.PI), 0, 0, 1);
 					modVehicle.renderFancyTracks(vehicle, f1);
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 				
 				GlStateManager.pushMatrix();
@@ -153,14 +153,14 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					if(modVehicle != null)
 					{
 						EntitySeat[] seats = vehicle.getSeats();
-						GL11.glTranslatef(modVehicle.barrelAttach.x,
+						GlStateManager.translate(modVehicle.barrelAttach.x,
 							modVehicle.barrelAttach.y,
 							-modVehicle.barrelAttach.z);
 						float bPitch = (seats[0].looking.getPitch() - seats[0].prevLooking.getPitch());
 						float aPitch = seats[0].prevLooking.getPitch() + bPitch * f1;
 						
-						GL11.glRotatef(-aPitch, 0F, 0F, 1F);
-						GL11.glTranslatef(recoilPos * -(5F / 16F), 0F, 0F);
+						GlStateManager.rotate(-aPitch, 0F, 0F, 1F);
+						GlStateManager.translate(recoilPos * -(5F / 16F), 0F, 0F);
 						modVehicle.renderAnimBarrel(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
 					}
 					
@@ -225,7 +225,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 			{
 				GlStateManager.disableTexture2D();
 				GlStateManager.enableBlend();
-				GL11.glDisable(GL11.GL_DEPTH_TEST);
+				GlStateManager.disableDepth();
 				GlStateManager.color(1F, 0F, 0F, 0.3F);
 				GlStateManager.scale(1F, 1F, 1F);
 				for(DriveablePart part : vehicle.getDriveableData().parts.values())
@@ -271,7 +271,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				}
 				
 				GlStateManager.enableTexture2D();
-				GL11.glEnable(GL11.GL_DEPTH_TEST);
+				GlStateManager.enableDepth();
 				GlStateManager.disableBlend();
 				GlStateManager.color(1F, 1F, 1F, 1F);
 			}
@@ -377,7 +377,8 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		//Setup lighting
 		Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
+		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
 		
 		RenderHelper.enableStandardItemLighting();
@@ -411,7 +412,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		//Reset Lighting
 		Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		//Pop
 		GlStateManager.popMatrix();
 	}

@@ -131,7 +131,7 @@ public class InstantBulletRenderer
 			normal.normalise();
 			
 			GlStateManager.enableRescaleNormal();
-			GL11.glNormal3f(normal.x, normal.y, normal.z);
+			GlStateManager.glNormal3f(normal.x, normal.y, normal.z);
 			
 			worldrenderer.startDrawingQuads();
 			worldrenderer.addVertexWithUV(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z, 0.0f, 0.0f);

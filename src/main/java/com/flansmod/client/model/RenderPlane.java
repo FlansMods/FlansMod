@@ -112,7 +112,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		{
 			GlStateManager.disableTexture2D();
 			GlStateManager.enableBlend();
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GlStateManager.disableDepth();
 			GlStateManager.color(1F, 0F, 0F, 0.3F);
 			GlStateManager.scale(-1F, 1F, -1F);
 			for(DriveablePart part : entityPlane.getDriveableData().parts.values())
@@ -163,7 +163,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			
 			
 			GlStateManager.enableTexture2D();
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GlStateManager.enableDepth();
 			GlStateManager.disableBlend();
 			GlStateManager.color(1F, 1F, 1F, 1F);
 		}

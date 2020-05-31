@@ -105,7 +105,7 @@ public class GuiMechaInventory extends GuiContainer
 		MechaType type = mecha.getMechaType();
 		//Render rotating mecha model
 		GlStateManager.pushMatrix();
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GlStateManager.enableDepth();
 		GlStateManager.enableLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate(j + 92, k + 105, 100);
@@ -117,7 +117,7 @@ public class GuiMechaInventory extends GuiContainer
 		mechaRenderer.doRender(mecha, 0, 0, 0, 0F, 0F);
 		//type.model.render(type);
 		GlStateManager.disableLighting();
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableDepth();
 		GlStateManager.popMatrix();
 	}
 	

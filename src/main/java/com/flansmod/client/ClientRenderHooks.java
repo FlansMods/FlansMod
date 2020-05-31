@@ -785,11 +785,11 @@ public class ClientRenderHooks
 									bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 							{
 								RenderHelper.enableGUIStandardItemLighting();
-								GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+								GlStateManager.enableRescaleNormal();
 								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 								int xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 16 + x : i / 2 - 32 - x;
 								drawSlotInventory(mc.fontRenderer, bulletStack, xPos, j - 65);
-								GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+								GlStateManager.disableRescaleNormal();
 								RenderHelper.disableStandardItemLighting();
 								String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" +
 										bulletStack.getMaxDamage();
@@ -817,12 +817,12 @@ public class ClientRenderHooks
 				&& PacketTeamInfo.getPlayerScoreData(FlansModClient.minecraft.player.getName()) != null)
 		{
 			GlStateManager.enableBlend();
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glDepthMask(false);
-			GL11.glBlendFunc(770, 771);
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			GlStateManager.blendFunc(770, 771);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			
+			GlStateManager.disableAlpha();
+
 			mc.renderEngine.bindTexture(GuiTeamScores.texture);
 			
 			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
@@ -865,9 +865,9 @@ public class ClientRenderHooks
 				worldrenderer.addVertexWithUV(i / 2d + 19, 0D, -90D, 62D / 256D, 98D / 256D);
 				worldrenderer.draw();
 				
-				GL11.glDepthMask(true);
-				GL11.glEnable(GL11.GL_DEPTH_TEST);
-				GL11.glEnable(GL11.GL_ALPHA_TEST);
+				GlStateManager.depthMask(true);
+				GlStateManager.enableDepth();
+				GlStateManager.enableAlpha();
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				
 				// Draw the team scores
@@ -901,9 +901,9 @@ public class ClientRenderHooks
 			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
 			
 			
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GlStateManager.depthMask(true);
+			GlStateManager.enableDepth();
+			GlStateManager.enableAlpha();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			String playerUsername = FlansModClient.minecraft.player.getName();
 			
@@ -930,7 +930,7 @@ public class ClientRenderHooks
 		// Draw icons indicated weapons used
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableRescaleNormal();
 		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		for(KillMessage killMessage : killMessages)
@@ -943,7 +943,7 @@ public class ClientRenderHooks
 					i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName),
 					j - 36 - killMessage.line * 16);
 		}
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.disableBlend();
 		RenderHelper.disableStandardItemLighting();
 	}
 	

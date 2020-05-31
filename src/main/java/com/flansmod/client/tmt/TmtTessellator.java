@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.Arrays;
 
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.ARBBufferObject;
 import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
@@ -246,7 +247,7 @@ public class TmtTessellator extends Tessellator
 				{
 					if(TmtTessellator.useVBO)
 					{
-						GL11.glTexCoordPointer(4, GL11.GL_FLOAT, 40, 12L);
+						GlStateManager.glTexCoordPointer(4, GL11.GL_FLOAT, 40, 12);
 					}
 					else
 					{
@@ -254,7 +255,7 @@ public class TmtTessellator extends Tessellator
 						GL11.glTexCoordPointer(4, 40, TmtTessellator.floatBuffer);
 					}
 					
-					GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+					GlStateManager.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 				}
 				
 				if(this.hasBrightness)
@@ -263,7 +264,7 @@ public class TmtTessellator extends Tessellator
 					
 					if(TmtTessellator.useVBO)
 					{
-						GL11.glTexCoordPointer(2, GL11.GL_SHORT, 40, 36L);
+						GlStateManager.glTexCoordPointer(2, GL11.GL_SHORT, 40, 36);
 					}
 					else
 					{
@@ -271,7 +272,7 @@ public class TmtTessellator extends Tessellator
 						GL11.glTexCoordPointer(2, 40, TmtTessellator.shortBuffer);
 					}
 					
-					GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+					GlStateManager.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 					OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
 				}
 				
@@ -279,7 +280,7 @@ public class TmtTessellator extends Tessellator
 				{
 					if(TmtTessellator.useVBO)
 					{
-						GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, 40, 28L);
+						GlStateManager.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, 40, 28);
 					}
 					else
 					{
@@ -287,7 +288,7 @@ public class TmtTessellator extends Tessellator
 						GL11.glColorPointer(4, true, 40, TmtTessellator.byteBuffer);
 					}
 					
-					GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+					GlStateManager.glEnableClientState(GL11.GL_COLOR_ARRAY);
 				}
 				
 				if(this.hasNormals)
@@ -302,12 +303,12 @@ public class TmtTessellator extends Tessellator
 						GL11.glNormalPointer(40, TmtTessellator.byteBuffer);
 					}
 					
-					GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+					GlStateManager.glEnableClientState(GL11.GL_NORMAL_ARRAY);
 				}
 				
 				if(TmtTessellator.useVBO)
 				{
-					GL11.glVertexPointer(3, GL11.GL_FLOAT, 40, 0L);
+					GlStateManager.glVertexPointer(3, GL11.GL_FLOAT, 40, 0);
 				}
 				else
 				{
@@ -315,39 +316,39 @@ public class TmtTessellator extends Tessellator
 					GL11.glVertexPointer(3, 40, TmtTessellator.floatBuffer);
 				}
 				
-				GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+				GlStateManager.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 				
 				if(this.drawMode == 7 && convertQuadsToTriangles)
 				{
-					GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vtc);
+					GlStateManager.glDrawArrays(GL11.GL_TRIANGLES, 0, vtc);
 				}
 				else
 				{
-					GL11.glDrawArrays(this.drawMode, 0, vtc);
+					GlStateManager.glDrawArrays(this.drawMode, 0, vtc);
 				}
 				
-				GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-				
+				GlStateManager.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+
 				if(this.hasTexture)
 				{
-					GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+					GlStateManager.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 				}
 				
 				if(this.hasBrightness)
 				{
 					OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
-					GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+					GlStateManager.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 					OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
 				}
 				
 				if(this.hasColor)
 				{
-					GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+					GlStateManager.glDisableClientState(GL11.GL_COLOR_ARRAY);
 				}
 				
 				if(this.hasNormals)
 				{
-					GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+					GlStateManager.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 				}
 			}
 			

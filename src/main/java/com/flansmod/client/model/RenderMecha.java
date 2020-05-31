@@ -197,7 +197,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 		{
 			GlStateManager.disableTexture2D();
 			GlStateManager.enableBlend();
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GlStateManager.disableDepth();
 			
 			//Render boxes
 			GlStateManager.color(1F, 0F, 0F, 0.3F);
@@ -239,7 +239,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			}
 			
 			GlStateManager.enableTexture2D();
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GlStateManager.enableDepth();
 			GlStateManager.disableBlend();
 			GlStateManager.color(1F, 1F, 1F, 1F);
 		}
@@ -436,7 +436,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			IBakedModel ibakedmodel = renderItem.getItemModelMesher().getItemModel(stack);
 			renderItem.renderItem(stack, ibakedmodel);
 			
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GlStateManager.disableRescaleNormal();
 		}
 		GlStateManager.popMatrix();
 	}

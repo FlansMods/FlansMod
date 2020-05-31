@@ -25,7 +25,7 @@ public class RenderDebugVector extends Render<EntityDebugVector>
 			return;
 		
 		GlStateManager.disableTexture2D();
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableDepth();
 		GlStateManager.color(entity.getColorRed(), entity.getColorGreen(), entity.getColorBlue());
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float)d0, (float)d1, (float)d2);
@@ -36,7 +36,7 @@ public class RenderDebugVector extends Render<EntityDebugVector>
 		GlStateManager.glEnd();
 		GlStateManager.popMatrix();
 		GlStateManager.enableTexture2D();
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GlStateManager.enableDepth();
 	}
 	
 	@Override

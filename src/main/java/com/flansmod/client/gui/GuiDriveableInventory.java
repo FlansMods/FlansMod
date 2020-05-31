@@ -90,10 +90,9 @@ public class GuiDriveableInventory extends GuiContainer
 			}
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableDepth();
 	}
 	
 	@Override

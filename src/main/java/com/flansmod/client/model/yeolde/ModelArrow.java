@@ -35,19 +35,19 @@ public class ModelArrow extends ModelBase
 		float var18 = (5 + var11 * 10) / 32.0F;
 		float var19 = (10 + var11 * 10) / 32.0F;
 		float var20 = 0.05625F;
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableRescaleNormal();
 		GlStateManager.rotate(90F, 0.0F, 0.0F, 1.0F);
 		GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(var20, var20, var20);
 		GlStateManager.translate(-4.0F, 0.0F, 0.0F);
-		GL11.glNormal3f(var20, 0.0F, 0.0F);
+		GlStateManager.glNormal3f(var20, 0.0F, 0.0F);
 		worldrenderer.startDrawingQuads();
 		worldrenderer.addVertexWithUV(-7.0D, -2.0D, -2.0D, var16, var18);
 		worldrenderer.addVertexWithUV(-7.0D, -2.0D, 2.0D, var17, var18);
 		worldrenderer.addVertexWithUV(-7.0D, 2.0D, 2.0D, var17, var19);
 		worldrenderer.addVertexWithUV(-7.0D, 2.0D, -2.0D, var16, var19);
 		worldrenderer.draw();
-		GL11.glNormal3f(-var20, 0.0F, 0.0F);
+		GlStateManager.glNormal3f(-var20, 0.0F, 0.0F);
 		worldrenderer.startDrawingQuads();
 		worldrenderer.addVertexWithUV(-7.0D, 2.0D, -2.0D, var16, var18);
 		worldrenderer.addVertexWithUV(-7.0D, 2.0D, 2.0D, var17, var18);
@@ -66,7 +66,7 @@ public class ModelArrow extends ModelBase
 			worldrenderer.addVertexWithUV(-8.0D, 2.0D, 0.0D, var12, var15);
 			worldrenderer.draw();
 		}
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.disableRescaleNormal();
 
 	}
 

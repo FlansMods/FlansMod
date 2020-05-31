@@ -193,7 +193,7 @@ public class GuiGunModTable extends GuiContainer
 				}
 				
 				GlStateManager.color(1F, 1F, 1F, 1F);
-				GL11.glDisable(GL11.GL_LIGHTING);
+				GlStateManager.disableLighting();
 				mc.renderEngine.bindTexture(texture);
 				
 				int originX = mouseX + 6;
