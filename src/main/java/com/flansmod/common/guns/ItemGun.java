@@ -424,7 +424,6 @@ public class ItemGun extends Item implements IFlanItem
 				{
 					data.isShootingRight = data.isShootingLeft = false;
 					data.offHandGunSlot = 0;
-					(new PacketSelectOffHandGun(0)).handleServerSide(player);
 				}
 				return;
 			}
