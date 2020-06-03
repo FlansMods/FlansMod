@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import io.netty.buffer.ByteBuf;
+import io.vavr.Tuple;
+import io.vavr.Tuple3;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -497,15 +501,11 @@ public class EntityMecha extends EntityDriveable
 		Entity driver = driverSeat == null ? null : driverSeat.getControllingPassenger();
 		EntityLivingBase livingDriver = driver instanceof EntityLivingBase ? (EntityLivingBase)driver : null;
 		EntityPlayer playerDriver = driver instanceof EntityPlayer ? (EntityPlayer)driver : null;
-		boolean isCreative = playerDriver != null && playerDriver.capabilities.isCreativeMode;
+		boolean isCreative = playerDriver != null && playerDriver.isCreative();
 		
 		//Decrement delay variables
-		if(jumpDelay > 0) jumpDelay--;
-		if(shootDelayLeft > 0) shootDelayLeft--;
-		if(shootDelayRight > 0) shootDelayRight--;
-		if(soundDelayLeft > 0) soundDelayLeft--;
-		if(soundDelayRight > 0) soundDelayRight--;
-		
+		updateDelays();
+
 		//If the player left the driver's seat, stop digging / whatever
 		if(!world.isRemote && (driverSeat == null || driver == null))
 			primaryShootHeld = secondaryShootHeld = false;
@@ -524,81 +524,17 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		prevLegsYaw = legAxes.getYaw();
-		
-		//Autorepair. Like a Boss.
-		
-		if(toggleTimer == 0 && autoRepair())
-		{
-			for(EnumDriveablePart part : EnumDriveablePart.values())
-			{
-				DriveablePart thisPart = data.parts.get(part);
-				boolean hasCreativePlayer = playerDriver != null && isCreative;
-				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
-				{
-					thisPart.health += 1;
-					if(!hasCreativePlayer)
-						data.fuelInTank -= 10F;
-				}
-			}
-			toggleTimer = 20;
-		}
-		
-		if(diamondDetect() != null && diamondTimer == 0 && world.isRemote && FlansMod.proxy.isThePlayer(playerDriver))
-		{
-			float sqDistance = 901;
-			for(float i = -30; i <= 30; i++)
-			{
-				for(float j = -30; j <= 30; j++)
-				{
-					for(float k = -30; k <= 30; k++)
-					{
-						int x = MathHelper.floor(i + posX);
-						int y = MathHelper.floor(j + posY);
-						int z = MathHelper.floor(k + posZ);
-						if(i * i + j * j + k * k < sqDistance && world.getBlockState(new BlockPos(x, y, z)).getBlock() == (Blocks.DIAMOND_ORE))
-						{
-							sqDistance = i * i + j * j + k * k;
-						}
-					}
-				}
-			}
-			if(sqDistance < 901)
-			{
-				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, diamondDetect().detectSound, false);
-				diamondTimer = 1 + 2 * MathHelper.floor(MathHelper.sqrt(sqDistance));
-			}
-		}
-		if(diamondTimer > 0) --diamondTimer;
-		
-		//TODO better implement this
-		if(isPartIntact(EnumDriveablePart.hips))
-		{
-			setSize(type.width, type.height);
-			yOffset = type.yOffset;
-		}
-		else
-		{
-			setSize(type.width, type.height - type.chassisHeight);
-			yOffset = type.yOffset - type.chassisHeight;
-		}
-		
+
+		// Abilities
+		autoRepair(playerDriver, isCreative, data);
+		detectDiamonds(playerDriver);
+
+		updateHeight(type);
+		updateDespawn(driver);
+
 		//Work out of this is client side and the player is driving
 		boolean thePlayerIsDrivingThis = world.isRemote && FlansMod.proxy.isThePlayer(playerDriver);
-		
-		//Despawning
-		ticksSinceUsed++;
-		if(!world.isRemote && driver != null)
-			ticksSinceUsed = 0;
-		if(!world.isRemote && TeamsManager.mechaLove > 0 && ticksSinceUsed > TeamsManager.mechaLove * 20)
-		{
-			setDead();
-		}
-		
-		//Timer, for general use (only current use is for Auto Repair)
-		if(toggleTimer > 0)
-			toggleTimer--;
-		
-		//Player is not driving this. Update its position from server update packets 
+		//Player is not driving this. Update its position from server update packets
 		if(world.isRemote && !thePlayerIsDrivingThis)
 		{
 			//The driveable is currently moving towards its server position. Continue doing so.
@@ -610,58 +546,24 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		//Movement
-		
-		if(driverSeat != null)
-		{
-			//if(seats[0].riddenByEntity == null)
-			//{
-			//	axes.rotateGlobalYaw(2F);
-			//}
-			if(livingDriver != null && playerDriver == null)
-			{
-				axes.setAngles(livingDriver.renderYawOffset + 90F, 0F, 0F);
-			}
-			else
-			{
-				//Function to limit Head Movement Left/Right
-				if(type.limitHeadTurn)
-				{
-					float axesLegs = legAxes.getYaw();
-					float axesBody = axes.getYaw();
-					
-					double dYaw = axesBody - axesLegs;
-					if(dYaw > 180)
-						axesBody -= 360F;
-					if(dYaw < -180)
-						axesBody += 360F;
-					
-					if(axesLegs + type.limitHeadTurnValue < axesBody)
-						axes.setAngles(axesLegs + type.limitHeadTurnValue, 0F, 0F);
-					
-					if(axesLegs - type.limitHeadTurnValue > axesBody)
-						axes.setAngles(axesLegs - type.limitHeadTurnValue, 0F, 0F);
-				}
-				
-				float yaw = driverSeat.looking.getYaw();
-				axes.rotateGlobalYaw(yaw);
-				driverSeat.looking.rotateGlobalYaw(-yaw);
-				driverSeat.playerLooking.rotateGlobalYaw(-yaw);
-			}
-		}
-		
+		updateHeadPosition(driverSeat, livingDriver, playerDriver, type);
+
 		moveX = 0;
 		moveZ = 0;
-		
-		float jetPack = jetPackPower();
-		if(!onGround && thePlayerIsDrivingThis /*&& Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController*/
-				&& FlansMod.proxy.isKeyDown(4) && shouldFly() && (isCreative || data.fuelInTank >= (10F * jetPack)))
+
+		float jetPackPower = jetPackPower();
+		if(!onGround
+				&& thePlayerIsDrivingThis
+				&& FlansMod.proxy.isKeyDown(4)
+				&& shouldFly()
+				&& (isCreative || data.fuelInTank >= (10F * jetPackPower)))
 		{
 			motionY *= 0.95;
-			motionY += (0.07 * jetPack);
+			motionY += (0.07 * jetPackPower);
 			fallDistance = 0;
 			if(!isCreative)
 			{
-				data.fuelInTank -= (10F * jetPack);
+				data.fuelInTank -= (10F * jetPackPower);
 			}
 			if(rocketTimer <= 0 && rocketPack().soundEffect != null)
 			{
@@ -669,83 +571,74 @@ public class EntityMecha extends EntityDriveable
 				rocketTimer = rocketPack().soundTime;
 			}
 		}
-		else if(isInWater() && shouldFloat())
+
+		if(isInWater() && shouldFloat())
 		{
 			motionY *= 0.89;
 			motionY += 0.1;
 		}
-		
-		if(rocketTimer != 0) rocketTimer--;
-		
+
+
+
 		Vector3f actualMotion = new Vector3f(0F, motionY - (16F / 400F), 0F);
-		
+
 		if(livingDriver != null)
 		{
-			if(thePlayerIsDrivingThis /*&& Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController*/)
+			if(thePlayerIsDrivingThis)
 			{
 				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
 				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
 				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
 			}
-			else if(livingDriver != null && playerDriver == null)
+			else if(playerDriver == null)
 			{
-				
 				moveZ = 1;
-				/*
-				EntityLiving ent = (EntityLiving)seats[0].riddenByEntity;
-				//FlansMod.log.debug(ent.moveForward);
-				Vec3d target = Vec3d.createVectorHelper(0D, 0D, 0D);
-				if(ent.getNavigator().getPath() != null)
-					target = ent.getNavigator().getPath().getPosition(ent);
-				moveX = (float) target.x;
-				moveZ = (float) target.z;
-				*/
 			}
 			Vector3f intent = new Vector3f(moveX, 0, moveZ);
-			
+
 			if(Math.abs(intent.lengthSquared()) > 0.1)
 			{
 				intent.normalise();
-				
+
 				++legSwing;
-				
+
 				intent = axes.findLocalVectorGlobally(intent);
-				
+
 				Vector3f intentOnLegAxes = legAxes.findGlobalVectorLocally(intent);
 				float intentAngle = (float)Math.atan2(intent.z, intent.x) * 180F / 3.14159265F;
 				float angleBetween = intentAngle - legAxes.getYaw();
 				if(angleBetween > 180F) angleBetween -= 360F;
 				if(angleBetween < -180F) angleBetween += 360F;
-				
+
 				float signBetween = Math.signum(angleBetween);
 				angleBetween = Math.abs(angleBetween);
-				
+
 				if(angleBetween > 0.1)
 				{
 					legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed) * signBetween);
 				}
-				
+
 				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier()) * (4.3F / 20F));
-								
+
 				if((isCreative || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(!onGround && shouldFly() && (isCreative || data.fuelInTank > 10F * jetPack + data.engine.fuelConsumption))
+					if(!onGround && shouldFly() && (isCreative || data.fuelInTank > 10F * jetPackPower + data.engine.fuelConsumption))
 					{
-						intent.scale(jetPack);
+						intent.scale(jetPackPower);
 						if(!isCreative)
-							data.fuelInTank -= 10F * jetPack;
+							data.fuelInTank -= 10F * jetPackPower;
 					}
-					
+
 					//Move!
 					Vector3f.add(actualMotion, intent, actualMotion);
-					
+
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!isCreative)
 						data.fuelInTank -= data.engine.fuelConsumption;
 				}
 			}
-			
+
 			//Block breaking
 			if(!world.isRemote)
 			{
@@ -756,191 +649,13 @@ public class EntityMecha extends EntityDriveable
 					useItem(false);
 				
 				//Check the left block being mined
-				if(breakingBlock != null)
-				{
-					//Get block and material
-					IBlockState state = world.getBlockState(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-					Block blockHit = state.getBlock();
-					Material material = state.getMaterial();
-					
-					//Get the itemstacks in each hand
-					ItemStack leftStack = inventory.getStackInSlot(EnumMechaSlotType.leftTool);
-					ItemStack rightStack = inventory.getStackInSlot(EnumMechaSlotType.rightTool);
-					
-					//Work out if we are actually breaking blocks
-					boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaAddon;
-					boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaAddon;
-					boolean breakingBlocks = (primaryShootHeld && leftStackIsTool) || (secondaryShootHeld && rightStackIsTool);
-					
-					//If we are not breaking blocks, reset everything
-					if(blockHit == null || !breakingBlocks)
-					{
-						//if(world.isRemote)
-						//	Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(getEntityId(), breakingBlock.x, breakingBlock.y, breakingBlock.z, -1);
-						breakingBlock = null;
-					}
-					else
-					{
-						//Get the block hardness
-						float blockHardness = state.getBlockHardness(world, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-						
-						//Calculate the mine speed
-						float mineSpeed = 1F;
-						boolean atLeastOneEffectiveTool = false;
-						if(leftStackIsTool)
-						{
-							MechaItemType leftType = ((ItemMechaAddon)leftStack.getItem()).type;
-							if(leftType.function.effectiveAgainst(material) && leftType.toolHardness > blockHardness)
-							{
-								mineSpeed *= leftType.speed;
-								atLeastOneEffectiveTool = true;
-							}
-						}
-						if(rightStackIsTool)
-						{
-							MechaItemType rightType = ((ItemMechaAddon)rightStack.getItem()).type;
-							if(rightType.function.effectiveAgainst(material) && rightType.toolHardness > blockHardness)
-							{
-								mineSpeed *= rightType.speed;
-								atLeastOneEffectiveTool = true;
-							}
-						}
-						
-						//If this block is immortal, do not break it
-						if(blockHardness < -0.01F)
-							mineSpeed = 0F;
-							//If this block's hardness is zero-ish, then the tool's power is OVER 9000!!!!
-						else if(Math.abs(blockHardness) < 0.01F)
-							mineSpeed = 9001F;
-						else
-						{
-							mineSpeed /= state.getBlockHardness(world, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-						}
-						
-						//Add block digging overlay
-						//if(world.isRemote)
-						//	Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(getEntityId(), breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
-						breakingProgress += 0.1F * mineSpeed;
-						if(breakingProgress >= 1F)
-						{
-							boolean cancelled = false;
-							if(playerDriver instanceof EntityPlayerMP)
-							{
-								int eventOutcome = ForgeHooks.onBlockBreakEvent(world, isCreative ? GameType.CREATIVE : playerDriver.capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)playerDriver, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-								cancelled = eventOutcome == -1;
-							}
-							if(!cancelled)
-							{
-								//blockHit.dropBlockAsItem(world, breakingBlock.x, breakingBlock.y, breakingBlock.z, world.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
-								//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, world.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-								//world.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
-								
-								boolean vacuumItems = vacuumItems();
-								if(vacuumItems)
-								{
-									NonNullList<ItemStack> drops = NonNullList.create();
-									blockHit.getDrops(drops, world, new BlockPos(breakingBlock.x, breakingBlock.y,
-											breakingBlock.z), state, 0);
-									for(ItemStack stack : drops)
-									{
-										//Check for iron regarding refining
-										boolean fuelCheck = (data.fuelInTank >= 5F || isCreative);
-										if(fuelCheck && refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).getBlock() == Blocks.IRON_ORE)
-										{
-											stack = (new ItemStack(Items.IRON_INGOT, 1, 0));
-											if(!isCreative)
-												data.fuelInTank -= 5F;
-										}
-										
-										//Check for waste to be compacted
-										fuelCheck = (data.fuelInTank >= 0.1F || isCreative);
-										if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock &&
-												(((ItemBlock)stack.getItem()).getBlock() == Blocks.COBBLESTONE
-														|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.DIRT
-														|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.SAND))
-										{
-											stack.setCount(0);
-											if(!isCreative)
-												data.fuelInTank -= 0.1F;
-										}
-										
-										//Check for item multipliers
-										fuelCheck = (data.fuelInTank >= 3F * diamondMultiplier() || isCreative);
-										if(fuelCheck && stack.getItem() == Items.DIAMOND)
-										{
-											float multiplier = diamondMultiplier();
-											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!isCreative)
-												data.fuelInTank -= 3F * diamondMultiplier();
-										}
-										fuelCheck = (data.fuelInTank >= 2F * redstoneMultiplier() || isCreative);
-										if(fuelCheck && stack.getItem() == Items.REDSTONE)
-										{
-											float multiplier = redstoneMultiplier();
-											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!isCreative)
-												data.fuelInTank -= 2F * redstoneMultiplier();
-										}
-										fuelCheck = (data.fuelInTank >= 2F * coalMultiplier() || isCreative);
-										if(fuelCheck && stack.getItem() == Items.COAL)
-										{
-											float multiplier = coalMultiplier();
-											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!isCreative)
-												data.fuelInTank -= 2F * coalMultiplier();
-										}
-										fuelCheck = (data.fuelInTank >= 2F * emeraldMultiplier() || isCreative);
-										if(fuelCheck && stack.getItem() == Items.EMERALD)
-										{
-											float multiplier = emeraldMultiplier();
-											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!isCreative)
-												data.fuelInTank -= 2F * emeraldMultiplier();
-										}
-										fuelCheck = (data.fuelInTank >= 2F * ironMultiplier() || isCreative);
-										//check for refineIron OTHERWISE NICE DUPE. think about it and you will get why
-										if(fuelCheck && (stack.getItem() == Items.IRON_INGOT) && refineIron())
-										{
-											float multiplier = ironMultiplier();
-											stack.setCount(stack.getCount() * (MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
-											if(!isCreative)
-												data.fuelInTank -= 2F * ironMultiplier();
-										}
-										
-										//Check for auto coal consumption
-										if(autoCoal() && (stack.getItem() == Items.COAL) && (data.fuelInTank + 250F < type.fuelTankSize))
-										{
-											data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
-											couldNotFindFuel = false;
-											stack.setCount(0);
-										}
-										
-										//Add the itemstack to mecha inventory
-										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, isCreative) && !world.isRemote && world.getGameRules().getBoolean("doTileDrops"))
-										{
-											world.spawnEntity(new EntityItem(world, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
-										}
-									}
-								}
-								//Destroy block
-								if(!world.isRemote)
-								{
-									WorldServer worldServer = (WorldServer)world;
-									BlockPos pos = new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z);
-									boolean dropBlocks = atLeastOneEffectiveTool && !vacuumItems;
-									destroyBlock(worldServer, pos, driver, dropBlocks);
-								}
-							}
-						}
-					}
-				}
+				mineBlock(driver, playerDriver, isCreative, type, data);
 			}
 		}
 		else moveAI(actualMotion);
 		
 		motionY = actualMotion.y;
 		move(MoverType.SELF, actualMotion.x, actualMotion.y, actualMotion.z);
-		//FlansMod.log("" + fallDistance);
 		setPosition(posX, posY, posZ);
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
@@ -966,6 +681,291 @@ public class EntityMecha extends EntityDriveable
 			legSwing = legSwing / type.legSwingLimit;
 	}
 	
+	private void mineBlock(Entity driver, EntityPlayer playerDriver, boolean isCreative, MechaType type,
+						   DriveableData data)
+	{
+		if(breakingBlock != null)
+		{
+			//Get block and material
+			IBlockState state = world.getBlockState(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+			Block blockHit = state.getBlock();
+			Material material = state.getMaterial();
+			
+			//Get the itemstacks in each hand
+			ItemStack leftStack = inventory.getStackInSlot(EnumMechaSlotType.leftTool);
+			ItemStack rightStack = inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+			
+			//Work out if we are actually breaking blocks
+			boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaAddon;
+			boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaAddon;
+			boolean breakingBlocks = (primaryShootHeld && leftStackIsTool) || (secondaryShootHeld && rightStackIsTool);
+			
+			//If we are not breaking blocks, reset everything
+			if(!breakingBlocks)
+			{
+				breakingBlock = null;
+			}
+			else
+			{
+				//Get the block hardness
+				float blockHardness = state.getBlockHardness(world, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+				
+				//Calculate the mine speed
+				float mineSpeed = 1F;
+				boolean atLeastOneEffectiveTool = false;
+				if(leftStackIsTool)
+				{
+					MechaItemType leftType = ((ItemMechaAddon)leftStack.getItem()).type;
+					if(leftType.function.effectiveAgainst(material) && leftType.toolHardness > blockHardness)
+					{
+						mineSpeed *= leftType.speed;
+						atLeastOneEffectiveTool = true;
+					}
+				}
+				if(rightStackIsTool)
+				{
+					MechaItemType rightType = ((ItemMechaAddon)rightStack.getItem()).type;
+					if(rightType.function.effectiveAgainst(material) && rightType.toolHardness > blockHardness)
+					{
+						mineSpeed *= rightType.speed;
+						atLeastOneEffectiveTool = true;
+					}
+				}
+				
+				//If this block is immortal, do not break it
+				if(blockHardness < -0.01F)
+					mineSpeed = 0F;
+					//If this block's hardness is zero-ish, then the tool's power is OVER 9000!!!!
+				else if(Math.abs(blockHardness) < 0.01F)
+					mineSpeed = 9001F;
+				else
+				{
+					mineSpeed /= state.getBlockHardness(world, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+				}
+				
+				//Add block digging overlay
+				breakingProgress += 0.1F * mineSpeed;
+				if(breakingProgress >= 1F)
+				{
+					boolean cancelled = false;
+					if(playerDriver instanceof EntityPlayerMP)
+					{
+						int eventOutcome = ForgeHooks
+								.onBlockBreakEvent(world, isCreative ? GameType.CREATIVE : playerDriver.capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)playerDriver, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+						cancelled = eventOutcome == -1;
+					}
+					if(!cancelled)
+					{
+						if(canVacuumItems())
+						{
+							vacuumItems(isCreative, type, data, state, blockHit);
+						}
+						//Destroy block
+						if(!world.isRemote)
+						{
+							WorldServer worldServer = (WorldServer)world;
+							BlockPos pos = new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+							boolean dropBlocks = atLeastOneEffectiveTool && !canVacuumItems();
+							destroyBlock(worldServer, pos, driver, dropBlocks);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void vacuumItems(boolean isCreative, MechaType type, DriveableData data, IBlockState state, Block blockHit)
+	{
+		NonNullList<ItemStack> drops = NonNullList.create();
+		blockHit.getDrops(drops, world, new BlockPos(breakingBlock.x, breakingBlock.y,
+				breakingBlock.z), state, 0);
+		for(ItemStack stack : drops)
+		{
+			//Check for iron regarding refining
+			boolean fuelCheck = (data.fuelInTank >= 5F || isCreative);
+			if(fuelCheck
+					&& refineIron()
+					&& stack.getItem() instanceof ItemBlock
+					&& ((ItemBlock)stack.getItem()).getBlock() == Blocks.IRON_ORE)
+			{
+				stack = (new ItemStack(Items.IRON_INGOT, 1, 0));
+				if(!isCreative)
+					data.fuelInTank -= 5F;
+			}
+			
+			//Check for waste to be compacted
+			fuelCheck = (data.fuelInTank >= 0.1F || isCreative);
+			if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock &&
+					(((ItemBlock)stack.getItem()).getBlock() == Blocks.COBBLESTONE
+							|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.DIRT
+							|| ((ItemBlock)stack.getItem()).getBlock() == Blocks.SAND))
+			{
+				stack.setCount(0);
+				if(!isCreative)
+					data.fuelInTank -= 0.1F;
+			}
+			
+			//Check for item multipliers
+			List<Tuple3<Item, Float, Float>> itemsToFuelUsageAndMultiplier = List.of(
+					Tuple.of(Items.DIAMOND, 3F, diamondMultiplier()),
+					Tuple.of(Items.REDSTONE, 2F, redstoneMultiplier()),
+					Tuple.of(Items.COAL, 2F, coalMultiplier()),
+					Tuple.of(Items.EMERALD, 2F, emeraldMultiplier()),
+					Tuple.of(Items.IRON_INGOT, 2F, ironMultiplier()));
+			for(Tuple3<Item, Float, Float> itemToFuelUsageAndMultiplier : itemsToFuelUsageAndMultiplier)
+			{
+				Item item = itemToFuelUsageAndMultiplier._1;
+				float fuelUsage = itemToFuelUsageAndMultiplier._2;
+				float multiplier = itemToFuelUsageAndMultiplier._3;
+				
+				fuelCheck = (data.fuelInTank >= fuelUsage * multiplier || isCreative);
+				if(fuelCheck && stack.getItem() == item)
+				{
+					stack.setCount(stack.getCount() * (
+							MathHelper.floor(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0)));
+					if(!isCreative)
+						data.fuelInTank -= fuelUsage * multiplier;
+				}
+			}
+			
+			//Check for auto coal consumption
+			if(autoCoal() && (stack.getItem() == Items.COAL) && (data.fuelInTank + 250F < type.fuelTankSize))
+			{
+				data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
+				couldNotFindFuel = false;
+				stack.setCount(0);
+			}
+			
+			//Add the itemstack to mecha inventory
+			if(!InventoryHelper.addItemStackToInventory(driveableData, stack, isCreative) && !world.isRemote && world.getGameRules().getBoolean("doTileDrops"))
+			{
+				world.spawnEntity(new EntityItem(world, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
+			}
+		}
+	}
+	
+	private void updateHeadPosition(
+			EntitySeat driverSeat,
+			EntityLivingBase livingDriver,
+			EntityPlayer playerDriver,
+			MechaType type) {
+		if(driverSeat != null)
+		{
+			if(livingDriver != null && playerDriver == null)
+			{
+				axes.setAngles(livingDriver.renderYawOffset + 90F, 0F, 0F);
+			}
+			else
+			{
+				//Function to limit Head Movement Left/Right
+				if(type.limitHeadTurn)
+				{
+					float axesLegs = legAxes.getYaw();
+					float axesBody = axes.getYaw();
+
+					double dYaw = axesBody - axesLegs;
+					if(dYaw > 180)
+						axesBody -= 360F;
+					if(dYaw < -180)
+						axesBody += 360F;
+
+					if(axesLegs + type.limitHeadTurnValue < axesBody)
+						axes.setAngles(axesLegs + type.limitHeadTurnValue, 0F, 0F);
+
+					if(axesLegs - type.limitHeadTurnValue > axesBody)
+						axes.setAngles(axesLegs - type.limitHeadTurnValue, 0F, 0F);
+				}
+
+				float yaw = driverSeat.looking.getYaw();
+				axes.rotateGlobalYaw(yaw);
+				driverSeat.looking.rotateGlobalYaw(-yaw);
+				driverSeat.playerLooking.rotateGlobalYaw(-yaw);
+			}
+		}
+	}
+
+	private void updateDespawn(Entity driver) {
+		ticksSinceUsed++;
+		if(!world.isRemote && driver != null)
+			ticksSinceUsed = 0;
+		if(!world.isRemote && TeamsManager.mechaLove > 0 && ticksSinceUsed > TeamsManager.mechaLove * 20)
+		{
+			setDead();
+		}
+	}
+
+	private void updateHeight(MechaType type) {
+		//TODO better implement this
+		if(isPartIntact(EnumDriveablePart.hips))
+		{
+			setSize(type.width, type.height);
+			yOffset = type.yOffset;
+		}
+		else
+		{
+			setSize(type.width, type.height - type.chassisHeight);
+			yOffset = type.yOffset - type.chassisHeight;
+		}
+	}
+
+	private void detectDiamonds(EntityPlayer playerDriver) {
+		if(canDetectDiamonds() && diamondTimer == 0 && world.isRemote && FlansMod.proxy.isThePlayer(playerDriver))
+		{
+			float sqDistance = 901;
+			for(float i = -30; i <= 30; i++)
+			{
+				for(float j = -30; j <= 30; j++)
+				{
+					for(float k = -30; k <= 30; k++)
+					{
+						int x = MathHelper.floor(i + posX);
+						int y = MathHelper.floor(j + posY);
+						int z = MathHelper.floor(k + posZ);
+						if(i * i + j * j + k * k < sqDistance && world.getBlockState(new BlockPos(x, y, z)).getBlock() == (Blocks.DIAMOND_ORE))
+						{
+							sqDistance = i * i + j * j + k * k;
+						}
+					}
+				}
+			}
+			if(sqDistance < 901)
+			{
+				MechaItemType detectionItem = getDiamondDetectingUpgrade().get();
+				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, detectionItem.detectSound, false);
+				diamondTimer = 1 + 2 * MathHelper.floor(MathHelper.sqrt(sqDistance));
+			}
+		}
+	}
+
+	private void autoRepair(EntityPlayer playerDriver, boolean isCreative, DriveableData data) {
+		if(toggleTimer == 0 && canAutoRepair())
+		{
+			for(EnumDriveablePart part : EnumDriveablePart.values())
+			{
+				DriveablePart thisPart = data.parts.get(part);
+				boolean hasCreativePlayer = playerDriver != null && isCreative;
+				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
+				{
+					thisPart.health += 1;
+					if(!hasCreativePlayer)
+						data.fuelInTank -= 10F;
+				}
+			}
+			toggleTimer = 20;
+		}
+	}
+
+	private void updateDelays() {
+		if(jumpDelay > 0) jumpDelay--;
+		if(shootDelayLeft > 0) shootDelayLeft--;
+		if(shootDelayRight > 0) shootDelayRight--;
+		if(soundDelayLeft > 0) soundDelayLeft--;
+		if(soundDelayRight > 0) soundDelayRight--;
+		if(diamondTimer > 0) --diamondTimer;
+		if(toggleTimer > 0) toggleTimer--;
+		if(rocketTimer > 0) rocketTimer--;
+	}
+
 	protected void moveAI(Vector3f actualMotion)
 	{
 	
@@ -1008,7 +1008,7 @@ public class EntityMecha extends EntityDriveable
 	/**
 	 * Vacuum items?
 	 */
-	public boolean vacuumItems()
+	public boolean canVacuumItems()
 	{
 		for(MechaItemType type : getUpgradeTypes())
 		{
@@ -1034,14 +1034,24 @@ public class EntityMecha extends EntityDriveable
 	/**
 	 * Detect Diamonds?
 	 */
-	public MechaItemType diamondDetect()
+	public boolean canDetectDiamonds()
 	{
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.diamondDetect)
-				return type;
+				return true;
 		}
-		return null;
+		return false;
+	}
+	
+	public Option<MechaItemType> getDiamondDetectingUpgrade()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.diamondDetect)
+				return Option.some(type);
+		}
+		return Option.none();
 	}
 	
 	/**
@@ -1190,7 +1200,7 @@ public class EntityMecha extends EntityDriveable
 	/**
 	 * Automatically repair damage?
 	 */
-	public boolean autoRepair()
+	public boolean canAutoRepair()
 	{
 		for(MechaItemType type : getUpgradeTypes())
 		{
