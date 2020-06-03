@@ -3,6 +3,7 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 
@@ -49,6 +50,17 @@ public class PacketPlaneControl extends PacketDriveableControl
 		plane.varDoor = doors;
 		plane.varGear = gear;
 		plane.varWing = wings;
+		
+		if(!clientSide)
+		{
+			FlansMod.getPacketHandler().sendToAllAround(
+					new PacketPlaneControl(plane),
+					posX,
+					posY,
+					posZ,
+					FlansMod.driveableUpdateRange,
+					plane.dimension);
+		}
 	}
 }
 

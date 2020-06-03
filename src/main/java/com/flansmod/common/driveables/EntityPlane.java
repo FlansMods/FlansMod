@@ -714,22 +714,16 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
-		if(thePlayerIsDrivingThis)
+		if(serverPosX != posX || serverPosY != posY || serverPosZ != posZ || serverYaw != axes.getYaw())
 		{
-			FlansMod.getPacketHandler().sendToServer(new PacketPlaneControl(this));
-			serverPosX = posX;
-			serverPosY = posY;
-			serverPosZ = posZ;
-			serverYaw = axes.getYaw();
-		}
-		
-		//If this is the server, send position updates to everyone, having received them from the driver
-		float updateSpeed = 0.01F;
-		if(!world.isRemote)// && (Math.abs(posX - prevPosX) > updateSpeed || Math.abs(posY - prevPosY) > updateSpeed || Math.abs(posZ - prevPosZ) > updateSpeed))
-		{
-			FlansMod.getPacketHandler()
-					.sendToAllAround(new PacketPlaneControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange,
-							dimension);
+			if(thePlayerIsDrivingThis)
+			{
+				FlansMod.getPacketHandler().sendToServer(new PacketPlaneControl(this));
+				serverPosX = posX;
+				serverPosY = posY;
+				serverPosZ = posZ;
+				serverYaw = axes.getYaw();
+			}
 		}
 	}
 	

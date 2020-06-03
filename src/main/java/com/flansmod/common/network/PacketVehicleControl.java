@@ -3,6 +3,7 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityVehicle;
 
@@ -41,5 +42,15 @@ public class PacketVehicleControl extends PacketDriveableControl
 		super.updateDriveable(driveable, clientSide);
 		EntityVehicle vehicle = (EntityVehicle)driveable;
 		vehicle.varDoor = doors;
+		
+		if(!clientSide)
+		{
+			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(vehicle),
+					posX,
+					posY,
+					posZ,
+					FlansMod.driveableUpdateRange,
+					vehicle.dimension);
+		}
 	}
 }

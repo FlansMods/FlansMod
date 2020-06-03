@@ -944,19 +944,16 @@ public class EntityMecha extends EntityDriveable
 		setPosition(posX, posY, posZ);
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
-		if(thePlayerIsDrivingThis)
+		if(serverPosX != posX || serverPosY != posY || serverPosZ != posZ || serverYaw != axes.getYaw())
 		{
-			FlansMod.getPacketHandler().sendToServer(new PacketMechaControl(this));
-			serverPosX = posX;
-			serverPosY = posY;
-			serverPosZ = posZ;
-			serverYaw = axes.getYaw();
-		}
-		
-		//If this is the server, send position updates to everyone, having received them from the driver
-		if(!world.isRemote && ticksExisted % 5 == 0)
-		{
-			FlansMod.getPacketHandler().sendToAllAround(new PacketMechaControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
+			if(thePlayerIsDrivingThis)
+			{
+				FlansMod.getPacketHandler().sendToServer(new PacketMechaControl(this));
+				serverPosX = posX;
+				serverPosY = posY;
+				serverPosZ = posZ;
+				serverYaw = axes.getYaw();
+			}
 		}
 		
 		for(EntitySeat seat : getSeats())

@@ -371,11 +371,14 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(newPitch < -seatInfo.maxPitch)
 			newPitch = -seatInfo.maxPitch;
 		
-		// Now set the new angles
-		prevLooking = looking.clone();
-		looking.setAngles(newYaw, newPitch, 0F);
 		
-		FlansMod.getPacketHandler().sendToServer(new PacketSeatUpdates(this));
+		if(looking.getYaw() != newYaw || looking.getPitch() != newPitch)
+		{
+			// Now set the new angles
+			prevLooking = looking.clone();
+			looking.setAngles(newYaw, newPitch, 0F);
+			FlansMod.getPacketHandler().sendToServer(new PacketSeatUpdates(this));
+		}
 		
 		playYawSound = signDeltaX != 0 && seatInfo.traverseSounds;
 		
