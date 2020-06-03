@@ -289,6 +289,10 @@ public class PacketTeamInfo extends PacketBase
 			FlansMod.log.throwing(e);
 			teamData = new TeamData[]{new TeamData()};
 		}
+		finally
+		{
+			data.release();
+		}
 	}
 	
 	@Override

@@ -45,6 +45,8 @@ public class PacketSeatUpdates extends PacketBase
 		seatId = data.readInt();
 		yaw = data.readFloat();
 		pitch = data.readFloat();
+		
+		data.release();
 	}
 	
 	@Override

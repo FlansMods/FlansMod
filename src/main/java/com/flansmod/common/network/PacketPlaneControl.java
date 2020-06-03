@@ -40,6 +40,8 @@ public class PacketPlaneControl extends PacketDriveableControl
 		gear = data.readBoolean();
 		doors = data.readBoolean();
 		wings = data.readBoolean();
+		
+		data.release();
 	}
 	
 	@Override

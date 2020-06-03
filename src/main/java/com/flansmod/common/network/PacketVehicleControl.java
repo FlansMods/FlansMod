@@ -34,6 +34,8 @@ public class PacketVehicleControl extends PacketDriveableControl
 	{
 		super.decodeInto(ctx, data);
 		doors = data.readBoolean();
+		
+		data.release();
 	}
 	
 	@Override

@@ -47,6 +47,8 @@ public class PacketMechaControl extends PacketDriveableControl
 		legSwing = data.readFloat();
 		leftStack = ByteBufUtils.readItemStack(data);
 		rightStack = ByteBufUtils.readItemStack(data);
+		
+		data.release();
 	}
 	
 	@Override
