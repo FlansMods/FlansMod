@@ -359,7 +359,7 @@ public class ShotHandler
 		}
 		else
 		{
-			return hardness;
+			return Math.max(hardness, 1);
 		}
 	}
 }
