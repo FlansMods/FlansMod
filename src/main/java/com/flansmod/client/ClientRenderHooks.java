@@ -626,8 +626,8 @@ public class ClientRenderHooks
 			{
 				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(),
 						(float)event.getRenderPartialTicks());
-				// Roll is disorientating when the player is not controlling it or is in third person
-				if(!(seat.driveable instanceof EntityPlane) || mc.gameSettings.thirdPersonView == 1)
+				// Roll in third person has been the default in FlansMod and the recent change has been extremely disorienting.
+				if(!(seat.driveable instanceof EntityPlane)) //|| mc.gameSettings.thirdPersonView == 1)
 				{
 					roll = 0F;
 				}
