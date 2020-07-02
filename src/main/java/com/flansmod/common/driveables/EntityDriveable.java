@@ -621,8 +621,19 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
-				shootDelayPrimary = shootDelaySecondary = 1;
-				return;
+				//shootDelayPrimary = shootDelaySecondary = 1;
+				//return;
+				
+				if(type!=null && type instanceof VehicleType)
+				{
+					shootDelaySecondary = 1;
+					return;
+				}
+				else
+				{
+					shootDelayPrimary = shootDelaySecondary = 1;
+					return;
+				}
 			}
 			
 			// For each 
@@ -743,7 +754,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						}
 						else
 						{
-							shootDelayPrimary = shootDelaySecondary = 1;
+								shootDelayPrimary = shootDelaySecondary = 1;
+								return;
 						}
 					}
 					break;
