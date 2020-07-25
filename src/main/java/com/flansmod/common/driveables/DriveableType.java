@@ -974,7 +974,7 @@ public abstract class DriveableType extends PaintableType
 		return new DriveablePosition(new Vector3f(), EnumDriveablePart.core);
 	}
 	
-	public ArrayList<ShootPoint> shootPoints(boolean s)
+	public List<ShootPoint> shootPoints(boolean s)
 	{
 		return s ? shootPointsSecondary : shootPointsPrimary;
 	}

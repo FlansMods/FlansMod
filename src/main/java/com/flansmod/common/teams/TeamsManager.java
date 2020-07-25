@@ -778,7 +778,7 @@ public class TeamsManager
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemShootable)
 				{
 					ShootableType bulletType = ((ItemShootable)ammoItemstack.getItem()).type;
-					if(gunType.isAmmo(bulletType))
+					if(gunType.isCorrectAmmo(bulletType))
 					{
 						gunEntity.ammoStacks.add(ammoItemstack.copy());
 						ammoItemstack.setCount(0);

@@ -3,7 +3,6 @@ package com.flansmod.common.driveables;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -679,7 +678,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 						if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemShootable)
 						{
 							ShootableType bullet = ((ItemShootable)bulletItemStack.getItem()).type;
-							if(gun.isAmmo(bullet))
+							if(gun.isCorrectAmmo(bullet))
 							{
 								// Gun origin
 								Vector3f gunOrigin = Vector3f.add(driveable.axes.findLocalVectorGlobally(seatInfo.gunOrigin), new Vector3f(driveable.posX, driveable.posY, driveable.posZ), null);

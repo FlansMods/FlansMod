@@ -496,7 +496,7 @@ public class ItemGun extends Item implements IPaintableItem
 				ShootableType shootableType = shootableItem.type;
 				Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 				
-					ShootBulletHandler handler = (Boolean isExtraBullet) ->
+					ShootBulletHandler handler = isExtraBullet ->
 					{
 						if(!isExtraBullet)
 						{
@@ -720,7 +720,7 @@ public class ItemGun extends Item implements IPaintableItem
 				for(int j = 0; j < inventory.getSizeInventory(); j++)
 				{
 					ItemStack item = inventory.getStackInSlot(j);
-					if(item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
+					if(item.getItem() instanceof ItemShootable && type.isCorrectAmmo(((ItemShootable)(item.getItem())).type))
 					{
 						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
 						if(bulletsInThisSlot > bulletsInBestSlot)
@@ -1002,7 +1002,7 @@ public class ItemGun extends Item implements IPaintableItem
 		for(int i = 0; i < inventory.getSizeInventory(); i++)
 		{
 			ItemStack stack = inventory.getStackInSlot(i);
-			if(type.isAmmo(stack))
+			if(type.isCorrectAmmo(stack))
 			{
 				return true;
 			}

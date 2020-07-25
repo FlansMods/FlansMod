@@ -216,7 +216,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				for(int j = 0; j < ammoStacks.length; j++)
 				{
 					ItemStack searchingStack = ammoStacks[j];
-					if(searchingStack != null && searchingStack.getItem() instanceof ItemShootable && gunType.isAmmo(((ItemShootable)(searchingStack.getItem())).type))
+					if(searchingStack != null && searchingStack.getItem() instanceof ItemShootable && gunType.isCorrectAmmo(((ItemShootable)(searchingStack.getItem())).type))
 					{
 						int bulletsInThisSlot = searchingStack.getMaxDamage() - searchingStack.getItemDamage();
 						if(bulletsInThisSlot > bulletsInBestSlot)

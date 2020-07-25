@@ -510,22 +510,22 @@ public class GunType extends PaintableType implements IScope
 		}
 	}
 	
-	public boolean isAmmo(ShootableType type)
+	public boolean isCorrectAmmo(ShootableType type)
 	{
 		return ammo.contains(type);
 	}
 	
-	public boolean isAmmo(ItemStack stack)
+	public boolean isCorrectAmmo(ItemStack stack)
 	{
 		if(stack == null || stack.isEmpty())
 			return false;
 		else if(stack.getItem() instanceof ItemBullet)
 		{
-			return isAmmo(((ItemBullet)stack.getItem()).type);
+			return isCorrectAmmo(((ItemBullet)stack.getItem()).type);
 		}
 		else if(stack.getItem() instanceof ItemGrenade)
 		{
-			return isAmmo(((ItemGrenade)stack.getItem()).type);
+			return isCorrectAmmo(((ItemGrenade)stack.getItem()).type);
 		}
 		return false;
 	}

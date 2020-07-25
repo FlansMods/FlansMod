@@ -213,7 +213,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		}
 		// Fire
 		BulletType bullet = BulletType.getBullet(ammo.getItem());
-		ShootBulletHandler handler = (Boolean isExtraBullet) ->
+		ShootBulletHandler handler = isExtraBullet ->
 		{
 			if(gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
@@ -336,7 +336,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 		{
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			if(type.isAmmo(stack))
+			if(type.isCorrectAmmo(stack))
 			{
 				return i;
 			}

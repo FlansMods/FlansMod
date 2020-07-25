@@ -186,7 +186,7 @@ public class EntityGunItem extends EntityItemCustomRender
 						for(int j = ammoStacks.size() - 1; j >= 0; j--)
 						{
 							ItemStack ammoStack = ammoStacks.get(j);
-							if(type.isAmmo(((ItemShootable)ammoStack.getItem()).type))
+							if(type.isCorrectAmmo(((ItemShootable)ammoStack.getItem()).type))
 							{
 								if(player.inventory.addItemStackToInventory(ammoStack))
 								{
@@ -232,7 +232,7 @@ public class EntityGunItem extends EntityItemCustomRender
 					{
 						ShootableType bulletType = ((ItemShootable)stack
 								.getItem()).type;
-						if(gunType.isAmmo(bulletType))
+						if(gunType.isCorrectAmmo(bulletType))
 						{
 							newAmmoStacks.add(stack.copy());
 							player.inventory.setInventorySlotContents(i, ItemStack.EMPTY.copy());

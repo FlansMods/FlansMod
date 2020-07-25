@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
@@ -104,7 +105,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Minigun speed variables */
 	public float minigunSpeedPrimary, minigunSpeedSecondary;
 	/** Current gun variables for alternating weapons */
-	public int currentGunPrimary, currentGunSecondary;
+	public int currentPrimaryGunShootPointIndex, currentSecondaryGunShootPointIndex;
 	
 	/** Whether each mouse button is held */
 	public boolean leftMouseHeld = false, rightMouseHeld = false;
@@ -557,30 +558,27 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void shoot(boolean secondary)
 	{
 		DriveableType type = getDriveableType();
-		if(seats[0] == null || !(seats[0].getControllingPassenger() instanceof EntityLivingBase))
-			return;
-		// Check shoot delay
-		while(getShootDelay(secondary) <= 0.0f)
+		List<ShootPoint> shootPoints = type.shootPoints(secondary);
+		EnumWeaponType weaponType = type.weaponType(secondary);
+		boolean driverIsLivingEntity = seats[0] != null
+				&& seats[0].getControllingPassenger() instanceof EntityLivingBase;
+		boolean gunHasDelayRemaining = getShootDelay(secondary) > 0;
+		boolean gunHasShootPoints = !shootPoints.isEmpty();
+
+		if(driverIsLivingEntity && !gunHasDelayRemaining && gunHasShootPoints)
 		{
-			// We can shoot, so grab the available shoot points and the weaponType
-			ArrayList<ShootPoint> shootPoints = type.shootPoints(secondary);
-			EnumWeaponType weaponType = type.weaponType(secondary);
-			// If there are no shoot points, return
-			if(shootPoints.isEmpty())
-				return;
 			// For alternating guns, move on to the next one
-			int currentGun = getCurrentGun(secondary);
 			if(type.alternate(secondary))
 			{
-				currentGun = (currentGun + 1) % shootPoints.size();
-				setCurrentGun(currentGun, secondary);
-				shootEach(type, shootPoints.get(currentGun), currentGun, secondary, weaponType);
+				int nextShootPointIndex = (getCurrentShootPointIndex(secondary) + 1) % shootPoints.size();
+				setCurrentShootPointIndex(nextShootPointIndex, secondary);
+				shootFromPoint(type, shootPoints.get(nextShootPointIndex), nextShootPointIndex, secondary, weaponType);
 			}
 			else
 			{
 				for(int i = 0; i < shootPoints.size(); i++)
 				{
-					shootEach(type, shootPoints.get(i), i, secondary, weaponType);
+					shootFromPoint(type, shootPoints.get(i), i, secondary, weaponType);
 				}
 			}
 		}
@@ -604,156 +602,128 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
-	private void shootEach(DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary,
-						   EnumWeaponType weaponType)
+	private void shootFromPoint(
+			DriveableType type,
+			ShootPoint shootPoint,
+			int shootPointIndex,
+			boolean secondary,
+			EnumWeaponType weaponType)
 	{
-		// Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
 		Vector3f lookVector = getLookVector(shootPoint);
 		
-		// If its a pilot gun, then it is using a gun type, so do the following
+		switch(weaponType)
+		{
+			case BOMB:
+				dropBomb(type, secondary, weaponType, gunVec, lookVector);
+				break;
+			case MISSILE:
+			case SHELL:
+				fireShell(type, secondary, weaponType, gunVec, lookVector);
+				break;
+			case GUN:
+				fireGun(type, shootPoint, shootPointIndex, secondary, gunVec, lookVector);
+				break;
+			case MINE:
+			case NONE:
+			default:
+				break;
+		}
+		
+		setShootDelay(type.shootDelay(secondary), secondary);
+	}
+	
+	private void fireGun(DriveableType type, ShootPoint shootPoint, int shootPointIndex, boolean secondary,
+						 Vector3f gunVec, Vector3f lookVector)
+	{
 		if(shootPoint.rootPos instanceof PilotGun)
 		{
 			PilotGun pilotGun = (PilotGun)shootPoint.rootPos;
-			// Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
-			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
+			ItemStack ammoItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + shootPointIndex];
+			Item ammoItem = ammoItemStack.getItem();
+			boolean isAmmo = ammoItem instanceof ItemShootable;
+			boolean isValidAmmoForGun = isAmmo && gunType.isCorrectAmmo(((ItemShootable) ammoItem).type);
 			
-			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
-			{
-				shootDelayPrimary = shootDelaySecondary = 1;
-				return;
-			}
-			
-			// For each 
-			
-			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
-			ShootableType shootableType = shootableItem.type;
-			
-			if(!gunType.isAmmo(shootableType))
-				return;
-			
-			FireableGun fireableGun = new FireableGun(gunType,
-				gunType.damage,
-				gunType.bulletSpread,
-				gunType.bulletSpeed);
 			//TODO grenades wont work (currently no vehicle with this feature exists)
-			if(shootableType instanceof BulletType)
+			if(isValidAmmoForGun && ((ItemShootable) ammoItem).type instanceof BulletType)
 			{
-				FiredShot shot = new FiredShot(fireableGun,
-					(BulletType)shootableType,
-					this,
-					(EntityPlayerMP)getDriver());
+				ShootableType ammoType = ((ItemShootable) ammoItem).type;
+				BulletType bulletType = (BulletType) ammoType;
+				FireableGun fireableGun = new FireableGun(
+						gunType,
+						gunType.damage,
+						gunType.bulletSpread,
+						gunType.bulletSpeed);
+				FiredShot shot = new FiredShot(fireableGun, bulletType, this, (EntityPlayerMP)getDriver());
 				
-				ShootBulletHandler handler = (Boolean isExtraBullet) ->
+				ShootBulletHandler handler = isExtraBullet ->
 				{
-					if(driverIsCreative())
-						return;
-					if(shootableStack.getItem() instanceof ItemShootable)
+					ammoItemStack.damageItem(1, getDriver());
+					if(ammoItemStack.isEmpty())
 					{
-						shootableStack.setItemDamage(shootableStack.getItemDamage() + 1);
-						if(shootableStack.getItemDamage() >= shootableStack.getMaxDamage())
-						{
-							shootableStack.setItemDamage(0);
-							shootableStack.setCount(shootableStack.getCount() - 1);
-							if(shootableStack.getCount() <= 0)
-								driveableData.ammo[getDriveableType().numPassengerGunners +
-									currentGun] = ItemStack.EMPTY.copy();
-						}
+						driveableData.ammo[getDriveableType().numPassengerGunners + shootPointIndex] = ItemStack.EMPTY
+								.copy();
 					}
 				};
 				
 				Vector3f gunVector = Vector3f.add(gunVec, new Vector3f(posX, posY, posZ), null);
 				
 				ShotHandler.fireGun(world,
-					shot,
-					gunType.numBullets * shootableType.numBullets,
-					gunVector,
-					lookVector,
-					handler);
+						shot,
+						gunType.numBullets * bulletType.numBullets,
+						gunVector,
+						lookVector,
+						handler);
 				
 				if(type.shootSound(secondary) != null)
 				{
 					PacketPlaySound.sendSoundPacket(gunVector.x,
-						gunVector.y,
-						gunVector.z,
-						FlansMod.soundRange,
-						world.provider.getDimension(),
-						type.shootSound(secondary),
-						false);
+							gunVector.y,
+							gunVector.z,
+							FlansMod.soundRange,
+							world.provider.getDimension(),
+							type.shootSound(secondary),
+							false);
 				}
 			}
-			
-			// Reset the shoot delay
-			setShootDelay(type.shootDelay(secondary), secondary);
 		}
-		else // One of the other modes
+	}
+	
+	private void fireShell(DriveableType type, boolean secondary, EnumWeaponType weaponType, Vector3f gunVec,
+						   Vector3f lookVector)
+	{
+		if(TeamsManager.shellsEnabled)
 		{
-			switch(weaponType)
+			for(int i = driveableData.getMissileInventoryStart();
+				i < driveableData.getMissileInventoryStart() + type.numMissileSlots; i++)
 			{
-				case BOMB:
+				ItemStack shell = driveableData.getStackInSlot(i);
+				if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(
+					((ItemBullet)shell.getItem()).type, weaponType))
 				{
-					if(TeamsManager.bombsEnabled)
-					{
-						int slot = -1;
-						for(int i = driveableData.getBombInventoryStart();
-							i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
-						{
-							ItemStack bomb = driveableData.getStackInSlot(i);
-							if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(
-								((ItemBullet)bomb.getItem()).type, weaponType))
-							{
-								slot = i;
-							}
-						}
-						
-						if(slot != -1)
-						{
-							shootProjectile(slot, gunVec, lookVector, type, secondary, (float)getSpeed());
-						}
-						else
-						{
-							shootDelayPrimary = shootDelaySecondary = 1;
-						}
-					}
+					shootProjectile(i, gunVec, lookVector, type, secondary, (float)getSpeed() + 3f);
 					break;
 				}
-				case MISSILE: // These two are actually almost identical
-				case SHELL:
+			}
+		}
+	}
+	
+	private void dropBomb(DriveableType type, boolean secondary, EnumWeaponType weaponType, Vector3f gunVec,
+						  Vector3f lookVector)
+	{
+		if(TeamsManager.bombsEnabled)
+		{
+			for(int i = driveableData.getBombInventoryStart();
+				i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
+			{
+				ItemStack bomb = driveableData.getStackInSlot(i);
+				if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(
+					((ItemBullet)bomb.getItem()).type, weaponType))
 				{
-					if(TeamsManager.shellsEnabled)
-					{
-						int slot = -1;
-						for(int i = driveableData.getMissileInventoryStart();
-							i < driveableData.getMissileInventoryStart() + type.numMissileSlots; i++)
-						{
-							ItemStack shell = driveableData.getStackInSlot(i);
-							if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(
-								((ItemBullet)shell.getItem()).type, weaponType))
-							{
-								slot = i;
-							}
-						}
-						
-						if(slot != -1)
-						{
-							shootProjectile(slot, gunVec,
-								lookVector,
-								type, secondary, (float)getSpeed() + 3f);
-						}
-						else
-						{
-							shootDelayPrimary = shootDelaySecondary = 1;
-						}
-					}
+					shootProjectile(i, gunVec, lookVector, type, secondary, (float)getSpeed());
 					break;
 				}
-				case GUN: // Handled above
-					break;
-				case MINE:
-					break;
-				case NONE:
-					break;
 			}
 		}
 	}
@@ -801,7 +771,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			speed);
 		FiredShot shot = new FiredShot(fireableGun, bulletItem.type, this, (EntityPlayerMP)getDriver());
 		
-		ShootBulletHandler handler = (Boolean isExtraBullet) ->
+		ShootBulletHandler handler = isExtraBullet ->
 		{
 			if(!driverIsCreative())
 			{
@@ -1816,9 +1786,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return secondary ? minigunSpeedSecondary : minigunSpeedPrimary;
 	}
 	
-	public int getCurrentGun(boolean secondary)
+	public int getCurrentShootPointIndex(boolean secondary)
 	{
-		return secondary ? currentGunSecondary : currentGunPrimary;
+		return secondary ? currentSecondaryGunShootPointIndex : currentPrimaryGunShootPointIndex;
 	}
 	
 	public void setShootDelay(float f, boolean secondary)
@@ -1835,11 +1805,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		else minigunSpeedPrimary = f;
 	}
 	
-	public void setCurrentGun(int i, boolean secondary)
+	public void setCurrentShootPointIndex(int i, boolean secondary)
 	{
 		if(secondary)
-			currentGunSecondary = i;
-		else currentGunPrimary = i;
+			currentSecondaryGunShootPointIndex = i;
+		else currentPrimaryGunShootPointIndex = i;
 	}
 	
 	
