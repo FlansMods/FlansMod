@@ -6,10 +6,9 @@ labels: crash
 assignees: ''
 
 ---
-<!-- BEFORE POSTING AN ISSUE: Please search existing issues for your problem
-and avoid posting duplicate issues -->
-<!-- Please stick to the issue template and give as much information
-as you can -->
+<!-- BEFORE POSTING AN ISSUE: Read the issue reporting guidelines at
+https://github.com/FlansMods/FlansMod/wiki/Issue-Reporting -->
+<!-- If you do not follow the guidelines, we may close your issue without explanation -->
 **To Reproduce**
 Steps to reproduce the crash:
 1. 
