@@ -1,5 +1,26 @@
-#By MCBBS FlansMod fans
+#By MCBBS FlansMod fans ------Previous version
+#By a MC and FlansMod's fan - Ximu_Luya   ------Current version
 
+key.flansmod.category=Flan's Mod 模组
+key.pitchDown.desc=降落
+key.vehicleMenu.desc=载具菜单
+key.dropBomb.desc=投下炸弹
+key.fireVehicleGuns.desc=载具武器开火
+key.switchControlMode.desc=切换控制模式
+key.reload.desc=重新装弹
+key.teamsMenu.desc=团队菜单
+key.teamsScores.desc=团队分数
+key.rollLeft.desc=飞机-左翻滚
+key.rollRight.desc=飞机-右翻滚
+key.toggleLandingGear.desc=切换起落架
+key.toggleDoors.desc=开/关 载具门
+key.switchMovementMode.desc=切换载具行驶模式
+key.lookAtGun.desc=观察枪
+key.debug.desc=调试
+key.reloadModels.desc=重新载入模型
+key.toggleCameraPerspective.desc=切换相机角度
+key.primaryVehicleInteract.desc=主要车辆互动
+key.secondaryVehicleInteract.desc=次要车辆互动
 itemGroup.tabFlan0=Flan's Mod 武器
 itemGroup.tabFlan1=Flan's Mod 载具
 itemGroup.tabFlan2=Flan's Mod 零件
@@ -7,7 +28,7 @@ itemGroup.tabFlan3=Flan's Mod 团队工具
 itemGroup.tabFlan4=Flan's Mod 其他
 tile.flansWorkbench.0.name=载具制作台
 tile.flansWorkbench.1.name=枪械改造台
-tile.flansWorkbench.2.name=零件合成台（即将到来）
+tile.flansWorkbench.2.name=零件合成台(即将到来)
 item.opStick.0.name=所有权杖
 item.opStick.1.name=联络杖
 item.opStick.2.name=绘图杖
@@ -16,3 +37,5 @@ item.flagpole.name=旗杆
 tile.teamsSpawner.0.name=物品生成器
 tile.teamsSpawner.1.name=士兵生成器
 tile.teamsSpawner.2.name=载具生成器
+item.rainbowPaintcan.name=彩色喷漆罐(for Custom Paintjobs)
+tile.paintjobTable.name=喷漆工作台
