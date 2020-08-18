@@ -1,3 +1,5 @@
+#By a MC and FlansMod's fan - Ximu_Luya   ------Current version
+
 tile.modern.name=现代武器盒
 tile.modernAdvanced.name=高级现代武器盒
 tile.mwArmour.name=现代战争装甲箱
@@ -211,8 +213,8 @@ item.FMG.name=FMG9折叠冲锋枪
 item.Humvee.name=悍马
 item.judge.name=“判官”霰弹枪
 item.jury.name=Jury 自动左轮手枪
-item.juryAmmo.name=“刽子手”霰弹枪
-item.executioner.name=执行者Shot弹枪
+item.juryAmmo.name=自动左轮手枪弹药
+item.executioner.name=执行者霰弹枪弹枪
 item.barrettCompactAmmo.name=巴雷特.50口径紧凑型弹药
 item.minigunPortableAmmo.name=加特林便携式弹药
 item.aa12.name=AA-12(散弹枪)
