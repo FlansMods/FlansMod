@@ -69,7 +69,7 @@ public class KeyInputHandler
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_Z,
 			"key.flansmod.category");
-	public static KeyBinding rightRollKey = new KeyBinding("Roll right",
+	public static KeyBinding rightRollKey = new KeyBinding("key.rollRight.desc",
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_X,
 			"key.flansmod.category");
