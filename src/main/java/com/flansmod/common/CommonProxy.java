@@ -37,10 +37,34 @@ import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
+import com.google.common.io.Files;
 
 public class CommonProxy
 {
 	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
+	
+	public void CopyContentPacksFromModsFolder()
+	{
+		for(File file : FlansMod.modDir.listFiles())
+		{
+			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
+			{
+				if(file.getName().contains("Content Pack"))
+				{
+					try
+					{
+						Files.copy(file, new File(FlansMod.flanDir + "/" + file.getName()));
+					}
+					catch(Exception e)
+					{
+						FlansMod.log.error("Failed to copy content pack to Flan folder : " + file.getName());
+						FlansMod.log.throwing(e);
+					}
+				}
+					
+			}
+		}
+	}
 	
 	/**
 	 * Returns the list of content pack files, and on the client, adds the content pack resources and models to the classpath

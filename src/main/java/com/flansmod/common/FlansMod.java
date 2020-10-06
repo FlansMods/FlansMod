@@ -137,7 +137,7 @@ public class FlansMod
 	//A standardised ticker for all bits of the mod to call upon if they need one
 	public static int ticker = 0;
 	public static long lastTime;
-	public static File flanDir;
+	public static File flanDir, modDir;
 	public static final float soundRange = 50F;
 	public static final float driveableUpdateRange = 200F;
 	public static final int numPlayerSnapshots = 20;
@@ -222,6 +222,7 @@ public class FlansMod
 			isApocalypseLoaded = false;
 		}
 		
+		modDir = new File(event.getModConfigurationDirectory().getParentFile(), "/mods/");
 		flanDir = new File(event.getModConfigurationDirectory().getParentFile(), "/Flan/");
 		
 		if(!flanDir.exists())
@@ -640,6 +641,8 @@ public class FlansMod
 			FlansMod.log.throwing(e);
 		}
 		
+		
+		proxy.CopyContentPacksFromModsFolder();
 		List<File> contentPacks = proxy.getContentList(method, classloader);
 		
 		//TODO : Add gametype loader

@@ -22,6 +22,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -223,8 +224,8 @@ public class ClientProxy extends CommonProxy
 	 */
 	@Override
 	public void forceReload()
-	{
-		Minecraft.getMinecraft().refreshResources();
+	{	
+		FMLClientHandler.instance().refreshResources(VanillaResourceType.MODELS, VanillaResourceType.TEXTURES, VanillaResourceType.SOUNDS, VanillaResourceType.LANGUAGES);
 	}
 	
 	/**
