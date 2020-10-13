@@ -49,7 +49,7 @@ public class CommonProxy
 		{
 			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
-				if(file.getName().contains("Content Pack"))
+				if(file.getName().contains("Content") && file.getName().contains("Pack"))
 				{
 					try
 					{
