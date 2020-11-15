@@ -28,7 +28,8 @@ FourWheelDrive true
 //Tank mode activate
 Tank true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 60000
+//138–175 U.S. gallons (522–662 litres),so 600L
 //Inventory Slots
 CargoSlots 20
 ShellSlots 5
