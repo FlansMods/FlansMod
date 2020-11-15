@@ -28,7 +28,8 @@ FourWheelDrive true
 //Tank mode activate
 Tank true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 191000
+//Fuel capacity is oficially 504.4 US gallons, or 1909,3617 liters. Assume that jerry can has 1000 fuel points equal to 10 liters. So capacity will be approximately 1910000. As US Army Government in real life, you will also worry about fuel.
 //Inventory Slots
 CargoSlots 0
 ShellSlots 5
