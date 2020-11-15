@@ -55,7 +55,8 @@ BombSlots 0
 MissileSlots 0
 AllowAllAmmo False
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 1500
+FuelTankSize 17000
+//No IRL equivalents, so let it be 170L.
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 0 -4 0
 Passengers 1
