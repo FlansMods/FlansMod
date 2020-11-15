@@ -68,7 +68,8 @@ AddAmmo largeBomb
 AddAmmo smallBomb
 AddAmmo napalm
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 4000
+FuelTankSize 10000
+//IRL 348x2L+322L internal tanks. Let it be 1000L generally.
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 9 23 0
 Passengers 0

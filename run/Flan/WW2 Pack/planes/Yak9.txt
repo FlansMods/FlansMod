@@ -54,7 +54,7 @@ ShootPointPrimary 60 3 -5 nose dp28
 ShootPointSecondary -30 -12 0
 DamageModifierPrimary 50
 // ------------------------------------------------------ Inventory ------------------------------------------------------
-CargoSlots 0
+CargoSlots 2
 BombSlots 3
 MissileSlots 0
 AllowAllAmmo False
@@ -62,7 +62,8 @@ AddAmmo largeBomb
 AddAmmo smallBomb
 AddAmmo napalm
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 6000
+FuelTankSize 43000
+//430L volume of tanks may be obtained by doing some math+physics with 322kg of benzin. Yak-9 original(no D, T or other letter) carried 322kg of fuel.
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 12 4 0
 Passengers 0
