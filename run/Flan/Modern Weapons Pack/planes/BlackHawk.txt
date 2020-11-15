@@ -57,7 +57,8 @@ MissileSlots 0
 AllowAllAmmo False
 AddAmmo None
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 5000
+FuelTankSize 137000
+//IRL fuel capacity is 1361L+2x700L aux-tanks.
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 49 13 14
 Passengers 11

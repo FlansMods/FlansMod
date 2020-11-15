@@ -70,7 +70,8 @@ AddAmmo largeBomb
 AddAmmo smallBomb
 AddAmmo napalm
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 6000
+FuelTankSize 18173000
+//officially has 181725L fuel capacity and fueled by machines, not jerry cans
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 412 69 -13
 Passengers 5

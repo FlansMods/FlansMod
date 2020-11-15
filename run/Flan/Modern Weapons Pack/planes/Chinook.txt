@@ -53,12 +53,13 @@ ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
 // ------------------------------------------------------ Inventory ------------------------------------------------------
-CargoSlots 0
+CargoSlots 3
 BombSlots 0
 MissileSlots 0
 AllowAllAmmo False
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 5000
+FuelTankSize 783000
+//7828L (+3x3028L aux-tanks in cargo)
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 154 17 10
 Passengers 25

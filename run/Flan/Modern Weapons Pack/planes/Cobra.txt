@@ -55,13 +55,14 @@ ModeSecondary FullAuto
 ShootPointPrimary 12 -4 -29 rightWing
 ShootPointPrimary 12 -4 29 leftWing
 // ------------------------------------------------------ Inventory ------------------------------------------------------
-CargoSlots 0
+CargoSlots 1
 BombSlots 0
 MissileSlots 8
 AllowAllAmmo False
 AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 5000
+FuelTankSize 116000
+//IRL FC is 1153L and 1165L from 4 aux-tanks, thanks to German Wikipedia
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 32 -4 0
 Passengers 1

@@ -65,7 +65,8 @@ MissileSlots 4
 AllowAllAmmo False
 AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 6000
+FuelTankSize 620000
+//6200L IRL
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 105 43 0
 Passengers 0
