@@ -14,8 +14,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveableType;
@@ -346,15 +354,22 @@ public class FlansModLootGenerator
 					break;
 				case 1: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.WATER_BUCKET));
 					break;
-				case 2: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.BUCKET, rand.nextInt(2) + 1));
+				case 2: 
+					List<Fluid> fluids = new ArrayList<Fluid>(); 
+					fluids.addAll(FluidRegistry.getBucketFluids());
+					if(fluids.size() > 0)
+					{
+						Fluid fluid = fluids.get(rand.nextInt(fluids.size()));
+						chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), FluidUtil.getFilledBucket(new FluidStack(fluid, Fluid.BUCKET_VOLUME)));
+					}
 					break;
-				case 3: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM));
-					break;
-				case 4: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM));
-					break;
-				case 5: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM));
-					break;
-				case 6: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.POTIONITEM, 1, potions[rand.nextInt(9)]));
+				case 3: 
+				case 4: 
+				case 5: 
+				case 6:
+					ItemStack stack = new ItemStack(Items.POTIONITEM);
+					stack = PotionUtils.addPotionToItemStack(stack, PotionType.getPotionTypeForName("minecraft:strength"));
+					chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), stack);
 					break;
 				case 7: chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(FlansModApocalypse.sulphur, rand.nextInt(12) + 1));
 					break;

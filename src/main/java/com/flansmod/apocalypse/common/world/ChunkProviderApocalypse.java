@@ -422,12 +422,13 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 		
 		int xOrigin = ModuloHelper.divide(x, 4);
 		
-		this.rand.setSeed(this.world.getSeed());
-		k = this.rand.nextLong() / 2L * 2L + 1L;
-		l = this.rand.nextLong() / 2L * 2L + 1L;
-		this.rand.setSeed((long)xOrigin * k + (long)z * l ^ this.world.getSeed());
+		Random randomRunwayGen = new Random();
+		randomRunwayGen.setSeed(this.world.getSeed());
+		k = randomRunwayGen.nextLong() / 2L * 2L + 1L;
+		l = randomRunwayGen.nextLong() / 2L * 2L + 1L;
+		randomRunwayGen.setSeed((long)xOrigin * k + (long)z * l ^ this.world.getSeed());
 		
-		if(rand.nextInt(FlansModApocalypse.AIRPORT_RARITY) == 0)
+		if(randomRunwayGen.nextInt(FlansModApocalypse.AIRPORT_RARITY) == 0)
 		{
 			boolean canSpawn = true;
 			for(int n = 0; n < 4; n++)

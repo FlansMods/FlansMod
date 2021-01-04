@@ -24,7 +24,7 @@ public class WorldGenRunway extends WorldGenFlan
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos)
 	{
-		int chunkX = pos.getX() / 16;
+		int chunkX = ModuloHelper.divide(pos.getX(), 16);
 		
 		int x = pos.getX();
 		int z = pos.getZ();
