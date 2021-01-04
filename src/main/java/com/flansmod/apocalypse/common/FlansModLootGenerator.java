@@ -517,37 +517,37 @@ public class FlansModLootGenerator
 		{
 			case 0:
 				stack.setTagInfo("title", new NBTTagString("Help me!"));
-				pages.appendTag(new NBTTagString("I have no food. My child has no food. We are going to die. Why did this have to happen?"));
+				pages.appendTag(new NBTTagString("\"I have no food. My child has no food. We are going to die. Why did this have to happen?\""));
 				break;
 			case 1:
 				stack.setTagInfo("title", new NBTTagString("The Endtimes"));
-				pages.appendTag(new NBTTagString("It's amazing how fast your world can be torn down around you. Just three days ago, I was happily trading emeralds at the village market. Now all that is gone. I am left to wander this wasteland alone. I don't know how long I'll last, or how long I'll stay sane..."));
+				pages.appendTag(new NBTTagString("\"It's amazing how fast your world can be torn down around you. Just three days ago, I was happily trading emeralds at the village market. Now all that is gone. I am left to wander this wasteland alone. I don't know how long I'll last, or how long I'll stay sane...\""));
 				break;
 			case 2:
 				stack.setTagInfo("title", new NBTTagString("Day 5"));
-				pages.appendTag(new NBTTagString("We found water today! At the bottom of a village well. We drank and bathed and filled our bottles and left. But for reference, the village was at- *bloodstains*"));
+				pages.appendTag(new NBTTagString("\"We found water today! At the bottom of a village well. We drank and bathed and filled our bottles and left. But for reference, the village was at- *bloodstains*\""));
 				break;
 			case 3:
 				stack.setTagInfo("title", new NBTTagString("Day 7"));
-				pages.appendTag(new NBTTagString("They got my brother! Just after we left the village, he was snatched by some sort of... robot... Also, I think the water may have been contaminated. I've been sweating an awful lot, and it's not just the heat."));
+				pages.appendTag(new NBTTagString("\"They got my brother! Just after we left the village, he was snatched by some sort of... robot... Also, I think the water may have been contaminated. I've been sweating an awful lot, and it's not just the heat.\""));
 				break;
 			case 4:
 				stack.setTagInfo("title", new NBTTagString("Day 10"));
-				pages.appendTag(new NBTTagString("I have been violently ill, but have not found a new water source yet. I may have to drink more contaminated water to stay alive. I couldn't get worse, could I?"));
+				pages.appendTag(new NBTTagString("\"I have been violently ill, but have not found a new water source yet. I may have to drink more contaminated water to stay alive. I couldn't get worse, could I?\""));
 				break;
 			case 5:
 				stack.setTagInfo("title", new NBTTagString("The Wasteland"));
-				pages.appendTag(new NBTTagString("This world is harsh and unforgiving. I've had to make difficult choices, but they are necessary in order to survive. If I hadn't pulled the trigger, they would have done so instead. I'm sure of it."));
+				pages.appendTag(new NBTTagString("\"This world is harsh and unforgiving. I've had to make difficult choices, but they are necessary in order to survive. If I hadn't pulled the trigger, they would have done so instead. I'm sure of it.\""));
 				break;
 			case 6:
 				stack.setTagInfo("title", new NBTTagString(""));
-				pages.appendTag(new NBTTagString("We spotted an airstrip in the distance! We're going to head over there under cover of darkness and see if we can acquire ourselves a plane. Let's get out of this terrible place."));
+				pages.appendTag(new NBTTagString("\"We spotted an airstrip in the distance! We're going to head over there under cover of darkness and see if we can acquire ourselves a plane. Let's get out of this terrible place.\""));
 				break;
 			case 7:
 				stack.setTagInfo("title", new NBTTagString("Time Portal: Instruction Manual"));
 				stack.setTagInfo("generation", new NBTTagInt(3));
-				pages.appendTag(new NBTTagString("The Time Portal uses the portal properties of obsidian combined with-"));
-				pages.appendTag(new NBTTagString("Beware! The mechas are coming! The time portal is of great importance! You must-"));
+				pages.appendTag(new NBTTagString("\"The Time Portal uses the portal properties of obsidian combined with-\""));
+				pages.appendTag(new NBTTagString("\"Beware! The mechas are coming! The time portal is of great importance! You must-\""));
 				break;
 		}
 		
