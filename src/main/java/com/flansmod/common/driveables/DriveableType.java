@@ -946,7 +946,7 @@ public abstract class DriveableType extends PaintableType
 				}
 				else
 				{
-					FlansMod.log.info("Found and invoked parser for " + split[0] + " in driveable " + shortName);
+					//FlansMod.log.info("Found and invoked parser for " + split[0] + " in driveable " + shortName);
 					parser.Parse(split, this);
 				}
 			}

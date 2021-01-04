@@ -70,7 +70,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	 * Whether or not the currently selected driveable can be crafted
 	 */
 	private boolean canCraft = false;
-	public static final int BLUEPRINT_ROW_COUNT = 2;
+	public static final int BLUEPRINT_ROW_COUNT = 4;
 	public static final int BLUEPRINT_COLUMN_COUNT = 8;
 	public static final int BLUEPRINT_WIDTH = 18;
 	public static final int BLUEPRINT_HEIGHT = 18;
@@ -85,7 +85,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	private int engineTextX;
 	private int engineTextY;
 	public static final int GUI_WIDTH = 176;
-	public static final int GUI_HEIGHT = 198;
+	public static final int GUI_HEIGHT = 198 + 36;
 	public static final int WHITE = Color.white.getRGB();
 	private int recipeOriginX;
 	private int recipeOriginY;
@@ -117,24 +117,24 @@ public class GuiDriveableCrafting extends GuiScreen
 		blueprintsOriginX = guiOriginX + 8;
 		blueprintsOriginY = guiOriginY + 18;
 		statsOriginX = guiOriginX + 82;
-		statsOriginY = guiOriginY + 64;
+		statsOriginY = guiOriginY + 64 + 36;
 		vehicleCraftingTextX = guiOriginX + 6;
 		vehicleCraftingTextY = guiOriginY + 6;
 		requiresTextX = guiOriginX + 6;
-		requiresTextY = guiOriginY + 125;
+		requiresTextY = guiOriginY + 125 + 36;
 		engineTextX = guiOriginX + 114;
-		engineTextY = guiOriginY + 141;
+		engineTextY = guiOriginY + 141 + 36;
 		recipeOriginX = guiOriginX + 8;
-		recipeOriginY = guiOriginY + 138;
+		recipeOriginY = guiOriginY + 138 + 36;
 		engineOriginX = guiOriginX + 152;
-		engineOriginY = guiOriginY + 138;
+		engineOriginY = guiOriginY + 138 + 36;
 		modelCenterX = guiOriginX + 42;
-		modelCenterY = guiOriginY + 89;
+		modelCenterY = guiOriginY + 89 + 36;
 
 		buttonList.add(craftButton = new GuiButton(
 				CRAFT_BUTTON_ID,
 				guiOriginX + 110,
-				guiOriginY + 162,
+				guiOriginY + 162 + 36,
 				40,
 				20,
 				"Craft"));
@@ -146,17 +146,17 @@ public class GuiDriveableCrafting extends GuiScreen
 		buttonList.add(blueprintsDownButton = new ArrowButton(
 				BLUEPRINTS_DOWN_BUTTON_ID,
 				guiOriginX + 157,
-				guiOriginY + 39,
+				guiOriginY + 39 + 36,
 				Direction.DOWN));
 		buttonList.add(recipeUpButton = new ArrowButton(
 				RECIPE_UP_BUTTON_ID,
 				guiOriginX + 83,
-				guiOriginY + 141,
+				guiOriginY + 141 + 36,
 				Direction.UP));
 		buttonList.add(recipeDownButton = new ArrowButton(
 				RECIPE_DOWN_BUTTON_ID,
 				guiOriginX + 83,
-				guiOriginY + 177,
+				guiOriginY + 177 + 36,
 				Direction.DOWN));
 
 		updateButtons();
@@ -231,6 +231,8 @@ public class GuiDriveableCrafting extends GuiScreen
 		itemsToRender = itemsToRender.pushAll(getEngineItemToRender(bestEngineStack));
 
 		craftButton.enabled = canCraft;
+		
+		GlStateManager.disableLighting();
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -350,6 +352,7 @@ public class GuiDriveableCrafting extends GuiScreen
 
 	private void drawStats(DriveableType selectedType)
 	{
+		GlStateManager.disableLighting();
 		String recipeName = selectedType.name;
 		if(recipeName.length() > 16)
 			recipeName = recipeName.substring(0, 15) + "...";

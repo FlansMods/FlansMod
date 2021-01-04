@@ -40,12 +40,13 @@ import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.CreativeTabFlan;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.IFlansModContentProvider;
 import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.parts.PartType;
 
 @Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS_APOCALYPSE@", dependencies = "required-after:" + FlansMod.MODID)
 //, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
-public class FlansModApocalypse
+public class FlansModApocalypse implements IFlansModContentProvider
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
@@ -291,5 +292,17 @@ public class FlansModApocalypse
 				return NEARBY_OPT_IN;
 			return PLACER_ONLY;
 		}
+	}
+
+	@Override
+	public String GetContentFolder() 
+	{
+		return "Apocalypse";
+	}
+
+	@Override
+	public void RegisterModelRedirects() 
+	{
+		FlansMod.RegisterModelRedirect("apocalypse", "com.flansmod.apocalypse.client.model");
 	}
 }
