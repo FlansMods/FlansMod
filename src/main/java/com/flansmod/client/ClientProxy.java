@@ -115,11 +115,6 @@ public class ClientProxy extends CommonProxy
 	/* These renderers handle rendering in hand items */
 	public static RenderGun gunRenderer;
 	
-	/**
-	 * The file locations of the content packs, used for loading
-	 */
-	public List<File> contentPacks;
-	
 	public List<SoundEvent> eventsToRegister = new ArrayList<>();
 	
 	private FlansModClient flansModClient;
@@ -228,13 +223,28 @@ public class ClientProxy extends CommonProxy
 		FMLClientHandler.instance().refreshResources(VanillaResourceType.MODELS, VanillaResourceType.TEXTURES, VanillaResourceType.SOUNDS, VanillaResourceType.LANGUAGES);
 	}
 	
+	
 	/**
 	 * This method grabs all the content packs and puts them in a list. The client side part registers them as FMLModContainers which adds their resources to the game after a refresh
 	 */
 	@Override
-	public List<File> getContentList(Method method, ClassLoader classloader)
-	{
-		contentPacks = new ArrayList<>();
+	public void LoadAssetsFromFlanFolder()
+	{		
+		// Icons, Skins, Models
+		// Get the classloader in order to load the images
+		ClassLoader classloader = (net.minecraft.server.MinecraftServer.class).getClassLoader();
+		Method method = null;
+		try
+		{
+			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", java.net.URL.class);
+			method.setAccessible(true);
+		}
+		catch(Exception e)
+		{
+			FlansMod.log.error("Failed to get class loader. All content loading will now fail.");
+			FlansMod.log.throwing(e);
+		}
+		
 		for(File file : FlansMod.flanDir.listFiles())
 		{
 			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
@@ -259,12 +269,9 @@ public class ClientProxy extends CommonProxy
 				}
 				// Add the directory to the content pack list
 				FlansMod.log.info("Loaded content pack : " + file.getName());
-				contentPacks.add(file);
 			}
 		}
-		
 		FlansMod.log.info("Loaded textures and models.");
-		return contentPacks;
 	}
 	
 	/**
@@ -387,18 +394,25 @@ public class ClientProxy extends CommonProxy
 		String[] split = in.split("\\.");
 		//If there is no dot, our model class is in the default model package
 		if(split.length == 1)
-			return "Model" + in;
-			//Otherwise, we need to slightly rearrange the wording of the string for it to make sense
+			return modelDir + "Model" + in;
+		//Otherwise, we need to slightly rearrange the wording of the string for it to make sense
 		else if(split.length > 1)
 		{
-			String out = "Model" + split[split.length - 1];
-			for(int i = split.length - 2; i >= 0; i--)
+			if(split.length == 2 && FlansMod.modelDirectories.containsKey(split[0]))
 			{
-				out = split[i] + "." + out;
+				return FlansMod.modelDirectories.get(split[0]) + ".Model" + split[1];
 			}
-			return out;
+			else
+			{
+				String out = "Model" + split[split.length - 1];
+				for(int i = split.length - 2; i >= 0; i--)
+				{
+					out = split[i] + "." + out;
+				}
+				return modelDir + out;
+			}
 		}
-		return in;
+		return modelDir + in;
 	}
 	
 	/**
@@ -411,7 +425,7 @@ public class ClientProxy extends CommonProxy
 			return null;
 		try
 		{
-			return typeClass.cast(Class.forName(modelDir + getModelName(s)).getConstructor().newInstance());
+			return typeClass.cast(Class.forName(getModelName(s)).getConstructor().newInstance());
 		}
 		catch(Exception e)
 		{

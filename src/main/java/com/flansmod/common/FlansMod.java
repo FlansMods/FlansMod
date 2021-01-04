@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.zip.ZipEntry;
@@ -43,9 +44,11 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -56,6 +59,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
 
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
@@ -162,6 +166,8 @@ public class FlansMod
 	public static final TeamsManager teamsManager = new TeamsManagerRanked();
 	public static final CommonTickHandler tickHandler = new CommonTickHandler();
 	public static FlansHooks hooks = new FlansHooks();
+	public static final ContentManager contentManager = new ContentManager();
+	public static HashMap<String, String> modelDirectories = new HashMap<String, String>();
 	
 	//Items and creative tabs
 	public static BlockFlansWorkbench workbench;
@@ -189,6 +195,17 @@ public class FlansMod
 	public static float Pick(float totalWeight)
 	{
 		return rewardsRandom.nextFloat() * totalWeight;
+	}
+	
+	// Register an old-new package redirect.
+	// Previously models were in "com.flansmod.client.model.<key>"
+	// But now that official packs are mods, different structures may make more sense
+	// So for example the Modern pack has model keys like "mw.MP5"
+	// Now we want these in "com.flansmod.modernweapons.client.model"
+	// So we call this with ("mw", "com.flansmod.modernweapons.client.model")
+	public static void RegisterModelRedirect(String key, String redirect)
+	{
+		modelDirectories.put(key, redirect);
 	}
 	
 	/**
@@ -249,7 +266,16 @@ public class FlansMod
 		GameRegistry.registerTileEntity(TileEntityItemHolder.class, new ResourceLocation("flansmod:itemHolder"));
 		
 		//Read content packs
-		readContentPacks(event);
+		contentManager.FindContentInModsFolder();
+		contentManager.FindContentInFlanFolder();
+		contentManager.LoadAssetsFromFlanFolder();
+		contentManager.RegisterModelRedirects();
+		contentManager.LoadTypes();
+		contentManager.CreateItems();
+		Team.spectators = spectators;
+		
+		//Automates JSON adding for old content packs
+		proxy.addMissingJSONs(InfoType.infoTypes);
 		
 		//Force Minecraft to reload all resources in order to load content pack resources.
 		proxy.forceReload();
@@ -621,97 +647,7 @@ public class FlansMod
 		}
 	}
 	
-	/**
-	 * Content pack reader method
-	 */
-	private void readContentPacks(FMLPreInitializationEvent event)
-	{
-		// Icons, Skins, Models
-		// Get the classloader in order to load the images
-		ClassLoader classloader = (net.minecraft.server.MinecraftServer.class).getClassLoader();
-		Method method = null;
-		try
-		{
-			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", java.net.URL.class);
-			method.setAccessible(true);
-		}
-		catch(Exception e)
-		{
-			log.error("Failed to get class loader. All content loading will now fail.");
-			FlansMod.log.throwing(e);
-		}
 		
-		
-		proxy.CopyContentPacksFromModsFolder();
-		List<File> contentPacks = proxy.getContentList(method, classloader);
-		
-		//TODO : Add gametype loader
-		getTypeFiles(contentPacks);
-		
-		for(EnumType type : EnumType.values())
-		{
-			Class<? extends InfoType> typeClass = type.getTypeClass();
-			for(TypeFile typeFile : TypeFile.files.get(type))
-			{
-				try
-				{
-					InfoType infoType = (typeClass.getConstructor(TypeFile.class).newInstance(typeFile));
-					infoType.read(typeFile);
-					switch(type)
-					{
-						case bullet: new ItemBullet((BulletType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case attachment: new ItemAttachment((AttachmentType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case gun: new ItemGun((GunType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case grenade: new ItemGrenade((GrenadeType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case part: partItems.add((ItemPart)new ItemPart((PartType)infoType).setTranslationKey(infoType.shortName));
-							break;
-						case plane: new ItemPlane((PlaneType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case vehicle: new ItemVehicle((VehicleType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case aa: new ItemAAGun((AAGunType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case mechaItem: new ItemMechaAddon((MechaItemType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case mecha: mechaItems.add((ItemMecha)new ItemMecha((MechaType)infoType).setTranslationKey(infoType.shortName));
-							break;
-						case tool: toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setTranslationKey(infoType.shortName));
-							break;
-						case box: new BlockGunBox((GunBoxType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case armour: armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setTranslationKey(infoType.shortName));
-							break;
-						case armourBox: new BlockArmourBox((ArmourBoxType)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case playerClass: break;
-						case team: break;
-						case itemHolder: new BlockItemHolder((ItemHolderType)infoType);
-							break;
-						case rewardBox: new ItemRewardBox((RewardBox)infoType).setTranslationKey(infoType.shortName);
-							break;
-						case loadout: break;
-						default: log.warn("Unrecognised type for " + infoType.shortName);
-							break;
-					}
-				}
-				catch(Exception e)
-				{
-					log.error("Failed to add " + type.name() + " : " + typeFile.name);
-					FlansMod.log.throwing(e);
-				}
-			}
-			log.info("Loaded " + type.name() + ".");
-		}
-		Team.spectators = spectators;
-		
-		//Automates JSON adding for old content packs
-		proxy.addMissingJSONs(InfoType.infoTypes);
-	}
-	
 	public static PacketHandler getPacketHandler()
 	{
 		return INSTANCE.packetHandler;

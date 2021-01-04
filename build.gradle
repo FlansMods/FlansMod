@@ -79,14 +79,14 @@ task mechaParts(type: Jar) {
 }
 
 task modernWeapons(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/modernweapons/' }
     from 'run/Flan/Modern Weapons Pack'
     baseName = 'Modern Warfare'
     appendix = 'Content Pack'
 }
 
 task nerf(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/nerf/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/nerf/' }
     from 'run/Flan/Nerf Pack'
     baseName = 'Nerf'
     appendix = 'Content Pack'
@@ -99,42 +99,42 @@ task simpleParts(type: Jar) {
 }
 
 task titan(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/titan/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/titan/' }
     from 'run/Flan/Titan Pack'
     baseName = 'Titan'
     appendix = 'Content Pack'
 }
 
 task utility(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/utility/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/utility/' }
     from 'run/Flan/Utility Pack'
     baseName = 'Utility'
     appendix = 'Content Pack'
 }
 
 task ww2(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/ww2/' }
     from 'run/Flan/WW2 Pack'
     baseName = 'WW2'
     appendix = 'Content Pack'
 }
 
 task yeOlde(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/yeolde/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/yeolde/' }
     from 'run/Flan/Ye Olde Pack'
     baseName = 'Ye Olde'
     appendix = 'Content Pack'
 }
 
 task zombie(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/zombie/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/zombie/' }
     from 'run/Flan/Zombie Pack'
     baseName = 'Zombie'
     appendix = 'Content Pack'
 }
 
 task apoc(type: Jar) {
-    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/apocalypse/' }
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/apocalypse/' }
     from 'run/Flan/Apocalypse Pack'
     baseName = 'Apocalypse'
     appendix = 'Content Pack'
@@ -161,7 +161,7 @@ task outputJar(type: Jar) {
     destinationDir = new File("build/output/mods/")
     from(zipTree("build/libs/${archivesBaseName}-${version}-all.jar")) {
         exclude '**/apocalypse/'
-        exclude '**/mw/'
+        exclude '**/modernweapons/'
         exclude '**/nerf/'
         exclude '**/titan/'
         exclude '**/utility/'
@@ -176,7 +176,7 @@ task outputPacks(type: Copy) {
         include "**/*${version}.jar"
         exclude "**/Flan's Mod*.jar"
     }
-    into 'build/output/Flan/'
+    into 'build/output/mods/'
 }
 
 shadowJar {

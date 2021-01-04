@@ -43,49 +43,11 @@ public class CommonProxy
 {
 	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
 	
-	public void CopyContentPacksFromModsFolder()
+	public void LoadAssetsFromFlanFolder()
 	{
-		for(File file : FlansMod.modDir.listFiles())
-		{
-			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
-			{
-				if(file.getName().contains("Content") && file.getName().contains("Pack"))
-				{
-					try
-					{
-						Files.copy(file, new File(FlansMod.flanDir + "/" + file.getName()));
-					}
-					catch(Exception e)
-					{
-						FlansMod.log.error("Failed to copy content pack to Flan folder : " + file.getName());
-						FlansMod.log.throwing(e);
-					}
-				}
-					
-			}
-		}
+		// No-op, client only
 	}
-	
-	/**
-	 * Returns the list of content pack files, and on the client, adds the content pack resources and models to the classpath
-	 */
-	public List<File> getContentList(Method method, ClassLoader classloader)
-	{
-		List<File> contentPacks = new ArrayList<>();
-		for(File file : FlansMod.flanDir.listFiles())
-		{
-			//Load folders and valid zip files
-			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
-			{
-				//Add the directory to the content pack list
-				FlansMod.log.info("Loaded content pack : " + file.getName());
-				contentPacks.add(file);
-			}
-		}
-		FlansMod.log.info("Loaded content pack list server side.");
-		return contentPacks;
-	}
-	
+			
 	public void addMissingJSONs(HashMap<Integer, InfoType> types)
 	{
 		
