@@ -278,7 +278,8 @@ public class FlansMod
 		proxy.addMissingJSONs(InfoType.infoTypes);
 		
 		//Force Minecraft to reload all resources in order to load content pack resources.
-		proxy.forceReload();
+		if(contentManager.LoadedAnyContentFromFlanFolder())
+			proxy.forceReload();
 		
 		log.debug("Preinitializing complete.");
 	}

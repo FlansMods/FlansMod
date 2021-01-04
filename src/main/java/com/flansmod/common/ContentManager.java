@@ -95,6 +95,12 @@ public class ContentManager
 	
 	private HashMap<String, IFlansModContentProvider> packs = new HashMap<String, IFlansModContentProvider>();
 	protected Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
+	private boolean wasAnythingInFlanFolder = false;
+	
+	public boolean LoadedAnyContentFromFlanFolder()
+	{
+		return wasAnythingInFlanFolder;
+	}
 	
 	public void FindContentInFlanFolder()
 	{
@@ -112,6 +118,7 @@ public class ContentManager
 				{
 					FlansMod.log.info("Loaded content pack from Flan folder : " + file.getName());
 					packs.put(file.getName(), new ContentPackFlanFolder(file.getName(), file));
+					wasAnythingInFlanFolder = true;
 				}
 			}
 		}
