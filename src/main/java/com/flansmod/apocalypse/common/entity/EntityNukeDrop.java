@@ -4,6 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.apocalypse.common.FlansModApocalypse;
 
@@ -18,7 +20,7 @@ public class EntityNukeDrop extends Entity
 		
 		if(world.isRemote)
 		{
-			setRenderDistanceWeight(400D);
+			clientInit();
 		}
 		setSize(1F, 1F);
 		noClip = false;
@@ -31,6 +33,12 @@ public class EntityNukeDrop extends Entity
 		setPosition(x, y, z);
 	}
 
+	@SideOnly(Side.CLIENT)
+	private void clientInit()
+	{
+		setRenderDistanceWeight(400D);
+	}
+	
 	@Override
 	protected void entityInit()
 	{
