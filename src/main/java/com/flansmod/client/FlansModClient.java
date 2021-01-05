@@ -205,6 +205,12 @@ public class FlansModClient extends FlansMod
 		
 		if(controlModeSwitchTimer > 0)
 			controlModeSwitchTimer--;
+		
+		if(minecraft.getRenderViewEntity() == null ||
+			minecraft.getRenderViewEntity().isDead)
+		{
+			minecraft.setRenderViewEntity(minecraft.player);
+		}
 	}
 	
 	public static void setScope(IScope scope)
