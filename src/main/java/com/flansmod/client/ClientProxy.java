@@ -13,11 +13,15 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -25,6 +29,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -106,6 +111,7 @@ import com.flansmod.common.tools.EntityParachute;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
+import com.flansmod.common.vector.Vector3f;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
@@ -539,6 +545,60 @@ public class ClientProxy extends CommonProxy
 	public boolean keyDown(int keyCode)
 	{
 		return (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
+	}
+	
+	@SubscribeEvent
+	public void playerClick(PlayerInteractEvent event) 
+	{
+		Vec3d eye = event.getEntityPlayer().getPositionEyes(0f);
+		Vec3d look = event.getEntityPlayer().getLookVec();
+		double interactDistance = event.getEntityPlayer().getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+		look.normalize();
+		look.scale(interactDistance);
+		
+		if(event instanceof PlayerInteractEvent.LeftClickBlock 
+		|| event instanceof PlayerInteractEvent.RightClickBlock)
+			interactDistance = Math.min(interactDistance, Math.sqrt(event.getPos().distanceSq(eye.x, eye.y, eye.z)));
+		
+		if(event instanceof PlayerInteractEvent.EntityInteractSpecific)
+			interactDistance = Math.min(interactDistance, ((PlayerInteractEvent.EntityInteractSpecific)event).getLocalPos().distanceTo(eye));
+	
+		if(event instanceof PlayerInteractEvent.EntityInteract)
+			interactDistance = Math.min(interactDistance, ((PlayerInteractEvent.EntityInteract)event).getTarget().getDistance(eye.x, eye.y, eye.z));
+		
+		
+		for(Entity entity : event.getWorld().getLoadedEntityList()) 
+		{
+			if(entity instanceof EntityDriveable)
+			{
+				EntityDriveable d = (EntityDriveable)entity;
+				
+				// Quick sphere ray intersect test
+				Vec3d L = entity.getPositionVector().subtract(eye);
+		        double tca = L.dotProduct(look);
+		        if (tca < 0) 
+		        	continue;
+		        double d2 = L.dotProduct(L) - tca * tca; 
+		        if (d2 > d.getDriveableType().hitboxRadius) 
+		        	continue;
+		        		        
+		        // Check against collision boxes
+		        DriveablePart partHit = d.raytraceParts(new Vector3f(eye), new Vector3f(look));
+		        
+		        if(event instanceof PlayerInteractEvent.LeftClickEmpty
+		        || event instanceof PlayerInteractEvent.LeftClickBlock)
+		        	Minecraft.getMinecraft().playerController.attackEntity(event.getEntityPlayer(), d);
+		        
+		        if(event instanceof PlayerInteractEvent.RightClickEmpty
+		        || event instanceof PlayerInteractEvent.RightClickBlock)
+		        	Minecraft.getMinecraft().playerController.interactWithEntity(event.getEntityPlayer(), d, event.getHand());
+		        
+				if(event instanceof PlayerInteractEvent.RightClickItem)
+				{
+					event.setCanceled(true);
+				}
+			}
+		}
 	}
 	
 	@Override

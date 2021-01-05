@@ -109,6 +109,8 @@ public abstract class DriveableType extends PaintableType
 	// Shoot particles
 	public float vehicleGunModelScale = 1f;
 	
+	public double hitboxRadius = 0d;
+	
 	public static class ShootParticle
 	{
 		public ShootParticle(String s, float x1, float y1, float z1)
@@ -490,6 +492,9 @@ public abstract class DriveableType extends PaintableType
 				Integer.parseInt(split[7]),
 				Integer.parseInt(split[8]));
 			d.health.put(part, box);
+			double max = box.Max();
+			if(max > d.hitboxRadius)
+				d.hitboxRadius = max;
 		});
 		parsers.put("CollisionPoint", (split, d) -> d.collisionPoints.add(new DriveablePosition(split)));
 		parsers.put("AddCollisionPoint", parsers.get("CollisionPoint")); // Alt name

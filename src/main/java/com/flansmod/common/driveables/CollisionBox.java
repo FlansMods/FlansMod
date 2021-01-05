@@ -32,6 +32,14 @@ public class CollisionBox
 		this.d = d / 16F;
 	}
 	
+	public double Max()
+	{
+		double xMax = Math.max(x, x + w);
+		double yMax = Math.max(y, y + h);
+		double zMax = Math.max(z, z + d);
+		return Math.sqrt(xMax * xMax + yMax * yMax + zMax * zMax);
+	}
+	
 	/**
 	 * @return The centre (in global co-ordinates)
 	 */

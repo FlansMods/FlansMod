@@ -159,6 +159,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		driveableType = t.shortName;
 		driveableData = d;
 	}
+
 	
 	protected void initType(DriveableType type, boolean firstSpawn, boolean clientSide)
 	{
