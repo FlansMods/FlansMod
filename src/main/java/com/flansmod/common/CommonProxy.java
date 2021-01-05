@@ -41,7 +41,7 @@ import com.google.common.io.Files;
 
 public class CommonProxy
 {
-	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
+	protected static Pattern zipJar = Pattern.compile("(.+)\.(zip|jar)$");
 	
 	public void LoadAssetsFromFlanFolder()
 	{
