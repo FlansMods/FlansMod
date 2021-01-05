@@ -206,7 +206,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 				if(part.box == null)
 					continue;
 				
-				renderOffsetAABB(new AxisAlignedBB(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F), 0, 0, 0);
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F), 0, 0, 0);
 			}
 			
 			//Render shoot points
@@ -214,7 +214,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			for(ShootPoint point : type.shootPointsPrimary)
 			{
 				DriveablePosition driveablePosition = point.rootPos;
-				renderOffsetAABB(new AxisAlignedBB(
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 						driveablePosition.position.x - 0.25F,
 						driveablePosition.position.y - 0.25F,
 						driveablePosition.position.z - 0.25F,
@@ -228,7 +228,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			for(ShootPoint point : type.shootPointsSecondary)
 			{
 				DriveablePosition driveablePosition = point.rootPos;
-				renderOffsetAABB(new AxisAlignedBB(
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 						driveablePosition.position.x - 0.25F,
 						driveablePosition.position.y - 0.25F,
 						driveablePosition.position.z - 0.25F,

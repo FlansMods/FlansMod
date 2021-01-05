@@ -112,7 +112,9 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		{
 			GlStateManager.disableTexture2D();
 			GlStateManager.enableBlend();
+			GlStateManager.enableAlpha();
 			GlStateManager.disableDepth();
+			GlStateManager.disableLighting();
 			GlStateManager.color(1F, 0F, 0F, 0.3F);
 			GlStateManager.scale(-1F, 1F, -1F);
 			for(DriveablePart part : entityPlane.getDriveableData().parts.values())
@@ -122,13 +124,13 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 				
 				GlStateManager.color(1F, entityPlane.isPartIntact(part.type) ? 1F : 0F, 0F, 0.3F);
 				
-				renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
 						(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 			}
 			GlStateManager.color(1F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
 			{
-				renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F,
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F,
 						prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F), 0, 0, 0);
 			}
 			
@@ -137,7 +139,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			for(ShootPoint point : type.shootPointsPrimary)
 			{
 				DriveablePosition driveablePosition = point.rootPos;
-				renderOffsetAABB(new AxisAlignedBB(
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 						driveablePosition.position.x - 0.25F,
 						driveablePosition.position.y - 0.25F,
 						driveablePosition.position.z - 0.25F,
@@ -151,7 +153,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 			for(ShootPoint point : type.shootPointsSecondary)
 			{
 				DriveablePosition driveablePosition = point.rootPos;
-				renderOffsetAABB(new AxisAlignedBB(
+				ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 						driveablePosition.position.x - 0.25F,
 						driveablePosition.position.y - 0.25F,
 						driveablePosition.position.z - 0.25F,

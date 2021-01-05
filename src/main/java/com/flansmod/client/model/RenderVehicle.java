@@ -233,7 +233,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					if(part.box == null)
 						continue;
 					
-					renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
+					ModelDriveable.renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w),
 						(part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 				}
 				
@@ -244,7 +244,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 					DriveablePosition driveablePosition = point.rootPos;
 					if(driveablePosition.part != EnumDriveablePart.turret)
 					{
-						renderOffsetAABB(new AxisAlignedBB(
+						ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 								driveablePosition.position.x - 0.25F,
 								driveablePosition.position.y - 0.25F,
 								driveablePosition.position.z - 0.25F,
@@ -260,7 +260,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				{
 					DriveablePosition driveablePosition = point.rootPos;
 					if(driveablePosition.part != EnumDriveablePart.turret)
-						renderOffsetAABB(new AxisAlignedBB(
+						ModelDriveable.renderOffsetAABB(new AxisAlignedBB(
 								driveablePosition.position.x - 0.25F,
 								driveablePosition.position.y - 0.25F,
 								driveablePosition.position.z - 0.25F,
