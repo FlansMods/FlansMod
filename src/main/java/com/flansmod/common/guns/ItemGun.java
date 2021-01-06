@@ -1032,6 +1032,12 @@ public class ItemGun extends Item implements IPaintableItem
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("LegendaryCrafter"))
+		{
+			String crafter = stack.getTagCompound().getString("LegendaryCrafter");
+			lines.add("Legendary Skin Crafted by " + crafter);
+		}
+		
 		if(type.description != null)
 		{
 			Collections.addAll(lines, type.description.split("_"));
@@ -1219,11 +1225,13 @@ public class ItemGun extends Item implements IPaintableItem
 	}
 	
 	// For when we have custom paintjob names
-	//@Override
-	//public String getTranslationKey(ItemStack stack)
-	//{
-	//    return getTranslationKey();//stack.getTagCompound().getString("Paint");
-	//}
+	@Override
+	public String getTranslationKey(ItemStack stack)
+	{
+	    return getTranslationKey();
+	    
+	    //stack.getTagCompound().getString("Paint");
+	}
 	
 	@Override
 	public boolean canItemEditBlocks()

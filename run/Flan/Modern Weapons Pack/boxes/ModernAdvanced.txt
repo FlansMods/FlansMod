@@ -43,6 +43,8 @@ AddAmmo MP7Ammo 4 ingotIron 4 gunpowder
 AddGun HK416 12 ingotIron 8 fiberglass
 AddAmmo m16a4Ammo 6 ingotIron 5 gunpowder
 AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
+AddGun krissvector 2 ingotIron 20 fiberglass
+AddAmmo krissvectorAmmo 8 fiberglass 6 gunpowder
 SetPage Shotguns
 AddGun judge 8 ingotIron 4 fiberglass
 AddAmmo w1200Ammo 1 fiberglass 1 gunpowder

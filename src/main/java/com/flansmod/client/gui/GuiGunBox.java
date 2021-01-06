@@ -351,6 +351,19 @@ public class GuiGunBox extends GuiContainer
 				tempString = "" + gun.explosionRadius;
 				fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 35, 0x00000000);
 			}
+			
+			if(gun.damageVsDriveable > 1.0f)
+			{
+				fr.drawString("Anti-Tank: ", x + 5, y + 45, 0x00000000);
+				tempString = String.format("x%.0f", gun.damageVsDriveable);
+				fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 45, 0x00000000);
+			}
+			else if(gun.damageVsLiving > 1.0f)
+			{
+				fr.drawString("Anti-Person: ", x + 5, y + 45, 0x00000000);
+				tempString = String.format("x%.0f", gun.damageVsLiving);
+				fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 45, 0x00000000);
+			}
 		}
 		
 		fr.drawString("Cost", x + 5, y + 55, 0x00000000);

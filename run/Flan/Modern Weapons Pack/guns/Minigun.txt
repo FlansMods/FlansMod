@@ -62,4 +62,4 @@ Paintjob Minigun_Candy Minigun_Candy red 4 white 4
 Paintjob Minigun_Murica Minigun_Murica red 3 white 3 blue 3
 Paintjob Minigun_Rainbow Minigun_Rainbow red 1 orange 1 yellow 1 green 1 blue 1 purple 1
 Paintjob Minigun_Harvester Minigun_Harvester red 3 yellow 3 green 3
-Paintjob Minigun_Steampunk Minigun_Steampunk yellow 10 brown 10 black 10
+Paintjob Minigun_Steampunk Minigun_Steampunk yellow 10 brown 10 black 10 rainbow 1

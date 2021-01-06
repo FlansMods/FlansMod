@@ -1,11 +1,14 @@
 package com.flansmod.common.guns;
 
+import com.flansmod.common.FlansMod;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class ContainerGunModTable extends Container
@@ -126,13 +129,21 @@ public class ContainerGunModTable extends Container
 	}
 	
 	public void clickPaintjob(Paintjob paintjob)
-	{
+	{		
 		ItemStack gunStack = inventory.getStackInSlot(0);
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
-			
 			int numDyes = paintjob.dyesNeeded.length;
+			
+			boolean legendary = false;
+			for(int n = 0; n < numDyes; n++)
+			{
+				if(paintjob.dyesNeeded[n].getItem() == FlansMod.rainbowPaintcan)
+				{
+					legendary = true;
+				}
+			}
 			
 			if(!playerInv.player.capabilities.isCreativeMode)
 			{
@@ -140,12 +151,19 @@ public class ContainerGunModTable extends Container
 				for(int n = 0; n < numDyes; n++)
 				{
 					int amountNeeded = paintjob.dyesNeeded[n].getCount();
+					boolean lookingForRainbow = paintjob.dyesNeeded[n].getItem() == FlansMod.rainbowPaintcan;
 					for(int s = 0; s < playerInv.getSizeInventory(); s++)
 					{
 						ItemStack stack = playerInv.getStackInSlot(s);
-						if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						if(lookingForRainbow)
 						{
-							amountNeeded -= stack.getCount();
+							if(stack.getItem() == FlansMod.rainbowPaintcan)
+								amountNeeded -= stack.getCount();
+						}
+						else
+						{
+							if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+								amountNeeded -= stack.getCount();
 						}
 					}
 					//We don't have enough of this dye
@@ -161,10 +179,22 @@ public class ContainerGunModTable extends Container
 						if(amountNeeded <= 0)
 							continue;
 						ItemStack stack = playerInv.getStackInSlot(s);
-						if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						boolean lookingForRainbow = paintjob.dyesNeeded[n].getItem() == FlansMod.rainbowPaintcan;
+						if(lookingForRainbow)
 						{
-							ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
-							amountNeeded -= consumed.getCount();
+							if(stack.getItem() == FlansMod.rainbowPaintcan)
+							{
+								ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
+								amountNeeded -= stack.getCount();
+							}
+						}
+						else
+						{
+							if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+							{
+								ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
+								amountNeeded -= consumed.getCount();
+							}
 						}
 					}
 				}
@@ -173,6 +203,22 @@ public class ContainerGunModTable extends Container
 			//Paint the gun. This line is only reached if the player is in creative or they have had their dyes taken already
 			//gunStack.getTagCompound().setString("Paint", paintjob.iconName);
 			gunStack.setItemDamage(paintjob.ID);
+			if(legendary)
+			{
+				if(!gunStack.hasTagCompound())
+				{
+					gunStack.setTagCompound(new NBTTagCompound());
+				}
+				if(!gunStack.getTagCompound().hasKey("display"))
+				{
+					gunStack.getTagCompound().setTag("display", new NBTTagCompound());
+				}
+				if(!gunStack.getTagCompound().getCompoundTag("display").hasKey("Name"))
+				{
+					gunStack.getTagCompound().getCompoundTag("display").setString("Name", "\u00a7e" + playerInv.player.getName() + "'s " + gunStack.getDisplayName());
+				}
+				gunStack.getTagCompound().setString("LegendaryCrafter", playerInv.player.getName());
+			}
 		}
 	}
 }

@@ -473,6 +473,18 @@
       "flansmod:ExecutionerReload"
     ]
   },
+    "KrissVectorShoot": {
+    "category": "player",
+    "sounds": [
+      "flansmod:KrissVectorShoot"
+    ]
+  },
+  "KrissVectorReload": {
+    "category": "player",
+    "sounds": [
+      "flansmod:KrissVectorReload"
+    ]
+  },
   "JetIdle": {
     "category": "player",
     "sounds": [
