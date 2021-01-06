@@ -303,6 +303,49 @@ public class GunBoxType extends BoxType
 			this.requiredParts = requiredParts;
 		}
 		
+		public boolean haveEnoughOf(InventoryPlayer inv, ItemStack stackNeeded)
+		{
+			//Create a temporary copy of the player inventory for backup purposes
+			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
+			for(int i = 0; i < inv.getSizeInventory(); i++)
+			{
+				temporaryInventory.setInventorySlotContents(i, inv.getStackInSlot(i).copy());
+			}
+			
+			return haveEnoughOf(temporaryInventory, stackNeeded, false);
+		}
+		
+		private boolean haveEnoughOf(InventoryPlayer temporaryInventory, ItemStack stackNeeded, boolean takeItems)
+		{
+			//The total amount of items found that match this recipe stack
+			int totalAmountFound = 0;
+			//Iterate over the temporary inventory
+			for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
+			{
+				//Get the stack in each slot
+				ItemStack stackInSlot = temporaryInventory.getStackInSlot(m).copy();
+				//If the stack is what we want
+				if(stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
+				{
+					//Work out the amount to take from the stack
+					int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);
+					//Take it
+					stackInSlot.setCount(stackInSlot.getCount() - amountFound);
+					//Check for empty stacks
+					if(stackInSlot.getCount() <= 0)
+						stackInSlot = ItemStack.EMPTY.copy();
+					//Put the modified stack back in the inventory
+					temporaryInventory.setInventorySlotContents(m, stackInSlot);
+					//Increase the amount found counter
+					totalAmountFound += amountFound;
+					//If we have enough, stop looking
+					if(totalAmountFound == stackNeeded.getCount())
+						break;
+				}
+			}
+			return totalAmountFound >= stackNeeded.getCount();
+		}
+		
 		public boolean canCraft(InventoryPlayer inv, boolean takeItems)
 		{
 			//Create a temporary copy of the player inventory for backup purposes
@@ -318,34 +361,11 @@ public class GunBoxType extends BoxType
 			//Draw the stacks that should be in each slot
 			for(ItemStack stackNeeded : requiredParts)
 			{
-				//The total amount of items found that match this recipe stack
-				int totalAmountFound = 0;
-				//Iterate over the temporary inventory
-				for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
+				if(!haveEnoughOf(inv, stackNeeded, takeItems))
 				{
-					//Get the stack in each slot
-					ItemStack stackInSlot = temporaryInventory.getStackInSlot(m).copy();
-					//If the stack is what we want
-					if(stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
-					{
-						//Work out the amount to take from the stack
-						int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);
-						//Take it
-						stackInSlot.setCount(stackInSlot.getCount() - amountFound);
-						//Check for empty stacks
-						if(stackInSlot.getCount() <= 0)
-							stackInSlot = ItemStack.EMPTY.copy();
-						//Put the modified stack back in the inventory
-						temporaryInventory.setInventorySlotContents(m, stackInSlot);
-						//Increase the amount found counter
-						totalAmountFound += amountFound;
-						//If we have enough, stop looking
-						if(totalAmountFound == stackNeeded.getCount())
-							break;
-					}
-				}
-				if(totalAmountFound < stackNeeded.getCount())
 					canCraft = false;
+					break;
+				}
 			}
 			
 			if(canCraft && takeItems)

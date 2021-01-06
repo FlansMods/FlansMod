@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.guns.boxes.ContainerGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntry;
@@ -23,7 +25,7 @@ import com.flansmod.common.types.InfoType;
 
 public class GuiGunBox extends GuiContainer
 {
-	private static final int numCategories = 3;
+	private static final int numCategories = 4;
 	/**
 	 * Texture location
 	 */
@@ -148,8 +150,8 @@ public class GuiGunBox extends GuiContainer
 				break;
 			default:
 				currentPage = type.pages.get(pageScroller * numCategories + button.id - 4);
-				currentEntry = null;
-				currentSubEntry = null;
+				currentEntry = currentPage.entries.size() == 0 ? null : currentPage.entries.get(0);
+				currentSubEntry = currentEntry == null ? null : (currentEntry.childEntries.size() == 0 ? null : currentEntry.childEntries.get(0));
 
 		}
 		
@@ -269,10 +271,18 @@ public class GuiGunBox extends GuiContainer
 		int numPartsOnLine1 = Math.min(numParts, 4);
 		int numPartsOnLine2 = numParts > 4 ? Math.min(numParts - 4, 4) : 0;
 		
-		if(numPartsOnLine1 > 0)
-			drawModalRectWithCustomSizedTexture(x + 5, y + 44, 276, 122, 18 + 20 * (numPartsOnLine1 - 1), 18, textureX, textureY);
-		if(numPartsOnLine2 > 0)
-			drawModalRectWithCustomSizedTexture(x + 5, y + 64, 276, 122, 18 + 20 * (numPartsOnLine2 - 1), 18, textureX, textureY);
+		for(int i = 0; i < numPartsOnLine1; i++)
+		{
+			if(entry.haveEnoughOf(inventory, entry.requiredParts.get(i)))
+				drawModalRectWithCustomSizedTexture(x + 5 + 20 * i, y + 64, 294, 142, 18, 18, textureX, textureY);
+			else 
+				drawModalRectWithCustomSizedTexture(x + 5 + 20 * i, y + 64, 276, 142, 18, 18, textureX, textureY);
+		}
+		
+		//if(numPartsOnLine1 > 0)
+		//	drawModalRectWithCustomSizedTexture(x + 5, y + 44, 276, 122, 18 + 20 * (numPartsOnLine1 - 1), 18, textureX, textureY);
+		//if(numPartsOnLine2 > 0)
+		//	drawModalRectWithCustomSizedTexture(x + 5, y + 64, 276, 122, 18 + 20 * (numPartsOnLine2 - 1), 18, textureX, textureY);
 	}
 	
 	private void renderPanelForeground(GunBoxEntry entry, int x, int y)
@@ -298,7 +308,52 @@ public class GuiGunBox extends GuiContainer
 		fr.drawString(bufferLine, x + 5, y + 5, 0x00000000);
 		fr.drawString(bufferLine2, x + 5, y + 15, 0x00000000);
 		
-		fr.drawString("Cost", x + 5, y + 35, 0x00000000);
+		if(entry.type instanceof GunType)
+		{
+			GunType gun = (GunType)entry.type;
+			
+			fr.drawString("Damage: ", x + 5, y + 25, 0x00000000);
+			String tempString = "" + gun.damage;
+			fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 25, 0x00000000);
+			
+			fr.drawString("Spread: ", x + 5, y + 35, 0x00000000);
+			tempString = "" + gun.bulletSpread;
+			fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 35, 0x00000000);
+
+			if(gun.shootDelay > 0)
+			{
+				fr.drawString("RoF: ", x + 5, y + 45, 0x00000000);
+				tempString = String.format("%.0f RPM", 60f * 20f / gun.shootDelay);
+				fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 45, 0x00000000);
+			}
+		}
+		else if(entry.type instanceof ShootableType)
+		{
+			ShootableType gun = (ShootableType)entry.type;
+			
+			fr.drawString("No. Rounds: ", x + 5, y + 25, 0x00000000);
+			String tempString = "" + gun.roundsPerItem;
+			fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 25, 0x00000000);
+			
+			if(gun.numBullets > 1)
+			{
+				fr.drawString("Pellets: ", x + 5, y + 35, 0x00000000);
+				tempString = "" + gun.numBullets;
+				fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 35, 0x00000000);
+			}
+			else if(gun.fireRadius > 0f)
+			{
+				fr.drawString("Creates Fire", x + 5, y + 35, 0x00000000);
+			}			
+			else if(gun.explosionRadius > 0f)
+			{
+				fr.drawString("Explosion: ", x + 5, y + 35, 0x00000000);
+				tempString = "" + gun.explosionRadius;
+				fr.drawString(tempString, x + 85 - fr.getStringWidth(tempString), y + 35, 0x00000000);
+			}
+		}
+		
+		fr.drawString("Cost", x + 5, y + 55, 0x00000000);
 		
 		int numParts = entry.requiredParts.size();
 		
@@ -307,12 +362,12 @@ public class GuiGunBox extends GuiContainer
 		
 		for(int i = 0; i < numPartsOnLine1; i++)
 		{
-			drawSlotInventory(entry.requiredParts.get(i), x + 6 + 20 * i, y + 45);
+			drawSlotInventory(entry.requiredParts.get(i), x + 6 + 20 * i, y + 65);
 		}
-		for(int i = 0; i < numPartsOnLine2; i++)
-		{
-			drawSlotInventory(entry.requiredParts.get(i + 4), x + 6 + 20 * i, y + 65);
-		}
+		//for(int i = 0; i < numPartsOnLine2; i++)
+		//{
+		//	drawSlotInventory(entry.requiredParts.get(i + 4), x + 6 + 20 * i, y + 65);
+		//}
 	}
 
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
