@@ -18,14 +18,19 @@ import java.util.zip.ZipInputStream;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTNT;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -34,6 +39,15 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -111,6 +125,7 @@ import com.flansmod.common.teams.ItemFlagpole;
 import com.flansmod.common.teams.ItemOpStick;
 import com.flansmod.common.teams.ItemRewardBox;
 import com.flansmod.common.teams.ItemTeamArmour;
+import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.RewardBox;
 import com.flansmod.common.teams.Team;
@@ -172,7 +187,9 @@ public class FlansMod
 	//Items and creative tabs
 	public static BlockFlansWorkbench workbench;
 	public static ItemBlockManyNames workbenchItem;
+	public static Item gunpowderBlockItem;
 	public static BlockSpawner spawner;
+	public static Block gunpowderBlock;
 	public static ItemBlockManyNames spawnerItem;
 	public static ItemOpStick opStick;
 	public static ItemFlagpole flag;
@@ -260,6 +277,8 @@ public class FlansMod
 		workbenchItem = new ItemBlockManyNames(workbench);
 		spawnerItem = new ItemBlockManyNames(spawner);
 		crosshairsymbol = new Item().setTranslationKey("crosshairsymbol").setRegistryName("crosshairsymbol");
+		gunpowderBlock = new Block(Material.TNT).setHardness(0.0F).setTranslationKey("gunpowderblock").setRegistryName("gunpowderblock");
+		gunpowderBlockItem = new ItemBlock(gunpowderBlock).setTranslationKey("gunpowderblock").setRegistryName("gunpowderblock");
 		
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation("flansmod:teamsSpawner"));
 		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, new ResourceLocation("flansmod:paintjobTable"));
@@ -334,7 +353,21 @@ public class FlansMod
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			
-			event.getRegistry().register(new ShapelessRecipes("FlansMod", new ItemStack(Items.GUNPOWDER), ingredients).setRegistryName("FM_Gunpowder"));
+			event.getRegistry().register(new ShapelessRecipes(MODID, new ItemStack(Items.GUNPOWDER), ingredients).setRegistryName("FM_Gunpowder"));
+		}
+		
+		// Gunpowder block -> 9 gunpowder
+		{
+			NonNullList<Ingredient> ingredients = NonNullList.create();
+			ingredients.add(Ingredient.fromStacks(new ItemStack(gunpowderBlock)));
+			event.getRegistry().register(new ShapelessRecipes(MODID, new ItemStack(Items.GUNPOWDER, 9), ingredients).setRegistryName("GunpowderBlockToDust"));
+		}
+		// 9 gunpowder -> gunpowder block
+		{
+			NonNullList<Ingredient> ingredients = NonNullList.create();
+			for(int i = 0; i < 9; i++)
+				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GUNPOWDER)));
+			event.getRegistry().register(new ShapelessRecipes(MODID, new ItemStack(gunpowderBlock), ingredients).setRegistryName("GunpowderDustToBlock"));
 		}
 		
 		// Add the two workbench recipes
@@ -380,6 +413,7 @@ public class FlansMod
 		event.getRegistry().register(workbenchItem);
 		event.getRegistry().register(spawnerItem);
 		event.getRegistry().register(crosshairsymbol);
+		event.getRegistry().register(gunpowderBlockItem);
 	}
 	
 	@SubscribeEvent
@@ -395,6 +429,7 @@ public class FlansMod
 		event.getRegistry().register(workbench);//, ItemBlockManyNames.class, "flansWorkbench");
 		event.getRegistry().register(spawner); // ItemBlockManyNames.class, "teamsSpawner");
 		event.getRegistry().register(paintjobTable); //, "paintjobTable");
+		event.getRegistry().register(gunpowderBlock);
 	}
 	
 	@SubscribeEvent
@@ -439,14 +474,73 @@ public class FlansMod
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:DebugDot"), EntityDebugDot.class, "DebugDot", 105, this, 250, 20, false);
 	}
 	
-	@EventHandler
+	private static ResourceLocation lostCitiesChest = new ResourceLocation("lostcities", "chests/lostcitychest");
+	private static ResourceLocation lostCitiesRailChest = new ResourceLocation("lostcities", "chests/raildungeonchest");
+	
+	@SubscribeEvent
 	public void registerLoot(LootTableLoadEvent event)
 	{
 		for(InfoType type : InfoType.infoTypes.values())
 		{
 			type.addLoot(event);
 		}
+		
+		// Add default Flan's loot - extra gunpowder, iron etc
+		if(event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
+		|| event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)
+		|| event.getName().equals(LootTableList.CHESTS_END_CITY_TREASURE)
+		|| event.getName().equals(LootTableList.CHESTS_NETHER_BRIDGE)
+		|| event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID)
+		)
+		{
+			LootPool pool = event.getTable().getPool("FlansModBasicLoot");
+			if(pool == null)
+			{
+				event.getTable().addPool(new LootPool(new LootEntry[0], new LootCondition[0], new RandomValueRange(1, 3), new RandomValueRange(1, 2), "FlansModBasicLoot"));
+				pool = event.getTable().getPool("FlansModBasicLoot");
+			}
+			pool.addEntry(new LootEntryItem(gunpowderBlockItem, 8, 1, new LootFunction[] { new SetCount(new LootCondition[0], new RandomValueRange(1, 6)) }, new LootCondition[0], "gpowderblocks"));
+			pool.addEntry(new LootEntryItem(workbenchItem, 1, 1, new LootFunction[0], new LootCondition[0], "workbenches"));
+			pool.addEntry(new LootEntryItem(ItemBlock.getItemFromBlock(Blocks.IRON_BLOCK), 4, 1, new LootFunction[] { new SetCount(new LootCondition[0], new RandomValueRange(2, 4)) }, new LootCondition[0], "extrairon"));
+		}
+
+		// If LostCities is installed, add tons of extra loot
+		else if(event.getName().equals(lostCitiesRailChest)
+			 || event.getName().equals(lostCitiesChest)
+		)
+		{
+			LootPool pool = event.getTable().getPool("FlansModBasicLoot");
+			if(pool == null)
+			{
+				event.getTable().addPool(new LootPool(new LootEntry[0], new LootCondition[0], new RandomValueRange(1, 7), new RandomValueRange(1, 3), "FlansModBasicLoot"));
+				pool = event.getTable().getPool("FlansModBasicLoot");
+			}
+			
+			pool.addEntry(new LootEntryItem(gunpowderBlockItem, 32, 1, new LootFunction[] { new SetCount(new LootCondition[0], new RandomValueRange(1, 6)) }, new LootCondition[0], "gpowderblocks"));
+			pool.addEntry(new LootEntryItem(workbenchItem, 8, 1, new LootFunction[0], new LootCondition[0], "workbenches"));
+			pool.addEntry(new LootEntryItem(ItemBlock.getItemFromBlock(Blocks.DIAMOND_BLOCK), 1, 1, new LootFunction[0], new LootCondition[0], "diamonde"));
+			pool.addEntry(new LootEntryItem(ItemBlock.getItemFromBlock(Blocks.GOLD_BLOCK), 4, 1, new LootFunction[0], new LootCondition[0], "golds"));
+			pool.addEntry(new LootEntryItem(ItemBlock.getItemFromBlock(Blocks.IRON_BLOCK), 16, 1, new LootFunction[] { new SetCount(new LootCondition[0], new RandomValueRange(2, 4)) }, new LootCondition[0], "extrairon"));
+		}
 	}
+	
+	private class FMLootFunction extends LootFunction
+	{
+		private int min, max;
+		
+		protected FMLootFunction(LootCondition[] conditionsIn) 
+		{
+			super(conditionsIn);
+		}
+
+		@Override
+		public ItemStack apply(ItemStack stack, Random rand, LootContext context) 
+		{
+			return null;
+		}
+		
+	}
+
 	
 	/**
 	 * The mod post-initialisation method

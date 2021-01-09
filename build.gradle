@@ -36,7 +36,7 @@ minecraft {
     version = minecraft_version + "-" + forge_version
     runDir = "run"
 
-    replace "@ALLOWED_VERSIONS@", "[5.6.0-beta, 5.7)"
+    replace "@ALLOWED_VERSIONS@", "[5.7.0-beta, 5.8)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 

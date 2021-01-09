@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "flansmod:blocks/gunpowderblock",
+    "down": "flansmod:blocks/gunpowderblock",
+    "up": "flansmod:blocks/gunpowderblock",
+    "north": "flansmod:blocks/gunpowderblock",
+    "east": "flansmod:blocks/gunpowderblock",
+    "south": "flansmod:blocks/gunpowderblock",
+    "west": "flansmod:blocks/gunpowderblock"
+  }
+}

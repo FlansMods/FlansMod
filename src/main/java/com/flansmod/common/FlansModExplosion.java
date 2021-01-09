@@ -171,7 +171,7 @@ public class FlansModExplosion extends Explosion
 						double d10 = (1.0D - d12) * d14;
 						if(player.isPresent())
 						{
-							entity.attackEntityFrom(new EntityDamageSourceFlan(type.shortName, explosive, player.get(), type),
+							entity.attackEntityFrom(new EntityDamageSourceFlan(type.shortName, explosive, player.get(), type).setExplosion(),
 									(float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
 						} else {
 							entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
