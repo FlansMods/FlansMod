@@ -6,6 +6,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -554,6 +555,14 @@ public class InfoType
 		{
 			return new ItemStack(Items.CLAY_BALL, amount);
 		}
+		else if(s.equals("iron_trapdoor"))
+		{
+			return new ItemStack(Blocks.IRON_TRAPDOOR, amount);
+		}
+		else if(s.equals("trapdoor"))
+		{
+			return new ItemStack(Blocks.TRAPDOOR, amount);
+		}
 		else if(s.equals("gunpowder"))
 		{
 			return new ItemStack(Items.GUNPOWDER, amount);
@@ -570,7 +579,7 @@ public class InfoType
 		{
 			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
 			{
-				return new ItemStack(item, amount, damage);
+				return new ItemStack(item, amount, damage); 
 			}
 		}
 		for(InfoType type : infoTypes.values())

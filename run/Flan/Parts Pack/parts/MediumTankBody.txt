@@ -7,7 +7,7 @@ Colour 255 255 255
 Category Chassis
 StackSize 4
 RecipeOutput 1
-Recipe I ingotIron D trapdoor
+Recipe I ingotIron D iron_trapdoor
 IDI
 I I
 III

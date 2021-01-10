@@ -7,7 +7,7 @@ Colour 255 255 255
 Category Bay
 StackSize 4
 RecipeOutput 1
-Recipe I ingotIron D trapdoor
+Recipe I ingotIron D iron_trapdoor
 III
 I I
 IDI
