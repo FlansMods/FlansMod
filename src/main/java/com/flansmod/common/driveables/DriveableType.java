@@ -244,12 +244,9 @@ public abstract class DriveableType extends PaintableType
 	
 	public static ArrayList<DriveableType> types = new ArrayList<>();
 	
-	interface ParseFunc
-	{
-		void Parse(String[] split, DriveableType d);
-	}
+
 	
-	private static HashMap<String, ParseFunc> parsers = new HashMap<>();
+	private static HashMap<String, ParseFunc<DriveableType>> parsers = new HashMap<>();
 	
 	static
 	{
@@ -935,7 +932,6 @@ public abstract class DriveableType extends PaintableType
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
-		super.read(split, file);
 		try
 		{
 			// Special case for anything that reads multiple lines
@@ -945,14 +941,13 @@ public abstract class DriveableType extends PaintableType
 			else
 			{
 				ParseFunc parser = parsers.get(split[0]);
-				if(parser == null)
+				if(parser != null)
 				{
-					FlansMod.log.warn("Could not find parser for " + split[0] + " in driveable " + shortName);
+					parser.Parse(split, this);
 				}
 				else
 				{
-					//FlansMod.log.info("Found and invoked parser for " + split[0] + " in driveable " + shortName);
-					parser.Parse(split, this);
+					super.read(split, file);
 				}
 			}
 		}

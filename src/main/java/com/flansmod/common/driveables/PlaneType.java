@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -9,6 +10,7 @@ import com.flansmod.client.model.ModelPlane;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.common.types.InfoType.ParseFunc;
 import com.flansmod.common.vector.Vector3f;
 
 public class PlaneType extends DriveableType
@@ -72,6 +74,97 @@ public class PlaneType extends DriveableType
 	
 	public static ArrayList<PlaneType> types = new ArrayList<>();
 	
+	private static HashMap<String, ParseFunc<PlaneType>> parsers = new HashMap<>();
+	static
+	{
+		// Plane / Heli Mode
+		parsers.put("Mode", (split, d) -> d.mode = EnumPlaneMode.getMode(split[1]));
+		// Yaw modifiers
+		parsers.put("TurnLeftSpeed", (split, d) -> d.turnLeftModifier = Float.parseFloat(split[1]));
+		parsers.put("TurnRightSpeed", (split, d) -> d.turnRightModifier = Float.parseFloat(split[1]));
+		// Pitch modifiers
+		parsers.put("LookUpSpeed", (split, d) -> d.lookUpModifier = Float.parseFloat(split[1]));
+		parsers.put("LookDownSpeed", (split, d) -> d.lookDownModifier = Float.parseFloat(split[1]));
+		// Roll modifiers
+		parsers.put("RollLeftSpeed", (split, d) -> d.rollLeftModifier = Float.parseFloat(split[1]));
+		parsers.put("RollRightSpeed", (split, d) -> d.rollRightModifier = Float.parseFloat(split[1]));
+		
+		// Lift
+		parsers.put("Lift", (split, d) -> d.lift = Float.parseFloat(split[1]));
+		// Armaments
+		parsers.put("ShootDelay", (split, d) -> d.planeShootDelay = Integer.parseInt(split[1]));
+		parsers.put("BombDelay", (split, d) -> d.planeBombDelay = Integer.parseInt(split[1]));
+		
+		// Propellers
+		parsers.put("Propeller", (split, d) -> 
+		{
+			Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+			d.propellers.add(propeller);
+			d.driveableRecipe.add(new ItemStack(propeller.itemType.item));
+		});
+		parsers.put("HeliPropeller", (split, d) -> 
+		{
+			Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+			d.heliPropellers.add(propeller);
+			d.driveableRecipe.add(new ItemStack(propeller.itemType.item));
+		});
+		parsers.put("HeliTailPropeller", (split, d) -> 
+		{
+			Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+			d.heliTailPropellers.add(propeller);
+			d.driveableRecipe.add(new ItemStack(propeller.itemType.item));
+		});
+		
+		// Sound
+		parsers.put("PropSoundLength", (split, d) -> d.engineSoundLength = Integer.parseInt(split[1]));
+		parsers.put("PropSound", (split, d) -> 
+		{
+			d.engineSound = split[1];
+			FlansMod.proxy.loadSound(d.contentPack, "driveables", split[1]);
+		});
+		parsers.put("ShootSound", (split, d) -> 
+		{
+			d.shootSoundPrimary = split[1];
+			FlansMod.proxy.loadSound(d.contentPack, "driveables", split[1]);
+		});
+		parsers.put("BombSound", (split, d) -> 
+		{
+			d.shootSoundSecondary = split[1];
+			FlansMod.proxy.loadSound(d.contentPack, "driveables", split[1]);
+		});
+		
+		// Aesthetics
+		parsers.put("HasGear", (split, d) -> d.hasGear = Boolean.parseBoolean(split[1]));
+		parsers.put("HasDoor", (split, d) -> d.hasDoor = Boolean.parseBoolean(split[1]));
+		parsers.put("HasWing", (split, d) -> d.hasWing = Boolean.parseBoolean(split[1]));
+		parsers.put("RestingPitch", (split, d) -> d.restingPitch = Float.parseFloat(split[1]));
+		
+		parsers.put("InflightInventory", (split, d) -> d.invInflight = Boolean.parseBoolean(split[1]));
+	}
+	
+	
+
+	
+	@Override
+	protected void read(String[] split, TypeFile file)
+	{
+		try
+		{			
+			ParseFunc parser = parsers.get(split[0]);
+			if(parser != null)
+			{
+				parser.Parse(split, this);
+			}
+			else
+			{
+				super.read(split, file);
+			}
+		}
+		catch(Exception ignored)
+		{
+		}
+	}
+	
 	public PlaneType(TypeFile file)
 	{
 		super(file);
@@ -82,100 +175,6 @@ public class PlaneType extends DriveableType
 	public void preRead(TypeFile file)
 	{
 		super.preRead(file);
-	}
-	
-	@Override
-	protected void read(String[] split, TypeFile file)
-	{
-		super.read(split, file);
-		try
-		{
-			//Plane Mode
-			if(split[0].equals("Mode"))
-				mode = EnumPlaneMode.getMode(split[1]);
-			//Yaw modifiers
-			if(split[0].equals("TurnLeftSpeed"))
-				turnLeftModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("TurnRightSpeed"))
-				turnRightModifier = Float.parseFloat(split[1]);
-			//Pitch modifiers
-			if(split[0].equals("LookUpSpeed"))
-				lookUpModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("LookDownSpeed"))
-				lookDownModifier = Float.parseFloat(split[1]);
-			//Roll modifiers
-			if(split[0].equals("RollLeftSpeed"))
-				rollLeftModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("RollRightSpeed"))
-				rollRightModifier = Float.parseFloat(split[1]);
-			
-			//Lift
-			if(split[0].equals("Lift"))
-				lift = Float.parseFloat(split[1]);
-			
-			//Propellers and Armaments
-			
-			if(split[0].equals("ShootDelay"))
-				planeShootDelay = Integer.parseInt(split[1]);
-			if(split[0].equals("BombDelay"))
-				planeBombDelay = Integer.parseInt(split[1]);
-			
-			//Propellers
-			if(split[0].equals("Propeller"))
-			{
-				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
-				propellers.add(propeller);
-				driveableRecipe.add(new ItemStack(propeller.itemType.item));
-			}
-			if(split[0].equals("HeliPropeller"))
-			{
-				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
-				heliPropellers.add(propeller);
-				driveableRecipe.add(new ItemStack(propeller.itemType.item));
-			}
-			if(split[0].equals("HeliTailPropeller"))
-			{
-				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
-				heliTailPropellers.add(propeller);
-				driveableRecipe.add(new ItemStack(propeller.itemType.item));
-			}
-			
-			//Sound
-			if(split[0].equals("PropSoundLength"))
-				engineSoundLength = Integer.parseInt(split[1]);
-			if(split[0].equals("PropSound"))
-			{
-				engineSound = split[1];
-				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
-			}
-			if(split[0].equals("ShootSound"))
-			{
-				shootSoundPrimary = split[1];
-				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
-			}
-			if(split[0].equals("BombSound"))
-			{
-				shootSoundSecondary = split[1];
-				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
-			}
-			
-			//Aesthetics
-			if(split[0].equals("HasGear"))
-				hasGear = split[1].equals("True");
-			if(split[0].equals("HasDoor"))
-				hasDoor = split[1].equals("True");
-			if(split[0].equals("HasWing"))
-				hasWing = split[1].equals("True");
-			if(split[0].equals("RestingPitch"))
-				restingPitch = Float.parseFloat(split[1]);
-			
-			//In-flight inventory
-			if(split[0].equals("InflightInventory"))
-				invInflight = split[1].equals("False");
-		}
-		catch(Exception ignored)
-		{
-		}
 	}
 	
 	@Override

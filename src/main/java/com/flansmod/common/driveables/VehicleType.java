@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -9,6 +10,7 @@ import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.common.types.InfoType.ParseFunc;
 
 public class VehicleType extends DriveableType
 {
@@ -46,6 +48,33 @@ public class VehicleType extends DriveableType
 	public boolean flipLinkFix = false;
 	
 	public static ArrayList<VehicleType> types = new ArrayList<>();
+	private static HashMap<String, ParseFunc<VehicleType>> parsers = new HashMap<>();
+	
+	static
+	{
+		parsers.put("SquashMobs", (split, d) -> d.squashMobs = Boolean.parseBoolean(split[1]));
+		parsers.put("FourWheelDrive", (split, d) -> d.fourWheelDrive = Boolean.parseBoolean(split[1]));
+		parsers.put("Tank", (split, d) -> d.tank = Boolean.parseBoolean(split[1]));
+		parsers.put("TankMode", (split, d) -> d.tank = Boolean.parseBoolean(split[1]));
+		parsers.put("HasDoor", (split, d) -> d.hasDoor = Boolean.parseBoolean(split[1]));
+		parsers.put("RotateWheels", (split, d) -> d.rotateWheels = Boolean.parseBoolean(split[1]));
+			
+		parsers.put("TurnLeftSpeed", (split, d) -> d.turnLeftModifier = Float.parseFloat(split[1]));
+		parsers.put("TurnRightSpeed", (split, d) -> d.turnRightModifier = Float.parseFloat(split[1]));
+		parsers.put("ShootDelay", (split, d) -> d.vehicleShootDelay = Integer.parseInt(split[1]));
+		parsers.put("ShellDelay", (split, d) -> d.vehicleShellDelay = Integer.parseInt(split[1]));
+		
+		parsers.put("ShellSound", (split, d) -> 
+		{
+			d.shootSoundSecondary = split[1];
+			FlansMod.proxy.loadSound(d.contentPack, "driveables", split[1]);
+		});
+		parsers.put("ShootSound", (split, d) -> 
+		{
+			d.shootSoundPrimary = split[1];
+			FlansMod.proxy.loadSound(d.contentPack, "driveables", split[1]);
+		});
+	}
 	
 	public VehicleType(TypeFile file)
 	{
@@ -63,43 +92,16 @@ public class VehicleType extends DriveableType
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
-		super.read(split, file);
 		try
-		{
-			//Movement modifiers
-			if(split[0].equals("TurnLeftSpeed"))
-				turnLeftModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("TurnRightSpeed"))
-				turnRightModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("SquashMobs"))
-				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("FourWheelDrive"))
-				fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("Tank") || split[0].equals("TankMode"))
-				tank = Boolean.parseBoolean(split[1].toLowerCase());
-			
-			//Visuals
-			if(split[0].equals("HasDoor"))
-				hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("RotateWheels"))
-				rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
-			
-			//Armaments
-			if(split[0].equals("ShootDelay"))
-				vehicleShootDelay = Integer.parseInt(split[1]);
-			if(split[0].equals("ShellDelay"))
-				vehicleShellDelay = Integer.parseInt(split[1]);
-			
-			//Sound
-			if(split[0].equals("ShootSound"))
+		{			
+			ParseFunc parser = parsers.get(split[0]);
+			if(parser != null)
 			{
-				shootSoundPrimary = split[1];
-				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
+				parser.Parse(split, this);
 			}
-			if(split[0].equals("ShellSound"))
+			else
 			{
-				shootSoundSecondary = split[1];
-				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
+				super.read(split, file);
 			}
 		}
 		catch(Exception ignored)

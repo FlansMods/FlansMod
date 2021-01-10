@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.DriveableType;
 
 public class InfoType
 {
@@ -61,6 +62,11 @@ public class InfoType
 	public boolean canDrop = true;
 	
 	public int hash = 0;
+	
+	public interface ParseFunc<T extends InfoType>
+	{
+		void Parse(String[] split, T d);
+	}
 	
 	/**
 	 * The probability that this item will appear in a dungeon chest.
