@@ -16,8 +16,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelMp40 extends ModelGun
 {
-	int textureX = 128;
-	int textureY = 128;
+	int textureX = 256;
+	int textureY = 256;
 
 	public ModelMp40()
 	{

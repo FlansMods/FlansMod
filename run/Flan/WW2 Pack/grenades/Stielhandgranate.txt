@@ -7,7 +7,7 @@ Colour 255 255 255
 ////Item and recipe
 StackSize 4
 ////Visuals
-Model ww2.StickGrenade
+Model ww2.StickGrenade2
 Texture Stielhandgranate
 TrailParticles false
 //TrailParticleType <particleType>

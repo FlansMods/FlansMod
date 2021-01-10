@@ -7,7 +7,7 @@ Colour 255 255 255
 ////Item and recipe
 StackSize 4
 ////Visuals
-Model ww2.FragGrenade
+Model ww2.FragGrenade2
 Texture mk2frag
 TrailParticles false
 //TrailParticleType <particleType>
