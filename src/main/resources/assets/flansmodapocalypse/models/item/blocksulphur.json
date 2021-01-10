@@ -1,5 +1,5 @@
 {
-  "parent": "flansmodapocalypse:block/blockSulphur",
+  "parent": "flansmodapocalypse:block/blocksulphur",
   "display": {
     "thirdperson": {
       "rotation": [

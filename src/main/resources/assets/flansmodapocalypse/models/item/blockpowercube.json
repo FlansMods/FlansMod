@@ -1,5 +1,5 @@
 {
-  "parent": "flansmodapocalypse:block/labStone",
+  "parent": "flansmodapocalypse:block/blockpowercube",
   "display": {
     "thirdperson": {
       "rotation": [

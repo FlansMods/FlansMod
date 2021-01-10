@@ -28,9 +28,11 @@ import net.minecraft.world.gen.structure.MapGenMineshaft;
 
 import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.apocalypse.common.world.buildings.MapGenAbandonedVillage;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenAbandonedPortal;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenDeadTree;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenDyeFactory;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenResearchLab;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenRoads;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenRunway;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenSkeleton;
 import com.flansmod.common.ModuloHelper;
@@ -65,9 +67,11 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	private WorldGenDyeFactory dyeFactoryGenerator = new WorldGenDyeFactory();
 	private WorldGenRunway runwayGenerator = new WorldGenRunway();
 	private WorldGenSkeleton skeletonGenerator = new WorldGenSkeleton();
+	private WorldGenRoads roadsGenerator = new WorldGenRoads();
 	private WorldGenDeadTree deadTreeGenerator = new WorldGenDeadTree();
 	public static List<Biome> runwaySpawnBiome = Arrays.asList(BiomeApocalypse.highPlateau);
 	private WorldGenResearchLab researchLabGenerator = new WorldGenResearchLab();
+	private WorldGenAbandonedPortal abandonedPortalGenerator = new WorldGenAbandonedPortal();
 	public static List<Biome> labSpawnBiome = Arrays.asList(BiomeApocalypse.highPlateau);
 	
 	private final int seaLevel = 24;
@@ -371,13 +375,6 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 		int k1;
 		int l1;
 		int i2;
-		if(rand.nextInt(FlansModApocalypse.SKELETON_RARITY) == 0)
-		{
-			k1 = this.rand.nextInt(16) + 8;
-			l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
-			i2 = this.rand.nextInt(16) + 8;
-			skeletonGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
-		}
 		
 		if(rand.nextInt(FlansModApocalypse.DEAD_TREE_RARITY) == 0)
 		{
@@ -387,13 +384,19 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 			deadTreeGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
 		}
 		
-		
 		if(rand.nextInt(FlansModApocalypse.DYE_FACTORY_RARITY) == 0)
 		{
 			k1 = this.rand.nextInt(16) + 8;
 			l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
 			i2 = this.rand.nextInt(16) + 8;
 			dyeFactoryGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
+		}
+		
+		if(rand.nextInt(8) == 0)
+		{
+			
+			int height = world.getHeight(i + 8, j + 8);
+			abandonedPortalGenerator.generate(world, rand, blockpos.add(8, height,8));
 		}
 		
 		if(this.mapFeaturesEnabled)
@@ -413,12 +416,24 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 			}
 		}
 		
+		
+		
 		biome.decorate(this.world, this.rand, new BlockPos(i, 0, j));
+		
+		roadsGenerator.generate(world, rand, blockpos);
+		
 		if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, flag, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS))
 			WorldEntitySpawner.performWorldGenSpawning(this.world, biome, i + 8, j + 8, 16, 16, this.rand);
-		blockpos = blockpos.add(8, 0, 8);
 		
 		net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(false, this, this.world, this.rand, x, z, flag);
+		
+		if(rand.nextInt(FlansModApocalypse.SKELETON_RARITY) == 0)
+		{
+			k1 = this.rand.nextInt(16) + 8;
+			l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
+			i2 = this.rand.nextInt(16) + 8;
+			skeletonGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
+		}
 		
 		int xOrigin = ModuloHelper.divide(x, 4);
 		
@@ -438,8 +453,14 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 			}
 			//Generate runway section xOffset at chunk x
 			if(canSpawn)
-				runwayGenerator.generate(world, rand, new BlockPos(x * 16, 0, z * 16));
+				runwayGenerator.generate(world, rand, new BlockPos(x * 16 + 8, 0, z * 16 + 8));
 		}
+		
+		
+		
+		/*
+			
+		
 		
 		xOrigin = ModuloHelper.divide(x, 3);
 		int zOrigin = ModuloHelper.divide(z, 3);
@@ -472,7 +493,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 			}
 		}
 		
-		
+		*/
 		BlockFalling.fallInstantly = false;
 	}
 	

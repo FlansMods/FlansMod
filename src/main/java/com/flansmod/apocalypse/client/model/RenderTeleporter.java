@@ -1,12 +1,15 @@
 package com.flansmod.apocalypse.client.model;
 
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
+import com.flansmod.client.model.RenderParachute;
+import com.flansmod.common.tools.EntityParachute;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderTeleporter extends Render<EntityTeleporter>
 {
@@ -64,5 +67,14 @@ public class RenderTeleporter extends Render<EntityTeleporter>
 	protected ResourceLocation getEntityTexture(EntityTeleporter entity)
 	{
 		return texture;
+	}
+	
+	public static class Factory implements IRenderFactory<EntityTeleporter>
+	{
+		@Override
+		public Render<EntityTeleporter> createRenderFor(RenderManager manager)
+		{
+			return new RenderTeleporter(manager);
+		}
 	}
 }

@@ -48,6 +48,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	
 	public static int apocalypseCountdown = 0;
 	
+	@Override
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
@@ -55,26 +56,24 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		MinecraftForge.EVENT_BUS.register(this);
 		
 		((BlockSulphuricAcid)FlansModApocalypse.blockSulphuricAcid).registerRenderer();
+		RenderingRegistry.registerEntityRenderingHandler(EntitySurvivor.class, new RenderSurvivor.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFakePlayer.class,new RenderFakePlayer.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityTeleporter.class, new RenderTeleporter.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, new RenderMecha.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, new RenderNukeDrop.Factory());
+		
+
 	}
 	
+	@Override
 	public void init(FMLInitializationEvent event)
 	{
 		super.init(event);
-		registerVanillaItemModel(FlansModApocalypse.sulphur, Item.getItemFromBlock(FlansModApocalypse.blockSulphur), Item.getItemFromBlock(FlansModApocalypse.blockSulphuricAcid), Item.getItemFromBlock(FlansModApocalypse.blockLabStone), Item.getItemFromBlock(FlansModApocalypse.blockPowerCube));
+
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCube.class, new RenderPowerCube());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySurvivor.class, manager -> new RenderSurvivor(manager, new ModelBiped(), 0));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFakePlayer.class, manager -> new RenderFakePlayer(manager, new ModelBiped(), 0));
-		RenderingRegistry.registerEntityRenderingHandler(EntityTeleporter.class, RenderTeleporter::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, RenderMecha::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, RenderNukeDrop::new);
 	}
 	
-	private void registerVanillaItemModel(Item... items)
-	{
-		for(Item item : items)
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(FlansModApocalypse.MODID + ":" + item.getTranslationKey().split("\\.")[1], "inventory"));
-	}
-	
+	@Override
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		//FlansMod.getPacketHandler().registerPacket(PacketApocalypseCountdown.class);
@@ -87,30 +86,18 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event)
-	{
-		/*
-		Item item = Item.getItemFromBlock(FlansModApocalypse.blockSulphuricAcid);
-		ModelBakery.registerItemVariants(item);
-		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, FlansModApocalypse.sulphuricAcid.getName());
-
-		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition()
-        {
-            public ModelResourceLocation getModelLocation(ItemStack stack)
-            {
-                return modelResourceLocation;
-            }
-        });
-
-		ModelLoader.setCustomStateMapper(FlansModApocalypse.blockSulphuricAcid, new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return modelResourceLocation;
-			}
-		});
-		*/
+	{		
+		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.sulphur, 0, 
+				new ModelResourceLocation(FlansModApocalypse.MODID + ":flansulphur", "inventory"));
 		
-		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockLabStone, 0, new ModelResourceLocation("flansmodapocalypse:itemblocklabstone", "inventory"));
-		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation("flansmodapocalypse:itemblocklabstone"));
+		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockSulphur, 0, 
+				new ModelResourceLocation(FlansModApocalypse.MODID + ":blocksulphur", "inventory"));
+		
+		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockPowerCube, 0, 
+				new ModelResourceLocation(FlansModApocalypse.MODID + ":blockpowercube", "inventory"));
+
+		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockLabStone, 0, 
+				new ModelResourceLocation(FlansModApocalypse.MODID + ":blocklabstone", "inventory"));
 	}
 	
 	/**

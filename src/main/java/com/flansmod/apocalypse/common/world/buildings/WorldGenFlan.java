@@ -27,4 +27,20 @@ public abstract class WorldGenFlan extends WorldGenerator
 			}
 		}
 	}
+	
+	protected void replaceEmpty(World world, int x1, int y1, int z1, int x2, int y2, int z2, IBlockState state)
+	{
+		for(int i = x1; i < x2; i++)
+		{
+			for(int j = y1; j < y2; j++)
+			{
+				for(int k = z1; k < z2; k++)
+				{
+					BlockPos pos = new BlockPos(i, j, k);
+					if(world.isAirBlock(pos))
+						world.setBlockState(pos, state, 2);
+				}
+			}
+		}
+	}
 }

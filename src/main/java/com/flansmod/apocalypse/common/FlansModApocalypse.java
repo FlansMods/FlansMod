@@ -12,12 +12,16 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +32,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.flansmod.apocalypse.common.blocks.BlockPowerCube;
@@ -35,8 +41,15 @@ import com.flansmod.apocalypse.common.blocks.BlockStatic;
 import com.flansmod.apocalypse.common.blocks.BlockSulphur;
 import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
+import com.flansmod.apocalypse.common.entity.EntityAIMecha;
+import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
+import com.flansmod.apocalypse.common.entity.EntityFlyByPlane;
+import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
+import com.flansmod.apocalypse.common.entity.EntitySurvivor;
+import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenAbandonedPortal;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.CreativeTabFlan;
 import com.flansmod.common.FlansMod;
@@ -154,7 +167,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		MinecraftForge.EVENT_BUS.register(this);
 		
 		//Load config
 		configFile = new Configuration(event.getSuggestedConfigurationFile());
@@ -164,33 +177,33 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		
 		//Sulphur block and item
 		// TODO: [1.12] .setStepSound(Block.soundTypeSand)
-		blockSulphur = new BlockSulphur().setTranslationKey("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
-		sulphur = new Item().setTranslationKey("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
+		blockSulphur = new BlockSulphur().setTranslationKey("blocksulphur").setRegistryName("blocksulphur").setCreativeTab(tabApocalypse);
+		sulphur = new Item().setTranslationKey("flansulphur").setRegistryName("flansulphur").setCreativeTab(tabApocalypse);
 		
-		itemBlockSulphur = new ItemBlock(blockSulphur).setTranslationKey("blockSulphur").setRegistryName("itemBlockSulphur").setCreativeTab(tabApocalypse);
+		itemBlockSulphur = new ItemBlock(blockSulphur).setTranslationKey("blocksulphur").setRegistryName("blocksulphur").setCreativeTab(tabApocalypse);
 		
 		//Sulphuric acid
-		sulphuricAcid = new Fluid("sulphuricAcid", sulphuricAcidStill, sulphuricAcidFlowing).setTemperature(300).setViscosity(800);
+		sulphuricAcid = new Fluid("sulphuricacid", sulphuricAcidStill, sulphuricAcidFlowing).setTemperature(300).setViscosity(800);
 		if(FluidRegistry.registerFluid(sulphuricAcid))
 		{
-			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setTranslationKey("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
+			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setTranslationKey("blocksulphuricacid").setRegistryName("blocksulphuricacid").setCreativeTab(tabApocalypse);
 			sulphuricAcid.setBlock(blockSulphuricAcid);
 			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getTranslationKey());
 			FluidRegistry.addBucketForFluid(sulphuricAcid);
 		}
 		else
 		{
-			sulphuricAcid = FluidRegistry.getFluid("sulphuricAcid");
+			sulphuricAcid = FluidRegistry.getFluid("sulphuricacid");
 			blockSulphuricAcid = sulphuricAcid.getBlock();
 		}
 		
 		//Laboratory Stone
-		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setTranslationKey("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
-		itemBlockLabStone = new ItemBlock(blockLabStone).setTranslationKey("labStone").setRegistryName("itemBlockLabStone").setCreativeTab(tabApocalypse);
+		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setTranslationKey("blocklabstone").setRegistryName("blocklabstone").setCreativeTab(tabApocalypse);
+		itemBlockLabStone = new ItemBlock(blockLabStone).setTranslationKey("blocklabstone").setRegistryName("blocklabstone").setCreativeTab(tabApocalypse);
 		
 		//Power Cube
-		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setTranslationKey("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
-		itemBlockPowerCube = new ItemBlock(blockPowerCube).setTranslationKey("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
+		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setTranslationKey("blockpowercube").setRegistryName("blockpowercube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
+		itemBlockPowerCube = new ItemBlock(blockPowerCube).setTranslationKey("blockpowercube").setRegistryName("blockpowercube").setCreativeTab(tabApocalypse);
 		GameRegistry.registerTileEntity(TileEntityPowerCube.class, new ResourceLocation("flansmodapocalypse:powercube"));
 		
 		proxy.preInit(event);
@@ -248,6 +261,40 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit(event);
+	}
+	
+	private WorldGenAbandonedPortal portalGen = new WorldGenAbandonedPortal();
+	
+	
+	@SubscribeEvent
+	public void populateOverworldChunk(PopulateChunkEvent event)
+	{
+		if(event.getRand().nextInt(1000) == 0)
+		{
+			int i = event.getChunkX() * 16 + 8;
+			int j = event.getChunkZ() * 16 + 8;
+			
+			int height = event.getWorld().getHeight(i, j);
+			portalGen.generate(event.getWorld(), event.getRand(), new BlockPos(i, height, j));
+		}
+	}
+	
+	@SubscribeEvent
+	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
+	{
+		event.getRegistry().register(new EntityEntry(EntitySurvivor.class, "Survivor").setRegistryName("Survivor"));
+		event.getRegistry().register(new EntityEntry(EntityTeleporter.class, "Teleporter").setRegistryName("Teleporter"));
+		event.getRegistry().register(new EntityEntry(EntityAIMecha.class, "AIMecha").setRegistryName("AIMecha"));
+		event.getRegistry().register(new EntityEntry(EntityFakePlayer.class, "FakePlayer").setRegistryName("FakePlayer"));
+		event.getRegistry().register(new EntityEntry(EntityNukeDrop.class, "NukeDrop").setRegistryName("NukeDrop"));
+		event.getRegistry().register(new EntityEntry(EntityFlyByPlane.class, "FlyByPlane").setRegistryName("FlyByPlane"));
+		
+		//EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Survivor"), 		EntitySurvivor.class, "Survivor", 112, FlansModApocalypse.INSTANCE, 100, 20, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Teleporter"), EntityTeleporter.class, "Teleporter", 113, FlansModApocalypse.INSTANCE, 100, 20, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:AIMecha"), EntityAIMecha.class, "AIMecha", 114, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FakePlayer"), EntityFakePlayer.class, "FakePlayer", 115, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:NukeDrop"), EntityNukeDrop.class, "NukeDrop", 116, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FlyByPlane"), EntityFlyByPlane.class, "FlyByPlane", 117, FlansModApocalypse.INSTANCE, 250, 20, false);
 	}
 	
 	public static FlansModLootGenerator getLootGenerator()

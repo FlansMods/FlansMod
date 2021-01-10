@@ -80,7 +80,16 @@ public class EntityTeleporter extends Entity
 	{
 		if(!world.isRemote)
 		{
-			if(targetTeleporter == null && world.provider.getDimension() == FlansModApocalypse.dimensionID)
+			if(world.getBlockState(lowerLeftCornerPowerCube).getBlock() != FlansModApocalypse.blockPowerCube
+			|| world.getBlockState(lowerLeftCornerPowerCube.add(3,0,0)).getBlock() != FlansModApocalypse.blockPowerCube
+			|| world.getBlockState(lowerLeftCornerPowerCube.add(3,0,3)).getBlock() != FlansModApocalypse.blockPowerCube
+			|| world.getBlockState(lowerLeftCornerPowerCube.add(0,0,3)).getBlock() != FlansModApocalypse.blockPowerCube)
+			{
+				setDead();
+				return;
+			}
+			
+			if(targetTeleporter == null)// && world.provider.getDimension() == FlansModApocalypse.dimensionID)
 				findPortal(player);
 			
 			if(targetTeleporter != null && player.timeUntilPortal <= 0)
@@ -105,36 +114,63 @@ public class EntityTeleporter extends Entity
 	
 	private void findPortal(EntityPlayer player)
 	{
-		BlockPos entryPoint = FlansModApocalypse.proxy.data.entryPoints.get(player.getPersistentID());
-
-		//Find a valid place to enter the world
-		World overworld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
-		
-		if(entryPoint == null)
-			entryPoint = overworld.getSpawnPoint();
-
-		for(int i = overworld.rand.nextInt(100); i < 300; i++)
+		if(dimension == FlansModApocalypse.dimensionID)
 		{
-			double dX = Math.cos(i) * FlansModApocalypse.RETURN_RADIUS;
-			double dZ = Math.sin(i) * FlansModApocalypse.RETURN_RADIUS;
+			BlockPos entryPoint = FlansModApocalypse.proxy.data.entryPoints.get(player.getPersistentID());
+	
+			//Find a valid place to enter the world
+			World overworld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
 			
-			BlockPos pos = new BlockPos(entryPoint.getX() + dX, 256, entryPoint.getZ() + dZ);
-			for(; pos.getY() >= 0; pos = pos.down())
+			if(entryPoint == null)
+				entryPoint = overworld.getSpawnPoint();
+	
+			for(int i = overworld.rand.nextInt(100); i < 300; i++)
 			{
-				if(overworld.isAirBlock(pos) && overworld.isSideSolid(pos.down(), EnumFacing.UP))
+				double dX = Math.cos(i) * FlansModApocalypse.RETURN_RADIUS;
+				double dZ = Math.sin(i) * FlansModApocalypse.RETURN_RADIUS;
+				
+				BlockPos pos = new BlockPos(entryPoint.getX() + dX, 256, entryPoint.getZ() + dZ);
+				for(; pos.getY() >= 0; pos = pos.down())
 				{
-					//We have found a valid position
-					if(createPortal(overworld, pos))
+					if(overworld.isAirBlock(pos) && overworld.isSideSolid(pos.down(), EnumFacing.UP))
 					{
-						targetTeleporter = pos;
-						return;
+						//We have found a valid position
+						if(createPortal(overworld, pos))
+						{
+							targetTeleporter = pos;
+							return;
+						}
 					}
 				}
 			}
 		}
+		else
+		{
+			World apocWorld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID);
+			for(int i = apocWorld.rand.nextInt(100); i < 300; i++)
+			{
+				double dX = Math.cos(i) * FlansModApocalypse.RETURN_RADIUS;
+				double dZ = Math.sin(i) * FlansModApocalypse.RETURN_RADIUS;
+				
+				BlockPos pos = new BlockPos(posX + dX, 256, posZ + dZ);
+				for(; pos.getY() >= 0; pos = pos.down())
+				{
+					if(apocWorld.isAirBlock(pos) && apocWorld.isSideSolid(pos.down(), EnumFacing.UP))
+					{
+						//We have found a valid position
+						if(createPortal(apocWorld, pos))
+						{
+							targetTeleporter = pos;
+							return;
+						}
+					}
+				}
+			}
+		}
+			
 	}
 	
-	private boolean createPortal(World world, BlockPos pos)
+	private boolean createPortal(World otherWorld, BlockPos pos)
 	{
 		//If there isn't enough space, reject this spot
 		for(int i = 0; i < 4; i++)
@@ -143,7 +179,7 @@ public class EntityTeleporter extends Entity
 			{
 				for(int k = 0; k < 4; k++)
 				{
-					if(world.getBlockState(pos.add(i, j, k)).getBlock() != Blocks.AIR)
+					if(otherWorld.getBlockState(pos.add(i, j, k)).getBlock() != Blocks.AIR)
 						return false;
 				}
 			}
@@ -153,9 +189,9 @@ public class EntityTeleporter extends Entity
 		{
 			for(int j = 0; j < 2; j++)
 			{
-				world.setBlockState(pos.add(i * 3, -1, j * 3), Blocks.OBSIDIAN.getDefaultState());
-				world.setBlockState(pos.add(i * 3, 0, j * 3), FlansModApocalypse.blockPowerCube.getDefaultState());
-				world.setBlockState(pos.add(1 + i, -1, 1 + j), Blocks.OBSIDIAN.getDefaultState());
+				otherWorld.setBlockState(pos.add(i * 3, -1, j * 3), Blocks.OBSIDIAN.getDefaultState());
+				otherWorld.setBlockState(pos.add(i * 3, 0, j * 3), FlansModApocalypse.blockPowerCube.getDefaultState());
+				otherWorld.setBlockState(pos.add(1 + i, -1, 1 + j), Blocks.OBSIDIAN.getDefaultState());
 			}
 		}
 		//Create obsidian base pillar to avoid floating portals
@@ -163,15 +199,15 @@ public class EntityTeleporter extends Entity
 		{
 			for(int k = 0; k < 4; k++)
 			{
-				for(int j = -1; j >= 1 && world.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.AIR; j--)
+				for(int j = -1; j >= 1 && otherWorld.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.AIR; j--)
 				{
-					world.setBlockState(pos.add(i, j, k), Blocks.OBSIDIAN.getDefaultState());
+					otherWorld.setBlockState(pos.add(i, j, k), Blocks.OBSIDIAN.getDefaultState());
 				}
 			}
 		}
-		EntityTeleporter teleporter = new EntityTeleporter(world, pos);
+		EntityTeleporter teleporter = new EntityTeleporter(otherWorld, pos);
 		teleporter.targetTeleporter = new BlockPos(lowerLeftCornerPowerCube);
-		world.spawnEntity(teleporter);
+		otherWorld.spawnEntity(teleporter);
 		
 		return true;
 	}

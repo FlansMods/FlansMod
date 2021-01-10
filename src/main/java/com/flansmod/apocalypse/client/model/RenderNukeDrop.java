@@ -11,9 +11,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
+import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 
 public class RenderNukeDrop extends Render<EntityNukeDrop>
 {
@@ -139,5 +141,14 @@ public class RenderNukeDrop extends Render<EntityNukeDrop>
 		GlStateManager.disableLighting();
 		//Pop
 		GlStateManager.popMatrix();
+	}
+	
+	public static class Factory implements IRenderFactory<EntityNukeDrop>
+	{
+		@Override
+		public Render<EntityNukeDrop> createRenderFor(RenderManager manager)
+		{
+			return new RenderNukeDrop(manager);
+		}
 	}
 }

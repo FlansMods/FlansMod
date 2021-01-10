@@ -63,7 +63,7 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 		{
 			for(int j = 0; j < 2; j++)
 			{
-				if(world.provider.getDimension() == FlansModApocalypse.dimensionID && isPortal(world, pos.add(-3 * i, 0, -3 * j)))
+				if((world.provider.getDimension() == FlansModApocalypse.dimensionID || world.provider.getDimension() == 0) && isPortal(world, pos.add(-3 * i, 0, -3 * j)))
 				{
 					world.spawnEntity(new EntityTeleporter(world, pos.add(-3 * i, 0, -3 * j)));
 				}

@@ -13,4 +13,10 @@ public class ModuloHelper
 		int z = x % y;
 		return z < 0 ? z + y : z;
 	}
+	
+	public static double modulo(double x, double y)
+	{
+		double z = x % y;
+		return z < 0 ? z + y : z;
+	}
 }
