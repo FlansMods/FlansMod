@@ -317,8 +317,9 @@ public class GunBoxType extends BoxType
 		
 		private boolean haveEnoughOf(InventoryPlayer temporaryInventory, ItemStack stackNeeded, boolean takeItems)
 		{
-			//The total amount of items found that match this recipe stack
-			int totalAmountFound = 0;
+			//Initialize the amount of items we will need
+			int amountNeeded = stackNeeded.getCount();
+			
 			//Iterate over the temporary inventory
 			for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
 			{
@@ -327,23 +328,23 @@ public class GunBoxType extends BoxType
 				//If the stack is what we want
 				if(stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
 				{
-					//Work out the amount to take from the stack
-					int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);
-					//Take it
-					stackInSlot.setCount(stackInSlot.getCount() - amountFound);
-					//Check for empty stacks
-					if(stackInSlot.getCount() <= 0)
-						stackInSlot = ItemStack.EMPTY.copy();
-					//Put the modified stack back in the inventory
-					temporaryInventory.setInventorySlotContents(m, stackInSlot);
-					//Increase the amount found counter
-					totalAmountFound += amountFound;
-					//If we have enough, stop looking
-					if(totalAmountFound == stackNeeded.getCount())
+					//Check if the the remaining amount needed is less than the current stack
+					if (stackInSlot.getCount() < amountNeeded) {
+						//If the current stack is less than we need
+						//consume the whole stack and reduce the remaining amount needed by the stack size
+						amountNeeded -= stackInSlot.getCount();
+						stackInSlot.setCount(0);
+					} else {
+						//If the current stack is more than we need
+						//set the remaining amount needed to 0 and reduce the stack by the amount we take
+						amountNeeded = 0;
+						stackInSlot.setCount(stackInSlot.getCount() - amountNeeded);
 						break;
+					}
 				}
 			}
-			return totalAmountFound >= stackNeeded.getCount();
+			//Ensure that we have reached enough materials
+			return amountNeeded == 0;
 		}
 		
 		public boolean canCraft(InventoryPlayer inv, boolean takeItems)
