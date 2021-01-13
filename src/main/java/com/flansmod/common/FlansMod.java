@@ -479,12 +479,7 @@ public class FlansMod
 	
 	@SubscribeEvent
 	public void registerLoot(LootTableLoadEvent event)
-	{
-		for(InfoType type : InfoType.infoTypes.values())
-		{
-			type.addLoot(event);
-		}
-		
+	{		
 		// Add default Flan's loot - extra gunpowder, iron etc
 		if(event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)
 		|| event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)
@@ -493,6 +488,11 @@ public class FlansMod
 		|| event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID)
 		)
 		{
+			for(InfoType type : InfoType.infoTypes.values())
+			{
+				type.addLoot(event);
+			}
+			
 			LootPool pool = event.getTable().getPool("FlansModBasicLoot");
 			if(pool == null)
 			{
@@ -509,6 +509,11 @@ public class FlansMod
 			 || event.getName().equals(lostCitiesChest)
 		)
 		{
+			for(InfoType type : InfoType.infoTypes.values())
+			{
+				type.addLoot(event);
+			}
+			
 			LootPool pool = event.getTable().getPool("FlansModBasicLoot");
 			if(pool == null)
 			{
