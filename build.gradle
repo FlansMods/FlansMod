@@ -20,7 +20,7 @@ version = version_major + "." + version_minor + "." + version_patch + version_ex
 group = "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
-project.ext.set("apocalypseVersion", "1.0")
+apocalypseVersion = apocalypseVersion + version_extra
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -39,8 +39,17 @@ minecraft {
     replace "@ALLOWED_VERSIONS@", "[5.7.0-beta, 5.8)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
-
-    replace "@ALLOWED_VERSIONS_APOCALYPSE@", "[1.0, 1.1)"
+	replaceIn "ModernWeaponsPackMod.java"
+	replaceIn "TitanPackMod.java"
+	replaceIn "SimplePartsPackMod.java"
+	replaceIn "NerfPackMod.java"
+	replaceIn "MechaPartsPackMod.java"
+	replaceIn "UtilityPackMod.java"
+	replaceIn "WW2PackMod.java"
+	replaceIn "YeOldePackMod.java"	
+	replaceIn "ZombiePackMod.java"	
+	
+    replace "@ALLOWED_VERSIONS_APOCALYPSE@", "[1.2, 1.3)"
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
 
@@ -73,6 +82,7 @@ processResources {
 version = "${project.minecraft.version}-${project.version}"
 
 task mechaParts(type: Jar) {
+	from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/mechaparts/' }
     from 'run/Flan/Mecha Parts Pack'
     baseName = 'Mecha Parts'
     appendix = 'Content Pack'
@@ -93,6 +103,7 @@ task nerf(type: Jar) {
 }
 
 task simpleParts(type: Jar) {
+	from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/simple/' }
     from 'run/Flan/Parts Pack'
     baseName = 'Simple Parts'
     appendix = 'Content Pack'
@@ -168,6 +179,9 @@ task outputJar(type: Jar) {
         exclude '**/ww2/'
         exclude '**/yeolde/'
         exclude '**/zombie/'
+        exclude '**/simple/'
+        exclude '**/mechaparts/'
+		exclude '**/steampunk/'
     }
 }
 
