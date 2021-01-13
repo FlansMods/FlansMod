@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import com.flansmod.apocalypse.client.model.RenderFakePlayer;
 import com.flansmod.apocalypse.client.model.RenderNukeDrop;
 import com.flansmod.apocalypse.client.model.RenderPowerCube;
+import com.flansmod.apocalypse.client.model.RenderSkullBoss;
 import com.flansmod.apocalypse.client.model.RenderSurvivor;
 import com.flansmod.apocalypse.client.model.RenderTeleporter;
 import com.flansmod.apocalypse.common.CommonProxyApocalypse;
@@ -35,6 +36,7 @@ import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
 import com.flansmod.apocalypse.common.entity.EntityAIMecha;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
+import com.flansmod.apocalypse.common.entity.EntitySkullBoss;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.client.FlansModClient;
@@ -61,6 +63,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		RenderingRegistry.registerEntityRenderingHandler(EntityTeleporter.class, new RenderTeleporter.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, new RenderMecha.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, new RenderNukeDrop.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySkullBoss.class, new RenderSkullBoss.Factory());
 		
 
 	}

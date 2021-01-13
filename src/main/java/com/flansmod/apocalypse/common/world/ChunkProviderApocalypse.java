@@ -29,6 +29,7 @@ import net.minecraft.world.gen.structure.MapGenMineshaft;
 import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.apocalypse.common.world.buildings.MapGenAbandonedVillage;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenAbandonedPortal;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenBossPillar;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenDeadTree;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenDyeFactory;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenResearchLab;
@@ -68,6 +69,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 	private WorldGenRunway runwayGenerator = new WorldGenRunway();
 	private WorldGenSkeleton skeletonGenerator = new WorldGenSkeleton();
 	private WorldGenRoads roadsGenerator = new WorldGenRoads();
+	private WorldGenBossPillar bossPillarGenerator = new WorldGenBossPillar();
 	private WorldGenDeadTree deadTreeGenerator = new WorldGenDeadTree();
 	public static List<Biome> runwaySpawnBiome = Arrays.asList(BiomeApocalypse.highPlateau);
 	private WorldGenResearchLab researchLabGenerator = new WorldGenResearchLab();
@@ -392,9 +394,8 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 			dyeFactoryGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
 		}
 		
-		if(rand.nextInt(8) == 0)
+		if(rand.nextInt(FlansModApocalypse.ABANDONED_PORTAL_APOC_RARITY) == 0)
 		{
-			
 			int height = world.getHeight(i + 8, j + 8);
 			abandonedPortalGenerator.generate(world, rand, blockpos.add(8, height,8));
 		}
@@ -421,6 +422,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 		biome.decorate(this.world, this.rand, new BlockPos(i, 0, j));
 		
 		roadsGenerator.generate(world, rand, blockpos);
+		bossPillarGenerator.generate(world, rand, blockpos);
 		
 		if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, flag, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS))
 			WorldEntitySpawner.performWorldGenSpawning(this.world, biome, i + 8, j + 8, 16, 16, this.rand);

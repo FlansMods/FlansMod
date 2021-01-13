@@ -11,11 +11,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.flansmod.apocalypse.common.FlansModApocalypse;
+import com.flansmod.apocalypse.common.entity.EntitySkullBoss;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenBossPillar;
 
 public class BlockPowerCube extends Block implements ITileEntityProvider
 {
@@ -66,6 +69,33 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 				if((world.provider.getDimension() == FlansModApocalypse.dimensionID || world.provider.getDimension() == 0) && isPortal(world, pos.add(-3 * i, 0, -3 * j)))
 				{
 					world.spawnEntity(new EntityTeleporter(world, pos.add(-3 * i, 0, -3 * j)));
+				}
+			}
+		}
+		
+		final int checkY = MathHelper.floor(WorldGenBossPillar.kPillarMaxHeight + 1);
+		final int checkXZ = MathHelper.floor(WorldGenBossPillar.kPillarInnerEdge + 1);
+		
+		if(world.provider.getDimension() == FlansModApocalypse.dimensionID &&
+		   world.getBlockState(pos.down()).getBlock() == Blocks.BEDROCK)
+		{
+			if(Math.abs(pos.getX()) == checkXZ &&
+			   Math.abs(pos.getZ()) == checkXZ)
+			{
+				boolean allPresent = true;
+						
+				for(int i = 0; i < 2; i++)
+					for(int k = 0; k < 2; k++)
+						if(world.getBlockState(new BlockPos(checkXZ * (i == 0 ? 1 : -1), pos.getY(), checkXZ * (k == 0 ? 1 : -1))).getBlock() != this)
+							allPresent = false;
+				
+				if(allPresent)
+				{
+					FlansModApocalypse.INSTANCE.TriggerBossFight(world);
+					
+					for(int i = 0; i < 2; i++)
+						for(int k = 0; k < 2; k++)
+							world.destroyBlock(new BlockPos(checkXZ * (i == 0 ? 1 : -1), pos.getY(), checkXZ * (k == 0 ? 1 : -1)), false);
 				}
 			}
 		}

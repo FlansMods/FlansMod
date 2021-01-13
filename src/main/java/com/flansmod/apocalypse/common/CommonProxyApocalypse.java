@@ -141,6 +141,8 @@ public class CommonProxyApocalypse
 			WorldServer world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID);
 			if(world != null)
 			{
+				FlansModApocalypse.INSTANCE.UpdateBossFight(world);
+				
 				for(int i = 0; i < world.playerEntities.size(); i++)
 				{
 					EntityPlayer player = world.playerEntities.get(i);

@@ -14,6 +14,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,11 +46,13 @@ import com.flansmod.apocalypse.common.entity.EntityAIMecha;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
 import com.flansmod.apocalypse.common.entity.EntityFlyByPlane;
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
+import com.flansmod.apocalypse.common.entity.EntitySkullBoss;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenAbandonedPortal;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenBossPillar;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.CreativeTabFlan;
 import com.flansmod.common.FlansMod;
@@ -85,6 +88,11 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	public static int AIRPORT_RARITY = 125;
 	public static int DYE_FACTORY_RARITY = 800;
 	public static int LAB_RARITY = 100;
+	
+	// TODO: Configify
+	public static int ABANDONED_PORTAL_APOC_RARITY = 2000;
+	public static int ABANDONED_PORTAL_OVERWORLD_RARITY = 1000;
+	
 	/**
 	 * The distance between where the player left the overworld, and where they return
 	 */
@@ -269,7 +277,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	@SubscribeEvent
 	public void populateOverworldChunk(PopulateChunkEvent event)
 	{
-		if(event.getRand().nextInt(1000) == 0)
+		if(event.getRand().nextInt(FlansModApocalypse.ABANDONED_PORTAL_OVERWORLD_RARITY) == 0)
 		{
 			int i = event.getChunkX() * 16 + 8;
 			int j = event.getChunkZ() * 16 + 8;
@@ -288,6 +296,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		event.getRegistry().register(new EntityEntry(EntityFakePlayer.class, "FakePlayer").setRegistryName("FakePlayer"));
 		event.getRegistry().register(new EntityEntry(EntityNukeDrop.class, "NukeDrop").setRegistryName("NukeDrop"));
 		event.getRegistry().register(new EntityEntry(EntityFlyByPlane.class, "FlyByPlane").setRegistryName("FlyByPlane"));
+		event.getRegistry().register(new EntityEntry(EntitySkullBoss.class, "SkullBoss").setRegistryName("SkullBoss"));
 		
 		//EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Survivor"), 		EntitySurvivor.class, "Survivor", 112, FlansModApocalypse.INSTANCE, 100, 20, true, 0, 0);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Teleporter"), EntityTeleporter.class, "Teleporter", 113, FlansModApocalypse.INSTANCE, 100, 20, true);
@@ -295,6 +304,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FakePlayer"), EntityFakePlayer.class, "FakePlayer", 115, FlansModApocalypse.INSTANCE, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:NukeDrop"), EntityNukeDrop.class, "NukeDrop", 116, FlansModApocalypse.INSTANCE, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FlyByPlane"), EntityFlyByPlane.class, "FlyByPlane", 117, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:SkullBoss"), EntitySkullBoss.class, "SkullBoss", 118, FlansModApocalypse.INSTANCE, 500, 5, false);
 	}
 	
 	public static FlansModLootGenerator getLootGenerator()
@@ -351,5 +361,38 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	public void RegisterModelRedirects() 
 	{
 		FlansMod.RegisterModelRedirect("apocalypse", "com.flansmod.apocalypse.client.model");
+	}
+
+	// Boss fight server control
+	
+	private static final int kBossWarmupTicks = 200;
+	
+	
+	private static int sElapsedTicks = 0;
+	private static boolean sBossFightInProgress = false;
+	private static EntitySkullBoss sTheBoss = null;
+	
+	public void TriggerBossFight(World world) 
+	{
+		sElapsedTicks = 0;
+		
+		if(world.isRemote) {
+			return;
+		}
+		
+		sTheBoss = new EntitySkullBoss(world);
+		sTheBoss.setPosition(0d, WorldGenBossPillar.kBossSpawnHeight, 0d);
+		world.spawnEntity(sTheBoss);
+		
+	}
+	
+	public void UpdateBossFight(World world)
+	{
+		sElapsedTicks++;
+		
+		if(sElapsedTicks >= kBossWarmupTicks)
+		{
+			
+		}
 	}
 }

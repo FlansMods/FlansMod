@@ -23,20 +23,14 @@ public class WorldGenRoads extends WorldGenerator
 			kRingRoadOuter = 420d,
 			kRingRoadEdgeWidth = 1.5d;
 	
-	private static final double circumfrence = kRingRoadMid * Math.PI * 2d;
 	private static final double dashLength = 10.0d;
-	private static final double dashArcLength = Math.PI * 2d * dashLength / circumfrence;
 	private static final double archLength = 16.0d;
-	private static final double archArcLength = Math.PI * 2d * archLength / circumfrence;
-	
 	private static final double kAxisRoadWidth = 10.0d;
+	private static final double kRepeatDistance = 600d;
 	
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos)
 	{		
-
-		
-		double rRepeat = 600d;
 		for(int i = 8; i < 24; i++)
 		{
 			for(int k = 8; k < 24; k++)
@@ -46,18 +40,16 @@ public class WorldGenRoads extends WorldGenerator
 				double dist = p.getDistance(0, 0, 0);
 				double theta = Math.atan2(p.getZ(), p.getX());
 				
-				double r = ModuloHelper.modulo(dist, rRepeat);
-				int repeat = (int) Math.floor(dist / rRepeat);
-				double circumfrence = (kRingRoadMid + rRepeat * repeat) * Math.PI * 2d;
+				double r = ModuloHelper.modulo(dist, kRepeatDistance);
+				int repeat = (int) Math.floor(dist / kRepeatDistance);
+				double circumfrence = (kRingRoadMid + kRepeatDistance * repeat) * Math.PI * 2d;
 				double archArcLength = Math.PI * 2d * archLength / circumfrence;
 				double dashArcLength = Math.PI * 2d * dashLength / circumfrence;
 				
 				int doRoad = 0;
 				boolean doEdge = false;
 				boolean doDash = false;
-				
-				
-				
+								
 				double archHeight = 128d;
 				double tunnelHeight = 0d;
 				
