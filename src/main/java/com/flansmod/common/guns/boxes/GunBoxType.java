@@ -361,7 +361,7 @@ public class GunBoxType extends BoxType
 			//Draw the stacks that should be in each slot
 			for(ItemStack stackNeeded : requiredParts)
 			{
-				if(!haveEnoughOf(inv, stackNeeded, takeItems))
+				if(!haveEnoughOf(temporaryInventory, stackNeeded, takeItems))
 				{
 					canCraft = false;
 					break;
