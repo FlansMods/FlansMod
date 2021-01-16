@@ -679,6 +679,13 @@ public class EntityPlane extends EntityDriveable
 					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.5F / wheels.length;
 					//amountToMoveCar.z += ((wheel.posZ - wheel.prevPosZ) - (motionZ)) * 0.0616F / wheels.length;
 					
+					if(amountToMoveWheel.lengthSquared() >= 16f * 16f)
+					{
+						FlansMod.log.warn("Wheel tried to move " + amountToMoveWheel.length() + " in a single frame, capping at 16 blocks");
+						amountToMoveWheel.normalise();
+						amountToMoveWheel.scale(16f);
+					}
+					
 					wheel.move(MoverType.SELF, amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
 				}
 			}
