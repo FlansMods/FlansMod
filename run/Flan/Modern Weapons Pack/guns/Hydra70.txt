@@ -33,9 +33,9 @@ FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-//AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope
+//AllowAttachments
 AllowBarrelAttachments false
 AllowScopeAttachments false
 AllowStockAttachments false

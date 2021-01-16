@@ -7,6 +7,7 @@ Ammo mp5Ammo
 Ammo mp5kAmmo
 Ammo glockAmmo
 Ammo MP7Ammo
+Ammo smg100ammo
 Icon Skorpion
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -38,9 +39,9 @@ Model mw.Skorpion
 Texture Skorpion
 ModelScale 1.0
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

@@ -6,6 +6,7 @@ Ammo ak47Ammo
 Ammo ak74Ammo
 Ammo rpdAmmo
 Ammo rpkAmmo
+Ammo witheringakammo
 Icon RPD
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -38,9 +39,9 @@ Model mw.RPD
 Texture RPD
 ModelScale 1.0
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false

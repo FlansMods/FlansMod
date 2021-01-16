@@ -14,30 +14,37 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
+// --- Snipers ---
 SetPage Snipers
 AddGun m21 10 ingotIron 10 fiberglass 5 glass
 AddAmmo m21Ammo 2 ingotIron 3 fiberglass 3 gunpowder
 AddGun barrett 20 ingotIron 5 glass
 AddAmmo barrettAmmo 4 ingotIron 3 gunpowder
-AddAltAmmo barrettExplosiveAmmo 4 ingotIron 20 gunpowder
+AddAltAmmo barrettExplosiveAmmo 4 ingotIron 5 highexgunpowder
 AddGun l96 6 ingotIron 12 fiberglass 5 glass
 AddAmmo l96Ammo 3 fiberglass 3 gunpowder
 AddGun sg550 16 ingotIron 2 fiberglass
 AddAmmo sg550Ammo 5 ingotIron 4 gunpowder
+AddAmmo seekerrifleammo 2 ingotIron 2 highexgunpowder 1 ender_eye
+// --- LMGs ---
 SetPage LMGs
 AddGun m249 24 ingotIron 5 fiberglass
 AddAmmo m249Ammo 10 ingotIron 10 fiberglass 10 gunpowder 1 dyePowder.6
 AddGun rpd 20 ingotIron 5 log
 AddAmmo rpdAmmo 12 ingotIron 11 gunpowder
+AddAmmo witheringakammo 4 ingotIron 1 skull.1 3 gunpowder
 AddGun rpk 12 ingotIron 8 log
 AddAmmo rpkAmmo 6 ingotIron 4 gunpowder
+AddAmmo witheringakammo 4 ingotIron 1 skull.1 3 gunpowder
 AddGun m60 24 ingotIron
 AddAmmo m60Ammo 9 ingotIron 3 fiberglass 10 gunpowder
 AddGun l86 20 ingotIron 5 fiberglass
 AddAmmo l86Ammo 10 ingotIron 9 gunpowder
+// --- SMGs ---
 SetPage SMGs
 AddGun MP7 14 ingotIron
 AddAmmo MP7Ammo 4 ingotIron 4 gunpowder
+AddAmmo smg100ammo 6 fiberglass 9 gunpowder
 AddGun FMG 5 ingotIron 8 fiberglass
 AddAmmo MP7Ammo 4 ingotIron 4 gunpowder
 AddGun HK416 12 ingotIron 8 fiberglass
@@ -45,6 +52,7 @@ AddAmmo m16a4Ammo 6 ingotIron 5 gunpowder
 AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
 AddGun krissvector 2 ingotIron 20 fiberglass
 AddAmmo krissvectorAmmo 8 fiberglass 6 gunpowder
+//  --- Shotguns ---
 SetPage Shotguns
 AddGun judge 8 ingotIron 4 fiberglass
 AddAmmo w1200Ammo 1 fiberglass 1 gunpowder
@@ -60,14 +68,16 @@ AddAltAmmo r870Ammo 1 ingotIron 1 fiberglass 1 gunpowder
 AddAltAmmo m1887Ammo 1 ingotIron 1 fiberglass 1 gunpowder 1 spiderEye
 AddGun aa12 12 ingotIron 12 fiberglass
 AddAmmo aa12Ammo 6 ingotIron 6 fiberglass 8 gunpowder
+// --- Specials ---
 SetPage Specials
 AddGun minigun 32 ingotIron 16 fiberglass 16 redstone
 AddAmmo minigunAmmo 8 ingotIron 32 gunpowder
-AddAltAmmo minigunExplosiveAmmo 8 ingotIron 256 gunpowder
+AddAltAmmo minigunExplosiveAmmo 8 ingotIron 32 highexgunpowder
 AddGun desertEagle 12 ingotIron
 AddAmmo desertEagleAmmo 3 ingotIron 2 gunpowder
 AddGun goldDesertEagle 12 ingotGold
 AddAmmo desertEagleAmmo 3 ingotIron 2 gunpowder
+// --- Rockets ---
 SetPage Rockets
 AddGun rpg 25 ingotIron 10 log
 AddAmmo rpgAmmo 5 ingotIron 6 gunpowder
@@ -77,6 +87,7 @@ AddGun at4 5 fiberglass 4 ingotIron
 AddAmmo at4Ammo 3 ingotIron 5 gunpowder
 AddGun stinger 20 ingotIron 10 fiberglass 20 redstone
 AddAmmo stingerAmmo 12 ingotIron 4 ingotGold 12 gunpowder 6 redstone
+// --- Explosives ----
 SetPage Explosives
 AddGun gl1 12 ingotIron 6 log
 AddAmmo grenadeLauncherAmmo 3 ingotIron 5 gunpowder
@@ -87,6 +98,7 @@ AddAltAmmo grenadeLauncherGasAmmo 3 ingotIron 3 gunpowder 4 spiderEye
 AddGun claymore 4 fiberglass 2 gunpowder 1 redstone
 AddGun c4Remote 1 fiberglass 1 redstone
 AddAmmo c4 3 gunpowder 2 slimeball 1 redstone
+// --- Misc ---
 SetPage Misc
 AddGun mwRiotShield 12 fiberglass 12 thinGlass 16 ingotIron
 AddGun Hydra70Ammo 19 iron 19 gunpowder

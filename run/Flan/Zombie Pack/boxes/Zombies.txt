@@ -15,10 +15,12 @@ WWW
 SetPage Guns
 AddGun winchesterModel70 12 ingotIron 8 wood 4 glass
 AddAmmo 3006Bullet 1 ingotIron 1 gunpowder
+AddAmmo shulkersniperammo 1 shulker_shell 1 highexgunpowder
 AddGun m4Carbine 16 ingotIron
 AddAmmo m4CarbineAmmo 3 ingotIron 3 gunpowder
 AddGun mp5k 10 ingotIron
 AddAmmo mp5kAmmo 2 ingotIron 2 gunpowder
+AddAmmo smg100ammo 6 fiberglass 9 gunpowder
 AddGun olympia 12 ingotIron 8 wood
 AddAmmo 12gaugeShell 1 ingotIron 1 gunpowder
 AddAltAmmo 12gaugeShellIncendiary 1 ingotIron 3 gunpowder
@@ -28,6 +30,8 @@ AddAltAmmo 12gaugeShellIncendiary 1 ingotIron 3 gunpowder
 SetPage Pistols
 AddGun coltPython 8 ingotIron
 AddAmmo 357Magnum 1 ingotIron 1 gunpowder
+AddAmmo highexpistolammo 1 ingotIron 1 highexgunpowder
+AddAmmo appistolammo 1 ingotIron 1 highexgunpowder 1 prismarine_shard
 AddGun flareGun 9 ingotIron
 AddAmmo flareGunAmmo 2 ingotIron 2 gunpowder 1 redstone
 SetPage Melee

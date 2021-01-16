@@ -34,9 +34,9 @@ Model mw.KrissVector
 Texture KrissVector
 ModelScale 0.18
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSingleFire flanMWBurstFire flanMWAutoFire flanMWPistolFlashlight flanMWUnderBarrelLaser flanMWSilencer flanMWLongBarrel flanMWForegrip flanMWmuzzlebreak flanMWRedDot flanMWACOG flanMWHCOG flanMW4xScope flanMW2xScope flanMW8xScope
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

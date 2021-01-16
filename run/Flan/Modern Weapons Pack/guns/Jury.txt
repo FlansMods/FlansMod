@@ -3,6 +3,8 @@ ShortName jury
 //The ammo this gun uses (shortName)
 Ammo 357Magnum
 Ammo juryAmmo
+Ammo highexpistolammo
+Ammo appistolammo
 Icon Jury
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -35,9 +37,9 @@ DeployedModel None
 Model mw.Jury
 Texture Jury
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 //List here all the attachments allowed on this gun by shortName and separated by spaces
 //AllowAttachments
 AllowBarrelAttachments true

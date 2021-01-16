@@ -34,9 +34,9 @@ Model mw.HK416
 Texture SkinHK416
 ModelScale 0.75
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments false
 AllowScopeAttachments false
 AllowStockAttachments false

@@ -4,6 +4,7 @@ ShortName sg550
 Ammo g3Ammo
 Ammo m14Ammo
 Ammo sg550Ammo
+Ammo seekerrifleammo
 Icon SG550
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -34,9 +35,9 @@ Model mw.SG550
 Texture SG550
 ModelScale 0.9
 //Attachment Settings
-AllowAllAttachments False
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

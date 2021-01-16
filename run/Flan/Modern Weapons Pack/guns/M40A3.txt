@@ -4,6 +4,7 @@ ShortName m40a3
 Ammo m40a3Ammo
 Ammo r700Ammo
 Ammo 3006Bullet
+Ammo shulkersniperammo
 Icon M40A3
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -35,9 +36,9 @@ DeployedModel None
 Model mw.M40A3
 Texture M40A3
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

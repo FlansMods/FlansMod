@@ -76,13 +76,34 @@ public class ContainerGunModTable extends Container
 		ItemStack stack = ItemStack.EMPTY.copy();
 		Slot currentSlot = inventorySlots.get(slotID);
 		
+		Slot gunSlot = inventorySlots.get(0);
+		
 		if(currentSlot != null && currentSlot.getHasStack())
 		{
 			ItemStack slotStack = currentSlot.getStack();
 			stack = slotStack.copy();
 			
+			// gun slot, 4 attach slots and 8 generics
 			if(slotID >= 13)
 			{
+				if(slotStack.getItem() instanceof ItemGun && !gunSlot.getHasStack())
+				{
+					gunSlot.putStack(slotStack);
+					currentSlot.putStack(ItemStack.EMPTY.copy());
+				}
+				if(slotStack.getItem() instanceof ItemAttachment)
+				{
+					for(int i = 1; i < 12; i++)
+					{
+						Slot attachmentSlot = inventorySlots.get(i);
+						if(!attachmentSlot.getHasStack() && attachmentSlot.isItemValid(slotStack))
+						{
+							attachmentSlot.putStack(slotStack);
+							currentSlot.putStack(ItemStack.EMPTY.copy());
+							break;
+						}
+					}
+				}
 				return ItemStack.EMPTY.copy();
 			}
 			else

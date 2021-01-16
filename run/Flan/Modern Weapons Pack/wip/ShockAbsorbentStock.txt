@@ -1,0 +1,29 @@
+Name Shock-Absorbent Stock
+ShortName shockabsorbentstock
+Icon shockabsorbentstock
+//The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
+AttachmentType stock
+//If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment
+Silencer false
+//These multipliers stack between attachments and do what they say
+MeleeDamageMultiplier 1.0
+DamageMultiplier 0.9
+SpreadMultiplier 1.0
+RecoilMultiplier 0.4
+BulletSpeedMultiplier 1.0
+ReloadTimeMultiplier 1.0
+//These variables only come into effect if this is a scope
+//The ZoomLevel affects how much the view zooms in (note that this removes the model from the zooming animation and so is useless for iron sights)
+//The FOVZoomLevel affects how much the view narrows when zooming. Very useful for iron sights as it gives the illusion of zooming without killing off the model
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+ZoomOverlay None
+//Model
+Model mw.ShockAbsorbentStock
+Texture ShockAbsorbentStock
+//Recipe
+RecipeOutput 1
+Recipe F fiberglass M magma_cream P piston
+MPF
+MPF
+  F

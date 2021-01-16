@@ -35,9 +35,9 @@ Model mw.M249
 Texture M249
 ModelScale 1.5
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false

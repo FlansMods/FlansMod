@@ -31,9 +31,9 @@ DeployedModel None
 Model mw.AA12
 Texture AA12
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

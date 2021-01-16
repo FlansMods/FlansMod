@@ -553,46 +553,46 @@ public class InfoType
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage, String requester)
 	{
-		if(s.equals("doorIron"))
+		// Do a handful of special cases, mostly legacy recipes
+		switch(s)
 		{
-			return new ItemStack(Items.IRON_DOOR, amount);
+			case "doorIron": return new ItemStack(Items.IRON_DOOR, amount);
+			case "clayItem": return new ItemStack(Items.CLAY_BALL, amount);
+			case "iron_trapdoor": return new ItemStack(Blocks.IRON_TRAPDOOR, amount);
+			case "trapdoor": return new ItemStack(Blocks.TRAPDOOR, amount);
+			case "gunpowder": return new ItemStack(Items.GUNPOWDER, amount);
+			case "iron": return new ItemStack(Items.IRON_INGOT, amount);
+			case "boat": return new ItemStack(Items.BOAT, amount);
 		}
-		else if(s.equals("clayItem"))
+		
+		if(s.contains(":"))
 		{
-			return new ItemStack(Items.CLAY_BALL, amount);
+			Item item = Item.getByNameOrId(s);
+			if(item != null)
+				return new ItemStack(item, amount, damage);
 		}
-		else if(s.equals("iron_trapdoor"))
+		else // No modid, try a search with "minecraft:"
 		{
-			return new ItemStack(Blocks.IRON_TRAPDOOR, amount);
+			Item item = Item.getByNameOrId("minecraft:" + s);
+			if(item != null)
+				return new ItemStack(item, amount, damage);
 		}
-		else if(s.equals("trapdoor"))
-		{
-			return new ItemStack(Blocks.TRAPDOOR, amount);
-		}
-		else if(s.equals("gunpowder"))
-		{
-			return new ItemStack(Items.GUNPOWDER, amount);
-		}
-		else if(s.equals("iron"))
-		{
-			return new ItemStack(Items.IRON_INGOT, amount);
-		}
-		else if(s.equals("boat"))
-		{
-			return new ItemStack(Items.BOAT, amount);
-		}
-		for(Item item : Item.REGISTRY)
-		{
-			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
-			{
-				return new ItemStack(item, amount, damage); 
-			}
-		}
+		
 		for(InfoType type : infoTypes.values())
 		{
 			if(type.shortName.equals(s))
 				return new ItemStack(type.item, amount, damage);
 		}
+
+		for(Item item : Item.REGISTRY)
+		{
+			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
+			{
+				FlansMod.log.warn("Found item " + s + " but by legacy method. Shouldn't happen.");
+				return new ItemStack(item, amount, damage); 
+			}
+		}
+
 		
 		
 		FlansMod.log.warn("Could not find " + s + " when adding recipe for " + requester);

@@ -4,6 +4,7 @@ ShortName g3
 Ammo g3Ammo
 Ammo m14Ammo
 Ammo sg550Ammo
+Ammo seekerrifleammo
 Icon G3
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -34,9 +35,9 @@ Model mw.G3
 Texture G3
 ModelScale 1.0
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

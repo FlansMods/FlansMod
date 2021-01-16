@@ -4,6 +4,7 @@ ShortName m14
 Ammo g3Ammo
 Ammo m14Ammo
 Ammo sg550Ammo
+Ammo seekerrifleammo
 Icon M14
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -34,9 +35,9 @@ Model mw.M14
 Texture M14
 ModelScale 0.8
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

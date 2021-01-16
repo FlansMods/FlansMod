@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
@@ -36,6 +37,31 @@ public class ItemAttachment extends Item implements IPaintableItem
 		{
 			Collections.addAll(lines, type.description.split("_"));
 		}
+		
+		if(type.damageMultiplier != 1.0f)
+			lines.add("Damage x" + MathHelper.floor(type.damageMultiplier * 100.0f) + "%");
+	
+		if(type.recoilMultiplier != 1.0f)
+			lines.add("Recoil x" + MathHelper.floor(type.recoilMultiplier * 100.0f) + "%");
+
+		if(type.spreadMultiplier != 1.0f)
+			lines.add("Bullet Spread x" + MathHelper.floor(type.spreadMultiplier * 100.0f) + "%");
+		
+		if(type.reloadTimeMultiplier != 1.0f)
+			lines.add("Reload Time x" + MathHelper.floor(type.reloadTimeMultiplier * 100.0f) + "%");
+		
+		if(type.bulletSpeedMultiplier != 1.0f)
+			lines.add("Projectile Speed x" + MathHelper.floor(type.bulletSpeedMultiplier * 100.0f) + "%");
+		
+		if(type.silencer)
+			lines.add("Silenced");
+		
+		if(type.meleeDamageMultiplier != 1.0f)
+			lines.add("Melee Damage x" + MathHelper.floor(type.meleeDamageMultiplier * 100.0f) + "%");
+		
+		if(type.flashlight)
+			lines.add("Flashlight " + type.flashlightStrength);
+
 	}
 	
 	@Override

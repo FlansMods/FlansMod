@@ -39,6 +39,19 @@ public class SlotGun extends Slot
 			return false;
 		AttachmentType attachmentType = ((ItemAttachment)stack.getItem()).type;
 		GunType gunType = ((ItemGun)gunSlot.getStack().getItem()).GetType();
-		return gunType.allowAllAttachments || gunType.allowedAttachments.contains(attachmentType);
+
+		if(gunType.allowAllAttachments || gunType.allowedAttachments.contains(attachmentType))
+		{
+			switch(attachmentType.type)
+			{
+			case barrel:	return gunType.allowBarrelAttachments;
+			case sights:	return gunType.allowScopeAttachments;
+			case stock:		return gunType.allowStockAttachments;
+			case grip: 		return gunType.allowGripAttachments;
+			case generic:	return slotID < 5 + gunType.numGenericAttachmentSlots;
+			}
+		}
+		
+		return false;
 	}
 }

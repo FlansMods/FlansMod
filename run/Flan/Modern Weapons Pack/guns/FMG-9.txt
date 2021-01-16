@@ -41,9 +41,9 @@ Model mw.FMG
 Texture SkinFMG
 ModelScale 0.7
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSingleFire flanMWBurstFire flanMWAutoFire
+//AllowAttachments
 AllowBarrelAttachments false
 AllowScopeAttachments false
 AllowStockAttachments false

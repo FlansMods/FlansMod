@@ -42,9 +42,9 @@ ModelScale 0.64
 Texture SkinSIGP232
 Description Ammo Type : Pistol
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments True
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWSingleFire 
+//AllowAttachments
 AllowBarrelAttachments true
 AllowScopeAttachments false
 AllowStockAttachments false

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -166,10 +167,19 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{
 		NonNullList<Ingredient> ingredients = NonNullList.create();
-		ingredients.add(Ingredient.fromStacks(new ItemStack(Blocks.SAND)));
+		ingredients.add(Ingredient.fromItem(ItemBlock.getItemFromBlock(Blocks.SAND)));
 		ingredients.add(Ingredient.fromStacks(new ItemStack(sulphur)));
 		
 		event.getRegistry().register(new ShapelessRecipes("FlansModApocalypse", new ItemStack(Items.GUNPOWDER), ingredients).setRegistryName("GunpowderFromSulphur"));
+		
+		ingredients = NonNullList.create();
+		for(int i = 0; i < 4; i++)
+			ingredients.add(Ingredient.fromItem(ItemBlock.getItemFromBlock((Blocks.OBSIDIAN))));
+		ingredients.add(Ingredient.fromItem(Items.END_CRYSTAL));
+		for(int i = 0; i < 4; i++)
+			ingredients.add(Ingredient.fromItem(ItemBlock.getItemFromBlock((Blocks.OBSIDIAN))));
+
+		event.getRegistry().register(new ShapedRecipes(MODID, 3, 3, ingredients, new ItemStack(itemBlockPowerCube)).setRegistryName("PowerCubeCrafting"));
 	}
 	
 	@EventHandler
