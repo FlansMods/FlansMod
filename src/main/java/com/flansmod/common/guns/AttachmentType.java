@@ -63,6 +63,8 @@ public class AttachmentType extends PaintableType implements IScope
 	 * Bullet speed modifier
 	 */
 	public float bulletSpeedMultiplier = 1F;
+	
+	public float shootDelayMultiplier = 1f;
 	/**
 	 * This modifies the reload time, which is then rounded down to the nearest
 	 * tick
@@ -147,6 +149,8 @@ public class AttachmentType extends PaintableType implements IScope
 				recoilMultiplier = Float.parseFloat(split[1]);
 			else if(split[0].equals("BulletSpeedMultiplier"))
 				bulletSpeedMultiplier = Float.parseFloat(split[1]);
+			else if(split[0].equals("ShootDelayMultiplier"))
+				shootDelayMultiplier = Float.parseFloat(split[1]);
 			else if(split[0].equals("ReloadTimeMultiplier"))
 				reloadTimeMultiplier = Float.parseFloat(split[1]);
 				// Scope Variables
