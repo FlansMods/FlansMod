@@ -7,6 +7,9 @@ import com.flansmod.common.vector.Vector3f;
 
 public class ModelGun extends ModelBase
 {
+	public static final Vector3f invalid = new Vector3f(0f, Float.MAX_VALUE, 0f);
+	
+	
 	//Shapebox template. For quick copy pasting
 	//, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 	
@@ -37,6 +40,8 @@ public class ModelGun extends ModelBase
 	public Vector3f scopeAttachPoint = new Vector3f();
 	public Vector3f stockAttachPoint = new Vector3f();
 	public Vector3f gripAttachPoint = new Vector3f();
+	
+	public Vector3f muzzleFlashPoint = invalid;
 	
 	//Various animation parameters
 	public float gunSlideDistance = 1F / 4F;

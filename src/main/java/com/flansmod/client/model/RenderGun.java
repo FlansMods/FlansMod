@@ -1,7 +1,9 @@
 package com.flansmod.client.model;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -332,6 +334,10 @@ public class RenderGun implements CustomItemRenderer
 		if(animations == null)
 			animations = GunAnimations.defaults;
 		
+		// Do we have a muzzle flash
+		ModelMuzzleFlash mfModel = type.muzzleFlashModel;
+		boolean renderMuzzleFlash = mfModel != null && animations.muzzleFlash > 0;
+		
 		//Get all the attachments that we may need to render
 		AttachmentType scopeAttachment = type.getScope(item);
 		AttachmentType barrelAttachment = type.getBarrel(item);
@@ -650,7 +656,6 @@ public class RenderGun implements CustomItemRenderer
 				ModelAttachment scopeModel = scopeAttachment.model;
 				if(scopeModel != null)
 					scopeModel.renderAttachment(f);
-				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
 			}
 			GlStateManager.popMatrix();
 		}
@@ -669,7 +674,6 @@ public class RenderGun implements CustomItemRenderer
 				ModelAttachment gripModel = gripAttachment.model;
 				if(gripModel != null)
 					gripModel.renderAttachment(f);
-				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
 			}
 			GlStateManager.popMatrix();
 		}
@@ -686,7 +690,6 @@ public class RenderGun implements CustomItemRenderer
 				ModelAttachment barrelModel = barrelAttachment.model;
 				if(barrelModel != null)
 					barrelModel.renderAttachment(f);
-				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
 			}
 			GlStateManager.popMatrix();
 		}
@@ -703,7 +706,42 @@ public class RenderGun implements CustomItemRenderer
 				ModelAttachment stockModel = stockAttachment.model;
 				if(stockModel != null)
 					stockModel.renderAttachment(f);
-				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+			}
+			GlStateManager.popMatrix();
+		}
+		
+		if(renderMuzzleFlash)
+		{
+			Vector3f mfPoint = model.muzzleFlashPoint;
+			if(mfPoint == ModelGun.invalid)
+			{
+				mfPoint = model.barrelAttachPoint;
+			}
+			if(barrelAttachment != null)
+			{
+				Vector3f.add(model.barrelAttachPoint, barrelAttachment.model.muzzleFlashPoint, mfPoint);
+			}
+			
+			GlStateManager.pushMatrix();
+			{
+				
+				GlStateManager.disableLighting();
+		        GlStateManager.enableBlend();
+		        GlStateManager.disableAlpha();
+		        GlStateManager.depthMask(false);
+		        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+				 int i = 61680;
+			        int j = i % 65536;
+			        int k = i / 65536;
+			        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+				GlStateManager.color(1f, 1f, 1f);
+				renderEngine.bindTexture(mfModel.GetTexture());
+				GlStateManager.translate(mfPoint.x * type.modelScale, mfPoint.y * type.modelScale, mfPoint.z * type.modelScale);
+				mfModel.render(null, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, f);
+				GlStateManager.enableLighting();
+				GlStateManager.disableBlend();
+				GlStateManager.enableAlpha();
+				GlStateManager.depthMask(true);
 			}
 			GlStateManager.popMatrix();
 		}

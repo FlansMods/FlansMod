@@ -26,6 +26,8 @@ public class GunAnimations
 	 */
 	public boolean pumping = false;
 	
+	public int muzzleFlash = 0;
+	
 	public boolean reloading = false;
 	
 	public float reloadAnimationTime = 0;
@@ -67,6 +69,8 @@ public class GunAnimations
 	public void update()
 	{
 		lastPumped = pumped;
+		
+		muzzleFlash--;
 		
 		if(timeUntilPump > 0)
 		{
@@ -163,6 +167,7 @@ public class GunAnimations
 		lastGunSlide = gunSlide = 1F;
 		timeUntilPump = pumpDelay;
 		timeToPumpFor = pumpTime;
+		muzzleFlash = 2;
 	}
 	
 	public void doReload(int reloadTime, int pumpDelay, int pumpTime)

@@ -12,8 +12,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.model.ModelDefaultMuzzleFlash;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
+import com.flansmod.client.model.ModelMuzzleFlash;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
@@ -216,6 +218,9 @@ public class GunType extends PaintableType implements IScope
 	 */
 	@SideOnly(Side.CLIENT)
 	public ModelMG deployableModel;
+	
+	@SideOnly(Side.CLIENT)
+	public ModelMuzzleFlash muzzleFlashModel;
 	/**
 	 * The deployable model's texture
 	 */
@@ -301,6 +306,10 @@ public class GunType extends PaintableType implements IScope
 		super.postRead(file);
 		gunList.add(this);
 		guns.put(shortName.hashCode(), this);
+		if(muzzleFlashModel == null)
+		{
+			muzzleFlashModel = new ModelDefaultMuzzleFlash();
+		}
 	}
 	
 	@Override
@@ -414,7 +423,10 @@ public class GunType extends PaintableType implements IScope
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelGun.class);
 			}
-			
+			else if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("MuzzleFlashModel")))
+			{
+				muzzleFlashModel = FlansMod.proxy.loadModel(split[1], shortName, ModelMuzzleFlash.class);
+			}
 			deployableTexture = Read(split, "DeployedTexture", deployableTexture);
 			standBackDist = Read(split, "StandBackDistance", standBackDist);
 			topViewLimit = Read(split, "TopViewLimit", topViewLimit);

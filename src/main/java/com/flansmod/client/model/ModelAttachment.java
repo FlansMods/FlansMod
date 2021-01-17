@@ -3,11 +3,13 @@ package com.flansmod.client.model;
 import net.minecraft.client.model.ModelBase;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelAttachment extends ModelBase
 {
 	public ModelRendererTurbo[] attachmentModel = new ModelRendererTurbo[0];
 	
+	public Vector3f muzzleFlashPoint = new Vector3f();
 	/**
 	 * For big scopes, so that the player actually looks through them properly
 	 */
