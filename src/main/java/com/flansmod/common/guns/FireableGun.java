@@ -13,6 +13,8 @@ public class FireableGun
 	 */
 	private Float spread;
 	
+	private EnumSpreadPattern spreadPattern;
+	
 	/**
 	 * Speed a bullet fired from this gun will travel at. (0 means instant/raytraced)
 	 */
@@ -32,15 +34,16 @@ public class FireableGun
 	 * the damage against vehicles
 	 */
 	private float vehicledamage;
+	
 	/**
 	 * @param type        InfoType of the gun
 	 * @param damage      Damage of the gun
 	 * @param spread      Bullet spread of the gun
 	 * @param bulletSpeed Bullet speed of the gun (0 means instant/raytraced)
 	 */
-	public FireableGun(InfoType type, float damage, float spread, float bulletSpeed)
+	public FireableGun(InfoType type, float damage, float spread, float bulletSpeed, EnumSpreadPattern spreadPattern)
 	{
-		this(type, damage, damage, spread, bulletSpeed);
+		this(type, damage, damage, spread, bulletSpeed, spreadPattern);
 	}
 	
 	/**
@@ -50,13 +53,14 @@ public class FireableGun
 	 * @param spread        Bullet spread of the gun
 	 * @param bulletSpeed   Bullet speed of the gun (0 means instant/raytraced)
 	 */
-	public FireableGun(InfoType type, float damage, float vehicledamage, float spread, float bulletSpeed)
+	public FireableGun(InfoType type, float damage, float vehicledamage, float spread, float bulletSpeed, EnumSpreadPattern spreadPattern)
 	{
 		this.type = type;
 		this.damage = damage;
 		this.spread = spread;
 		this.bulletSpeed = bulletSpeed;
 		this.vehicledamage = vehicledamage;
+		this.spreadPattern = spreadPattern;
 	}
 	
 	/**
@@ -65,6 +69,11 @@ public class FireableGun
 	public Float getGunSpread()
 	{
 		return spread;
+	}
+	
+	public EnumSpreadPattern getSpreadPattern()
+	{
+		return spreadPattern;
 	}
 	
 	/**

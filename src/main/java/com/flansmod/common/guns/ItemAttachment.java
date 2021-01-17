@@ -38,6 +38,9 @@ public class ItemAttachment extends Item implements IPaintableItem
 			Collections.addAll(lines, type.description.split("_"));
 		}
 		
+		if(type.shootDelayMultiplier != 1.0f)
+			lines.add("Rate of Fire x" + MathHelper.floor(100.0f / type.shootDelayMultiplier) + "%");
+		
 		if(type.damageMultiplier != 1.0f)
 			lines.add("Damage x" + MathHelper.floor(type.damageMultiplier * 100.0f) + "%");
 	

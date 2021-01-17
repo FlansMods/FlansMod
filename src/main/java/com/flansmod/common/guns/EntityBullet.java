@@ -449,7 +449,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		if (tag.hasKey("fireablegun"))
 		{
 			NBTTagCompound gun = tag.getCompoundTag("fireablegun");
-			fireablegun = new FireableGun(InfoType.getType(gun.getInteger("infotype")), gun.getFloat("damage"), gun.getFloat("vehicledamage"), gun.getFloat("spread"), gun.getFloat("speed"));
+			fireablegun = new FireableGun(InfoType.getType(gun.getInteger("infotype")), gun.getFloat("damage"), gun.getFloat("vehicledamage"), gun.getFloat("spread"), gun.getFloat("speed"), EnumSpreadPattern.circle);
 		}
 		
 		if (tag.hasKey("player"))

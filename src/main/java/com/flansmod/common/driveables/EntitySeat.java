@@ -688,7 +688,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 								Vector3f yOffset = driveable.axes
 										.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
 								
-								FireableGun fireableGun = new FireableGun(gun, gun.damage, gun.bulletSpread, gun.bulletSpeed);
+								FireableGun fireableGun = new FireableGun(gun, gun.damage, gun.bulletSpread, gun.bulletSpeed, gun.spreadPattern);
 								//TODO unchecked cast, grenades wont work (currently no vehicle with this feature exists)
 								FiredShot shot = new FiredShot(fireableGun, (BulletType) bullet, this, (EntityPlayerMP)getControllingPassenger());
 								ShotHandler.fireGun(world, shot, gun.numBullets*bullet.numBullets, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec);

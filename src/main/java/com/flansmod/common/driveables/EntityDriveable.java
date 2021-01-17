@@ -45,6 +45,7 @@ import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.EnumSpreadPattern;
 import com.flansmod.common.guns.FireableGun;
 import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GunType;
@@ -655,7 +656,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						gunType,
 						gunType.damage,
 						gunType.bulletSpread,
-						gunType.bulletSpeed);
+						gunType.bulletSpeed,
+						gunType.spreadPattern);
 				FiredShot shot = new FiredShot(fireableGun, bulletType, this, (EntityPlayerMP)getDriver());
 				
 				ShootBulletHandler handler = isExtraBullet ->
@@ -769,7 +771,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			bulletItem.type.damageVsLiving * damageMultiplier,
 			bulletItem.type.damageVsDriveable * damageMultiplier,
 			bulletItem.type.bulletSpread,
-			speed);
+			speed,
+			EnumSpreadPattern.circle);
 		FiredShot shot = new FiredShot(fireableGun, bulletItem.type, this, (EntityPlayerMP)getDriver());
 		
 		ShootBulletHandler handler = isExtraBullet ->

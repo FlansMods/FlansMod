@@ -102,7 +102,7 @@ public class ShotHandler
 
 	private static void createShot(World world, FiredShot shot, Float bulletspread, Vector3f rayTraceOrigin, Vector3f shootingDirection)
 	{
-		randomizeVectorDirection(world, shootingDirection, bulletspread);
+		randomizeVectorDirection(world, shootingDirection, bulletspread, shot.getFireableGun().getSpreadPattern());
 		shootingDirection.scale(500.0f);
 		
 		Float penetrationPower = shot.getBulletType().penetratingPower;
@@ -343,11 +343,95 @@ public class ShotHandler
 
 	}
 	
-	public static void randomizeVectorDirection(World world, Vector3f vector, Float spread)
+	public static void randomizeVectorDirection(World world, Vector3f vector, Float spread, EnumSpreadPattern pattern)
 	{
-		vector.x += (float)world.rand.nextGaussian() * spread;
-		vector.y += (float)world.rand.nextGaussian() * spread;
-		vector.z += (float)world.rand.nextGaussian() * spread;
+		Vector3f xAxis = Vector3f.cross(vector, new Vector3f(0f, 1f, 0f), null);
+		xAxis.normalise();
+		Vector3f yAxis = Vector3f.cross(vector, xAxis, null);
+		yAxis.normalise();
+		
+		switch(pattern)
+		{
+			case circle:
+			{
+				float theta = (float)(world.rand.nextDouble() * Math.PI * 2.0f);
+				float radius = (float)world.rand.nextDouble() * spread;
+				float xComponent = radius * (float)Math.sin(theta);
+				float yComponent = radius * (float)Math.cos(theta);
+				
+				xAxis.scale(xComponent);
+				yAxis.scale(yComponent);
+				
+				Vector3f.add(vector, xAxis, vector);
+				Vector3f.add(vector, yAxis, vector);
+				
+				break;
+			}
+			case cube:
+			{
+				vector.x += (float)world.rand.nextGaussian() * spread;
+				vector.y += (float)world.rand.nextGaussian() * spread;
+				vector.z += (float)world.rand.nextGaussian() * spread;
+				break;
+			}
+			case horizontal:
+			{
+				float xComponent = spread * (world.rand.nextFloat() * 2f - 1f);
+				
+				xAxis.scale(xComponent);
+				
+				Vector3f.add(vector, xAxis, vector);
+				
+				break;
+			}
+			case vertical:
+			{
+				float yComponent = spread * (world.rand.nextFloat() * 2f - 1f);
+				
+				yAxis.scale(yComponent);
+				
+				Vector3f.add(vector, yAxis, vector);
+				
+				break;
+			}
+			case triangle:
+			{
+				// Random square, then fold the corners
+				float xComponent = world.rand.nextFloat() * 2f - 1f;
+				float yComponent = world.rand.nextFloat() * 2f - 1f;
+				
+				if(xComponent > 0f)
+				{
+					if(yComponent > 1.0f - xComponent * 2f)
+					{
+						yComponent = -yComponent;
+						xComponent = 1f - xComponent;
+					}
+				}
+				else
+				{
+					if(yComponent > xComponent * 2f + 1f)
+					{
+						yComponent = -yComponent;
+						xComponent = -1f - xComponent;
+					}
+				}
+				
+				xComponent *= spread;
+				yComponent *= spread;
+				
+				xAxis.scale(xComponent);
+				yAxis.scale(yComponent);
+				
+				Vector3f.add(vector, xAxis, vector);
+				Vector3f.add(vector, yAxis, vector);
+				
+				break;
+			}
+			default:
+				break;
+		}
+
 	}
 	
 	public static float getBlockPenetrationDecrease(IBlockState blockstate, BlockPos pos, World world)

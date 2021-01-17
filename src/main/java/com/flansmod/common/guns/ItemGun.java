@@ -547,7 +547,7 @@ public class ItemGun extends Item implements IPaintableItem
 						if (shootableType instanceof BulletType)
 						{
 							//Fire gun
-							FireableGun fireableGun = new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed);
+							FireableGun fireableGun = new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed, type.getSpreadPattern(gunstack));
 							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, (EntityPlayerMP)player);
 							//TODO gunOrigin? & animation origin
 							ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler);

@@ -44,6 +44,9 @@ public class GunType extends PaintableType implements IScope
 	 * The amount that bullets spread out when fired from this gun
 	 */
 	public float bulletSpread;
+	
+	public EnumSpreadPattern spreadPattern = EnumSpreadPattern.cube;
+	
 	/**
 	 * Damage inflicted by this gun. Multiplied by the bullet damage.
 	 */
@@ -441,6 +444,9 @@ public class GunType extends PaintableType implements IScope
 			usableByPlayers = Read(split, "UsableByPlayers", usableByPlayers);
 			usableByMechas = Read(split, "UsableByMechas", usableByMechas);
 			
+			if(split[0].equals("SpreadPattern"))
+				spreadPattern = EnumSpreadPattern.get(split[1]);
+			
 			if(split[0].equals("Ammo"))
 			{
 				ShootableType type = ShootableType.getShootableType(split[1]);
@@ -746,6 +752,16 @@ public class GunType extends PaintableType implements IScope
 			stackSpread *= attachment.spreadMultiplier;
 		}
 		return stackSpread;
+	}
+	
+	public EnumSpreadPattern getSpreadPattern(ItemStack stack)
+	{
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			if(attachment.spreadPattern != null)
+				return attachment.spreadPattern;
+		}
+		return spreadPattern;
 	}
 	
 	/**

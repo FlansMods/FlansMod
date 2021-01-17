@@ -76,6 +76,8 @@ public class AttachmentType extends PaintableType implements IScope
 	 */
 	public EnumFireMode modeOverride = null;
 	
+	public EnumSpreadPattern spreadPattern = null;
+	
 	// Scope variables (These variables only come into play for scope
 	// attachments)
 	/**
@@ -153,6 +155,10 @@ public class AttachmentType extends PaintableType implements IScope
 				shootDelayMultiplier = Float.parseFloat(split[1]);
 			else if(split[0].equals("ReloadTimeMultiplier"))
 				reloadTimeMultiplier = Float.parseFloat(split[1]);
+			
+			if(split[0].equals("SpreadPattern"))
+				spreadPattern = EnumSpreadPattern.get(split[1]);
+			
 				// Scope Variables
 			else if(split[0].equals("ZoomLevel"))
 				zoomLevel = Float.parseFloat(split[1]);

@@ -287,7 +287,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
 			Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
 			
-			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack));
+			FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack), gunType.getSpreadPattern(stack));
 			
 			//Grenades are currently disabled for this entity
 			if (bullet instanceof BulletType)
