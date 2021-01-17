@@ -64,7 +64,7 @@ public class PlayerData
 	/**
 	 * Sound delay parameters
 	 */
-	public boolean shouldPlayCooldownSound, shouldPlayWarmupSound;
+	public boolean isSpinning;
 	/**
 	 * Melee weapon custom hit simulation
 	 */
@@ -181,8 +181,8 @@ public class PlayerData
 		if(loopedSoundDelay > 0)
 		{
 			loopedSoundDelay--;
-			if(loopedSoundDelay == 0 && !isShootingRight)
-				shouldPlayCooldownSound = true;
+			//if(loopedSoundDelay == 0 && !isShootingRight)
+				//shouldPlayCooldownSound = true;
 		}
 		
 		//Move all snapshots along one place

@@ -384,10 +384,12 @@ public class ItemGun extends Item implements IPaintableItem
 						}
 						// TODO : Re-add looping sounds
 						if(data.minigunSpeed < type.minigunStartSpeed)
-						{
-							if(type.useLoopingSounds)
+						{							
+							if(type.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingRight && !data.isSpinning)
 							{
-								data.shouldPlayWarmupSound = true;
+								data.loopedSoundDelay = type.warmupSoundLength;
+								PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.warmupSound, false);
+								data.isSpinning = true;
 							}
 							break;
 						}
@@ -402,6 +404,20 @@ public class ItemGun extends Item implements IPaintableItem
 					{
 						needsToReload = false;
 					}
+					
+					//Play looping sounds for minigun
+					if(type.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > type.minigunStartSpeed)
+					{
+						data.loopedSoundDelay = type.loopedSoundLength;
+						PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.loopedSound, false);
+						data.isSpinning = true; // isSpinning = true
+					}
+					if(type.useLoopingSounds && data.isSpinning && data.minigunSpeed < type.minigunStartSpeed)
+					{
+						PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.cooldownSound, false);
+						data.isSpinning = false;
+					}
+					
 					break;
 				}
 				default:
