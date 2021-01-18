@@ -679,6 +679,8 @@ public class EntityMecha extends EntityDriveable
 		
 		if(livingDriver == null || thePlayerIsDrivingThis)
 			legSwing = legSwing / type.legSwingLimit;
+		
+		PostUpdate();
 	}
 	
 	private void mineBlock(Entity driver, EntityPlayer playerDriver, boolean isCreative, MechaType type,

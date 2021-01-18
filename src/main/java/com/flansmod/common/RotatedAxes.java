@@ -31,6 +31,17 @@ public class RotatedAxes
 		return newAxes;
 	}
 	
+	public boolean isValid()
+	{
+		if(rotationMatrix.determinant() == 0f)
+			return false;
+		
+		if(Float.isNaN(rotationMatrix.determinant()))
+			return false;
+		
+		return true;
+	}
+	
 	public void setAngles(float yaw, float pitch, float roll)
 	{
 		rotationYaw = yaw;

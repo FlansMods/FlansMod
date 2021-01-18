@@ -1221,6 +1221,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
+	public void PostUpdate()
+	{
+		if(Double.isNaN(posX) 
+		|| Double.isNaN(posY)
+		|| Double.isNaN(posZ)
+		|| Float.isNaN(rotationYaw)
+		|| Float.isNaN(rotationPitch)
+		|| !axes.isValid())
+		{
+			FlansMod.log.error("Driveable went to NaNsville. Reverting one frame");
+			posX = prevPosX;
+			posY = prevPosY;
+			posZ = prevPosZ;
+			
+			axes = prevAxes.clone();
+		}
+	}
+	
 	public void tryRecoil()
 	{
 		int slot = -1;

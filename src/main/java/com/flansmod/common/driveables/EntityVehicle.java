@@ -600,6 +600,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				animFrame = type.animFrames;
 			}
 		}
+		
+		PostUpdate();
 	}
 
 	private boolean canThrust(DriveableData data, EntityPlayer driver) {

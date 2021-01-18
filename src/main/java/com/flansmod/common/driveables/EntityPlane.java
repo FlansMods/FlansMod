@@ -732,6 +732,8 @@ public class EntityPlane extends EntityDriveable
 				serverYaw = axes.getYaw();
 			}
 		}
+		
+		PostUpdate();
 	}
 	
 	public boolean canThrust()
