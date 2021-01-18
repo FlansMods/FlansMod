@@ -28,6 +28,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -76,6 +77,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 		super.onUpdate();
 		
 		animations.update();
+		this.fallDistance = 0f;
 		
 		int entityID = dataManager.get(LOOKING_AT_ENTITY);
 		Entity target = world.getEntityByID(entityID);
@@ -251,7 +253,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 	@Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-		if(source.isExplosion())
+		if(source.isExplosion() || source.isFireDamage())
 			return false;
 		if(source.getTrueSource() instanceof EntitySkullBoss 
 		|| source.getTrueSource() instanceof EntitySkullDrone)
@@ -289,12 +291,8 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 		tags.setInteger("LookingAt", dataManager.get(LOOKING_AT_ENTITY));
 		tags.setTag("BulletStack", bulletStack.writeToNBT(new NBTTagCompound()));
 	}
-
-	
-	
 	
 	// IInventory
-	
 	private ItemStack bulletStack = ItemStack.EMPTY;
 	
 	@Override

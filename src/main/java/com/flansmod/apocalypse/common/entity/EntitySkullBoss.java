@@ -10,9 +10,13 @@ import com.flansmod.common.network.PacketPlaySound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -138,6 +142,7 @@ public class EntitySkullBoss extends EntityLiving
 		super.onUpdate();
 		
 		timeInCurrentMode++;
+		this.fallDistance = 0f;
 		
 		EnumAction currentAction = GetCurrentAction();
 		if(currentAction != prevAction)
@@ -305,7 +310,20 @@ public class EntitySkullBoss extends EntityLiving
 		{
 			return false; 
 		}
-		amount *= 0.25f;
+		switch(world.getWorldInfo().getDifficulty())
+		{
+			case HARD:
+				amount *= 0.25f;
+				break;
+			case NORMAL:
+				amount *= 0.5f;
+				break;
+			default:
+			case EASY:
+			case PEACEFUL:
+				break;
+		}
+		
 		super.attackEntityFrom(source, amount);
 		if(!world.isRemote)
 		{
@@ -343,4 +361,17 @@ public class EntitySkullBoss extends EntityLiving
 		tags.setInteger("LookingAt", dataManager.get(LOOKING_AT_ENTITY));
 	}
 
+	@Override
+    protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier)
+    {
+		dropItem(Items.GOLDEN_APPLE, rand.nextInt(4) + 1);
+		dropItem(Items.TOTEM_OF_UNDYING, 1);
+		// Lots of gunpowder
+		dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
+		dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
+		dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
+		dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+		dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+		dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+	}
 }
