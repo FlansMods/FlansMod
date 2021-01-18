@@ -44,6 +44,7 @@ import com.flansmod.apocalypse.common.blocks.BlockSulphur;
 import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
 import com.flansmod.apocalypse.common.entity.EntityAIMecha;
+import com.flansmod.apocalypse.common.entity.EntitySkullDrone;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
 import com.flansmod.apocalypse.common.entity.EntityFlyByPlane;
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
@@ -307,6 +308,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		event.getRegistry().register(new EntityEntry(EntityNukeDrop.class, "NukeDrop").setRegistryName("NukeDrop"));
 		event.getRegistry().register(new EntityEntry(EntityFlyByPlane.class, "FlyByPlane").setRegistryName("FlyByPlane"));
 		event.getRegistry().register(new EntityEntry(EntitySkullBoss.class, "SkullBoss").setRegistryName("SkullBoss"));
+		event.getRegistry().register(new EntityEntry(EntitySkullDrone.class, "AutoDrone").setRegistryName("AutoDrone"));
 		
 		//EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Survivor"), 		EntitySurvivor.class, "Survivor", 112, FlansModApocalypse.INSTANCE, 100, 20, true, 0, 0);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Teleporter"), EntityTeleporter.class, "Teleporter", 113, FlansModApocalypse.INSTANCE, 100, 20, true);
@@ -315,6 +317,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:NukeDrop"), EntityNukeDrop.class, "NukeDrop", 116, FlansModApocalypse.INSTANCE, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FlyByPlane"), EntityFlyByPlane.class, "FlyByPlane", 117, FlansModApocalypse.INSTANCE, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:SkullBoss"), EntitySkullBoss.class, "SkullBoss", 118, FlansModApocalypse.INSTANCE, 500, 5, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:AutoDrone"), EntitySkullDrone.class, "AutoDrone", 119, FlansModApocalypse.INSTANCE, 500, 5, true);
 	}
 	
 	public static FlansModLootGenerator getLootGenerator()

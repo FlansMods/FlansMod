@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 
 /**
  * Class for creating object containing all necessary informations about a fired shot
@@ -113,6 +114,10 @@ public class FiredShot {
 	{
 		if (player.isPresent()) {
 			return new EntityDamageSourceFlan(weapon.getShortName(), player.get(), player.get(), weapon.getInfoType(), headshot);
+		}
+		else if(shooter.isPresent())
+		{
+			return new EntityDamageSource("flans.unknown", shooter.get());
 		}
 		return DamageSource.GENERIC;
 	}

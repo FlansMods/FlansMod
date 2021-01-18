@@ -25,5 +25,17 @@
       "flansmod:bulletair6",
       "flansmod:bulletair7"
     ]
+  },
+    "skullboss_laugh": {
+    "category": "player",
+    "sounds": [
+      "flansmod:skullboss_laugh"
+    ]
+  },
+   "skullboss_spawn": {
+    "category": "player",
+    "sounds": [
+      "flansmod:skullboss_spawn"
+    ]
   }
 }

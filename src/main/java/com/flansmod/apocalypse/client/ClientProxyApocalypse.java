@@ -10,11 +10,13 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -23,6 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import com.flansmod.apocalypse.client.model.RenderSkullDrone;
 import com.flansmod.apocalypse.client.model.RenderFakePlayer;
 import com.flansmod.apocalypse.client.model.RenderNukeDrop;
 import com.flansmod.apocalypse.client.model.RenderPowerCube;
@@ -34,12 +37,14 @@ import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
 import com.flansmod.apocalypse.common.entity.EntityAIMecha;
+import com.flansmod.apocalypse.common.entity.EntitySkullDrone;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.common.entity.EntitySkullBoss;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
@@ -64,7 +69,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, new RenderMecha.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, new RenderNukeDrop.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkullBoss.class, new RenderSkullBoss.Factory());
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntitySkullDrone.class, new RenderSkullDrone.Factory());
 
 	}
 	
@@ -81,6 +86,14 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	{
 		//FlansMod.getPacketHandler().registerPacket(PacketApocalypseCountdown.class);
 	}
+	
+	@SubscribeEvent
+	public void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
+	{
+		event.getRegistry().register(FlansModResourceHandler.getSoundEvent("skullboss_laugh"));
+		event.getRegistry().register(FlansModResourceHandler.getSoundEvent("skullboss_spawn"));
+	}
+	
 	
 	public static void updateApocalypseCountdownTimer(int i)
 	{

@@ -277,6 +277,10 @@ public class CommonProxyApocalypse
 				EnumSet enumset = EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class);
 				float angle = event.player.world.rand.nextFloat() * 2F * 3.14159F;
 				pos = pos.add((int)(Math.cos(angle) * FlansModApocalypse.SPAWN_RADIUS), 128 - pos.getY(), (int)(Math.sin(angle) * FlansModApocalypse.SPAWN_RADIUS));
+				if(pos.getDistance(0, pos.getY(), 0) < 200d)
+				{
+					pos.add((pos.getX() > 0 ? 100 : -100) - pos.getX(), 0, (pos.getZ() > 0 ? 100 : -100) - pos.getZ());
+				}
 				for(; event.player.world.isAirBlock(pos); pos = pos.down())
 				{
 					

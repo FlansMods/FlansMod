@@ -1,18 +1,27 @@
 package com.flansmod.apocalypse.common.entity;
 
+import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.apocalypse.common.world.buildings.WorldGenBossPillar;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.EntityDamageSourceFlan;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketPlaySound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
@@ -28,7 +37,6 @@ public class EntitySkullBoss extends EntityLiving
     public enum EnumAction
     {
     	IDLE,
-    	LOOK_AT_PLAYER,
     	LAUGH,
     	SPAWN_DRONES,
     	SHOOT_TNT,
@@ -39,9 +47,22 @@ public class EntitySkullBoss extends EntityLiving
     private static final float kLaughContributionOffset = 1.0f / ((float)kNumLaughs + 1);
     private static final float kLaughContributionLength = 2.0f * kLaughContributionOffset;
     
+    // in degrees
+    public float GetSpawnSpin(float partialTicks)
+    {
+    	if(GetCurrentAction() == EnumAction.SPAWN_DRONES)
+    	{
+    		float parametric = (float)(timeInCurrentMode + partialTicks) / (float)kLaughTicks;
+    		float smoothstep =  parametric * parametric * (3 - 2 * parametric);
+
+    		return smoothstep * 720f;    		
+    	}
+    	return 0.0f;
+    }
+    
     public float GetLaughFactor(float partialTicks)
     {
-    	if(GetCurrentAction() == EnumAction.LAUGH)
+    	if(GetCurrentAction() == EnumAction.LAUGH || GetCurrentAction() == EnumAction.SHOOT_TNT)
     	{
     		float result = 0.0f;
     		float parametric = (float)(timeInCurrentMode + partialTicks) / (float)kLaughTicks;
@@ -73,7 +94,9 @@ public class EntitySkullBoss extends EntityLiving
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1000.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1024.0D);
+        //this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10d);
+        //this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(10d);
     }
 	
     /**
@@ -137,36 +160,102 @@ public class EntitySkullBoss extends EntityLiving
 				{
 					if(timeInCurrentMode >= 20)	// After 1s in idle, choose another mode
 					{
-						switch(rand.nextInt(4))
+						switch(rand.nextInt(3))
 						{
-							//case 0: SwitchAction(EnumAction.LOOK_AT_PLAYER); break;
-							//case 1: SwitchAction(EnumAction.LAUGH); break;
-							//case 2: SwitchAction(EnumAction.SPAWN_DRONES); break;
-							//case 3: SwitchAction(EnumAction.SHOOT_TNT); break;
+							case 1: SwitchAction(EnumAction.LAUGH); break;
+							case 2: SwitchAction(EnumAction.SPAWN_DRONES); break;
+							case 0: SwitchAction(EnumAction.SHOOT_TNT); break;
 							
-							default: SwitchAction(EnumAction.LAUGH); break;
+							default: SwitchAction(EnumAction.SHOOT_TNT); break;
 						}
 					}
 					break;
 				}
-				case LOOK_AT_PLAYER:
-				{
-					break;
-				}
 				case LAUGH:	
 				{
-					if(timeInCurrentMode >= kLaughTicks)
+					if(timeInCurrentMode == 2)
 					{
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, "skullboss_laugh", false);
+						
+					}
+					
+					if(timeInCurrentMode % 5 == 0)
+					{
+						world.createExplosion(this, posX + rand.nextGaussian() * 10d, posY + rand.nextGaussian() * 10d, posZ + rand.nextGaussian() * 10d, 10f, false);
+					}
+					
+					if(timeInCurrentMode >= kLaughTicks)
+					{						
 						SwitchAction(EnumAction.IDLE);
 					}
 					break;
 				}
 				case SPAWN_DRONES:
 				{
+					if(timeInCurrentMode == 2)
+					{
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, "skullboss_spawn", false);
+						
+						EntitySkullDrone drone = new EntitySkullDrone(world);
+						drone.setPosition(posX, posY - 5f, posZ);
+						ItemStack loadedGun = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand, false);
+						drone.setHeldItem(EnumHand.MAIN_HAND, loadedGun);
+						drone.setInventorySlotContents(0, ((ItemGun)loadedGun.getItem()).getBulletItemStack(loadedGun, 0).copy());
+						
+						int lookingAtID = dataManager.get(LOOKING_AT_ENTITY);
+						if(lookingAtID != 0)
+						{
+							Entity target = world.getEntityByID(lookingAtID);
+							drone.SetTarget(target);
+						}
+						world.spawnEntity(drone);
+						
+					}
+					
+					if(timeInCurrentMode >= kLaughTicks)
+					{
+						SwitchAction(EnumAction.IDLE);
+					}
 					break;
 				}
 				case SHOOT_TNT:
 				{
+					if(timeInCurrentMode % 20 == 0)
+					{
+						int lookingAtID = dataManager.get(LOOKING_AT_ENTITY);
+						if(lookingAtID != 0)
+						{
+							Entity target = world.getEntityByID(lookingAtID);
+							if(target != null)
+							{
+								EntityTNTPrimed tnt = new EntityTNTPrimed(world);
+								Vec3d dPos = new Vec3d(
+										target.posX - posX,
+										target.posY - posY,
+										target.posX - posX);
+								
+								double distance = dPos.length();
+								dPos = dPos.normalize();
+								dPos = dPos.scale(2d);
+								
+								tnt.setNoGravity(true);
+								tnt.setPosition(posX + dPos.x, posY + dPos.y, posZ + dPos.z);
+								tnt.setVelocity(
+										(target.posX - posX) / 40d, 
+										(target.posY - posY) / 40d, 
+										(target.posZ - posZ) / 40d);
+								world.spawnEntity(tnt);
+								
+								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, "fire.ignite", true);
+
+							}
+						}
+					}
+					
+					if(timeInCurrentMode >= kLaughTicks)
+					{
+						SwitchAction(EnumAction.IDLE);
+					}
 					break;
 				}
 			}
@@ -209,6 +298,14 @@ public class EntitySkullBoss extends EntityLiving
 	@Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
+		if(source.isExplosion())
+			return false;
+		if(source.getTrueSource() instanceof EntitySkullDrone || 
+				source instanceof EntityDamageSourceFlan && ((EntityDamageSourceFlan)source).getCausedPlayer() == null)
+		{
+			return false; 
+		}
+		amount *= 0.25f;
 		super.attackEntityFrom(source, amount);
 		if(!world.isRemote)
 		{
@@ -225,6 +322,9 @@ public class EntitySkullBoss extends EntityLiving
 		super.entityInit();
 		dataManager.register(ACTION, (byte)0);
 		dataManager.register(LOOKING_AT_ENTITY, 0);
+		
+		PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, "skullboss_spawn", true);
+
 	}
 
 	@Override

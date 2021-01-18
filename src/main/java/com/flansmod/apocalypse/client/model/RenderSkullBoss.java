@@ -36,7 +36,7 @@ public class RenderSkullBoss extends Render<EntitySkullBoss>
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		
-		GlStateManager.rotate(-entity.rotationYaw, 0, 1, 0);
+		GlStateManager.rotate(-entity.rotationYaw + entity.GetSpawnSpin(partialTicks), 0, 1, 0);
 		GlStateManager.rotate(entity.rotationPitch, 0, 0, 1);
 		GlStateManager.scale(32f, 32f, 32f);
 		
