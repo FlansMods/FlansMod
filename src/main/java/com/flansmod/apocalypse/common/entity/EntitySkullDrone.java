@@ -57,7 +57,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 	public EntitySkullDrone(World worldIn) 
 	{
 		super(worldIn);
-		setSize(1F, 1F);
+		setSize(3F, 1F);
 		setNoGravity(true);
 		enablePersistence();
 		setNoAI(true);	
@@ -70,6 +70,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
     }
+
 	
 	@Override 
 	public void onUpdate()

@@ -12,7 +12,7 @@ MaxStackSize 2
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 1
 //The damage multiplier caused by the bullet on hitting an entity
-DamageVsLiving 6500
+DamageVsLiving 65
 DamageVsVehicles 6500
 //Size of explosion caused
 Explosion 1

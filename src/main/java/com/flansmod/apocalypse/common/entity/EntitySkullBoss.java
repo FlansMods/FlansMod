@@ -9,6 +9,7 @@ import com.flansmod.common.network.PacketPlaySound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityTNTPrimed;
@@ -155,9 +156,12 @@ public class EntitySkullBoss extends EntityLiving
 		if(!world.isRemote) 
 		{
 			float lerpSpeed = 0.1f;
+			float targetYHeight = 180f + (float)Math.sin(ticksExisted / 200f) * 40f;
 			this.motionX -= this.posX * lerpSpeed / 20f; 
 			this.motionZ -= this.posZ * lerpSpeed / 20f; 
-			this.motionY = (WorldGenBossPillar.kBossSpawnHeight - this.posY) * lerpSpeed / 20f; 
+			this.motionY = (targetYHeight - this.posY) * lerpSpeed / 20f; 
+			
+			this.move(MoverType.SELF, motionX, motionY, motionZ);
 									
 			switch(currentAction)
 			{
@@ -310,6 +314,10 @@ public class EntitySkullBoss extends EntityLiving
 		{
 			return false; 
 		}
+		// Hard cap because some Flan's Mod configs can get a bit out of hand
+		if(amount > 99f)
+			amount = 99f;
+		
 		switch(world.getWorldInfo().getDifficulty())
 		{
 			case HARD:
@@ -360,10 +368,12 @@ public class EntitySkullBoss extends EntityLiving
 		tags.setByte("Action", dataManager.get(ACTION));
 		tags.setInteger("LookingAt", dataManager.get(LOOKING_AT_ENTITY));
 	}
-
-	@Override
-    protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier)
-    {
+	
+	@Override 
+	public void setDead()
+	{
+		super.setDead();
+		
 		dropItem(Items.GOLDEN_APPLE, rand.nextInt(4) + 1);
 		dropItem(Items.TOTEM_OF_UNDYING, 1);
 		// Lots of gunpowder
