@@ -117,7 +117,7 @@ public class FiredShot {
 		}
 		else if(shooter.isPresent())
 		{
-			return new EntityDamageSource("flans.unknown", shooter.get());
+			return new EntityDamageSourceFlan(weapon.getShortName(), null, null, weapon.getInfoType(), headshot);
 		}
 		return DamageSource.GENERIC;
 	}

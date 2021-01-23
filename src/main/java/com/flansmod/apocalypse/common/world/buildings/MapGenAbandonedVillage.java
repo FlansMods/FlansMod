@@ -86,8 +86,8 @@ public class MapGenAbandonedVillage extends MapGenStructure
 		
 		public Start(World world, Random rand, int x, int z, int size)
 		{
-			List<StructureVillagePieces.PieceWeight> list = StructureVillagePieces.getStructureVillageWeightedPieceList(rand, size);
-			StructureVillagePieces.Start structurevillagepieces$start = new StructureVillagePieces.Start(world.getBiomeProvider(), 0, rand, (x << 4) + 2, (z << 4) + 2, list, size);
+			List<StructureAbandonedVillagePieces.PieceWeight> list = StructureAbandonedVillagePieces.getStructureVillageWeightedPieceList(rand, size);
+			StructureAbandonedVillagePieces.Start structurevillagepieces$start = new StructureAbandonedVillagePieces.Start(world.getBiomeProvider(), 0, rand, (x << 4) + 2, (z << 4) + 2, list, size);
 			this.components.add(structurevillagepieces$start);
 			structurevillagepieces$start.buildComponent(structurevillagepieces$start, this.components, rand);
 			List<StructureComponent> list1 = structurevillagepieces$start.pendingRoads;
@@ -114,7 +114,7 @@ public class MapGenAbandonedVillage extends MapGenStructure
 
 			for(StructureComponent structurecomponent1 : this.components)
 			{
-				if(!(structurecomponent1 instanceof StructureVillagePieces.Road))
+				if(!(structurecomponent1 instanceof StructureAbandonedVillagePieces.Road))
 				{
 					++k;
 				}

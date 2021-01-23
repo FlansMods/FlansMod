@@ -222,7 +222,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 		this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
 		this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 		
-		//this.ravineGenerator.generate(this.world, x, z, chunkprimer);
+		this.ravineGenerator.generate(this.world, x, z, chunkprimer);
 		this.mineshaftGenerator.generate(this.world, x, z, chunkprimer);
 		this.villageGenerator.generate(this.world, x, z, chunkprimer);
 		
@@ -458,12 +458,6 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 				runwayGenerator.generate(world, rand, new BlockPos(x * 16 + 8, 0, z * 16 + 8));
 		}
 		
-		
-		
-		/*
-			
-		
-		
 		xOrigin = ModuloHelper.divide(x, 3);
 		int zOrigin = ModuloHelper.divide(z, 3);
 		
@@ -494,8 +488,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
 				researchLabGenerator.generate(world, rand, new BlockPos(x * 16, 0, z * 16));
 			}
 		}
-		
-		*/
+
 		BlockFalling.fallInstantly = false;
 	}
 	

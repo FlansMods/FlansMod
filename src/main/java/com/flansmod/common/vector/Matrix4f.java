@@ -578,6 +578,8 @@ public class Matrix4f extends Matrix implements Serializable
 	 */
 	public static Matrix4f rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f dest)
 	{
+		if(axis.lengthSquared() >= 1.1f)
+			return src;
 		if(dest == null)
 			dest = new Matrix4f();
 		float c = (float)Math.cos(angle);
@@ -622,6 +624,10 @@ public class Matrix4f extends Matrix implements Serializable
 		dest.m11 = t11;
 		dest.m12 = t12;
 		dest.m13 = t13;
+		
+		if(Math.abs(dest.m00) > 1.0e10f)
+			return dest;
+		
 		return dest;
 	}
 	

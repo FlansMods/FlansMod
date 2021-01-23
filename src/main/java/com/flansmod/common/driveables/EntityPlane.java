@@ -646,6 +646,8 @@ public class EntityPlane extends EntityDriveable
 					float newLength = currentWheelLength + dLength * type.wheelSpringStrength;
 					Vector3f rotateAround = Vector3f.cross(targetWheelPos, currentWheelPos, null);
 					
+					rotateAround.normalise();
+					
 					Matrix4f mat = new Matrix4f();
 					mat.m00 = currentWheelPos.x;
 					mat.m10 = currentWheelPos.y;

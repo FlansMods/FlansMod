@@ -43,9 +43,11 @@ public class EntitySurvivor extends EntityFlansModShooter
 				ammoStacks[i] = new ItemStack(type.item);
 			}
 		}
-		targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityFlansModShooter.class, true));
+		//targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityFlansModShooter.class, true));
 		//tasks.addTask(5, new EntityAIGoSomewhere(this, 1.0D, world.rand.nextDouble() * 10D, world.rand.nextDouble() * 10D));
 
+		setCombatTask();
+		
 		for(int i = 0; i < inventoryArmorDropChances.length; ++i)
 		{
 			inventoryArmorDropChances[i] = 0.5F;

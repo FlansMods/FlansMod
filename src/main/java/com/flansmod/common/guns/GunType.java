@@ -309,6 +309,17 @@ public class GunType extends PaintableType implements IScope
 		super.postRead(file);
 		gunList.add(this);
 		guns.put(shortName.hashCode(), this);
+		
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
+		{
+			checkMF();
+		}
+
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void checkMF()
+	{
 		if(muzzleFlashModel == null)
 		{
 			muzzleFlashModel = new ModelDefaultMuzzleFlash();

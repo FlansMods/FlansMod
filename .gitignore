@@ -4,6 +4,7 @@ build/
 bin/
 out/
 run/*
+src/main/java/com/flansmod/leaderboards/*
 
 # IDEs
 .classpath

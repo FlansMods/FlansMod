@@ -304,6 +304,11 @@ public class EntitySkullBoss extends EntityLiving
 		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 	}
 	
+	public void SetTarget(Entity target)
+	{
+		dataManager.set(LOOKING_AT_ENTITY, target == null ? 0 : target.getEntityId());
+	}
+	
 	@Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {

@@ -10,3 +10,5 @@ tile.blockpowercube.name=Power Cube
 tile.blocklabstone.name=Laboratory Stone
 entity.SkullBoss.name=Nukranium
 entity.AutoDrone.name=Bone Drone
+death.attack.flans.unknown=%1$s was shot to death
+death.attack.sulphuricAcid=%1$s got fizzled

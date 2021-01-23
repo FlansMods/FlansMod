@@ -222,7 +222,7 @@ public class StructureAbandonedVillagePieces
 				if(p_176066_0_.getBiomeProvider().areBiomesViable(i1, j1, i2 / 2 + 4, MapGenAbandonedVillage.villageSpawnBiomes))
 				{
 					p_176066_1_.add(village);
-					p_176066_0_.field_74932_i.add(village);
+					p_176066_0_.pendingHouses.add(village);
 					return village;
 				}
 			}
@@ -257,7 +257,7 @@ public class StructureAbandonedVillagePieces
 				if(p_176069_0_.getBiomeProvider().areBiomesViable(i1, j1, i2 / 2 + 4, MapGenAbandonedVillage.villageSpawnBiomes))
 				{
 					p_176069_1_.add(path);
-					p_176069_0_.field_74930_j.add(path);
+					p_176069_0_.pendingRoads.add(path);
 					return path;
 				}
 			}
@@ -1548,13 +1548,15 @@ public class StructureAbandonedVillagePieces
 		 */
 		public int terrainType;
 		public StructureAbandonedVillagePieces.PieceWeight structVillagePieceWeight;
+		
 		/**
 		 * Contains List of all spawnable Structure Piece Weights. If no more Pieces of a type can be spawned, they
 		 * are removed from this list
 		 */
 		public List structureVillageWeightedPieceList;
-		public List field_74932_i = Lists.newArrayList();
-		public List field_74930_j = Lists.newArrayList();
+		public List<StructureComponent> pendingHouses = Lists.<StructureComponent>newArrayList();
+        public List<StructureComponent> pendingRoads = Lists.<StructureComponent>newArrayList();
+        
 		private static final String __OBFID = "CL_00000527";
 		public Biome biome;
 		

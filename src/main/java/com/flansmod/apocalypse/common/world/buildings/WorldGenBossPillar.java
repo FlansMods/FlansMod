@@ -48,7 +48,7 @@ public class WorldGenBossPillar extends WorldGenerator
 						{
 							if((Math.abs(p.getX()) == kPillarInnerEdge + 1 || Math.abs(p.getZ()) == kPillarInnerEdge + 1) && rand.nextInt(500) == 0)
 							{
-								world.setBlockState(downIterate, Blocks.LAVA.getDefaultState());
+								world.setBlockState(downIterate, Blocks.MAGMA.getDefaultState());
 							}
 							else
 							{

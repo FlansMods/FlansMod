@@ -639,19 +639,21 @@ public class ClientRenderHooks
 	
 	public void modifyHUD(RenderGameOverlayEvent event)
 	{
-		// Remove crosshairs if looking down the sights of a gun
-		if(event.getType() == ElementType.CROSSHAIRS
-				&& FlansModClient.currentScope != null)
-		{
-			event.setCanceled(true);
-			return;
-		}
-		
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		
 		Tessellator tessellator = Tessellator.getInstance();
+		
+		// Remove crosshairs if looking down the sights of a gun
+		if(event.getType() == ElementType.CROSSHAIRS
+				&& FlansModClient.currentScope != null)
+		{
+			renderHitMarker(tessellator, i, j);
+			event.setCanceled(true);
+			return;
+		}
+		
 		
 		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
 		{

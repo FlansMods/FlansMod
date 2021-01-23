@@ -24,6 +24,12 @@ public class CommandTeams extends CommandBase
 	}
 	
 	@Override
+    public int getRequiredPermissionLevel()
+    {
+        return 4;
+    }
+	
+	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] split) throws CommandException
 	{
 		if(teamsManager == null)

@@ -151,6 +151,12 @@ task apoc(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task leaderboards(type: Jar) {
+    from(zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/leaderboards/' }
+    baseName = 'Leaderboards'
+    appendix = 'Content Pack'
+}
+
 task contentPacks() {
     dependsOn mechaParts
     dependsOn modernWeapons
@@ -162,6 +168,7 @@ task contentPacks() {
     dependsOn yeOlde
     dependsOn zombie
     dependsOn apoc
+	dependsOn leaderboards
 }
 
 task clearOutput(type: Delete) {
@@ -182,6 +189,7 @@ task outputJar(type: Jar) {
         exclude '**/simple/'
         exclude '**/mechaparts/'
 		exclude '**/steampunk/'
+		exclude '**/leaderboards/'
     }
 }
 

@@ -32,9 +32,12 @@ public class PlayerDeathEventListener
 			EntityPlayer died = (EntityPlayer) event.getEntity();
 			
 			Team killedTeam = PlayerHandler.getPlayerData(died).team;
-			Team killerTeam = PlayerHandler.getPlayerData(source.getCausedPlayer()).team;
-			
-			FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(source.isHeadshot(), source.getWeapon(), (killedTeam == null ? "f" : killedTeam.textColour) + died.getName(), (killerTeam == null ? "f" : killerTeam.textColour) + source.getCausedPlayer().getName()), died.dimension);
+			if(source.getCausedPlayer() != null)
+			{
+				Team killerTeam = PlayerHandler.getPlayerData(source.getCausedPlayer()).team;
+				
+				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(source.isHeadshot(), source.getWeapon(), (killedTeam == null ? "f" : killedTeam.textColour) + died.getName(), (killerTeam == null ? "f" : killerTeam.textColour) + source.getCausedPlayer().getName()), died.dimension);
+			}
 		}
 	}
 }

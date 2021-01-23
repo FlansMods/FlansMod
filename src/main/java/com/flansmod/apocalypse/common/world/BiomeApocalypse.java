@@ -55,7 +55,7 @@ public class BiomeApocalypse extends Biome
 		topBlock = Blocks.SAND.getStateFromMeta(1);
 		fillerBlock = Blocks.SAND.getStateFromMeta(1);
 		this.decorator.treesPerChunk = -999;
-		this.decorator.deadBushPerChunk = 0;
+		this.decorator.deadBushPerChunk = 1;
 		this.decorator.reedsPerChunk = 0;
 		this.decorator.cactiPerChunk = 0;
 		

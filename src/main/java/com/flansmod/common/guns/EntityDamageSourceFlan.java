@@ -46,7 +46,11 @@ public class EntityDamageSourceFlan extends EntityDamageSourceIndirect{
 	{
 		if(!(living instanceof EntityPlayer) || shooter == null || PlayerHandler.getPlayerData(shooter) == null)
 		{
-			return super.getDeathMessage(living);
+			if(shooter == null)
+			{
+				return new TextComponentString(living.getName() + " was shot");
+			}
+			else return new TextComponentString(living.getName() + " was shot by " + shooter.getName());
 		}
 
 		return new TextComponentString("#flansmod");

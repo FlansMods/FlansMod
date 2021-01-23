@@ -5,17 +5,27 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRangedBow;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIFleeSun;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIRestrictSun;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -33,9 +43,30 @@ import com.flansmod.common.guns.ShotHandler;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
+public class EntityFlansModShooter extends AbstractSkeleton
 {
-	private EntityAIAttackRangedBow aiArrowAttack = new EntityAIAttackRangedBow(this, 1.0D, 20, 70.0F);
+	
+	public class EntityAIAttackRangedGun extends EntityAIAttackRangedBow<EntityFlansModShooter>
+	{
+		private EntityFlansModShooter entity;
+		
+		public EntityAIAttackRangedGun(EntityFlansModShooter mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
+			super(mob, moveSpeedAmpIn, attackCooldownIn, maxAttackDistanceIn);
+			entity = mob;
+		}
+		
+		@Override
+	    protected boolean isBowInMainhand()
+	    {
+	        return !entity.getHeldItemMainhand().isEmpty() 
+	        	&& entity.getHeldItemMainhand().getItem() instanceof ItemGun;
+	    }
+
+	}
+	
+	//private EntityAIAttackRangedBow aiArrowAttack = new EntityAIAttackRangedBow(this, 1.0D, 20, 70.0F);
+	private EntityAIAttackRangedGun shooterShoot;
+    private EntityAIAttackMelee shooterMelee;
 	public ItemStack[] ammoStacks;
 	public float shootDelay = 0;
 	public float minigunSpeed = 0.0F;
@@ -48,23 +79,39 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	{
 		super(world);
 		ammoStacks = new ItemStack[0];
-		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(4, new EntityAIWander(this, 1.0D));
-		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(6, new EntityAILookIdle(this));
-		targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-		targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+		//tasks.addTask(1, new EntityAISwimming(this));
+		//tasks.addTask(4, new EntityAIWander(this, 1.0D));
+		//tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		//tasks.addTask(6, new EntityAILookIdle(this));
+		//targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+		//targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+		//targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
 
 		if(world != null && !world.isRemote)
 		{
-			tasks.addTask(4, this.aiArrowAttack);
+		//	tasks.addTask(4, this.aiArrowAttack);
 		}
 		else
 		{
 			setRenderDistanceWeight(200D);
 		}
 	}
+	
+	/*
+    protected void initEntityAI()
+    {
+        this.tasks.addTask(1, new EntityAISwimming(this));
+        this.tasks.addTask(2, new EntityAIRestrictSun(this));
+        this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
+        this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityWolf.class, 6.0F, 1.0D, 1.2D));
+        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(6, new EntityAILookIdle(this));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+    }
+	*/
 	
 	@Override
 	public void onUpdate()
@@ -87,7 +134,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	{
 		data = super.onInitialSpawn(difficulty, data);
 
-		this.tasks.addTask(4, this.aiArrowAttack);
+		//this.tasks.addTask(4, this.aiArrowAttack);
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 
@@ -95,6 +142,40 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 
 		return data;
 	}
+
+	@Override
+    public void setCombatTask()
+    {
+		if(shooterShoot == null || shooterMelee == null)
+		{
+			shooterShoot = new EntityAIAttackRangedGun(this, 1.0D, 20, 15.0F);
+			shooterMelee = new EntityAIAttackMelee(this, 1.2D, false);
+		}
+		
+        if (this.world != null && !this.world.isRemote)
+        {
+            this.tasks.removeTask(this.shooterMelee);
+            this.tasks.removeTask(this.shooterShoot);
+            ItemStack itemstack = this.getHeldItemMainhand();
+
+            if (itemstack.getItem() instanceof ItemGun)
+            {
+                int i = 10;
+
+                if (this.world.getDifficulty() != EnumDifficulty.HARD)
+                {
+                    i = 20;
+                }
+
+                this.shooterShoot.setAttackCooldown(i);
+                this.tasks.addTask(4, this.shooterShoot);
+            }
+            else
+            {
+                this.tasks.addTask(4, this.shooterMelee);
+            }
+        }
+    }
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase entity, float range)
@@ -327,6 +408,11 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	@Override
 	public void setSwingingArms(boolean swingingArms)
 	{
-		
+	}
+	
+	@Override
+	protected SoundEvent getStepSound() 
+	{
+		return SoundEvents.ENTITY_ZOMBIE_VILLAGER_STEP;
 	}
 }

@@ -9,6 +9,7 @@ import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.EnumSpreadPattern;
 import com.flansmod.common.guns.FireableGun;
 import com.flansmod.common.guns.FiredShot;
 import com.flansmod.common.guns.GrenadeType;
@@ -181,7 +182,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 					if(gunType.reloadSound != null)
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, gunType.reloadSound, gunType.distortSound);
 					
-					shootDelay = gunType.reloadTime;
+					shootDelay = gunType.reloadTime * 3f;
 				}
 				//A bullet stack was found, so try shooting with it
 				else if(ammoStackInGun.getItem() instanceof ItemBullet || ammoStackInGun.getItem() instanceof ItemGrenade)
@@ -216,7 +217,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 			ShootableType shootableType = ((ItemShootable)bulletStack.getItem()).type;
 			if (shootableType instanceof BulletType)
 			{
-				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack), gunType.getBulletSpeed(stack), gunType.getSpreadPattern(stack));
+				FireableGun fireableGun = new FireableGun(gunType, gunType.getDamage(stack), gunType.getSpread(stack) * 5f + 10f, gunType.getBulletSpeed(stack), EnumSpreadPattern.circle);
 				FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, this, null);
 				ShotHandler.fireGun(world, shot, gunType.numBullets*bulletType.numBullets, bulletOrigin, aimVector);
 			}

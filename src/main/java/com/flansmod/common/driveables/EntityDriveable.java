@@ -1235,7 +1235,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			posY = prevPosY;
 			posZ = prevPosZ;
 			
-			axes = prevAxes.clone();
+			// Just reset the axes
+			axes = new RotatedAxes();
+			prevAxes = new RotatedAxes();
 		}
 	}
 	

@@ -2,6 +2,7 @@ package com.flansmod.apocalypse.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -82,13 +83,13 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	 * The time it takes between an AI chip being activated and the apocalypse happening (in ticks)
 	 */
 	public static int apocalypseCountdownLength = 469;
-	public static int SURVIVOR_RARITY = 450;
-	public static int WANDERING_SURVIVOR_RARITY = 2500;
+	public static int SURVIVOR_RARITY = 250;
+	public static int WANDERING_SURVIVOR_RARITY = 500;
 	public static int SKELETON_RARITY = 50;
 	public static int DEAD_TREE_RARITY = 100;
 	public static int VEHICLE_RARITY = 2000;
 	public static int AIRPORT_RARITY = 125;
-	public static int DYE_FACTORY_RARITY = 800;
+	public static int DYE_FACTORY_RARITY = 400;
 	public static int LAB_RARITY = 100;
 	
 	// TODO: Configify
@@ -385,7 +386,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	private static boolean sBossFightInProgress = false;
 	private static EntitySkullBoss sTheBoss = null;
 	
-	public void TriggerBossFight(World world) 
+	public void TriggerBossFight(World world, EntityLivingBase placer) 
 	{
 		sElapsedTicks = 0;
 		
@@ -395,6 +396,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		
 		sTheBoss = new EntitySkullBoss(world);
 		sTheBoss.setPosition(0d, WorldGenBossPillar.kBossSpawnHeight, 0d);
+		sTheBoss.SetTarget(placer);
 		world.spawnEntity(sTheBoss);
 		
 	}
