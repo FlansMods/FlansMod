@@ -8,7 +8,7 @@ Silencer false
 //Flashlight variables
 Flashlight true
 FlashlightRange 10
-FlashlightStrength 12
+FlashlightStrength 16
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
 DamageMultiplier 1.0
@@ -23,11 +23,12 @@ ZoomLevel 1.0
 FOVZoomLevel 1.0
 ZoomOverlay None
 //Model
-Model mw.PistolFlashlight
-Texture USP
+Model mw.Flashlight
+Texture Flashlight
 //Recipe
 RecipeOutput 1
 Recipe F fiberglass G yellowDust R redstone
-FF 
-GR 
-FF 
+FFF
+GRR
+FFF
+Description Under Barrel Attatchment: Flashlight for smaller guns. 

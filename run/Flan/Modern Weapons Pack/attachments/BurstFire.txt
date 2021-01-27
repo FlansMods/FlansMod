@@ -12,8 +12,8 @@ FlashlightStrength 12
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
 DamageMultiplier 1.0
-SpreadMultiplier 1.0
-RecoilMultiplier 1.0
+SpreadMultiplier 1.2
+RecoilMultiplier 1.2
 BulletSpeedMultiplier 1.0
 ReloadTimeMultiplier 1.0
 ModeOverride Burst
@@ -28,7 +28,8 @@ ZoomOverlay None
 //Texture Flashlight
 //Recipe
 RecipeOutput 1
-Recipe I ingotIron L lever C comparator
+Recipe I ingotIron L lever
 III
-ICC
- L 
+III
+LL
+Description Internal Attatchment: Adds a triple round burst to applicable weapons.

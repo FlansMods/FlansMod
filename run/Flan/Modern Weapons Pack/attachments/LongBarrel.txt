@@ -7,8 +7,8 @@ AttachmentType barrel
 Silencer false
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
-DamageMultiplier 1.2
-SpreadMultiplier 0.1
+DamageMultiplier 1.0
+SpreadMultiplier 0.2
 RecoilMultiplier 1.0
 BulletSpeedMultiplier 1.0
 ReloadTimeMultiplier 1.0
@@ -22,7 +22,8 @@ ZoomOverlay None
 Model mw.LongBarrel
 Texture LongBarrel
 RecipeOutput 1
-Recipe I ingotIron F fiberglass
-   
-III
+Recipe R ingotIron F fiberglass
 FFF
+RRR
+FFF
+Description Barrel Attatchment: Barrel extentsion.

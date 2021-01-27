@@ -1,0 +1,60 @@
+Name GAU19
+ShortName gau19
+//The ammo this gun uses (shortName)
+Ammo gau19Ammo
+Icon GAU19
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 60
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//The amount of knockback dealt to the player when using this. Negated by sneaking
+Knockback 0.5
+//Damage in half hearts
+Damage 8
+//The higher this value, the more the bullets spread
+Accuracy 4
+//Time in ticks between rounds
+ShootDelay 0.2
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 1
+//Spin sound plays the whole time the player holds the shoot button, on loop. Warmup plays first, and cooldown plays when they stop firing
+WarmupSound MinigunWarmup
+SpinSound MinigunSpin
+CooldownSound MinigunCooldown
+WarmupSoundLength 11
+SpinSoundLength 9
+ShootSound MinigunShoot
+ReloadSound BrowningReload
+Mode Minigun
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Model settings
+Model mw.GAU19
+Texture GAU19
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowBarrelAttachments false
+AllowScopeAttachments false
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 0
+Description Ammo Type : Minigun
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.15
+Paintjob gau19_stoic_blue gau19_stoic_blue blue 5
+Paintjob gau19_stoic_green gau19_stoic_green green 5
+Paintjob gau19_stoic_red gau19_stoic_red red 5
+Paintjob gau19_stoic_orange gau19_stoic_orange orange 5

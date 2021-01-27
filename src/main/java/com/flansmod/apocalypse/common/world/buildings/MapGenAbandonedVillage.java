@@ -13,7 +13,6 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 

@@ -1,0 +1,57 @@
+Name Honey Badger
+ShortName honeybadger
+//The ammo this gun uses (shortName)
+Ammo mp7Ammo
+Ammo mp5Ammo
+Ammo skorpionAmmo
+Ammo uziAmmo
+Ammo mp7Ammo
+Ammo honeybadgerAmmo
+Icon HoneyBadger
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 60
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 2
+//Damage in half hearts
+Damage 7
+//The higher this value, the more the bullets spread
+Accuracy 6
+//Time in ticks between rounds
+ShootDelay 1.4
+ShootSound HoneyBadgerShoot
+ReloadSound MWMP44Reload
+Mode FullAuto
+OneHanded true
+//Bullet speed, default 3.0
+BulletSpeed 8.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.HoneyBadger
+Texture HoneyBadger
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description AmmoType : SMG_Dual Wieldable
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob honeybadger_stoic_blue honeybadger_stoic_blue blue 3
+Paintjob honeybadger_stoic_green honeybadger_stoic_green green 3
+Paintjob honeybadger_stoic_red honeybadger_stoic_red red 3
+Paintjob honeybadger_stoic_orange honeybadger_stoic_orange orange 3

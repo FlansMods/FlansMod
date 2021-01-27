@@ -1,0 +1,46 @@
+Name B4 Cross Bow
+ShortName b4crossbow
+//The ammo this gun uses (shortName)
+Ammo b4crossbowAmmo
+Icon B4CrossBow
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 80
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//Damage in half hearts
+Damage 20
+//The higher this value, the more the bullets spread
+Accuracy 1
+//Time in ticks between rounds
+ShootDelay 6
+ShootSound B4CrossBowShoot
+ReloadSound B4CrossBowReload
+Mode Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 18.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.B4CrossBow
+Texture B4CrossBow
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description Special Weapon : Heavy Duty 300LB draw-weight cross bow.
+Paintjob b4crossbow_stoic_blue b4crossbow_stoic_blue blue 3
+Paintjob b4crossbow_stoic_green b4crossbow_stoic_green green 3
+Paintjob b4crossbow_stoic_red b4crossbow_stoic_red red 3
+Paintjob b4crossbow_stoic_orange b4crossbow_stoic_orange orange 3

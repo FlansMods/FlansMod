@@ -1,0 +1,55 @@
+Name EMP4
+ShortName emp4
+//The ammo this gun uses (shortName)
+Ammo emp4Ammo
+Icon EMP4
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 80
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//Damage in half hearts
+Damage 50
+//The higher this value, the more the bullets spread
+Accuracy 1
+//Time in ticks between rounds
+ShootDelay 20
+minigunStartSpeed 15
+//Spin sound plays the whole time the player holds the shoot button, on loop. Warmup plays first, and cooldown plays when they stop firing
+WarmupSound EMP4Warmup
+SpinSound EMP4Spin
+CooldownSound EMP4Cooldown
+WarmupSoundLength 10
+SpinSoundLength 10
+ShootSound EMP4Shoot
+ReloadSound BrowningReload
+Mode Minigun
+//Bullet speed, default 3.0
+BulletSpeed 18.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope mwemp4
+ZoomLevel 8.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.EMP4
+Texture EMP4
+ModelScale 0.8
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+//AllowAttachments
+AllowBarrelAttachments false
+AllowScopeAttachments false
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 0
+MoveSpeedModifier 0.4
+Description Special Weapon : Experimental portable variant of the KCA SLUGGER
+Paintjob emp4_stoic_blue emp4_stoic_blue blue 3
+Paintjob emp4_stoic_green emp4_stoic_green green 3
+Paintjob emp4_stoic_red emp4_stoic_red red 3
+Paintjob emp4_stoic_orange emp4_stoic_orange orange 3

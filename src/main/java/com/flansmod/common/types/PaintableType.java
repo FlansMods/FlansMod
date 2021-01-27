@@ -97,9 +97,11 @@ public abstract class PaintableType extends InfoType
 				}
 				if(split[1].contains("_"))
 				{
-					String[] splat = split[1].split("_");
-					if(splat[0].equals(iconPath))
-						split[1] = splat[1];
+					int indexOf_ = split[1].indexOf('_');
+					if(indexOf_ != -1 && split[1].toLowerCase().startsWith(iconPath.toLowerCase()))
+					{
+						split[1] = split[1].substring(indexOf_ + 1);
+					}
 				}
 				paintjobs.add(new Paintjob(this, nextPaintjobID++, split[1], split[2], dyeStacks));
 			}

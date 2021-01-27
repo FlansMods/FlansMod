@@ -1,0 +1,51 @@
+Name Triple Take
+ShortName tripletake
+//The ammo this gun uses (shortName)
+Ammo tripletakeAmmo
+Icon TripleTake
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 70
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 13
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 4
+//Damage in half hearts
+Damage 5
+//The higher this value, the more the bullets spread
+Accuracy 3
+SpreadPattern horizontal
+//Time in ticks between rounds
+ShootDelay 14
+ShootSound tripletakeshoot
+ReloadSound tripletakereload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 8
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model Settings
+Model mw.TripleTake
+Texture TripleTake
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowScopeAttachments true
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description Rifle :
+
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob tripletake_stoic_blue tripletake_stoic_blue blue 3
+Paintjob tripletake_stoic_green tripletake_stoic_green green 3
+Paintjob tripletake_stoic_red tripletake_stoic_red red 3
+Paintjob tripletake_stoic_orange tripletake_stoic_orange orange 3

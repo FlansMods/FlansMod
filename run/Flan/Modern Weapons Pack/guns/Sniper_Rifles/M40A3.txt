@@ -1,0 +1,56 @@
+Name M40A3
+ShortName m40a3
+//The ammo this gun uses (shortName)
+Ammo sniperAmmo
+Ammo hesniperAmmo
+Ammo 3006Bullet
+Ammo shulkersniperammo
+Icon M40A3
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 120
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 26
+//Damage in half hearts
+Damage 32
+//The higher this value, the more the bullets spread
+Accuracy 1
+//For guns in which the magazine is integrated
+LoadIntoGun 5
+//Time in ticks between rounds
+ShootDelay 24.0
+ShootSound R700Shoot
+ReloadSound MWSpringfieldReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default Scope Settings
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model Settings
+Model mw.M40A3
+Texture M40A3
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 0
+Description Ammo Type : Sniper
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob m40a3_stoic_blue m40a3_stoic_blue blue 3
+Paintjob m40a3_stoic_green m40a3_stoic_green green 3
+Paintjob m40a3_stoic_red m40a3_stoic_red red 3
+Paintjob m40a3_stoic_orange m40a3_stoic_orange orange 3

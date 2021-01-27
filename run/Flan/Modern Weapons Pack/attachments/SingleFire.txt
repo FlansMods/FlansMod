@@ -31,4 +31,5 @@ RecipeOutput 1
 Recipe I ingotIron L lever
 III
 III
- L 
+L
+Description Internal Attatchment: Adds a single shot function to applicable weapons.

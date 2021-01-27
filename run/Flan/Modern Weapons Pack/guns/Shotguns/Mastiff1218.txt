@@ -1,0 +1,54 @@
+Name Mastiff1218
+ShortName mastiff1218
+//The ammo this gun uses (shortName)
+Ammo mastiff1218Ammo
+LoadIntoGun 1
+Icon Mastiff1218
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 50
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 12
+//Damage in half hearts
+Damage 2.2
+//The higher this value, the more the bullets spread
+Accuracy 26
+SpreadPattern horizontal
+//Time in ticks between rounds
+ShootDelay 10.0
+ShootSound MastiffShoot
+ReloadSound MWMP44Reload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 14
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.Mastiff1218
+Texture Mastiff1218
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWLongBarrel flanMWRedDot flanMWACOG flanMWHCOG flanMWSingleFire flanMWBurstFire flanMWAutoFire flanMWForegrip flanMWUnderBarrelLaser flanMWprecisionchoke flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight 
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob mastiff1218_stoic_blue mastiff1218_stoic_blue blue 3
+Paintjob mastiff1218_stoic_green mastiff1218_stoic_green green 3
+Paintjob mastiff1218_stoic_red mastiff1218_stoic_red red 3
+Paintjob mastiff1218_stoic_orange mastiff1218_stoic_orange orange 3

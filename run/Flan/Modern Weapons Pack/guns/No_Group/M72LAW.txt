@@ -1,0 +1,35 @@
+Name M72 LAW
+ShortName m72law
+//The ammo this gun uses (shortName)
+Ammo m72lawAmmo
+Icon M72LAW
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 75
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 25
+//Damage in half hearts
+Damage 2
+//The higher this value, the more the bullets spread
+Accuracy 2
+//Time in ticks between rounds
+ShootDelay 1.0
+ShootSound AT4Shoot
+ReloadSound MWbazookaReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 3.0
+Scope None
+Deployable False
+DeployedModel None
+Model mw.M72LAW
+Texture M72LAW
+ModelScale 0.18
+//Modifiers
+MoveSpeedModifier 0.8
+Description Rocket Launcher : Anti-Armor weapon for heavy landcraft.
+Paintjob m72law_stoic_blue m72law_stoic_blue blue 4
+Paintjob m72law_stoic_green m72law_stoic_green green 4
+Paintjob m72law_stoic_red m72law_stoic_red red 4
+Paintjob m72law_stoic_orange m72law_stoic_orange orange 4

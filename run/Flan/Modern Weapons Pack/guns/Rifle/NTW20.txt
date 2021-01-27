@@ -1,0 +1,52 @@
+Name NTW20
+ShortName ntw20
+//The ammo this gun uses (shortName)
+Ammo ntw20Ammo
+Icon NTW20
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 65
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 32
+//Damage in half hearts
+Damage 60
+//The higher this value, the more the bullets spread
+Accuracy 2
+//Time in ticks between rounds
+ShootDelay 40.0
+ShootSound kraberShoot
+ReloadSound kraberReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 22.0
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model Settings
+Model mw.NTW20
+Texture NTW20
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWForegrip flanMW4xScope flanMW2xScope flanMW8xScope flanMWLDCIGScope flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight 
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 0
+//Description HPR :
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.15
+Paintjob ntw20_stoic_blue ntw20_stoic_blue blue 3
+Paintjob ntw20_stoic_green ntw20_stoic_green green 3
+Paintjob ntw20_stoic_red ntw20_stoic_red red 3
+Paintjob ntw20_stoic_orange ntw20_stoic_orange orange 3

@@ -1,0 +1,42 @@
+Name MLRS6
+ShortName mlrs6
+//The ammo this gun uses (shortName)
+Ammo mlrs6Ammo
+Icon MLRS6
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 140
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 14
+//Damage in half hearts
+Damage 2
+//For guns in which the magazine is integrated
+LoadIntoGun 6
+//The higher this value, the more the bullets spread
+Accuracy 1
+//Time in ticks between rounds
+ShootDelay 4.0
+ShootSound MLRS6Shoot
+ReloadSound MLRS6Reload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 3.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 4.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.MLRS6
+Texture MLRS6
+ModelScale 0.18
+//Modifiers
+MoveSpeedModifier 0.8
+Description Rocket Launcher : Multi-Role target finding rocket launcher.
+Paintjob mlrs6_stoic_blue mlrs6_stoic_blue blue 3
+Paintjob mlrs6_stoic_green mlrs6_stoic_green green 3
+Paintjob mlrs6_stoic_red mlrs6_stoic_red red 3
+Paintjob mlrs6_stoic_orange mlrs6_stoic_orange orange 3

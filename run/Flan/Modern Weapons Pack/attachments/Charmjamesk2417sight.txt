@@ -1,0 +1,26 @@
+Name Charm jamesk2417 sight
+ShortName flanMWCharmjamesk2417sight
+Icon CharmJamesK2417Sight
+//The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
+AttachmentType sights
+//If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment
+Silencer false
+//These multipliers stack between attachments and do what they say
+MeleeDamageMultiplier 1.0
+DamageMultiplier 1.0
+SpreadMultiplier 0.2
+RecoilMultiplier 0.5
+BulletSpeedMultiplier 1.0
+ReloadTimeMultiplier 1.0
+FOVZoomLevel 2.0
+//Model
+Model mw.CharmBaseSight
+Texture Charmjamesk2417
+ModelScale 0.09
+//Recipe
+RecipeOutput 1
+Recipe I ingotIron L lever D diamond
+III
+ILI
+III
+Description Sight Attatchment: Special sight.

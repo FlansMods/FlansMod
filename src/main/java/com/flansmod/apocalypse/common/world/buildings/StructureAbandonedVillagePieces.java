@@ -27,6 +27,7 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.BiomeEvent;
@@ -70,9 +71,16 @@ public class StructureAbandonedVillagePieces
 		arraylist.add(new StructureAbandonedVillagePieces.PieceWeight(StructureAbandonedVillagePieces.Field2.class, 3, MathHelper.getInt(p_75084_0_, 2 + p_75084_1_, 4 + p_75084_1_ * 2)));
 		arraylist.add(new StructureAbandonedVillagePieces.PieceWeight(StructureAbandonedVillagePieces.Blacksmith.class, 15, MathHelper.getInt(p_75084_0_, 0, 1 + p_75084_1_)));
 		arraylist.add(new StructureAbandonedVillagePieces.PieceWeight(StructureAbandonedVillagePieces.House3.class, 8, MathHelper.getInt(p_75084_0_, 0 + p_75084_1_, 3 + p_75084_1_ * 2)));
-		net.minecraftforge.fml.common.registry.VillagerRegistry.addExtraVillageComponents(arraylist, p_75084_0_, p_75084_1_);
+		//net.minecraftforge.fml.common.registry.VillagerRegistry.addExtraVillageComponents(arraylist, p_75084_0_, p_75084_1_);
 		
-		arraylist.removeIf(o -> ((PieceWeight)o).villagePiecesLimit == 0);
+		arraylist.removeIf(o -> 
+		{
+			if(o instanceof PieceWeight)
+				return ((PieceWeight)o).villagePiecesLimit == 0;
+			else if(o instanceof StructureVillagePieces.PieceWeight)
+				return ((StructureVillagePieces.PieceWeight)o).villagePiecesLimit == 0;
+			return true;
+		});
 		
 		return arraylist;
 	}

@@ -1,0 +1,56 @@
+Name R700
+ShortName r700
+//The ammo this gun uses (shortName)
+Ammo sniperAmmo
+Ammo hesniperAmmo
+Ammo 3006Bullet
+Ammo shulkersniperammo
+Icon R700
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 80
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 16
+//Damage in half hearts
+Damage 24
+//The higher this value, the more the bullets spread
+Accuracy 3
+//For guns in which the magazine is integrated
+LoadIntoGun 4
+//Time in ticks between rounds
+ShootDelay 22.0
+ShootSound R700Shoot
+ReloadSound MWSpringfieldReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default Scope Settings
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model Settings
+Model mw.R700
+Texture R700
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 0
+Description Ammo Type : Sniper
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob r700_stoic_blue r700_stoic_blue blue 3
+Paintjob r700_stoic_green r700_stoic_green green 3
+Paintjob r700_stoic_red r700_stoic_red red 3
+Paintjob r700_stoic_orange r700_stoic_orange orange 3

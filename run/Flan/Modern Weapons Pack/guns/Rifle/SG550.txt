@@ -1,0 +1,53 @@
+Name SG550
+ShortName sg550
+//The ammo this gun uses (shortName)
+Ammo sg550Ammo
+Ammo apcrrifleAmmo
+Icon SG550
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 40
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 2
+//Damage in half hearts
+Damage 9
+//The higher this value, the more the bullets spread
+Accuracy 3
+//Time in ticks between rounds
+ShootDelay 2.2
+ShootSound SG550Shoot
+ReloadSound MWMP44Reload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.SG550
+Texture SG550
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description Rifle :
+
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob sg550_stoic_blue sg550_stoic_blue blue 3
+Paintjob sg550_stoic_green sg550_stoic_green green 3
+Paintjob sg550_stoic_red sg550_stoic_red red 3
+Paintjob sg550_stoic_orange sg550_stoic_orange orange 3

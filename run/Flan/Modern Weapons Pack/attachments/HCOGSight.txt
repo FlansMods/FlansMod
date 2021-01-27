@@ -1,0 +1,26 @@
+Name HCOG Sight
+ShortName flanMWHCOG
+Icon HCOGSight
+//The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
+AttachmentType sights
+//If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment
+Silencer false
+//These multipliers stack between attachments and do what they say
+MeleeDamageMultiplier 1.0
+DamageMultiplier 1.0
+SpreadMultiplier 1.0
+RecoilMultiplier 1.0
+BulletSpeedMultiplier 1.0
+ReloadTimeMultiplier 1.0
+FOVZoomLevel 2.0
+//Model
+Model mw.HCOG
+Texture HCOGSight
+ModelScale 0.125
+//Recipe
+RecipeOutput 1
+Recipe R ingotIron F dyePowder.1 G thinGlass
+GGG
+RFR
+RRR
+Description Sight Attatchment: HCOG sight.

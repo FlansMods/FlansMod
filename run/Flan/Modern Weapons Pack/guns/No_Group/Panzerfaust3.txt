@@ -1,0 +1,35 @@
+Name Panzerfaust 3
+ShortName panzerfaust3
+//The ammo this gun uses (shortName)
+Ammo panzerfaust3Ammo
+Icon Panzerfaust3
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 95
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 25
+//Damage in half hearts
+Damage 2
+//The higher this value, the more the bullets spread
+Accuracy 2
+//Time in ticks between rounds
+ShootDelay 1.0
+ShootSound AT4Shoot
+ReloadSound MWbazookaReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 3.0
+Scope None
+Deployable False
+DeployedModel None
+Model mw.Panzerfaust3
+Texture Panzerfaust3
+ModelScale 0.18
+//Modifiers
+MoveSpeedModifier 0.8
+Description Rocket Launcher : General purpose rocket launcher.
+Paintjob panzerfaust3_stoic_blue panzerfaust3_stoic_blue blue 3
+Paintjob panzerfaust3_stoic_green panzerfaust3_stoic_green green 3
+Paintjob panzerfaust3_stoic_red panzerfaust3_stoic_red red 3
+Paintjob panzerfaust3_stoic_orange panzerfaust3_stoic_orange orange 3

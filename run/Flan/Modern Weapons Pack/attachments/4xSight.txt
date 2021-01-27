@@ -8,8 +8,8 @@ Silencer false
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
 DamageMultiplier 1.0
-SpreadMultiplier 0.4
-RecoilMultiplier 0.8
+SpreadMultiplier 1.0
+RecoilMultiplier 1.0
 BulletSpeedMultiplier 1.0
 ReloadTimeMultiplier 1.0
 //These variables only come into effect if this is a scope
@@ -17,14 +17,15 @@ ReloadTimeMultiplier 1.0
 //The FOVZoomLevel affects how much the view narrows when zooming. Very useful for iron sights as it gives the illusion of zooming without killing off the model
 ZoomLevel 4.0
 FOVZoomLevel 2.0
-ZoomOverlay mwbarrett
+ZoomOverlay mwscope
 //Model
 Model mw.4xScope
 Texture 4xScope
-ModelScale
+ModelScale 0.080
 //Recipe
 RecipeOutput 1
-Recipe R yellowDust F fiberglass G thinGlass
-FFF
-G G
-FFF
+Recipe R ingotIron F ingotGold G thinGlass
+RRR
+GFG
+RRR
+Description Sight Attatchment: 4x magnifacation scope.

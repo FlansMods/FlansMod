@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
@@ -155,12 +160,12 @@ public class ContentManager
 						File source = container.getSource();
 						if(source.getName().endsWith("bin"))
 						{
-							FlansMod.log.info("Found .java content pack. We must be in MCP. Loading from folder using IFlansModContentProvider");
+							FlansMod.log.info("Found .java content pack" + source.getName() + " We must be in MCP. Loading from folder using IFlansModContentProvider");
 							packs.put(folder, new ContentPackMod(container, mod));
 						}
 						else if(zipJar.matcher(source.getName()).matches())
 						{
-							FlansMod.log.info("Found .jar content pack in mods folder. Loading from jar");
+							FlansMod.log.info("Found .jar content pack " + source.getName() + " in mods folder. Loading from jar");
 							packs.put(folder, new ContentPackMod(container, mod));
 						}
 					}
@@ -180,33 +185,36 @@ public class ContentManager
 			File typesDir = new File(contentPack, "/" + typeToCheckFor.folderName + "/");
 			if(!typesDir.exists())
 				continue;
-			for(File file : typesDir.listFiles())
+			for(File file : FileUtils.listFiles(typesDir, new String[] {"txt" }, true))
 			{
-				try
+				if(!file.isDirectory())
 				{
-					BufferedReader reader = new BufferedReader(new FileReader(file));
-					String[] splitName = file.getName().split("/");
-					TypeFile typeFile = new TypeFile(contentPackName, typeToCheckFor, splitName[splitName.length - 1].split("\\.")[0]);
-					for(; ; )
+					try
 					{
-						String line = null;
-						try
+						BufferedReader reader = new BufferedReader(new FileReader(file));
+						String[] splitName = file.getName().split("/");
+						TypeFile typeFile = new TypeFile(contentPackName, typeToCheckFor, splitName[splitName.length - 1].split("\\.")[0]);
+						for(; ; )
 						{
-							line = reader.readLine();
+							String line = null;
+							try
+							{
+								line = reader.readLine();
+							}
+							catch(Exception e)
+							{
+								break;
+							}
+							if(line == null)
+								break;
+							typeFile.parseLine(line);
 						}
-						catch(Exception e)
-						{
-							break;
-						}
-						if(line == null)
-							break;
-						typeFile.parseLine(line);
+						reader.close();
 					}
-					reader.close();
-				}
-				catch(IOException e)
-				{
-					FlansMod.log.throwing(e);
+					catch(IOException e)
+					{
+						FlansMod.log.throwing(e);
+					}
 				}
 			}
 		}
@@ -224,6 +232,8 @@ public class ContentManager
 			{
 				zipEntry = zipStream.getNextEntry();
 				if(zipEntry == null)
+					continue;
+				if(zipEntry.isDirectory())
 					continue;
 				TypeFile typeFile = null;
 				for(EnumType type : EnumType.values())

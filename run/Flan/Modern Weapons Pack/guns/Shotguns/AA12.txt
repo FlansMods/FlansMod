@@ -1,0 +1,63 @@
+Name AA12
+ShortName aa12
+//The ammo this gun uses (shortName)
+Ammo 12gslugAmmo
+Ammo 12gbirdshotAmmo
+Ammo 12gbuckshotAmmo
+Ammo 12gflechetteAmmo
+Ammo 12gheAmmo
+Ammo 12gincendiaryAmmo
+Ammo 12gpoisonedflechetteAmmo
+Ammo 12gaugeShell
+Ammo 12gaugeShellIncendiary
+Icon AA12
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 90
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 6
+//Damage in half hearts
+Damage 1.8
+//For guns in which the magazine is integrated
+LoadIntoGun 14
+//The higher this value, the more the bullets spread
+Accuracy 22
+//Time in ticks between rounds
+ShootDelay 6.0
+ShootSound AA12Shoot
+ReloadSound AA12Reload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 15.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.AA12
+Texture AA12
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWRedDot flanMWACOG flanMWHCOG flanMW4xScope flanMW2xScope flanMW8xScope flanMWUnderBarrelLaser flanMWForegrip flanMWSingleFire flanMWintrovertedchoke flanMWextrovertedchoke flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight 
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description Ammo Type : Shotgun
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob aa12_stoic_blue aa12_stoic_blue blue 3
+Paintjob aa12_stoic_green aa12_stoic_green green 3
+Paintjob aa12_stoic_red aa12_stoic_red red 3
+Paintjob aa12_stoic_orange aa12_stoic_orange orange 3

@@ -7,8 +7,8 @@ AttachmentType grip
 Silencer false
 //Flashlight variables
 Flashlight true
-FlashlightRange 10
-FlashlightStrength 12
+FlashlightRange 14
+FlashlightStrength 16
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
 DamageMultiplier 1.0
@@ -29,5 +29,6 @@ Texture Flashlight
 RecipeOutput 1
 Recipe F fiberglass G yellowDust R redstone
 FFF
-GRR
+GGR
 FFF
+Description Under Barrel Attatchment: Flashlight for long guns.

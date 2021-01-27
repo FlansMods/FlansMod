@@ -1,0 +1,64 @@
+Name Devotion X55
+ShortName devotionx55
+//The ammo this gun uses (shortName)
+Ammo m60Ammo
+Ammo m249Ammo
+Ammo devotionx55Ammo
+Icon DevotionX55
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 160
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 2
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 1
+//Damage in half hearts
+Damage 8
+//The higher this value, the more the bullets spread
+Accuracy 2
+//Time in ticks between rounds
+ShootDelay 0.8
+//Spin sound plays the whole time the player holds the shoot button, on loop. Warmup plays first, and cooldown plays when they stop firing
+WarmupSound DevotionX55Warmup
+SpinSound DevotionX55Spin
+CooldownSound DevotionX55Cooldown
+WarmupSoundLength 10
+SpinSoundLength 10
+ShootSound DevotionX55Shoot
+ReloadSound DevotionX55Reload
+Mode Minigun
+//Bullet speed, default 3.0
+BulletSpeed 6.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.DevotionX55
+Texture DevotionX55
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWRedDot flanMWACOG flanMWHCOG flanMW4xScope flanMW2xScope flanMW8xScope flanMWForegrip flanMWUnderBarrelLaser flanMWFlashlight flanMWmuzzlebreak flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight flanMWturbocharger
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description Ammo Type : Light Machine Gun
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob devotionx55_stoic_blue devotionx55_stoic_blue blue 3
+Paintjob devotionx55_stoic_green devotionx55_stoic_green green 3
+Paintjob devotionx55_stoic_red devotionx55_stoic_red red 3
+Paintjob devotionx55_stoic_orange devotionx55_stoic_orange orange 3

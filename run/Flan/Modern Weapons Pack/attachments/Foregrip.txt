@@ -8,7 +8,7 @@ Silencer false
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
 DamageMultiplier 1.0
-SpreadMultiplier 0.8
+SpreadMultiplier 1.0
 RecoilMultiplier 0.5
 BulletSpeedMultiplier 1.0
 ReloadTimeMultiplier 1.0
@@ -21,9 +21,11 @@ ZoomOverlay None
 //Model
 Model mw.Foregrip
 Texture Foregrip
+ModelScale 0.65
 //Recipe
 RecipeOutput 1
-Recipe F fiberglass
-FFF
+Recipe F fiberglass I ingotIron
+III
  F 
  F 
+Description Under Barrel Attatchment: Vertical foregrip.

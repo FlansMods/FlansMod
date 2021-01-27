@@ -1,0 +1,32 @@
+Name Flamethrower
+ShortName flamethrower
+//The ammo this gun uses (shortName)
+Ammo flamethrowerAmmo
+Icon Flamethrower
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 50
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//Damage in half hearts
+Damage 1
+//The higher this value, the more the bullets spread
+Accuracy 20
+//Time in ticks between rounds
+ShootDelay 3
+ShootSound FlamethrowerShoot
+ReloadSound FlamethrowerReload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 2.0
+Scope None
+Deployable False
+DeployedModel None
+Model mw.Flamethrower
+Texture Flamethrower
+ModelScale 0.18
+Paintjob flamethrower_stoic_blue flamethrower_stoic_blue blue 4
+Paintjob flamethrower_stoic_green flamethrower_stoic_green green 4
+Paintjob flamethrower_stoic_red flamethrower_stoic_red red 4
+Paintjob flamethrower_stoic_orange flamethrower_stoic_orange orange 4
