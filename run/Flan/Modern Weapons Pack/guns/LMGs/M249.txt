@@ -4,6 +4,8 @@ ShortName m249
 Ammo m60Ammo
 Ammo m249Ammo
 Ammo devotionx55Ammo
+Ammo pr3Ammo
+Ammo pr3oscAmmo
 Icon M249
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -42,7 +44,7 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments true
 NumGenericAttachmentSlots 2
-Description Ammo Type : Light Machine Gun
+Description Ammo Type : LMG
 ShowAccuracy true
 ShowReloadTime true
 ShowDamage true

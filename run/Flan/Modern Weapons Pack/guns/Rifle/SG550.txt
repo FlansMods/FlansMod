@@ -1,8 +1,15 @@
 Name SG550
 ShortName sg550
 //The ammo this gun uses (shortName)
+Ammo tripletakeAmmo
 Ammo sg550Ammo
-Ammo apcrrifleAmmo
+Ammo seekerrifleammo
+Ammo ntw20Ammo
+Ammo m21Ammo
+Ammo m14Ammo
+Ammo l96Ammo
+Ammo g3Ammo
+Ammo dragunovAmmo
 Icon SG550
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -39,8 +46,7 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments true
 NumGenericAttachmentSlots 1
-Description Rifle :
-
+Description Ammo Type : Rifle
 ShowAccuracy true
 ShowReloadTime true
 ShowDamage true

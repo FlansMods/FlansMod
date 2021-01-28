@@ -1,0 +1,56 @@
+////Name and icon
+Name PR3 OSC Ammo
+ShortName pr3oscAmmo
+Icon Pr3OSCAmmo
+//Colour in Red, Green, Blue, each going up to 255
+Colour 255 255 255
+////Item and recipe
+StackSize 2
+////Visuals
+Model mw.RoundGrenade
+Texture M67
+TrailParticles false
+//TrailParticleType <particleType>
+ExplodeParticles 4
+//ExplodeParticleType <particleType>
+SmokeTime 0
+//SmokeParticleType <particleType>
+SpinWhenThrown true
+////Throwing
+CanThrow False
+ThrowDelay 10
+//ThrowSound <sound>
+//DropItemOnThrow <itemID.damage>
+////Physics
+DetonateOnImpact true
+Bounciness 10.0
+HitEntityDamage 45
+ThrowSpeed 3.0
+FallSpeed 1.0
+BreaksGlass true
+PenetratesBlocks false
+HitBoxSize 0.5
+Sticky false
+//BounceSound <sound>
+////Detonation conditions
+VehicleProximityTrigger -1.0
+LivingProximityTrigger -1.0
+Fuse 90
+DetonateWhenShot false
+Remote false
+//DespawnTime 0
+PrimeDelay 0
+////Detonation
+FireRadius 0.0
+ExplosionRadius 1.0
+ExplosionBreaksBlocks false
+//DropItemOnDetonate <itemID.damage>
+//Detonate Sound <sound>
+////Misc
+MeleeDamage 4
+DamageMultiplier 2.0
+SpreadMultiplier 1.0
+RecoilMultiplier 4.0
+BulletSpeedMultiplier 2.0
+ReloadTimeMultiplier 8.0
+Description Ammo Type : LMG

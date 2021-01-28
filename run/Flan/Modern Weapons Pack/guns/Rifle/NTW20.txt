@@ -1,7 +1,15 @@
 Name NTW20
 ShortName ntw20
 //The ammo this gun uses (shortName)
+Ammo tripletakeAmmo
+Ammo sg550Ammo
+Ammo seekerrifleammo
 Ammo ntw20Ammo
+Ammo m21Ammo
+Ammo m14Ammo
+Ammo l96Ammo
+Ammo g3Ammo
+Ammo dragunovAmmo
 Icon NTW20
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -38,7 +46,7 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments true
 NumGenericAttachmentSlots 0
-//Description HPR :
+Description Ammo Type : Rifle
 ShowAccuracy true
 ShowReloadTime true
 ShowDamage true

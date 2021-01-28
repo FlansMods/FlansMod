@@ -2,6 +2,14 @@ Name KCA Smart pistol
 ShortName kcasmartpistol
 //The ammo this gun uses (shortName)
 Ammo kcasmartpistolAmmo
+Ammo desertEagleAmmo
+Ammo glockAmmo
+Ammo m9Ammo
+Ammo m1911Ammo
+Ammo makarovAmmo
+Ammo sigP226Ammo
+Ammo uspAmmo
+Ammo uspPoisonAmmo
 NumBurstRounds 3
 Icon KCASmartpistol
 //Colour in Red, Green, Blue, each going up to 255.

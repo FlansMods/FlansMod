@@ -1,0 +1,59 @@
+Name L96
+ShortName l96
+//The ammo this gun uses (shortName)
+Ammo tripletakeAmmo
+Ammo sg550Ammo
+Ammo seekerrifleammo
+Ammo ntw20Ammo
+Ammo m21Ammo
+Ammo m14Ammo
+Ammo l96Ammo
+Ammo g3Ammo
+Ammo dragunovAmmo
+Icon L96
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 70
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 20
+//Damage in half hearts
+Damage 26
+//The higher this value, the more the bullets spread
+Accuracy 1
+//Time in ticks between rounds
+ShootDelay 34.0
+ShootSound L96Shoot
+ReloadSound BARReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default Scope Settings
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model Settings
+Model mw.L96
+Texture L96
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1
+Description Ammo Type : Rifle
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob l96_stoic_blue l96_stoic_blue blue 3
+Paintjob l96_stoic_green l96_stoic_green green 3
+Paintjob l96_stoic_red l96_stoic_red red 3
+Paintjob l96_stoic_orange l96_stoic_orange orange 3

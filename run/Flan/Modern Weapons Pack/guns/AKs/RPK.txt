@@ -1,0 +1,60 @@
+Name RPK
+ShortName rpk
+//The ammo this gun uses (shortName)
+Ammo ak74Ammo
+Ammo ak47Ammo
+Ammo rpkAmmo
+Ammo rpdAmmo
+Ammo witheringakammo
+Icon RPK
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 90
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 5
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 1
+//Damage in half hearts
+Damage 9
+//The higher this value, the more the bullets spread
+Accuracy 8
+//Time in ticks between rounds
+ShootDelay 1.8
+ShootSound RPDShoot
+ReloadSound MG42Reload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.RPK
+Texture RPK
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWRedDot flanMWACOG flanMWHCOG flanMW4xScope flanMW2xScope flanMW8xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire flanMWanvilreceiver flanMWmuzzlebreak flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight 
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1
+Description Ammo Type : AK
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob rpk_stoic_blue rpk_stoic_blue blue 3
+Paintjob rpk_stoic_green rpk_stoic_green green 3
+Paintjob rpk_stoic_red rpk_stoic_red red 3
+Paintjob rpk_stoic_orange rpk_stoic_orange orange 3

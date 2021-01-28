@@ -1,0 +1,55 @@
+Name AK74
+ShortName ak74
+//The ammo this gun uses (shortName)
+Ammo ak74Ammo
+Ammo ak47Ammo
+Ammo rpkAmmo
+Ammo rpdAmmo
+Ammo witheringakammo
+Icon AK74
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 40
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 2
+//Damage in half hearts
+Damage 6
+//The higher this value, the more the bullets spread
+Accuracy 10
+//Time in ticks between rounds
+ShootDelay 1.2
+ShootSound AK74Shoot
+ReloadSound MWMP40Reload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.AK74
+Texture AK74
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description AmmoType : AK
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob ak74_stoic_blue ak74_stoic_blue blue 3
+Paintjob ak74_stoic_green ak74_stoic_green green 3
+Paintjob ak74_stoic_red ak74_stoic_red red 3
+Paintjob ak74_stoic_orange ak74_stoic_orange orange 3

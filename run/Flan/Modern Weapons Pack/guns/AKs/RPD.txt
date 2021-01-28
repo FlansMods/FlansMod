@@ -1,0 +1,58 @@
+Name RPD
+ShortName rpd
+//The ammo this gun uses (shortName)
+Ammo ak74Ammo
+Ammo ak47Ammo
+Ammo rpkAmmo
+Ammo rpdAmmo
+Ammo witheringakammo
+Icon RPD
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 60
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 5
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 1
+//Damage in half hearts
+Damage 9
+//The higher this value, the more the bullets spread
+Accuracy 6
+//Time in ticks between rounds
+ShootDelay 2.0
+ShootSound RPDShoot
+ReloadSound MG42Reload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.RPD
+Texture RPD
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1
+Description Ammo Type : AK
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob rpd_stoic_blue rpd_stoic_blue blue 3
+Paintjob rpd_stoic_green rpd_stoic_green green 3
+Paintjob rpd_stoic_red rpd_stoic_red red 3
+Paintjob rpd_stoic_orange rpd_stoic_orange orange 3

@@ -561,6 +561,7 @@ public class InfoType
 			case "iron_trapdoor": return new ItemStack(Blocks.IRON_TRAPDOOR, amount);
 			case "trapdoor": return new ItemStack(Blocks.TRAPDOOR, amount);
 			case "gunpowder": return new ItemStack(Items.GUNPOWDER, amount);
+			case "ingotIron":
 			case "iron": return new ItemStack(Items.IRON_INGOT, amount);
 			case "boat": return new ItemStack(Items.BOAT, amount);
 		}
@@ -588,7 +589,7 @@ public class InfoType
 		{
 			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
 			{
-				FlansMod.log.warn("Found item " + s + " but by legacy method. Shouldn't happen.");
+				// Turned off console spam for this case. It's legacy, but there's so much of it now that this is pretty standard in official packs
 				return new ItemStack(item, amount, damage); 
 			}
 		}

@@ -1,7 +1,15 @@
 Name Desert Eagle
 ShortName desertEagle
 //The ammo this gun uses (shortName)
+Ammo kcasmartpistolAmmo
 Ammo desertEagleAmmo
+Ammo glockAmmo
+Ammo m9Ammo
+Ammo m1911Ammo
+Ammo makarovAmmo
+Ammo sigP226Ammo
+Ammo uspAmmo
+Ammo uspPoisonAmmo
 Icon DesertEagle
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

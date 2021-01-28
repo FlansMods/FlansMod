@@ -1,6 +1,9 @@
 Name Pr3
 ShortName pr3
 //The ammo this gun uses (shortName)
+Ammo m60Ammo
+Ammo m249Ammo
+Ammo devotionx55Ammo
 Ammo pr3Ammo
 Ammo pr3oscAmmo
 Icon Pr3
@@ -42,7 +45,7 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments true
 NumGenericAttachmentSlots 1
-//Description Ammo Type : Light Machine Gun
+Description Ammo Type : LMG
 ShowAccuracy true
 ShowReloadTime true
 ShowDamage true

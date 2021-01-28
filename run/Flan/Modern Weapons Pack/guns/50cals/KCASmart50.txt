@@ -1,0 +1,54 @@
+Name KCA Smart 50
+ShortName kcasmart50
+//The ammo this gun uses (shortName)
+Ammo kcasmart50Ammo
+Ammo barrettAmmo
+Ammo barrettExplosiveAmmo
+Ammo barrettCompactAmmo
+Icon kcasmart50
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 75
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 26
+//Damage in half hearts
+Damage 28
+//The higher this value, the more the bullets spread
+Accuracy 3
+//Time in ticks between rounds
+ShootDelay 40.0
+ShootSound BarrettShoot
+ReloadSound BARReload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 3.0
+//Default Scope Settings
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model Settings
+Model mw.KCASmart50
+Texture KCASmart50
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 3
+Description Ammo Type : .50 Cal Sniper
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+MoveSpeedModifier 0.8
+Paintjob kcasmart50_stoic_blue kcasmart50_stoic_blue blue 3
+Paintjob kcasmart50_stoic_green kcasmart50_stoic_green green 3
+Paintjob kcasmart50_stoic_red kcasmart50_stoic_red red 3
+Paintjob kcasmart50_stoic_orange kcasmart50_stoic_orange orange 3

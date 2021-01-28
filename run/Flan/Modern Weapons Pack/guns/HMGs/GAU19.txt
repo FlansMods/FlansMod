@@ -46,7 +46,7 @@ AllowScopeAttachments false
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 0
-Description Ammo Type : Minigun
+Description Ammo Type : HMG
 ShowAccuracy true
 ShowReloadTime true
 ShowDamage true

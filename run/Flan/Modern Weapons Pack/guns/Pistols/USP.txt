@@ -1,6 +1,13 @@
 Name USP .45
 ShortName usp
 //The ammo this gun uses (shortName)
+Ammo kcasmartpistolAmmo
+Ammo desertEagleAmmo
+Ammo glockAmmo
+Ammo m9Ammo
+Ammo m1911Ammo
+Ammo makarovAmmo
+Ammo sigP226Ammo
 Ammo uspAmmo
 Ammo uspPoisonAmmo
 Icon USP

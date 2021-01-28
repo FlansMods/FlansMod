@@ -1,11 +1,13 @@
 Name MP5K
 ShortName mp5k
 //The ammo this gun uses (shortName)
-Ammo skorpionAmmo
-Ammo uziAmmo
 Ammo mp5Ammo
 Ammo mp5kAmmo
-Ammo glockAmmo
+Ammo skorpionAmmo
+Ammo uziAmmo
+Ammo mp7Ammo
+Ammo honeybadgerAmmo
+Ammo smg100ammo
 Icon MP5K
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

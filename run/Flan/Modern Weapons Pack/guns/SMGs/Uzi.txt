@@ -1,12 +1,13 @@
 Name Mini-Uzi
 ShortName uzi
 //The ammo this gun uses (shortName)
-Ammo mp7Ammo
 Ammo mp5Ammo
+Ammo mp5kAmmo
 Ammo skorpionAmmo
 Ammo uziAmmo
 Ammo mp7Ammo
 Ammo honeybadgerAmmo
+Ammo smg100ammo
 Icon MiniUzi
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

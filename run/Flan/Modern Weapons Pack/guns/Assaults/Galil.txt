@@ -1,0 +1,67 @@
+Name Galil
+ShortName galil
+//The ammo this gun uses (shortName)
+Ammo m16a4Ammo
+Ammo famasAmmo
+Ammo mtarAmmo
+Ammo m4CarbineAmmo
+Ammo g36Ammo
+Ammo augAmmo
+Ammo acrAmmo
+Ammo adar15Ammo
+Ammo an94Ammo
+Ammo ash12Ammo
+Ammo galilAmmo
+Ammo hcarAmmo
+Ammo kcasmartcarbineAmmo
+Ammo fnscarAmmo
+Ammo betacmag
+Ammo apcrrifleAmmo
+Ammo l86Ammo
+Icon Galil
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 50
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 4
+//Damage in half hearts
+Damage 7
+//The higher this value, the more the bullets spread
+Accuracy 4
+//Time in ticks between rounds
+ShootDelay 1.9
+ShootSound GalilShoot
+ReloadSound GalilReload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model mw.Galil
+Texture Galil
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments true
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
+Description Ammo Type : Assault Rifle
+ShowAccuracy true
+ShowReloadTime true
+ShowDamage true
+ShowRecoil true
+DistortSound True
+CanShootUnderwater False
+Paintjob galil_stoic_blue galil_stoic_blue blue 3
+Paintjob galil_stoic_green galil_stoic_green green 3
+Paintjob galil_stoic_red galil_stoic_red red 3
+Paintjob galil_stoic_orange galil_stoic_orange orange 3

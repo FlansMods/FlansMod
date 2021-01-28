@@ -2,6 +2,14 @@ Name Triple Take
 ShortName tripletake
 //The ammo this gun uses (shortName)
 Ammo tripletakeAmmo
+Ammo sg550Ammo
+Ammo seekerrifleammo
+Ammo ntw20Ammo
+Ammo m21Ammo
+Ammo m14Ammo
+Ammo l96Ammo
+Ammo g3Ammo
+Ammo dragunovAmmo
 Icon TripleTake
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -37,8 +45,7 @@ AllowAllAttachments true
 AllowScopeAttachments true
 AllowGripAttachments true
 NumGenericAttachmentSlots 1
-Description Rifle :
-
+Description Ammo Type : Rifle
 ShowAccuracy true
 ShowReloadTime true
 ShowDamage true

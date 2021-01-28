@@ -1,9 +1,10 @@
 Name GL6 Grenade Launcher
 ShortName gl6
 //The ammo this gun uses (shortName)
-Ammo grenadelauncherimpactAmmo
-Ammo grenadelauncherbouncyAmmo
-Ammo grenadelaunchergasAmmo
+Ammo grenadeLauncherAmmo
+Ammo grenadeLauncherBouncyAmmo
+Ammo grenadeLauncherGasAmmo
+Ammo grenadeLauncherIncendiaryAmmo
 Icon GL6
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
