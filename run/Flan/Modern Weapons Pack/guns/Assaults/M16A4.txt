@@ -47,7 +47,6 @@ DeployedModel None
 //Model settings
 Model mw.M16A4
 Texture M16A4
-ModelScale 0.18
 //Attachment Settings
 AllowAllAttachments true
 AllowBarrelAttachments true
@@ -62,7 +61,7 @@ ShowDamage true
 ShowRecoil true
 DistortSound True
 CanShootUnderwater False
-Paintjob m16a4_stoic_blue m16a4_stoic_blue blue 3
-Paintjob m16a4_stoic_green m16a4_stoic_green green 3
-Paintjob m16a4_stoic_red m16a4_stoic_red red 3
-Paintjob m16a4_stoic_orange m16a4_stoic_orange orange 3
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob M16A4_Orange M16A4_Orange orange 1 white 1
+Paintjob M16A4_Green M16A4_Green green 2
+Paintjob M16A4_Howl M16A4_Howl orange 1 red 2

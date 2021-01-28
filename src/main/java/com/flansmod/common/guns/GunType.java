@@ -467,7 +467,8 @@ public class GunType extends PaintableType implements IScope
 					if(type.explosionRadius <= 0F)
 						nonExplosiveAmmo.add(type);
 				}
-				else FlansMod.log.warn("Could not find " + split[1] + " when reading ammo types for " + shortName);
+				// Too spammy when packs have optional dependencies
+				//else FlansMod.log.warn("Could not find " + split[1] + " when reading ammo types for " + shortName);
 			}
 			else if(split[0].equals("BulletSpeed"))
 			{

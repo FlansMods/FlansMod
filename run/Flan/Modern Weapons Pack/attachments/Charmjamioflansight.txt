@@ -1,6 +1,6 @@
-Name Charm jthmonkey sight
-ShortName flanMWCharmjthmonkeysight
-Icon CharmJthmonkeySight
+Name Charm jamioflan Sight
+ShortName flanMWCharmjamioflansight
+Icon CharmJamioflanSight
 //The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
 AttachmentType sights
 //If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment
@@ -15,12 +15,12 @@ ReloadTimeMultiplier 1.0
 FOVZoomLevel 2.0
 //Model
 Model mw.CharmBaseSight
-Texture Charmjthmonkey
+Texture Charmjamioflan
 ModelScale 0.09
 //Recipe
 RecipeOutput 1
-Recipe H minecraft:skull I iron_ingot G gold_ingot
-GIG
-IHI
-GIG
+Recipe H minecraft:skull D diamond
+DDD
+DHD
+DDD
 Description Sight Attatchment : Cosmetic Iron Sights

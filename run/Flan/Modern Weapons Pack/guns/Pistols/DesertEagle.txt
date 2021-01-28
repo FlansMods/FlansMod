@@ -42,7 +42,6 @@ DeployedModel None
 Model mw.DesertEagle
 ModelScale 0.8
 Texture DesertEagle
-ModelScale 0.18
 //Attachment Settings
 AllowAllAttachments true
 AllowBarrelAttachments true
@@ -57,7 +56,10 @@ ShowDamage true
 ShowRecoil true
 DistortSound True
 CanShootUnderwater False
-Paintjob deserteagle_stoic_blue deserteagle_stoic_blue blue 2
-Paintjob deserteagle_stoic_green deserteagle_stoic_green green 2
-Paintjob deserteagle_stoic_red deserteagle_stoic_red red 2
-Paintjob deserteagle_stoic_orange deserteagle_stoic_orange orange 2
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob DesertEagle_Neon DesertEagle_Neon magenta 2
+Paintjob DesertEagle_Venom DesertEagle_Venom lime 2
+Paintjob DesertEagle_CoralSnake DesertEagle_CoralSnake red 1 yellow 1
+Paintjob DesertEagle_Gold DesertEagle_Gold yellow 8 gray 1
+Paintjob DesertEagle_Messenger DesertEagle_Messenger orange 16 yellow 16 gray 16 rainbow 1

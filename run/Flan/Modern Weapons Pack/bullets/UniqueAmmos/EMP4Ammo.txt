@@ -1,6 +1,6 @@
 Name EMP4 Ammo
 ShortName emp4Ammo
-Model mw.EMP4Sabot
+Model Bullet
 Texture EMP4Sabot
 //Colour of icon and model
 Colour 255 255 255

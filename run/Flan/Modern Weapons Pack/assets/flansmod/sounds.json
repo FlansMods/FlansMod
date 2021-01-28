@@ -431,12 +431,6 @@
       "flansmod:ChallengerRun"
     ]
   },
-  "JeepRun": {
-    "category": "player",
-    "sounds": [
-      "flansmod:JeepRun"
-    ]
-  },
   "MinigunShoot": {
     "category": "player",
     "sounds": [
@@ -527,54 +521,6 @@
       "flansmod:MastiffReload"
     ]
   },
-  "GAU20mmShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU20mmShoot"
-    ]
-  },
-  "GAU20mmReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU20mmReload"
-    ]
-  },
-  "AMA40mmShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:AMA40mmShoot"
-    ]
-  },
-  "AMA40mmReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:AMA40mmReload"
-    ]
-  },
-  "BasicsalvoShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:BasicsalvoShoot"
-    ]
-  },
-  "BasicsalvoReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:BasicsalvoReload"
-    ]
-  },
-  "STARSShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:STARSShoot"
-    ]
-  },
-  "STARSReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:STARSReload"
-    ]
-  },
   "KCASmartpistolShoot": {
     "category": "player",
     "sounds": [
@@ -585,12 +531,6 @@
     "category": "player",
     "sounds": [
       "flansmod:KCASmartpistolReload"
-    ]
-  },
-  "KCASluggerShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:KCASluggerShoot"
     ]
   },
   "HoneyBadgerReload": {
@@ -617,12 +557,6 @@
       "flansmod:HCARShoot"
     ]
   },
-  "ENATurretShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:ENATurretShoot"
-    ]
-  },
   "ElDiabloShoot": {
     "category": "player",
     "sounds": [
@@ -647,82 +581,16 @@
       "flansmod:Pr3Reload"
     ]
   },
-  "SplitterCannonShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:SplitterCannonShoot"
-    ]
-  },
-  "SplitterCannonReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:SplitterCannonReload"
-    ]
-  },
-  "Predator37mmShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Predator37mmShoot"
-    ]
-  },
-  "Predator37mmReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Predator37mmReload"
-    ]
-  },
   "AutomaticAnnihilation100Shoot": {
     "category": "player",
     "sounds": [
       "flansmod:AutomaticAnnihilation100Shoot"
     ]
   },
-  "SkullPartingAssistaveShotgunShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:SkullPartingAssistaveShotgunShoot"
-    ]
-  },
   "GrizzlyBRShoot": {
     "category": "player",
     "sounds": [
       "flansmod:GrizzlyBRShoot"
-    ]
-  },
-  "Massacre2000Shoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Massacre2000Shoot"
-    ]
-  },
-  "HighSpeedCranialAllocationRifleShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:HighSpeedCranialAllocationRifleShoot"
-    ]
-  },
-  "HexaTakeShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:HexaTakeShoot"
-    ]
-  },
-  "FinalLawShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:FinalLawShoot"
-    ]
-  },
-  "KeeperOfSalvationShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:KeeperOfSalvationShoot"
-    ]
-  },
-  "GoliathShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GoliathShoot"
     ]
   },
   "DevotionX55Shoot": {
@@ -749,36 +617,6 @@
       "flansmod:PeaceKeeperReload"
     ]
   },
-  "SplitterCannonEntangledLensShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:SplitterCannonEntangledLensShoot"
-    ]
-  },
-  "AMA40mmBurstLoaderShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:AMA40mmBurstLoaderShoot"
-    ]
-  },
-  "GAU20mmArcTrunionShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU20mmArcTrunionShoot"
-    ]
-  },
-  "Z10LightRifleShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z10LightRifleShoot"
-    ]
-  },
-  "Z10LightRifleReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z10LightRifleReload"
-    ]
-  },
   "FlamethrowerShoot": {
     "category": "player",
     "sounds": [
@@ -803,18 +641,6 @@
       "flansmod:MLRS6Reload"
     ]
   },
-  "Z15SplicerShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z15SplicerShoot"
-    ]
-  },
-  "Z15SplicerReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z15SplicerReload"
-    ]
-  },
   "KrissVectorShoot": {
     "category": "player",
     "sounds": [
@@ -825,18 +651,6 @@
     "category": "player",
     "sounds": [
       "flansmod:KrissVectorReload"
-    ]
-  },
-  "Z20SignetShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z20SignetShoot"
-    ]
-  },
-  "Z20SignetReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z20SignetReload"
     ]
   },
   "SPASShoot": {
@@ -861,48 +675,6 @@
     "category": "player",
     "sounds": [
       "flansmod:AA12Reload"
-    ]
-  },
-  "HyperCriticalCowBoyCockMassShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:HyperCriticalCowBoyCockMassShoot"
-    ]
-  },
-  "GAU30mmShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU30mmShoot"
-    ]
-  },
-  "GAU30mmReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU30mmReload"
-    ]
-  },
-  "GAU24mmShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU24mmShoot"
-    ]
-  },
-  "GAU24mmReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:GAU24mmReload"
-    ]
-  },
-  "AU40mmShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:AU40mmShoot"
-    ]
-  },
-  "AU40mmReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:AU40mmReload"
     ]
   },
   "Rocket1Shoot": {
@@ -951,66 +723,6 @@
     "category": "player",
     "sounds": [
       "flansmod:Rocket4Reload"
-    ]
-  },
-  "Shell1Shoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell1Shoot"
-    ]
-  },
-  "Shell1Reload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell1Reload"
-    ]
-  },
-  "Shell2Shoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell2Shoot"
-    ]
-  },
-  "Shell2Reload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell2Reload"
-    ]
-  },
-  "Shell3Shoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell3Shoot"
-    ]
-  },
-  "Shell3Reload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell3Reload"
-    ]
-  },
-  "Shell4Shoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell4Shoot"
-    ]
-  },
-  "Shell4Reload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Shell4Reload"
-    ]
-  },
-  "AlarmTrapDetonate": {
-    "category": "player",
-    "sounds": [
-      "flansmod:AlarmTrapDetonate"
-    ]
-  },
-  "DecoyCanisterDetonate": {
-    "category": "player",
-    "sounds": [
-      "flansmod:DecoyCanisterDetonate"
     ]
   },
   "ColdWarE2Shoot": {
@@ -1109,24 +821,6 @@
       "flansmod:ElectricSmokeGrenadeDetonate"
     ]
   },
-  "SplinterGrenadeDetonate": {
-    "category": "player",
-    "sounds": [
-      "flansmod:SplinterGrenadeDetonate"
-    ]
-  },
-  "Z45SentinelShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z45SentinelShoot"
-    ]
-  },
-  "Z45SentinelReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z45SentinelReload"
-    ]
-  },
   "ASH12Shoot": {
     "category": "player",
     "sounds": [
@@ -1137,18 +831,6 @@
     "category": "player",
     "sounds": [
       "flansmod:ASH12Reload"
-    ]
-  },
-  "Z16SplicerRifleShoot": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z16SplicerRifleShoot"
-    ]
-  },
-  "Z16SplicerRifleReload": {
-    "category": "player",
-    "sounds": [
-      "flansmod:Z16SplicerRifleReload"
     ]
   }
 }

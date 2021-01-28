@@ -1,8 +1,8 @@
 Name Winchester Model 70
 ShortName winchesterModel70
 //The ammo this gun uses (shortName)
-Ammo m40a3Ammo
-Ammo r700Ammo
+Ammo sniperAmmo
+Ammo hesniperAmmo
 Ammo 3006Bullet
 Ammo shulkersniperammo
 Icon WinchesterModel70

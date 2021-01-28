@@ -1,12 +1,13 @@
 Name Double Barrelled Shotgun
 ShortName doubleBarrelledShotgun
 //The ammo this gun uses (shortName)
-Ammo w1200Ammo
-Ammo w1200IncendiaryAmmo
-Ammo r870Ammo
-Ammo m1014Ammo
-Ammo spasAmmo
-Ammo m1887Ammo
+Ammo 12gslugAmmo
+Ammo 12gbirdshotAmmo
+Ammo 12gbuckshotAmmo
+Ammo 12gflechetteAmmo
+Ammo 12gheAmmo
+Ammo 12gincendiaryAmmo
+Ammo 12gpoisonedflechetteAmmo
 Ammo 12gaugeShell
 Ammo 12gaugeShellIncendiary
 Icon DoubleBarrelledShotgun

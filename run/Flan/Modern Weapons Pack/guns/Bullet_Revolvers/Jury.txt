@@ -2,6 +2,9 @@ Name Jury Autorevolver
 ShortName jury
 //The ammo this gun uses (shortName)
 Ammo juryAmmo
+Ammo 357Magnum
+Ammo highexpistolammo
+Ammo appistolammo
 Icon Jury
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
