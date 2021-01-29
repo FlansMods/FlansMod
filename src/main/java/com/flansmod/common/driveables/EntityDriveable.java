@@ -816,6 +816,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		super.onUpdate();
 		
+		prevRotationYaw = axes.getYaw();
+		prevRotationPitch = axes.getPitch();
+		prevRotationRoll = axes.getRoll();
+		
 		DriveableType type = getDriveableType();
 		
 		// Do a full check of our passengers for wheels or seats

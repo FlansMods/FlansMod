@@ -192,7 +192,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void renderWorld(RenderWorldLastEvent event)
 	{
 		//Get the world
@@ -219,7 +219,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		
 		RenderHelper.enableStandardItemLighting();
 		
-		GlStateManager.translate(-x, -y, -z);
+		//GlStateManager.translate(-x, -y, -z);
 		for(Object entity : world.loadedEntityList)
 		{
 			if(entity instanceof EntityPlane)
@@ -237,9 +237,9 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				render(plane,
-						plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(),
-						plane.prevPosY + (plane.posY - plane.prevPosY) * event.getPartialTicks(),
-						plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(),
+						(plane.prevPosX - x) + (plane.posX - plane.prevPosX) * event.getPartialTicks(),
+						(plane.prevPosY - y) + (plane.posY - plane.prevPosY) * event.getPartialTicks(),
+						(plane.prevPosZ - z) + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(),
 						0F,
 						event.getPartialTicks());
 			}

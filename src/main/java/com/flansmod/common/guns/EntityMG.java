@@ -129,7 +129,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			float angle = direction * 90F + rotationYaw;
 			double dX = (type.standBackDist * Math.sin(angle * 3.1415926535F / 180F));
 			double dZ = -(type.standBackDist * Math.cos(angle * 3.1415926535F / 180F));
-			gunner.setPosition((blockX + 0.5D + dX), blockY + gunner.getYOffset() - 0.5D, (blockZ + 0.5D + dZ));
+			gunner.setPosition((blockX + 0.5D + dX), blockY - 1.0d, (blockZ + 0.5D + dZ));
 			// gunner.setPosition((double)(blockX + (direction == 1 ? 1 : 0) -
 			// (direction == 3 ? 1 : 0)) + 0.5D, blockY + gunner.getYOffset() -
 			// 0.5D, (double)(blockZ - (direction == 0 ? 1 : 0) + (direction ==
@@ -228,7 +228,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 
 		Double radianYaw = Math.toRadians(direction * 90F + rotationYaw);
 		Double radianPitch = Math.toRadians(rotationPitch);
-		Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
+		Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), -Math.sin(radianPitch), Math.cos(radianYaw));
 		ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, position, shootingDirection, handler);
 		
 		if(soundDelay <= 0)

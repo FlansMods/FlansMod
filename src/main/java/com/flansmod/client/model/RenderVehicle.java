@@ -355,7 +355,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		GlStateManager.popMatrix();
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void renderWorld(RenderWorldLastEvent event)
 	{
 		//Get the world
@@ -383,7 +383,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		
 		RenderHelper.enableStandardItemLighting();
 		
-		GlStateManager.translate(-(float)x, -(float)y, -(float)z);
+		//GlStateManager.translate(-(float)x, -(float)y, -(float)z);
 		for(Object entity : world.loadedEntityList)
 		{
 			if(entity instanceof EntityVehicle)
@@ -401,9 +401,9 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				render(vehicle,
-					vehicle.prevPosX + (vehicle.posX - vehicle.prevPosX) * event.getPartialTicks(),
-					vehicle.prevPosY + (vehicle.posY - vehicle.prevPosY) * event.getPartialTicks(),
-					vehicle.prevPosZ + (vehicle.posZ - vehicle.prevPosZ) * event.getPartialTicks(),
+					(vehicle.prevPosX - x) + (vehicle.posX - vehicle.prevPosX) * event.getPartialTicks(),
+					(vehicle.prevPosY - y) + (vehicle.posY - vehicle.prevPosY) * event.getPartialTicks(),
+					(vehicle.prevPosZ - z) + (vehicle.posZ - vehicle.prevPosZ) * event.getPartialTicks(),
 					0F,
 					event.getPartialTicks());
 			}
