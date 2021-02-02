@@ -624,10 +624,10 @@ public class InfoType
 		return infoTypes.get(hash);
 	}
 	
-	public void onWorldLoad(World world)
-	{
-		
-	}
+	//public void onWorldLoad(World world)
+	//{
+	//	
+	//}
 	
 	public static InfoType getType(ItemStack itemStack)
 	{

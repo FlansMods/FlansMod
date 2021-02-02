@@ -1256,8 +1256,8 @@ public class TeamsManager
 		}
 		
 		//Reset all infotypes. Specifically, send this to player classes so that they may create itemstacks from strings regarding attachments for guns
-		for(InfoType type : InfoType.infoTypes.values())
-			type.onWorldLoad(world);
+		//for(InfoType type : InfoType.infoTypes.values())
+			//type.onWorldLoad(world);
 	}
 	
 	private void savePerWorldData(Event event, WorldServer world)

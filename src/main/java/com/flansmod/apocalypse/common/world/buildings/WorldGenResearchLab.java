@@ -24,11 +24,13 @@ import com.flansmod.common.ModuloHelper;
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.mechas.EnumMechaSlotType;
 import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.parts.PartType;
 
 public class WorldGenResearchLab extends WorldGenFlan
 {
@@ -270,7 +272,15 @@ public class WorldGenResearchLab extends WorldGenFlan
 	{
 		MechaType type = FlansModApocalypse.getLootGenerator().getRandomDungeonMecha(rand);
 		NBTTagCompound tags = new NBTTagCompound();
-		tags.setString("Engine", FlansModApocalypse.getLootGenerator().getRandomEngine(type, rand).shortName);
+		PartType engine = FlansModApocalypse.getLootGenerator().getRandomEngine(type, rand);
+		if(engine == null && PlaneType.types.size() > 0)
+		{
+			engine = FlansModApocalypse.getLootGenerator().getRandomEngine(PlaneType.types.get(0), rand);
+		}
+		if(engine == null && PartType.parts.size() > 0)
+			engine = PartType.parts.get(0);
+		
+		tags.setString("Engine", engine.shortName);
 		tags.setString("Type", type.shortName);
 		for(EnumDriveablePart part : EnumDriveablePart.values())
 		{

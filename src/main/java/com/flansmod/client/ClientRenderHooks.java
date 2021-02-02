@@ -509,7 +509,7 @@ public class ClientRenderHooks
 						ClientProxy.gunRenderer
 								.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
 					}
-					else
+					else if(entity instanceof EntityPlayer)
 					{
 						biped.bipedLeftArm.postRender(0.0625F);
 						GlStateManager.rotate(-90F, 1F, 0F, 0F);

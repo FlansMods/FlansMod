@@ -148,7 +148,91 @@ public class PlayerClass extends InfoType implements IPlayerClass
 	@Override
 	protected void postRead(TypeFile file)
 	{
-		onWorldLoad(null);
+		//onWorldLoad(null);
+		
+		try
+		{
+			
+			startingItems.clear();
+			for(String[] split : startingItemStrings)
+			{
+				Item matchingItem = null;
+				int amount = 1;
+				int damage = 0;
+				String[] itemNames = split[1].split("\\+");
+				for(Object object : Item.REGISTRY)
+				{
+					Item item = (Item)object;
+					if(item != null && (item.getTranslationKey().equals(itemNames[0]) || item.getTranslationKey().split("\\.").length > 1 && item.getTranslationKey().split("\\.")[1].equals(itemNames[0])))
+						matchingItem = item;
+				}
+				for(InfoType type : InfoType.infoTypes.values())
+				{
+					if(type.shortName.equals(itemNames[0]) && type.item != null)
+						matchingItem = type.item;
+				}
+				if(matchingItem == null)
+				{
+					FlansMod.log.warn("Tried to add " + split[1] + " to player class " + shortName + " but the item did not exist");
+					return;
+				}
+				if(split.length > 2)
+				{
+					amount = Integer.parseInt(split[2]);
+				}
+				if(split.length > 3)
+				{
+					damage = Integer.parseInt(split[3]);
+				}
+				ItemStack stack = new ItemStack(matchingItem, amount, damage);
+				if(itemNames.length > 1 && matchingItem instanceof ItemGun)
+				{
+					GunType gunType = ((ItemGun)matchingItem).GetType();
+					NBTTagCompound tags = new NBTTagCompound();
+					NBTTagCompound attachmentTags = new NBTTagCompound();
+					int genericID = 0;
+					for(int i = 0; i < itemNames.length - 1; i++)
+					{
+						AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
+						if(attachment != null)
+						{
+							String tagName = null;
+							switch(attachment.type)
+							{
+								case sights: tagName = "scope";
+									break;
+								case barrel: tagName = "barrel";
+									break;
+								case stock: tagName = "stock";
+									break;
+								case grip: tagName = "grip";
+									break;
+								case generic: tagName = "generic_" + genericID++;
+									break;
+							}
+							NBTTagCompound specificAttachmentTags = new NBTTagCompound();
+							new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
+							attachmentTags.setTag(tagName, specificAttachmentTags);
+						}
+						//Maybe it was a paintjob
+						else
+						{
+							Paintjob paintjob = gunType.getPaintjob(itemNames[i + 1]);
+							if(paintjob != null)
+								tags.setString("Paint", paintjob.iconName);
+						}
+					}
+					tags.setTag("attachments", attachmentTags);
+					stack.setTagCompound(tags);
+				}
+				startingItems.add(stack);
+			}
+		}
+		catch(Exception e)
+		{
+			FlansMod.log.error("Interpreting player class file failed.");
+			FlansMod.log.throwing(e);
+		}
 	}
 	
 	/**
@@ -156,6 +240,8 @@ public class PlayerClass extends InfoType implements IPlayerClass
 	 * So to avoid guns with attachments having their attachments replaced with incorrect ones,
 	 * random guns and other silly things, we read the relevant lines here, as the world loads
 	 */
+	/*
+	 * Edit 29/01/2021 - I think this may be a legacy concern. ItemStack now references an Item, not an item ID. Moving back to the PostRead step
 	@Override
 	public void onWorldLoad(World world)
 	{
@@ -245,6 +331,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 			FlansMod.log.throwing(e);
 		}
 	}
+	*/
 	
 	public static PlayerClass getClass(String s)
 	{

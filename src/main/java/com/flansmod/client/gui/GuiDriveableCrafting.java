@@ -387,6 +387,7 @@ public class GuiDriveableCrafting extends GuiScreen
 
 		//Render rotating driveable model
 		GlStateManager.pushMatrix();
+		if(selectedType.model != null)
 		{
 			GlStateManager.translate(modelCenterX, modelCenterY, 100);
 			GlStateManager.disableLighting();
@@ -412,6 +413,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			GlStateManager.rotate(30F, 1F, 0F, 0F);
 			GlStateManager.rotate(spinner / 5F, 0F, 1F, 0F);
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
+
 			selectedType.model.render(selectedType);
 		}
 		GlStateManager.popMatrix();
