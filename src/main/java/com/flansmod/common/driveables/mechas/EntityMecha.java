@@ -373,6 +373,10 @@ public class EntityMecha extends EntityDriveable
 	
 	private void shoot(ItemStack stack, GunType gunType, ItemStack bulletStack, boolean creative, boolean left)
 	{
+		EntitySeat seat = getSeat(0);
+		if(seat == null)
+			return;
+		
 		MechaType mechaType = getMechaType();
 		ShootableType bulletType = ((ItemShootable)bulletStack.getItem()).type;
 		RotatedAxes a = new RotatedAxes();
@@ -384,7 +388,7 @@ public class EntityMecha extends EntityDriveable
 		a.rotateGlobalYaw(axes.getYaw());
 		armOrigin = a.findLocalVectorGlobally(armOrigin);
 		
-		a.rotateLocalPitch(-getSeat(0).looking.getPitch());
+		a.rotateLocalPitch(-seat.looking.getPitch());
 		gunVector = a.findLocalVectorGlobally(gunVector);
 		armVector = a.findLocalVectorGlobally(armVector);
 		

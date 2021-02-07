@@ -93,8 +93,8 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	public static int LAB_RARITY = 100;
 	
 	// TODO: Configify
-	public static int ABANDONED_PORTAL_APOC_RARITY = 2000;
-	public static int ABANDONED_PORTAL_OVERWORLD_RARITY = 1000;
+	public static int ABANDONED_PORTAL_APOC_RARITY = 4000;
+	public static int ABANDONED_PORTAL_OVERWORLD_RARITY = 4000;
 	
 	/**
 	 * The distance between where the player left the overworld, and where they return
@@ -340,6 +340,9 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		RETURN_RADIUS = configFile.getInt("Return Radius", Configuration.CATEGORY_GENERAL, RETURN_RADIUS, 1, Integer.MAX_VALUE, "The distance away from your initial AI mecha that your return portal appears");
 		SPAWN_RADIUS = configFile.getInt("Spawn Radius", Configuration.CATEGORY_GENERAL, SPAWN_RADIUS, 1, Integer.MAX_VALUE, "The distance from your deathpoint that you respawn in the apocalypse");
 		OPTION = TeleportOption.getOption(configFile.getString("Option", Configuration.CATEGORY_GENERAL, OPTION.toString(), "Who gets teleported to the apocalypse with a player (One of PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN)"));
+		
+		ABANDONED_PORTAL_APOC_RARITY = configFile.getInt("Abandoned Portal Rarity (Apocalypse)", Configuration.CATEGORY_GENERAL, ABANDONED_PORTAL_APOC_RARITY, 1, Integer.MAX_VALUE, "Rarity of the abandoned portal structures in the apocalypse");
+		ABANDONED_PORTAL_OVERWORLD_RARITY = configFile.getInt("Abandoned Portal Rarity (Other Dimensions)", Configuration.CATEGORY_GENERAL, ABANDONED_PORTAL_OVERWORLD_RARITY, 1, Integer.MAX_VALUE, "Rarity of the abandoned portal structures in other dimensions");
 		
 		if(configFile.hasChanged())
 			configFile.save();

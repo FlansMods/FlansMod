@@ -2,6 +2,7 @@ package com.flansmod.apocalypse.common.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,17 +21,21 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.FireableGun;
@@ -97,21 +102,14 @@ public class EntityFlansModShooter extends AbstractSkeleton
 		}
 	}
 	
-	/*
+	
     protected void initEntityAI()
     {
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIRestrictSun(this));
-        this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
-        this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityWolf.class, 6.0F, 1.0D, 1.2D));
-        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(6, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityIronGolem.class, true));
+        super.initEntityAI();
+        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityAnimal.class, true));
+        this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntitySkullDrone.class, true));
     }
-	*/
+	
 	
 	@Override
 	public void onUpdate()
@@ -120,6 +118,19 @@ public class EntityFlansModShooter extends AbstractSkeleton
 		if(shootDelay > 0)
 			shootDelay--;
 	}
+	
+	@Override
+    public EnumCreatureAttribute getCreatureAttribute()
+    {
+        return EnumCreatureAttribute.UNDEFINED;
+    }
+	
+	// Hack to prevent skeleton burning. What is the point in AbstractSkeleton if its always undead and weak to sunlight eh?
+	@Override
+    public float getBrightness()
+    {
+		return 0.0F;
+    }
 	
 	@Override
 	protected void applyEntityAttributes()
