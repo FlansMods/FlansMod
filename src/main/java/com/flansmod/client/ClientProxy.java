@@ -239,7 +239,7 @@ public class ClientProxy extends CommonProxy
 	{		
 		// Icons, Skins, Models
 		// Get the classloader in order to load the images
-		ClassLoader classloader = (net.minecraft.server.MinecraftServer.class).getClassLoader();
+		ClassLoader classloader = (net.minecraft.client.Minecraft.class).getClassLoader();
 		Method method = null;
 		try
 		{

@@ -95,7 +95,56 @@ public class ContentManager
 		}
 		
 		@Override
-		public void RegisterModelRedirects() {}
+		public void RegisterModelRedirects() 
+		{
+			try
+			{
+				if(folder.isDirectory())
+				{
+					File redirectInfo = new File(folder, "/redirect.info");
+					if(redirectInfo.exists())
+					{
+						BufferedReader reader = new BufferedReader(new FileReader(redirectInfo));
+						String src = reader.readLine();
+						String dst = reader.readLine();
+						
+						if(src != null && dst != null)
+						{
+							FlansMod.log.info("Registered Flan folder model redirect from " + src + " to " + dst);
+							FlansMod.RegisterModelRedirect(src, dst);
+						}
+						
+						reader.close();
+					}
+				}
+				else if(zipJar.matcher(folder.getName()).matches())
+				{
+					ZipFile zip = new ZipFile(folder);
+					ZipEntry entry = zip.getEntry("redirect.info");
+					
+					if(entry != null && !entry.isDirectory())
+					{
+						BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry)));
+						String src = reader.readLine();
+						String dst = reader.readLine();
+						
+						if(src != null && dst != null)
+						{
+							FlansMod.log.info("Registered Flan folder model redirect from " + src + " to " + dst);
+							FlansMod.RegisterModelRedirect(src, dst);
+						}
+						
+						reader.close();
+					}
+					
+					zip.close();
+				}
+			}
+			catch(Exception e)
+			{
+				
+			}
+		}
 	}
 	
 	private HashMap<String, IFlansModContentProvider> packs = new HashMap<String, IFlansModContentProvider>();
