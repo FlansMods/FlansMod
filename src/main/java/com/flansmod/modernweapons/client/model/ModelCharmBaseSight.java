@@ -1,5 +1,5 @@
 //This File was created with the Minecraft-SMP Modelling Toolbox 2.3.0.0
-// Copyright (C) 2020 Minecraft-SMP.de
+// Copyright (C) 2021 Minecraft-SMP.de
 // This file is for Flan's Flying Mod Version 4.0.x+
 
 // Model: CharmBaseSight
@@ -48,12 +48,12 @@ public class ModelCharmBaseSight extends ModelAttachment //Same as Filename
 		attachmentModel[3].rotateAngleZ = -2.44346095F;
 
 		attachmentModel[4].addBox(-2F, 0F, -2F, 4, 12, 4, 0F); // Part_05
-		attachmentModel[4].setRotationPoint(-6.75F, -3F, -3F);
+		attachmentModel[4].setRotationPoint(-5.75F, -1.5F, -3.01F);
 		attachmentModel[4].rotateAngleX = -1.57079633F;
 		attachmentModel[4].rotateAngleY = -1.57079633F;
 
 		attachmentModel[5].addBox(-2F, 0F, -2F, 4, 12, 4, 0F); // Part_06
-		attachmentModel[5].setRotationPoint(-6.75F, -3F, 1F);
+		attachmentModel[5].setRotationPoint(-5.75F, -1.5F, 1.01F);
 		attachmentModel[5].rotateAngleX = -1.57079633F;
 		attachmentModel[5].rotateAngleY = -1.57079633F;
 

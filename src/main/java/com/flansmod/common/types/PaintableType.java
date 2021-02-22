@@ -27,6 +27,7 @@ public abstract class PaintableType extends InfoType
 	 * The list of all available paintjobs for this gun
 	 */
 	public ArrayList<Paintjob> paintjobs = new ArrayList<>();
+	public ArrayList<Paintjob> nonlegendarypaintjobs = new ArrayList<>();
 	/**
 	 * The default paintjob for this gun. This is created automatically in the load process from existing info
 	 */
@@ -70,8 +71,15 @@ public abstract class PaintableType extends InfoType
 			FlansMod.Assert(false, "Duplicate info type name " + shortName);
 		}
 		
+		nonlegendarypaintjobs.clear();
+		for(Paintjob p : paintjobs)
+		{
+			if(!p.IsLegendary())
+				nonlegendarypaintjobs.add(p);
+		}
+		
 		// Add all custom paintjobs to dungeon loot. Equal chance for each
-		totalDungeonChance += dungeonChance * (paintjobs.size() - 1);
+		totalDungeonChance += dungeonChance * (nonlegendarypaintjobs.size() - 1);
 		
 		paintableTypes.put(shortName.hashCode(), this);
 	}
@@ -149,7 +157,16 @@ public abstract class PaintableType extends InfoType
 			
 			if(pool != null)
 			{
-				LootEntry entry = new LootEntryItem(item, FlansMod.dungeonLootChance * dungeonChance, 1, new LootFunction[]{new SetDamage(new LootCondition[0], new RandomValueRange(0, paintjobs.size() - 1))}, new LootCondition[0], shortName);
+				LootEntry entry = new LootEntryItem(
+						item, 
+						FlansMod.dungeonLootChance * dungeonChance, 
+						1, 
+						new LootFunction[]
+						{
+							new SetDamage(new LootCondition[0], new RandomValueRange(0, nonlegendarypaintjobs.size() - 1))
+						}, 
+						new LootCondition[0], 
+						shortName);
 				pool.addEntry(entry);
 			}
 		}

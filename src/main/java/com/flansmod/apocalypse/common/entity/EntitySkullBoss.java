@@ -379,14 +379,17 @@ public class EntitySkullBoss extends EntityLiving
 	{
 		super.setDead();
 		
-		dropItem(Items.GOLDEN_APPLE, rand.nextInt(4) + 1);
-		dropItem(Items.TOTEM_OF_UNDYING, 1);
-		// Lots of gunpowder
-		dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
-		dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
-		dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
-		dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
-		dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
-		dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+		if(!world.isRemote)
+		{
+			dropItem(Items.GOLDEN_APPLE, rand.nextInt(4) + 1);
+			dropItem(Items.TOTEM_OF_UNDYING, 1);
+			// Lots of gunpowder
+			dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
+			dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
+			dropItem(Items.GUNPOWDER, rand.nextInt(32) + 1);
+			dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+			dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+			dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+		}
 	}
 }

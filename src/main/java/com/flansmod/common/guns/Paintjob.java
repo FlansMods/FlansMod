@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.EnumPaintjobRarity;
 import com.flansmod.common.types.PaintableType;
 
@@ -34,6 +35,16 @@ public class Paintjob
 	public int hashCode()
 	{
 		return parent.hashCode() ^ ID;
+	}
+	
+	public boolean IsLegendary()
+	{
+		for(ItemStack stack : dyesNeeded)
+		{
+			if(stack.getItem() == FlansMod.rainbowPaintcan)
+				return true;
+		}
+		return false;
 	}
 	
 	public static Paintjob GetPaintjob(int hash)

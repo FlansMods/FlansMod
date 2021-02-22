@@ -132,7 +132,7 @@ public class FlansModLootGenerator
 			stack.getTagCompound().setTag("ammo", ammoTagsList);
 		}
 		if(gunType.paintjobs.size() > 1)
-			stack.setItemDamage(rand.nextInt(gunType.paintjobs.size()));
+			stack.setItemDamage(rand.nextInt(gunType.nonlegendarypaintjobs.size()));
 		return stack;
 	}
 	
@@ -141,7 +141,7 @@ public class FlansModLootGenerator
 		GunType gun = validGuns.get(rand.nextInt(validGuns.size()));
 		ItemStack stack = new ItemStack(gun.item);
 		NBTTagCompound tags = new NBTTagCompound();
-		tags.setString("Paint", gun.paintjobs.get(rand.nextInt(gun.paintjobs.size())).iconName);
+		tags.setString("Paint", gun.nonlegendarypaintjobs.get(rand.nextInt(gun.nonlegendarypaintjobs.size())).iconName);
 		stack.setTagCompound(tags);
 		return stack;
 	}
@@ -227,7 +227,7 @@ public class FlansModLootGenerator
 	{
 		ItemStack stack = new ItemStack(gun.item);
 		NBTTagCompound tags = new NBTTagCompound();
-		tags.setString("Paint", gun.paintjobs.get(rand.nextInt(gun.paintjobs.size())).iconName);
+		tags.setString("Paint", gun.nonlegendarypaintjobs.get(rand.nextInt(gun.nonlegendarypaintjobs.size())).iconName);
 		if(gun.ammo.size() > 0)
 		{
 			NBTTagList ammoTagsList = new NBTTagList();

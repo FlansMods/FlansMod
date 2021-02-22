@@ -53,7 +53,7 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 	private Vector3f offsetFromTarget = new Vector3f();
 	
 	@SideOnly(Side.CLIENT)
-	public GunAnimations animations = new GunAnimations();
+	public GunAnimations animations;
 	
 	public EntitySkullDrone(World worldIn) 
 	{
@@ -63,6 +63,14 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 		enablePersistence();
 		setNoAI(true);	
 		experienceValue = 50;
+		if(worldIn.isRemote)
+			initAnimations();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void initAnimations()
+	{
+		animations = new GunAnimations();
 	}
 	
 	@Override
@@ -72,13 +80,19 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
     }
 
+	@SideOnly(Side.CLIENT)
+	private void updateClient()
+	{
+		animations.update();
+	}
 	
 	@Override 
 	public void onUpdate()
 	{
 		super.onUpdate();
 		
-		animations.update();
+		if(world.isRemote)
+			updateClient();
 		this.fallDistance = 0f;
 		
 		int entityID = dataManager.get(LOOKING_AT_ENTITY);
@@ -192,7 +206,8 @@ public class EntitySkullDrone extends EntityLiving implements IInventory
 					
 					//Apply animations to 3D modelled guns
 					//TODO this doesn't work
-					animations.doShoot(gunType.getPumpDelay(), gunType.getPumpTime());
+					if(world.isRemote)
+						animations.doShoot(gunType.getPumpDelay(), gunType.getPumpTime());
 					
 					//Damage the bullet item
 					ammoStackInGun.setItemDamage(ammoStackInGun.getItemDamage() + 1);
