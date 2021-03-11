@@ -148,7 +148,7 @@ public class ContentManager
 	}
 	
 	private HashMap<String, IFlansModContentProvider> packs = new HashMap<String, IFlansModContentProvider>();
-	protected Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
+	protected Pattern zipJar = Pattern.compile("(.+)\\.(zip|jar)$");
 	private boolean wasAnythingInFlanFolder = false;
 	
 	public boolean LoadedAnyContentFromFlanFolder()
