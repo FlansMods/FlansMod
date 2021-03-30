@@ -27,6 +27,8 @@ import com.flansmod.common.driveables.mechas.ItemMecha;
 import com.flansmod.common.driveables.mechas.ItemMechaAddon;
 import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.enchantments.GloveType;
+import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.guns.AAGunType;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.BulletType;
@@ -409,6 +411,9 @@ public class ContentManager
 						case rewardBox: new ItemRewardBox((RewardBox)infoType).setTranslationKey(infoType.shortName);
 							break;
 						case loadout: break;
+						case glove:
+							new ItemGlove((GloveType)infoType);
+							break;
 						default: FlansMod.log.warn("Unrecognised type for " + infoType.shortName);
 							break;
 					}

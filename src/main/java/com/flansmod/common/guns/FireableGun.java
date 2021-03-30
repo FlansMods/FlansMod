@@ -8,31 +8,15 @@ import com.flansmod.common.types.InfoType;
 public class FireableGun
 {
 
-	/**
-	 * Spread of the bullets shot with this gun
-	 */
-	private Float spread;
-	
+	//Spread of the bullets shot with this gun
+	private float spread;
 	private EnumSpreadPattern spreadPattern;
-	
-	/**
-	 * Speed a bullet fired from this gun will travel at. (0 means instant/raytraced)
-	 */
-	private Float bulletSpeed;
-	
-	/**
-	 * The InfoType of this gun
-	 */
+	// Speed a bullet fired from this gun will travel at. (0 means instant/raytraced)
+	private float bulletSpeed;
 	private InfoType type;
-	
-	/**
-	 * the damage this gun will cause
-	 */
+	// the damage this gun will cause
 	private float damage;
-	
-	/**
-	 * the damage against vehicles
-	 */
+	// the damage against vehicles
 	private float vehicledamage;
 	
 	/**
@@ -66,7 +50,7 @@ public class FireableGun
 	/**
 	 * @return the bullet spread of this gun
 	 */
-	public Float getGunSpread()
+	public float getGunSpread()
 	{
 		return spread;
 	}
@@ -95,7 +79,7 @@ public class FireableGun
 	/**
 	 * @return the damage this gun will cause
 	 */
-	public Float getDamage()
+	public float getDamage()
 	{
 		return damage;
 	}
@@ -103,7 +87,7 @@ public class FireableGun
 	/**
 	 * @return the speed a bullet fired from this gun will travel at. (0 means instant/raytraced)
 	 */
-	public Float getBulletSpeed()
+	public float getBulletSpeed()
 	{
 		return this.bulletSpeed;
 	}
@@ -111,8 +95,11 @@ public class FireableGun
 	/**
 	 * @return the damage this gun will cause against vehicles
 	 */
-	public Float getDamageAgainstVehicles()
+	public float getDamageAgainstVehicles()
 	{
 		return this.vehicledamage;
 	}
+	
+	public void MultiplySpread(float multiplier) { spread *= multiplier; }
+	public void MultiplyDamage(float multiplier) { damage *= multiplier; }
 }

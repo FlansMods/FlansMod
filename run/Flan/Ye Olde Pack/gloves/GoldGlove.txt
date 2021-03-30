@@ -1,0 +1,12 @@
+Name Gold Glove
+ShortName gold_glove
+Icon gold_glove
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Enchantability 25
+Durability 128
+RecipeOutput 1
+Recipe G ingotGold L leather
+GG
+GG
+LL

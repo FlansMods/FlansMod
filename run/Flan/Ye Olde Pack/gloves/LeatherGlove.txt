@@ -1,0 +1,12 @@
+Name Leather Glove
+ShortName leather_glove
+Icon leather_glove
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Enchantability 5
+Durability 64
+RecipeOutput 1
+Recipe S string L leather
+LL
+LL
+SS

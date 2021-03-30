@@ -1,0 +1,12 @@
+Name Iron Glove
+ShortName iron_glove
+Icon iron_glove
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Enchantability 7
+Durability 512
+RecipeOutput 1
+Recipe G ingotIron L leather
+GG
+GG
+LL

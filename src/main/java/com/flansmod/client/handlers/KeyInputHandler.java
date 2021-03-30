@@ -25,6 +25,7 @@ import com.flansmod.client.util.FlansKeyConflictContext;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.enchantments.EnchantmentModule;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketReload;
@@ -207,6 +208,8 @@ public class KeyInputHandler
 						// Set player shoot delay to be the reload delay
 						// Set both gun delays to avoid reloading two guns at once
 						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(stack);
+						
+						float reloadDelay = EnchantmentModule.ModifyReloadTime(type.reloadTime, player, player.getHeldItemOffhand());
 						
 						GunAnimations animations = FlansModClient.getGunAnimations(player, EnumHand.MAIN_HAND);
 						

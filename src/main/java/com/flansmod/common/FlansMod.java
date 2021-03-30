@@ -90,6 +90,7 @@ import com.flansmod.common.driveables.mechas.ItemMecha;
 import com.flansmod.common.driveables.mechas.ItemMechaAddon;
 import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.enchantments.EnchantmentModule;
 import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 import com.flansmod.common.guns.AAGunType;
 import com.flansmod.common.guns.AttachmentType;
@@ -165,6 +166,7 @@ public class FlansMod
 	public static boolean addGunpowderRecipe = true;
 	public static boolean shootOnRightClick = false;
 	public static boolean forceUpdateJSONs = false;
+	public static boolean enchantmentModuleEnabled = true;
 	
 	public static float armourSpawnRate = 0.25F;
 	
@@ -182,6 +184,7 @@ public class FlansMod
 	public static final CommonTickHandler tickHandler = new CommonTickHandler();
 	public static FlansHooks hooks = new FlansHooks();
 	public static final ContentManager contentManager = new ContentManager();
+	public static final EnchantmentModule enchantmentModule = new EnchantmentModule();
 	public static HashMap<String, String> modelDirectories = new HashMap<String, String>();
 	
 	//Items and creative tabs
@@ -242,6 +245,8 @@ public class FlansMod
 		configFile = new Configuration(event.getSuggestedConfigurationFile());
 		syncConfig();
 		
+		if(enchantmentModuleEnabled)
+			enchantmentModule.PreInit();
 		//TODO : Load properties
 		//configuration = new Configuration(event.getSuggestedConfigurationFile());
 		//loadProperties();
@@ -313,6 +318,9 @@ public class FlansMod
 		
 		//Do proxy loading
 		proxy.init();
+		
+		if(enchantmentModuleEnabled)
+			enchantmentModule.Init();
 		
 		//Initialising handlers
 		packetHandler.initialise();
@@ -555,6 +563,9 @@ public class FlansMod
 	{
 		packetHandler.postInitialise();
 		
+		if(enchantmentModuleEnabled)
+			enchantmentModule.PostInit();
+		
 		hooks.hook();
 	}
 	
@@ -759,6 +770,7 @@ public class FlansMod
 		shootOnRightClick = configFile.getBoolean("ShootOnRightClick", Configuration.CATEGORY_GENERAL, shootOnRightClick, "If true, then shoot will be on right click");
 		addAllPaintjobsToCreative = configFile.getBoolean("Add All Paintjobs to Creative", Configuration.CATEGORY_GENERAL, addAllPaintjobsToCreative, "Whether all paintjobs should appear in creative");
 		forceUpdateJSONs = configFile.getBoolean("ForceUpdateJSONs", Configuration.CATEGORY_GENERAL, forceUpdateJSONs, "Turn this on to force re-create all JSON files. Should only be used in dev environment");
+		enchantmentModuleEnabled = configFile.getBoolean("EnchantmentModuleEnabled", Configuration.CATEGORY_GENERAL, enchantmentModuleEnabled, "Enable gun-related enchantments");
 		
 		if(configFile.hasChanged())
 			configFile.save();

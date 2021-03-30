@@ -13,6 +13,8 @@ import com.flansmod.common.driveables.mechas.ItemMecha;
 import com.flansmod.common.driveables.mechas.ItemMechaAddon;
 import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.enchantments.GloveType;
+import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.guns.AAGunType;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.BulletType;
@@ -47,7 +49,8 @@ public enum EnumType
 	part("parts"), bullet("bullets"), attachment("attachments"), grenade("grenades"), gun("guns"),
 	aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"),
 	tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"),
-	team("teams"), itemHolder("itemHolders"), rewardBox("rewardBoxes"), loadout("loadouts");
+	team("teams"), itemHolder("itemHolders"), rewardBox("rewardBoxes"), loadout("loadouts"),
+	glove("gloves");
 	
 	public String folderName;
 	
@@ -89,6 +92,7 @@ public enum EnumType
 			case itemHolder: return ItemHolderType.class;
 			case rewardBox: return RewardBox.class;
 			case loadout: return LoadoutPool.class;
+			case glove: return GloveType.class;
 			default: return InfoType.class;
 		}
 	}
@@ -114,6 +118,7 @@ public enum EnumType
 		if(o instanceof ItemHolderType || o instanceof TileEntityItemHolder) return itemHolder;
 		if(o instanceof RewardBox) return rewardBox;
 		if(o instanceof LoadoutPool) return loadout;
+		if(o instanceof GloveType || o instanceof ItemGlove) return glove;
 		return null;
 	}
 }

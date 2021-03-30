@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.enchantments.EnchantmentModule;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 
@@ -57,14 +58,17 @@ public class PacketReload extends PacketBase
 		ItemStack off = playerEntity.getHeldItemOffhand();
 		ItemStack stack = isOffHand ? off : main;
 		boolean hasOffHand = main != null && !main.isEmpty() && off != null && !off.isEmpty();
+		ItemStack otherHand = isOffHand ? main : off;
 		if(data != null && stack != null && stack.getItem() instanceof ItemGun)
 		{
 			GunType type = ((ItemGun)stack.getItem()).GetType();
 			
 			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, hand, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
 			{
+				float reloadDelay = EnchantmentModule.ModifyReloadTime(type.reloadTime, playerEntity, otherHand);
+				
 				//Set the reload delay
-				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
+				data.shootTimeRight = data.shootTimeLeft = reloadDelay;
 				if(isOffHand)
 					data.reloadingLeft = true;
 				else data.reloadingRight = true;
@@ -72,7 +76,7 @@ public class PacketReload extends PacketBase
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
 			
-				FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, type.reloadTime, type.getPumpDelayAfterReload(), type.getPumpTime()), playerEntity);
+				FlansMod.getPacketHandler().sendTo(new PacketGunAnimation(hand, (int)reloadDelay, type.getPumpDelayAfterReload(), type.getPumpTime()), playerEntity);
 			}
 		}
 	}

@@ -24,6 +24,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -53,6 +54,8 @@ import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.enchantments.EnchantmentModule;
+import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
@@ -338,7 +341,7 @@ public class ItemGun extends Item implements IPaintableItem
 			soundDelay = type.idleSoundLength;
 		}
 		
-		if (gunCantBeHandeled(type, player))
+		if (!gunCanBeHandled(type, player))
 			return;
 		
 		if(type.usableByPlayers)
@@ -446,15 +449,25 @@ public class ItemGun extends Item implements IPaintableItem
 	 * @param player The player who is handling the gun
 	 * @return if the player can handle the gun based on the contents of the main and off hand and the GunType
 	 */
-	public Boolean gunCantBeHandeled(GunType type, EntityPlayer player)
+	public boolean gunCanBeHandled(GunType type, EntityPlayer player)
 	{
+		// We can always use a 1H gun
+		if(type.oneHanded)
+			return true;
+		
 		ItemStack main = player.getHeldItemMainhand();
 		ItemStack off = player.getHeldItemOffhand();
 		Boolean hasItemInBothHands = !main.isEmpty() && !off.isEmpty();
-		if(hasItemInBothHands && !type.oneHanded)
-			return true;
+		if(hasItemInBothHands) 
+		{
+			// Gloves are special enchantable items that can be placed in the offhand while still letting you shoot 2H
+			if(off.getItem() instanceof ItemGlove)
+				return true;
+			else
+				return false;
+		}
 		
-		return false;
+		return true;
 	}
 	
 	public void shoot(EnumHand hand, EntityPlayer player, ItemStack gunstack, PlayerData data, World world, @Nullable GunAnimations animations)
@@ -462,6 +475,11 @@ public class ItemGun extends Item implements IPaintableItem
 		if(type.usableByPlayers)
 		{
 			float shootTime = data.GetShootTime(hand);
+			
+			ItemStack otherHand = null;
+			if(hand == EnumHand.MAIN_HAND)
+				otherHand = player.getHeldItemOffhand();
+			else otherHand = player.getHeldItemMainhand();
 			
 			if (!world.isRemote && shootTime > 0f)
 			{
@@ -563,7 +581,18 @@ public class ItemGun extends Item implements IPaintableItem
 						if (shootableType instanceof BulletType)
 						{
 							//Fire gun
-							FireableGun fireableGun = new FireableGun(type,type.getDamage(gunstack),type.getSpread(gunstack), type.bulletSpeed, type.getSpreadPattern(gunstack));
+							FireableGun fireableGun = 
+									new FireableGun(type,
+											type.getDamage(gunstack),
+											type.getSpread(gunstack), 
+											type.bulletSpeed, 
+											type.getSpreadPattern(gunstack));
+							
+							if(otherHand.getItem() instanceof ItemShield || otherHand.getItem() instanceof ItemGlove)
+							{
+								EnchantmentModule.ModifyGun(fireableGun, player, otherHand);
+							}
+							
 							FiredShot shot = new FiredShot(fireableGun, (BulletType)shootableType, (EntityPlayerMP)player);
 							//TODO gunOrigin? & animation origin
 							ShotHandler.fireGun(world, shot, type.numBullets*shootableType.numBullets, rayTraceOrigin, rayTraceDirection, handler);
@@ -598,7 +627,7 @@ public class ItemGun extends Item implements IPaintableItem
 			if(type.deployable)
 				return;
 			
-			if (gunCantBeHandeled(type, player))
+			if (!gunCanBeHandled(type, player))
 				return;
 			
 			shoot(hand, player, gunstack, data, world, null);
