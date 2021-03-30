@@ -8,3 +8,7 @@ Defence 0.5
 ArmourTexture DustbinLidChestplate
 MoveSpeedModifier 0.7
 KnockbackModifier 0.5
+Enchantability 0
+Toughness 5
+Durability 512
+DamageReductionAmount 13

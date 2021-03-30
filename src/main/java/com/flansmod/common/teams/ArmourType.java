@@ -24,6 +24,15 @@ public class ArmourType extends InfoType
 	 * The amount of damage to absorb. From 0 to 1. Stacks additively between armour pieces
 	 */
 	public double defence;
+	
+	public int DamageReductionAmount;
+	// < 0 durability = infinite
+	public int Durability;
+	// Armour toughness, like diamond
+	public int Toughness;
+	// Enchantability, optional
+	public int Enchantability = 10;
+	
 	/**
 	 * The name for the armour texture. Texture path/name is assets/flansmod/armor/<armourTextureName>_1.png or _2 for legs
 	 */
@@ -94,6 +103,11 @@ public class ArmourType extends InfoType
 			smokeProtection = Read(split, "SmokeProtection", smokeProtection);
 			armourTextureName = Read(split, "ArmourTexture", armourTextureName);
 			armourTextureName = Read(split, "ArmorTexture", armourTextureName);
+			Enchantability = Read(split, "Enchantability", Enchantability);
+			Toughness = Read(split, "Toughness", Toughness);
+			Durability = Read(split, "Durability", Durability);
+			DamageReductionAmount = Read(split, "DamageReductionAmount", DamageReductionAmount);
+			
 		}
 		catch(Exception e)
 		{

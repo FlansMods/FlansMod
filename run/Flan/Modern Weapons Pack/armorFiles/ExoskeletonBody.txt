@@ -10,3 +10,7 @@ MoveSpeedModifier 1.0
 KnockbackModifier 0.1
 JumpModifier 2.5
 ModelScale 0.25
+Enchantability 0
+Toughness 2
+Durability 0
+DamageReductionAmount 9

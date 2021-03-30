@@ -123,6 +123,9 @@ public class EnchantmentModule
 				if(event.getAmount() > maxHP * maxDamageAsPercentOfHP)
 				{
 					float absorbedDmg = event.getAmount() - maxHP * maxDamageAsPercentOfHP;
+					// Don't want to just annihalate the armour in edge cases. That would be :(
+					if(absorbedDmg > 256.0f)
+						absorbedDmg = 256.0f;
 					for(ItemStack armour : event.getEntityLiving().getArmorInventoryList())
 					{
 						if(EnchantmentHelper.getEnchantmentLevel(JUGGERNAUT_ENCHANT, armour) > 0)

@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,18 +29,33 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
-public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanItem
+public class ItemTeamArmour extends ItemArmor implements IFlanItem //, ISpecialArmor
 {
 	public ArmourType type;
+	private ArmorMaterial material;
 	protected static final UUID[] uuid = new UUID[]{UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()};
 	
 	public ItemTeamArmour(ArmourType t)
 	{
-		super(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.values()[5 - t.type]);
+		super(EnumHelper.addArmorMaterial(
+					t.shortName, 
+					"", 
+					t.Durability, 
+					new int[] {t.DamageReductionAmount, t.DamageReductionAmount, t.DamageReductionAmount, t.DamageReductionAmount}, 
+					t.Enchantability, 
+					SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 
+					t.Toughness), 
+				0, 
+				EntityEquipmentSlot.values()[5 - t.type]);
 		type = t;
 		type.item = this;
 		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
+		
+		if(type.Durability > 0)
+			setMaxDamage(type.Durability);
+		else
+			setMaxDamage(0);
 	}
 	
 	public ItemTeamArmour(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, int armourType)
@@ -46,6 +63,13 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		super(armorMaterial, renderIndex, EntityEquipmentSlot.values()[5 - armourType]);
 	}
 	
+	@Override
+    public int getItemEnchantability()
+    {
+        return type.Enchantability;
+    }
+	
+	/*
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot)
 	{
@@ -63,6 +87,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		//Do nothing to the armour. It should not break as that would leave the player's team ambiguous
 	}
+	*/
 	
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String armourType)

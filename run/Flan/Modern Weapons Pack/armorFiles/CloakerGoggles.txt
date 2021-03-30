@@ -11,3 +11,7 @@ KnockbackModifier 0.25
 NightVision True
 Overlay CloakerGoggles
 SmokeProtection True
+Enchantability 25
+Toughness 0
+Durability 0
+DamageReductionAmount 3

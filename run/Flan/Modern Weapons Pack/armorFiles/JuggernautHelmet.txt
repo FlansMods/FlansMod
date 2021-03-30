@@ -8,3 +8,7 @@ ArmourTexture Juggernaut
 MoveSpeedModifier 0.85
 KnockbackModifier 0.25
 SmokeProtection True
+Enchantability 0
+Toughness 2
+Durability 0
+DamageReductionAmount 3

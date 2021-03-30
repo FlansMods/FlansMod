@@ -8,3 +8,7 @@ Defence 0.4
 ArmourTexture Bulldozer
 MoveSpeedModifier 0.65
 KnockbackModifier 0.25
+Enchantability 0
+Toughness 3
+Durability 0
+DamageReductionAmount 11

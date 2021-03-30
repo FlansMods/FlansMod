@@ -9,3 +9,7 @@ ArmourTexture Exoskeleton
 MoveSpeedModifier 2.0
 KnockbackModifier 0.1
 ModelScale 0.25
+Enchantability 0
+Toughness 2
+Durability 0
+DamageReductionAmount 6

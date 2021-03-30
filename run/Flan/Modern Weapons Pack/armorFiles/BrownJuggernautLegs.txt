@@ -7,3 +7,7 @@ Defence 0.2
 ArmourTexture BrownJuggernaut
 MoveSpeedModifier 0.75
 KnockbackModifier 0.25
+Enchantability 0
+Toughness 2
+Durability 0
+DamageReductionAmount 6
