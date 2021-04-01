@@ -175,7 +175,7 @@ public class LoadoutPool extends InfoType
 			int numAdditionalItems = (split.length - 3) / 2;
 			for(int i = 0; i < numAdditionalItems; i++)
 			{
-				ItemStack stack = getNonRecipeElement(split[2 * i + 3]);
+				ItemStack stack = getRecipeElement(split[2 * i + 3]);
 				if(stack == null || stack.isEmpty())
 				{
 					FlansMod.Assert(false, "Recipe item stack null");
@@ -183,6 +183,8 @@ public class LoadoutPool extends InfoType
 				else
 				{
 					stack.setCount(Integer.parseInt(split[2 * i + 4]));
+					if(stack.getItemDamage() == Short.MAX_VALUE)
+						stack.setItemDamage(0);
 					entry.extraItems.add(stack);
 				}
 			}

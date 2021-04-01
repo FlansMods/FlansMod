@@ -541,14 +541,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Drop item upon detonation, after explosions and whatnot
 		if(!world.isRemote && type.dropItemOnDetonate != null)
 		{
-			String itemName = type.dropItemOnDetonate;
-			int damage = 0;
-			if(itemName.contains("."))
-			{
-				damage = Integer.parseInt(itemName.split("\\.")[1]);
-				itemName = itemName.split("\\.")[0];
-			}
-			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
+			ItemStack dropStack = InfoType.getRecipeElement(type.dropItemOnDetonate);
 			entityDropItem(dropStack, 1.0F);
 		}
 		

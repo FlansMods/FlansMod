@@ -85,14 +85,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 			//Drop an item upon throwing if necessary
 			if(type.dropItemOnThrow != null)
 			{
-				String itemName = type.dropItemOnDetonate;
-				int damage = 0;
-				if(itemName.contains("."))
-				{
-					damage = Integer.parseInt(itemName.split("\\.")[1]);
-					itemName = itemName.split("\\.")[0];
-				}
-				ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
+				ItemStack dropStack = InfoType.getRecipeElement(type.dropItemOnDetonate);
 				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, dropStack));
 			}
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);

@@ -46,7 +46,7 @@ public class ToolType extends InfoType
 	/**
 	 * The items required to be added (shapelessly) to recharge the tool
 	 */
-	public ArrayList<ItemStack> rechargeRecipe = new ArrayList<>();
+	public ArrayList<Ingredient> rechargeRecipe = new ArrayList<>();
 	/**
 	 * Not yet implemented. For making tools chargeable with IC2 EU
 	 */
@@ -108,7 +108,7 @@ public class ToolType extends InfoType
 					boolean damaged = split[2 * i + 2].contains(".");
 					String itemName = damaged ? split[2 * i + 2].split("\\.")[0] : split[2 * i + 2];
 					int damage = damaged ? Integer.parseInt(split[2 * i + 2].split("\\.")[1]) : 0;
-					rechargeRecipe.add(getRecipeElement(itemName, amount, damage, shortName));
+					rechargeRecipe.add(getRecipeIngredient(itemName, amount, damage));
 				}
 			}
 			else if(split[0].equals("DestroyOnEmpty"))
@@ -130,12 +130,12 @@ public class ToolType extends InfoType
 		//Add the recharge recipe if there is one
 		if(rechargeRecipe.size() < 1)
 			return;
-		rechargeRecipe.add(new ItemStack(item, 1, toolLife));
+		rechargeRecipe.add(Ingredient.fromStacks(new ItemStack(item, 1, toolLife)));
 		
 		NonNullList<Ingredient> ingredients = NonNullList.create();
-		for(ItemStack stack : rechargeRecipe)
+		for(Ingredient stack : rechargeRecipe)
 		{
-			ingredients.add(Ingredient.fromStacks(stack));
+			ingredients.add(stack);
 		}
 		registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, 1, 0), ingredients).setRegistryName(name + "_recharge"));
 	}

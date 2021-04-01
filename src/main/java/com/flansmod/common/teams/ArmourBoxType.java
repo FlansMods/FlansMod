@@ -66,9 +66,9 @@ public class ArmourBoxType extends BoxType
 					{
 						ItemStack stack = ItemStack.EMPTY.copy();
 						if(lineSplit[j * 2 + 1].contains("."))
-							stack = getRecipeElement(lineSplit[j * 2 + 1].split("\\.")[0], Integer.valueOf(lineSplit[j * 2 + 2]), Integer.valueOf(lineSplit[j * 2 + 1].split("\\.")[1]), shortName);
+							stack = getRecipeElement(lineSplit[j * 2 + 1].split("\\.")[0], Integer.valueOf(lineSplit[j * 2 + 2]), Integer.valueOf(lineSplit[j * 2 + 1].split("\\.")[1]));
 						else
-							stack = getRecipeElement(lineSplit[j * 2 + 1], Integer.valueOf(lineSplit[j * 2 + 2]), 0, shortName);
+							stack = getRecipeElement(lineSplit[j * 2 + 1], Integer.valueOf(lineSplit[j * 2 + 2]), 0);
 						
 						if(stack != null && !stack.isEmpty())
 							entry.requiredStacks[i].add(stack);

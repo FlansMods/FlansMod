@@ -192,13 +192,7 @@ public class ItemGun extends Item implements IPaintableItem
 	{
 		if(itemName != null && !world.isRemote)
 		{
-			int damage = 0;
-			if(itemName.contains("."))
-			{
-				damage = Integer.parseInt(itemName.split("\\.")[1]);
-				itemName = itemName.split("\\.")[0];
-			}
-			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
+			ItemStack dropStack = InfoType.getRecipeElement(itemName);
 			entity.entityDropItem(dropStack, 0.5F);
 		}
 	}

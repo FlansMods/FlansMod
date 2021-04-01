@@ -29,6 +29,8 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
@@ -395,7 +397,7 @@ public class InfoType
 	{
 		if(smeltableFrom != null)
 		{
-			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 0), new ItemStack(item), 0.0F);
+			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 1, 0), new ItemStack(item), 0.0F);
 		}
 		if(recipeLine == null)
 			return;
@@ -445,11 +447,11 @@ public class InfoType
 				int height = maxY - minY + 1;
 				
 				// Make a menu of ingredients from the main recipe line
-				HashMap<Character, ItemStack> menu = new HashMap<>();
+				HashMap<Character, Ingredient> menu = new HashMap<>();
 				for(int i = 0; i < (recipeLine.length - 1) / 2; i++)
 				{
 					char c = recipeLine[i * 2 + 1].charAt(0);
-					ItemStack stack = getRecipeElement(recipeLine[i * 2 + 2]);
+					Ingredient stack = getRecipeIngredient(recipeLine[i * 2 + 2]);
 					
 					menu.put(c, stack);
 				}
@@ -463,18 +465,18 @@ public class InfoType
 						char c = recipeGrid[minX + i][minY + j];
 						if(c == ' ')
 						{
-							ingredients.add(Ingredient.fromStacks(ItemStack.EMPTY.copy()));
+							ingredients.add(Ingredient.EMPTY);
 						}
 						else
 						{
-							ItemStack stack = menu.get(c);
-							if(stack == null || stack.isEmpty())
+							Ingredient stack = menu.get(c);
+							if(stack == null)
 							{
 								FlansMod.log.warn("Failed to find " + c + " in recipe for " + shortName);
 								// This recipe is BORK. Kill it
 								return;
 							}
-							ingredients.add(Ingredient.fromStacks(stack.copy())); 
+							ingredients.add(stack); 
 						}
 					}
 				}
@@ -486,7 +488,7 @@ public class InfoType
 				NonNullList<Ingredient> ingredients = NonNullList.create();
 				for(int i = 0; i < (recipeLine.length - 1); i++)
 				{
-					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));
+					ingredients.add(getRecipeIngredient(recipeLine[i + 1]));
 				}
 				
 				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients).setRegistryName(shortName + "_shapeless"));
@@ -520,41 +522,61 @@ public class InfoType
 	{
 		return item;
 	}
-	
-	public static ItemStack getNonRecipeElement(String str)
-	{
-		// Split ID with . and if it contains a second part, use it
-		// as damage value.
-		if(str.contains("."))
-			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
-		else
-			return getRecipeElement(str, 0);
-	}
-	
+			
 	public static ItemStack getRecipeElement(String str)
 	{
-		// Split ID with . and if it contains a second part, use it
-		// as damage value.
-		if(str.contains("."))
-			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
-		else
-			return getRecipeElement(str, Short.MAX_VALUE);
+		String[] split = str.split("\\.");
+		if(split.length == 0)
+			return ItemStack.EMPTY;
+		
+		String id = split[0];
+		int damage = split.length > 1 ? Short.parseShort(split[1]) : Short.MAX_VALUE;
+		int amount = 1;
+		
+		return getRecipeElement(id, amount, damage);
 	}
 	
-	public static ItemStack getRecipeElement(String s, int damage)
+	public static Ingredient getRecipeIngredient(String str)
 	{
-		return getRecipeElement(s, 1, damage);
+		String[] split = str.split("\\.");
+		if(split.length == 0)
+			return Ingredient.EMPTY;
+		
+		String id = split[0];
+		int damage = split.length > 1 ? Short.parseShort(split[1]) : Short.MAX_VALUE;
+		int amount = 1;
+		
+		return getRecipeIngredient(id, amount, damage);
 	}
 	
-	public static ItemStack getRecipeElement(String s, int amount, int damage)
+	public static Ingredient getRecipeIngredient(String id, int amount, int damage)
 	{
-		return getRecipeElement(s, amount, damage, "unknown");
+		// Legacy cases
+		switch(id)
+		{
+			case "doorIron": return Ingredient.fromItem(Items.IRON_DOOR);
+			case "clayItem": return Ingredient.fromItem(Items.CLAY_BALL);
+			case "iron_trapdoor": return Ingredient.fromItem(Item.getItemFromBlock(Blocks.IRON_TRAPDOOR));
+			case "trapdoor": return Ingredient.fromItem(Item.getItemFromBlock(Blocks.TRAPDOOR));
+			case "gunpowder": return Ingredient.fromItem(Items.GUNPOWDER);
+			case "ingotIron":
+			case "iron": return Ingredient.fromItem(Items.IRON_INGOT);
+			case "boat": return Ingredient.fromItem(Items.BOAT);
+		}
+		
+		// Special ingredients, allows for steel with iron fallback etc.
+		if(SPECIAL_INGREDIENTS.containsKey(id))
+		{
+			return SPECIAL_INGREDIENTS.get(id);
+		}
+		
+		return Ingredient.fromStacks(getRecipeElement(id, amount, damage));
 	}
 	
-	public static ItemStack getRecipeElement(String s, int amount, int damage, String requester)
+	public static ItemStack getRecipeElement(String id, int amount, int damage)
 	{
 		// Do a handful of special cases, mostly legacy recipes
-		switch(s)
+		switch(id)
 		{
 			case "doorIron": return new ItemStack(Items.IRON_DOOR, amount);
 			case "clayItem": return new ItemStack(Items.CLAY_BALL, amount);
@@ -566,37 +588,35 @@ public class InfoType
 			case "boat": return new ItemStack(Items.BOAT, amount);
 		}
 		
-		if(s.contains(":"))
+		// Now try a modern "modid:itemid" style lookup
+		// No modid, try a search with "minecraft:"
 		{
-			Item item = Item.getByNameOrId(s);
-			if(item != null)
-				return new ItemStack(item, amount, damage);
-		}
-		else // No modid, try a search with "minecraft:"
-		{
-			Item item = Item.getByNameOrId("minecraft:" + s);
+			String modPrefixName = id;
+			if(!modPrefixName.contains(":"))
+				modPrefixName = "minecraft:" + modPrefixName;
+	
+			Item item = Item.getByNameOrId(modPrefixName);
 			if(item != null)
 				return new ItemStack(item, amount, damage);
 		}
 		
+		// Then fallback to the original way we used to do it, for legacy packs
 		for(InfoType type : infoTypes.values())
 		{
-			if(type.shortName.equals(s))
+			if(type.shortName.equals(id))
 				return new ItemStack(type.item, amount, damage);
 		}
 
 		for(Item item : Item.REGISTRY)
 		{
-			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
+			if(item != null && (item.getTranslationKey().equals("item." + id) || item.getTranslationKey().equals("tile." + id)))
 			{
 				// Turned off console spam for this case. It's legacy, but there's so much of it now that this is pretty standard in official packs
 				return new ItemStack(item, amount, damage); 
 			}
 		}
-
 		
-		
-		FlansMod.log.warn("Could not find " + s + " when adding recipe for " + requester);
+		FlansMod.log.warn("Could not find " + id + " in recipe");		
 		return ItemStack.EMPTY.copy();
 	}
 	
@@ -672,5 +692,65 @@ public class InfoType
 		}
 	}
 	
+	private static HashMap<String, Ingredient> SPECIAL_INGREDIENTS = new HashMap<String, Ingredient>();
+	public static void InitializeSpecialIngredients()
+	{
+		// Steel ingot - fallback is iron
+		AddOreDictEntry("nuggetSteel", Ingredient.fromItem(Items.IRON_NUGGET));
+		AddOreDictEntry("ingotSteel", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("blockSteel", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
+		// Nickel with fallback iron
+		AddOreDictEntry("nuggetNickel", Ingredient.fromItem(Items.IRON_NUGGET));
+		AddOreDictEntry("ingotNickel", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("blockNickel", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
+		// Lead with fallback iron
+		AddOreDictEntry("nuggetLead", Ingredient.fromItem(Items.IRON_NUGGET));
+		AddOreDictEntry("ingotLead", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("blockLead", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
+		// Copper with fallback iron
+		AddOreDictEntry("nuggetCopper", Ingredient.fromItem(Items.IRON_NUGGET));
+		AddOreDictEntry("ingotCopper", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("blockCopper", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
+		// Tin with fallback iron
+		AddOreDictEntry("nuggetTin", Ingredient.fromItem(Items.IRON_NUGGET));
+		AddOreDictEntry("ingotTin", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("blockTin", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
+		
+		// Electrum with fallback gold
+		AddOreDictEntry("nuggetElectrum", Ingredient.fromItem(Items.GOLD_NUGGET));
+		AddOreDictEntry("ingotElectrum", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("blockElectrum", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
+		// Constantan with fallback gold
+		AddOreDictEntry("nuggetConstantan", Ingredient.fromItem(Items.GOLD_NUGGET));
+		AddOreDictEntry("ingotConstantan", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("blockConstantan", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
+		// Silver with fallback gold
+		AddOreDictEntry("nuggetSilver", Ingredient.fromItem(Items.GOLD_NUGGET));
+		AddOreDictEntry("ingotSilver", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("blockSilver", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
+		// Bronze with fallback gold
+		AddOreDictEntry("nuggetBronze", Ingredient.fromItem(Items.GOLD_NUGGET));
+		AddOreDictEntry("ingotBronze", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("blockBronze", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
+
+		
+		AddModEntry("treatedPlanks", "immersiveengineering:treated_wood",  Ingredient.fromItems(Item.getItemFromBlock(Blocks.PLANKS)));
+	}
 	
+	private static void AddModEntry(String name, String resLoc, Ingredient fallback)
+	{
+		Item item = Item.getByNameOrId(resLoc);
+		if(item != null)
+			SPECIAL_INGREDIENTS.put(name, Ingredient.fromItem(item));
+		else
+			SPECIAL_INGREDIENTS.put(name, fallback);
+	}
+	
+	private static void AddOreDictEntry(String name, Ingredient fallback)
+	{
+		if(OreDictionary.doesOreNameExist(name))
+			SPECIAL_INGREDIENTS.put(name, new OreIngredient(name));
+		else
+			SPECIAL_INGREDIENTS.put(name, fallback);
+	}
 }

@@ -346,13 +346,13 @@ public class FlansModClient extends FlansMod
 			
 			if(split[0].equals("iconcrack"))
 			{
-				data = new int[]{Item.getIdFromItem(InfoType.getRecipeElement(split[1], 0).getItem())};
+				data = new int[]{Item.getIdFromItem(InfoType.getRecipeElement(split[1], 1, 0).getItem())};
 				particleID = EnumParticleTypes.ITEM_CRACK.getParticleID();
 			}
 			else
 			{
 				data = new int[]{
-					Block.getIdFromBlock(Block.getBlockFromItem(InfoType.getRecipeElement(split[1], 0).getItem()))};
+					Block.getIdFromBlock(Block.getBlockFromItem(InfoType.getRecipeElement(split[1], 1, 0).getItem()))};
 				
 				if(split[0].equals("blockcrack"))
 				{

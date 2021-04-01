@@ -348,6 +348,8 @@ public class FlansMod
 	{
 		log.info("Registering Recipes.");
 		
+		InfoType.InitializeSpecialIngredients();
+		
 		// Recipes
 		for(InfoType type : InfoType.infoTypes.values())
 		{

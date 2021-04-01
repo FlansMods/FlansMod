@@ -324,14 +324,7 @@ public class ShotHandler
 		if(bulletType.dropItemOnHit != null)
 		{
 			//TODO save ItemStack on load into the bulletType
-			String itemName = bulletType.dropItemOnHit;
-			int damage = 0;
-			if(itemName.contains("."))
-			{
-				damage = Integer.parseInt(itemName.split("\\.")[1]);
-				itemName = itemName.split("\\.")[0];
-			}
-			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
+			ItemStack dropStack = InfoType.getRecipeElement(bulletType.dropItemOnHit);
 			
 			if(dropStack != null && !dropStack.isEmpty())
 			{
