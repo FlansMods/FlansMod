@@ -121,11 +121,13 @@ public class EntityTeleporter extends Entity
 			//Find a valid place to enter the world
 			World overworld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
 			
+			// Map their apoc pos to overworld 1:1
 			if(entryPoint == null)
-				entryPoint = overworld.getSpawnPoint();
+				entryPoint = player.getPosition();
 	
-			for(int i = overworld.rand.nextInt(100); i < 300; i++)
+			for(int j = 0; j < 300; j++)
 			{
+				double i = overworld.rand.nextDouble() * Math.PI * 2d;
 				double dX = Math.cos(i) * FlansModApocalypse.RETURN_RADIUS;
 				double dZ = Math.sin(i) * FlansModApocalypse.RETURN_RADIUS;
 				
@@ -147,8 +149,9 @@ public class EntityTeleporter extends Entity
 		else
 		{
 			World apocWorld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID);
-			for(int i = apocWorld.rand.nextInt(100); i < 300; i++)
+			for(int j = 0; j < 300; j++)
 			{
+				double i = apocWorld.rand.nextDouble() * Math.PI * 2d;
 				double dX = Math.cos(i) * FlansModApocalypse.RETURN_RADIUS;
 				double dZ = Math.sin(i) * FlansModApocalypse.RETURN_RADIUS;
 				
