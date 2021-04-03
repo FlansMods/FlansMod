@@ -15,8 +15,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelMedicBag extends ModelBase
 {
-	int textureX = 1024;
-	int textureY = 1024;
+	int textureX = 512;
+	int textureY = 64;
 
 	public ModelMedicBag()
 	{

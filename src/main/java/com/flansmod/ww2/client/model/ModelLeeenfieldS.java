@@ -17,7 +17,7 @@ import com.flansmod.common.vector.Vector3f;
 
 public class ModelLeeenfieldS extends ModelGun
 {
-	int textureX = 128;
+	int textureX = 64;
 	int textureY = 128;
 	
 	public ModelLeeenfieldS()

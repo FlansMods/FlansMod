@@ -1,8 +1,18 @@
 package com.flansmod.client;
 
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -25,10 +35,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.actors.threadpool.Arrays;
 
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.client.util.WorldRenderer;
+import com.flansmod.common.ContentManager.ContentPackFlanFolder;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.AttachmentType;
@@ -135,6 +147,115 @@ public class FlansModClient extends FlansMod
 		wr = new WorldRenderer();
 	}
 	
+	private static void DoTextureTrim()
+	{
+		for(File contentPack : FlansMod.INSTANCE.contentManager.GetFolderContentPacks())
+		{
+			File skinFolder = new File(contentPack, "assets/flansmod/skins");
+			if(skinFolder.exists() && skinFolder.isDirectory())
+			{
+				List<File> skins = Arrays.asList(skinFolder.listFiles());
+				
+				// Group together variant skins
+				HashMap<String, List<File>> skinGroups = new HashMap<String, List<File>>();
+				for(File skin : skins)
+				{
+					String skinName = skin.getName().split("\\.")[0];
+					boolean foundParent = false;
+					for(File other : skins)
+					{
+						String otherName = other.getName().split("\\.")[0];
+						
+						// If we are a substring of any other skin, go to that group
+						if(skinName.startsWith(otherName))
+						{
+							if(!skinGroups.containsKey(otherName))
+								skinGroups.put(otherName, new ArrayList<File>(8));
+							skinGroups.get(otherName).add(skin);
+							foundParent = true;
+							break;
+						}
+					}
+					if(!foundParent)
+					{
+						if(!skinGroups.containsKey(skinName))
+							skinGroups.put(skinName, new ArrayList<File>(8));
+						skinGroups.get(skinName).add(skin);
+					}
+				}
+				
+				// Now process
+				for(HashMap.Entry<String, List<File>> kvp : skinGroups.entrySet())
+				{
+					String key = kvp.getKey();
+					
+					// Calculate the size
+					int x = 1, y = 1;
+					for(File skin : kvp.getValue())
+					{
+						try 
+						{
+							BufferedImage img = ImageIO.read(skin);
+							WritableRaster alpha = img.getAlphaRaster();
+							if(alpha != null)
+							{
+								for(int i = 0; i < alpha.getWidth(); i++)
+								{
+									for(int j = 0; j < alpha.getHeight(); j++)
+									{
+										// Skip the area we know we already contain
+										if(i < x && j < y)
+											continue;
+										
+										if(alpha.getSample(i, j, 0) > 0.0f)
+										{
+											if(i >= x && x < alpha.getWidth())
+												x *= 2;
+											if(j >= y && y < alpha.getHeight())
+												y *= 2;
+										}
+									}
+								}
+							}
+						} 
+						catch (Exception e) 
+						{
+							//e.printStackTrace();
+						}
+					}
+					
+					// Then apply
+					boolean anyResizeApplied = false;
+					for(File skin : kvp.getValue())
+					{
+						try 
+						{
+							BufferedImage img = ImageIO.read(skin);
+							if(x < img.getWidth() || y < img.getHeight())
+							{
+								
+								Raster subImg = img.getData(new Rectangle(0, 0, x, y));
+								//img.setData(subImg);
+								BufferedImage cropped = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
+								cropped.setData(subImg);
+								ImageIO.write(cropped, "PNG", skin);
+										//new File("C:\\JavaProjects\\FlansMod1.12.2_3\\tests\\" + skin.getName()));
+								anyResizeApplied = true;
+							}
+						} 
+						catch (Exception e) 
+						{
+							//e.printStackTrace();
+						}
+					}
+					
+					if(anyResizeApplied)
+						FlansMod.log.info(key + " was resized to " + x + ", " + y);
+				}	
+			}
+		}
+	}
+	
 	public static void tick()
 	{
 		if(minecraft.player == null || minecraft.world == null)
@@ -144,6 +265,11 @@ public class FlansModClient extends FlansMod
 			teamInfo.timeLeft--;
 		
 		ClientTeamsData.Tick();
+		
+		/*
+		if(Keyboard.isKeyDown(Keyboard.KEY_PAUSE))
+			DoTextureTrim();
+		*/
 		
 		// Force shutdown if too many vehicles break to prevent save data corruption
 		if(numVehicleExceptions > 2)

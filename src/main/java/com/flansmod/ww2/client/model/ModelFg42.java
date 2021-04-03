@@ -17,7 +17,7 @@ import com.flansmod.common.vector.Vector3f;
 public class ModelFg42 extends ModelGun //Same as Filename
 {
 	int textureX = 128;
-	int textureY = 128;
+	int textureY = 64;
 
 	public ModelFg42() //Same as Filename
 	{

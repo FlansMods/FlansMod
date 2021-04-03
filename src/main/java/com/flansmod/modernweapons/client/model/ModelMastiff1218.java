@@ -19,7 +19,7 @@ import com.flansmod.client.tmt.Shape2D;
 public class ModelMastiff1218 extends ModelGun //Same as Filename
 {
 	int textureX = 1024;
-	int textureY = 1024;
+	int textureY = 64;
 
 	public ModelMastiff1218() //Same as Filename
 	{

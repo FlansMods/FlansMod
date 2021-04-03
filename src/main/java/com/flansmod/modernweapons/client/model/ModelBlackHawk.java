@@ -11,7 +11,7 @@ import com.flansmod.common.vector.Vector3f;
 public class ModelBlackHawk extends ModelPlane //Same as Filename
 {
 	int textureX = 2048;
-	int textureY = 2048;
+	int textureY = 1024;
 	
 	public ModelBlackHawk() //Same as Filename
 	{

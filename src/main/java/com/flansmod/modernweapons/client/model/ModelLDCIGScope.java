@@ -15,7 +15,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelLDCIGScope extends ModelAttachment //Same as Filename
 {
 	int textureX = 512;
-	int textureY = 512;
+	int textureY = 256;
 
 	public ModelLDCIGScope() //Same as Filename
 	{

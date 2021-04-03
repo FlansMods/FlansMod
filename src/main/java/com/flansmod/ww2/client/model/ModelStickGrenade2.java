@@ -18,7 +18,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelStickGrenade2 extends ModelBase
 {
 	int textureX = 128;
-	int textureY = 128;
+	int textureY = 64;
 	
 	public ModelStickGrenade2()
 	{

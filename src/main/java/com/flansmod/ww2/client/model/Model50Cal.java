@@ -10,7 +10,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class Model50Cal extends ModelMG //Same as Filename
 {
 	int textureX = 64;
-	int textureY = 64;
+	int textureY = 32;
 
 	public Model50Cal() //Same as Filename
 	{

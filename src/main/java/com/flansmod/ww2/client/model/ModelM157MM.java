@@ -17,7 +17,7 @@ import com.flansmod.client.tmt.Shape2D;
 public class ModelM157MM extends ModelVehicle //Same as Filename
 {
 	int textureX = 256;
-	int textureY = 256;
+	int textureY = 128;
 
 	public ModelM157MM() //Same as Filename
 	{

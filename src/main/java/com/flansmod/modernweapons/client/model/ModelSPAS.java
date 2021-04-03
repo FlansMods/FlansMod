@@ -19,7 +19,7 @@ import com.flansmod.client.tmt.Shape2D;
 public class ModelSPAS extends ModelGun //Same as Filename
 {
 	int textureX = 1024;
-	int textureY = 1024;
+	int textureY = 64;
 
 	public ModelSPAS() //Same as Filename
 	{

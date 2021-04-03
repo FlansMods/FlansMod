@@ -14,8 +14,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelForegrip extends ModelAttachment //Same as Filename
 {
-	int textureX = 1024;
-	int textureY = 1024;
+	int textureX = 64;
+	int textureY = 16;
 
 	public ModelForegrip() //Same as Filename
 	{

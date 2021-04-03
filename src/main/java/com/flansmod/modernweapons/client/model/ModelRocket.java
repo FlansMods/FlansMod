@@ -6,7 +6,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelRocket extends ModelBase
 {
-	int textureX = 64;
+	int textureX = 32;
 	int textureY = 32;
 
 	public ModelRocket()

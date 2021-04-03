@@ -6,7 +6,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelMuzzleBreak extends ModelAttachment //Same as Filename
 {
 	int textureX = 64;
-	int textureY = 64;
+	int textureY = 16;
 
 	public ModelMuzzleBreak() //Same as Filename
 	{

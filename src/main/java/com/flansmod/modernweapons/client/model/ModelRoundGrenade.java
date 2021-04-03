@@ -15,8 +15,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelRoundGrenade extends ModelBase
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 16;
+	int textureY = 4;
 
 	public ModelRoundGrenade()
 	{

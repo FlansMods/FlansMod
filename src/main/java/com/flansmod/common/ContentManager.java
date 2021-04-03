@@ -427,4 +427,33 @@ public class ContentManager
 			FlansMod.log.info("Loaded " + type.name() + ".");
 		}
 	}
+
+	public List<File> GetFolderContentPacks() 
+	{
+		List<File> result = new ArrayList<File>();
+		for(HashMap.Entry<String, IFlansModContentProvider> entry : packs.entrySet())
+		{
+			String contentPackName = entry.getKey();
+			IFlansModContentProvider provider = entry.getValue();
+			
+			if(provider instanceof ContentPackFlanFolder)
+			{
+				ContentPackFlanFolder contentPack = (ContentPackFlanFolder)provider;
+				if(contentPack.folder.isDirectory())
+				{
+					result.add(contentPack.folder);
+				}
+			}
+			else if(provider instanceof ContentPackMod)
+			{
+				ContentPackMod mod = (ContentPackMod)provider;
+				if(mod.container.getSource().getName().endsWith("bin"))
+				{	
+					// If loading from inside MCP, use the content name to find content in run directory
+					result.add(new File(FlansMod.flanDir + "/" + contentPackName));
+				}
+			}
+		}
+		return result;
+	}
 }

@@ -19,7 +19,7 @@ import com.flansmod.client.tmt.Shape2D;
 public class ModelADAR15 extends ModelGun //Same as Filename
 {
 	int textureX = 1024;
-	int textureY = 1024;
+	int textureY = 64;
 
 	public ModelADAR15() //Same as Filename
 	{

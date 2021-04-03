@@ -12,7 +12,7 @@ import com.flansmod.client.tmt.Shape2D;
 public class ModelChaffee extends ModelVehicle //Same as Filename
 {
 	int textureX = 1024;
-	int textureY = 1024;
+	int textureY = 512;
 
 	public ModelChaffee() //Same as Filename
 	{

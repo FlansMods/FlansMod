@@ -10,7 +10,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelFlakvierling extends ModelVehicle //Same as Filename
 {
 	int textureX = 256;
-	int textureY = 256;
+	int textureY = 128;
 	
 	public ModelFlakvierling() //Same as Filename
 	{

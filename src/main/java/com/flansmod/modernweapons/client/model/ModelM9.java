@@ -18,8 +18,8 @@ import com.flansmod.client.tmt.Shape2D;
 
 public class ModelM9 extends ModelGun //Same as Filename
 {
-	int textureX = 1024;
-	int textureY = 1024;
+	int textureX = 512;
+	int textureY = 64;
 
 	public ModelM9() //Same as Filename
 	{

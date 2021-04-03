@@ -14,8 +14,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelRedDot extends ModelAttachment //Same as Filename
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 256;
+	int textureY = 32;
 
 	public ModelRedDot() //Same as Filename
 	{

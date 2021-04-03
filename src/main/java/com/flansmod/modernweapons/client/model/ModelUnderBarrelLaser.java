@@ -14,7 +14,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelUnderBarrelLaser extends ModelAttachment //Same as Filename
 {
-	int textureX = 2048;
+	int textureX = 64;
 	int textureY = 2048;
 
 	public ModelUnderBarrelLaser() //Same as Filename

@@ -12,7 +12,7 @@ import com.flansmod.common.vector.Vector3f;
 public class ModelThompson extends ModelGun //Same as Filename
 {
 	int textureX = 128;
-	int textureY = 128;
+	int textureY = 64;
 	
 	public ModelThompson() //Same as Filename
 	{

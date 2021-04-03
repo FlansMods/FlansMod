@@ -16,7 +16,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelPIAT extends ModelGun
 {
-	int textureX = 128;
+	int textureX = 64;
 	int textureY = 128;
 
 	public ModelPIAT()

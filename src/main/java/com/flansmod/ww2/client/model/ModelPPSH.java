@@ -16,7 +16,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelPPSH extends ModelGun
 {
-	int textureX = 512;
+	int textureX = 64;
 	int textureY = 512;
 
 	public ModelPPSH()

@@ -15,8 +15,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelProximityMine extends ModelBase
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 32;
+	int textureY = 16;
 
 	public ModelProximityMine()
 	{

@@ -15,7 +15,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelACOG extends ModelAttachment //Same as Filename
 {
 	int textureX = 512;
-	int textureY = 512;
+	int textureY = 64;
 
 	public ModelACOG() //Same as Filename
 	{

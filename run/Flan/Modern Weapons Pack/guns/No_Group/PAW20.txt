@@ -1,0 +1,47 @@
+Name PAW20
+ShortName paw20
+//The ammo this gun uses (shortName)
+Ammo paw20Ammo
+Icon PAW20
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 70
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 12
+//Damage in half hearts
+Damage 1
+//The higher this value, the more the bullets spread
+Accuracy 1
+//Time in ticks between rounds
+ShootDelay 10.0
+ShootSound PAW20Shoot
+ReloadSound PAW20Reload
+Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 3.0
+UsableByMechas false
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Model settings
+Model jamespostmodernweapons.PAW20
+Texture PAW20
+ModelScale 0.18
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWRedDot flanMWACOG flanMWHCOG flanMW2xScope flanMW4xScope flanMW8xScope flanMWCharmjamesk2417sight flanMWCharmjthmonkeysight flanMWCharmkingasa3sight flanMWCharmjamioflansight flanMWForegrip flanMWUnderBarrelLaser flanMWFlashlight
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 0
+//Modifiers
+MoveSpeedModifier 0.8
+KnockbackModifier 0
+Description Grenade Launcher : 20mm pneumatic pay grenade launcher.

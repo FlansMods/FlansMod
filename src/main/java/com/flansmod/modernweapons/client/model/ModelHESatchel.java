@@ -15,8 +15,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelHESatchel extends ModelBase
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 128;
+	int textureY = 16;
 
 	public ModelHESatchel()
 	{

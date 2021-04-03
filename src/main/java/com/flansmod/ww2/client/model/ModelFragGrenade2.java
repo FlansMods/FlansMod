@@ -18,7 +18,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelFragGrenade2 extends ModelBase
 {
 	int textureX = 256;
-	int textureY = 256;
+	int textureY = 128;
 	
 	public ModelFragGrenade2()
 	{

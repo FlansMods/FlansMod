@@ -15,7 +15,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class Model8xScope extends ModelAttachment //Same as Filename
 {
 	int textureX = 512;
-	int textureY = 512;
+	int textureY = 128;
 
 	public Model8xScope() //Same as Filename
 	{

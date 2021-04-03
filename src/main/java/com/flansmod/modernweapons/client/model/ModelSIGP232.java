@@ -18,8 +18,8 @@ import com.flansmod.client.tmt.Shape2D;
 
 public class ModelSIGP232 extends ModelGun //Same as Filename
 {
-	int textureX = 1024;
-	int textureY = 1024;
+	int textureX = 512;
+	int textureY = 64;
 
 	public ModelSIGP232() //Same as Filename
 	{

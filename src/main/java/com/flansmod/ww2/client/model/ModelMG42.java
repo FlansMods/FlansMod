@@ -10,7 +10,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelMG42 extends ModelMG //Same as Filename
 {
 	int textureX = 64;
-	int textureY = 64;
+	int textureY = 32;
 
 	public ModelMG42() //Same as Filename
 	{

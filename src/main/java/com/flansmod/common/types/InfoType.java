@@ -733,7 +733,7 @@ public class InfoType
 		AddOreDictEntry("ingotBronze", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("blockBronze", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
 
-		
+		// IE lookups
 		AddModEntry("treatedPlanks", "immersiveengineering:treated_wood",  Ingredient.fromItems(Item.getItemFromBlock(Blocks.PLANKS)));
 	}
 	
