@@ -607,7 +607,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	private boolean canThrust(DriveableData data, EntityPlayer driver) {
 		return !TeamsManager.vehiclesNeedFuel
 				|| driverIsCreative()
-				|| data.fuelInTank > data.engine.fuelConsumption * throttle;
+				|| (data.engine != null && data.fuelInTank > data.engine.fuelConsumption * throttle);
 	}
 
 	public void animateFancyTracks()
