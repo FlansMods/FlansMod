@@ -34,7 +34,16 @@ public class InventoryGunModTable extends InventoryBasic
 		if(gunStack != lastGunStack)
 		{
 			busy = true;
+			
+			if(!gunStack.hasTagCompound())
+				gunStack.setTagCompound(new NBTTagCompound());
 			NBTTagCompound attachmentTags = gunStack.getTagCompound().getCompoundTag("attachments");
+			if(attachmentTags == null)
+			{
+				attachmentTags = new NBTTagCompound();
+				gunStack.getTagCompound().setTag("attachments", attachmentTags);
+			}
+			
 			setInventorySlotContents(1, new ItemStack(attachmentTags.getCompoundTag("barrel")));
 			setInventorySlotContents(2, new ItemStack(attachmentTags.getCompoundTag("scope")));
 			setInventorySlotContents(3, new ItemStack(attachmentTags.getCompoundTag("stock")));
