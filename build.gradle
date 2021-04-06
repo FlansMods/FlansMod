@@ -1,16 +1,36 @@
-buildscript {
-    dependencies {
+buildscript 
+{
+    dependencies 
+	{
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
-    repositories {
+    repositories 
+	{
         jcenter()
-        maven {
-           // location of the maven that hosts the forge files
-          name = "Forge maven"
-          url = "http://files.minecraftforge.net/maven"
+        maven 
+		{
+			// location of the maven that hosts the forge files
+			name = "Forge maven"
+			url = "http://files.minecraftforge.net/maven"
         }
     }
+}
+
+repositories
+{
+	maven 
+	{
+		// location of the maven that hosts JEI files
+		name = "Progwml6 maven"
+		url = "https://dvs1.progwml6.com/files/maven/"
+	}
+	maven 
+	{
+		// location of a maven mirror for JEI files, as a fallback
+		name = "ModMaven"
+		url = "https://modmaven.k-4u.nl"
+	}
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -30,13 +50,18 @@ compileJava {
 dependencies {
     compile "io.vavr:vavr:0.10.2"
     shadow "io.vavr:vavr:0.10.2"
+	
+	// compile against the JEI API but do not include it at runtime
+	deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
+	// at runtime, use the full JEI jar
+	runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
 }
 
 minecraft {
     version = minecraft_version + "-" + forge_version
     runDir = "run"
 
-    replace "@ALLOWED_VERSIONS@", "[5.7.0, 5.8)"
+    replace "@ALLOWED_VERSIONS@", "[5.8.0, 5.9)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 	replaceIn "ModernWeaponsPackMod.java"
@@ -49,7 +74,7 @@ minecraft {
 	replaceIn "YeOldePackMod.java"	
 	replaceIn "ZombiePackMod.java"	
 	
-    replace "@ALLOWED_VERSIONS_APOCALYPSE@", "[1.2, 1.3)"
+    replace "@ALLOWED_VERSIONS_APOCALYPSE@", "[1.3, 1.4)"
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
 

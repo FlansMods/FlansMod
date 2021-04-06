@@ -61,8 +61,8 @@ public class VehicleType extends DriveableType
 			
 		parsers.put("TurnLeftSpeed", (split, d) -> d.turnLeftModifier = Float.parseFloat(split[1]));
 		parsers.put("TurnRightSpeed", (split, d) -> d.turnRightModifier = Float.parseFloat(split[1]));
-		parsers.put("ShootDelay", (split, d) -> d.vehicleShootDelay = Integer.parseInt(split[1]));
-		parsers.put("ShellDelay", (split, d) -> d.vehicleShellDelay = Integer.parseInt(split[1]));
+		parsers.put("ShootDelay", (split, d) -> d.shootDelaySecondary = Integer.parseInt(split[1]));
+		parsers.put("ShellDelay", (split, d) -> d.shootDelayPrimary = Integer.parseInt(split[1]));
 		
 		parsers.put("ShellSound", (split, d) -> 
 		{

@@ -1,5 +1,7 @@
 package com.flansmod.common.guns;
 
+import javax.annotation.Nullable;
+
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.types.InfoType;
 
@@ -7,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
@@ -79,4 +82,13 @@ public class EntityDamageSourceFlan extends EntityDamageSourceIndirect{
 	{
 		return headshot;
 	}
+	
+	@Override
+    @Nullable
+    public Vec3d getDamageLocation()
+    {
+		if(damageSourceEntity == null)
+			return new Vec3d(0d, 0d, 0d);
+        return super.getDamageLocation();
+    }
 }
