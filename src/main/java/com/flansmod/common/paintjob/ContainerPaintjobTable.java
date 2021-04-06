@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.flansmod.common.guns.Paintjob;
-import com.flansmod.common.types.IPaintableItem;
-import com.flansmod.common.types.PaintableType;
 
 public class ContainerPaintjobTable extends Container
 {

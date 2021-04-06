@@ -7,8 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 
 public class PlayerRankData
 {

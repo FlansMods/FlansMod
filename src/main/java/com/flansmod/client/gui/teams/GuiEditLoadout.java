@@ -23,6 +23,8 @@ import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.paintjob.IPaintableItem;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
@@ -31,9 +33,7 @@ import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.TeamsManagerRanked;
 import com.flansmod.common.types.IFlanItem;
-import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 
 public class GuiEditLoadout extends GuiTeamsBase
 {

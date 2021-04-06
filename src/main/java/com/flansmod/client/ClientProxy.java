@@ -101,6 +101,7 @@ import com.flansmod.common.network.PacketBuyArmour;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
 import com.flansmod.common.network.PacketRepairDriveable;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.BlockArmourBox;
@@ -110,7 +111,6 @@ import com.flansmod.common.teams.TileEntitySpawner;
 import com.flansmod.common.tools.EntityParachute;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
 
 @SideOnly(Side.CLIENT)

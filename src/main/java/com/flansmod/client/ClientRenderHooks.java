@@ -70,11 +70,11 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
+import com.flansmod.common.paintjob.IPaintableItem;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
-import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 
 @SideOnly(Side.CLIENT)

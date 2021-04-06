@@ -36,10 +36,6 @@ public class VehicleType extends DriveableType
 	public boolean tank = false;
 	
 	/**
-	 * Shoot delays
-	 */
-	public int vehicleShootDelay, vehicleShellDelay;
-	/**
 	 * Aesthetic door variable
 	 */
 	public boolean hasDoor = false;

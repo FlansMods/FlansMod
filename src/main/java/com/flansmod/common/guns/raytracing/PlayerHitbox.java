@@ -189,6 +189,8 @@ public class PlayerHitbox
 			if(!player.world.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)
 				TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)player, damagesource);
 			
+			//if(damagesource.)
+			
 			//Attack the entity!
 			if(player.attackEntityFrom(damagesource, hitDamage))
 			{

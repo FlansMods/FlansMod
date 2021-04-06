@@ -20,7 +20,7 @@ import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.Paintjob;
-import com.flansmod.common.types.PaintableType;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.vector.Vector3f;
 
 public class RenderGun implements CustomItemRenderer

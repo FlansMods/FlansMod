@@ -60,12 +60,12 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
+import com.flansmod.common.paintjob.IPaintableItem;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.EntityGunItem;
-import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
 
 public class ItemGun extends Item implements IPaintableItem

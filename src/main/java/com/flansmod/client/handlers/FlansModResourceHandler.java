@@ -19,8 +19,8 @@ import net.minecraft.util.SoundEvent;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 
 public class FlansModResourceHandler
 {

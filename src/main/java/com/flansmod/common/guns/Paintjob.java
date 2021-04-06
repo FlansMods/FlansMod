@@ -5,8 +5,8 @@ import java.util.HashMap;
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.types.EnumPaintjobRarity;
-import com.flansmod.common.types.PaintableType;
 
 public class Paintjob
 {

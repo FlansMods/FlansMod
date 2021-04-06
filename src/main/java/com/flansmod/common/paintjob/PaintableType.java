@@ -1,4 +1,4 @@
-package com.flansmod.common.types;
+package com.flansmod.common.paintjob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +19,8 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 
 public abstract class PaintableType extends InfoType
 {
@@ -140,7 +142,9 @@ public abstract class PaintableType extends InfoType
 	
 	public Paintjob getPaintjob(int i)
 	{
-		return paintjobs.get(i);
+		if(0 <= i && i < paintjobs.size())
+			return paintjobs.get(i);
+		return defaultPaintjob;
 	}
 	
 	@Override

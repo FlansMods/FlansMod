@@ -17,7 +17,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
 import com.flansmod.client.model.ModelMuzzleFlash;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.PaintableType;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 

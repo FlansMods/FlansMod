@@ -21,8 +21,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.collisions.CollisionShapeBox;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 

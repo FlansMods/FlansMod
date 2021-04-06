@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.PaintableType;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.types.TypeFile;
 
 public class AttachmentType extends PaintableType implements IScope

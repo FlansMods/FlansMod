@@ -27,11 +27,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.paintjob.IPaintableItem;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
-import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 
 public class ItemPlane extends Item implements IPaintableItem
 {

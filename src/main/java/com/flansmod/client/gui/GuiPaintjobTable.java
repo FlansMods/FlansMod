@@ -32,10 +32,10 @@ import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.network.PacketGunPaint;
 import com.flansmod.common.paintjob.ContainerPaintjobTable;
+import com.flansmod.common.paintjob.IPaintableItem;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.types.EnumType;
-import com.flansmod.common.types.IPaintableItem;
-import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
 
 public class GuiPaintjobTable extends GuiContainer

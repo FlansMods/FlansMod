@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.paintjob.PaintableType;
 import com.flansmod.common.types.EnumPaintjobRarity;
 import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 
 public class RewardBox extends InfoType
