@@ -188,7 +188,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			{
 				if(i == 0)
 				{
-					shellDelay = type.vehicleShellDelay;
+					shellDelay = type.shootDelayPrimary;
 					FlansMod.proxy.doTutorialStuff(entityplayer, this);
 				}
 				return true;

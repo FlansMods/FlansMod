@@ -376,19 +376,20 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				
 				for(int j = 0; j < type.numBarrels; j++)
 				{
+					int ammoSlot = j;
 					if(type.shareAmmo)
-						j = 0;
-					if(shootDelay <= 0 && ammo[j] != null && !ammo[j].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+						ammoSlot = 0;
+					if(shootDelay <= 0 && ammo[ammoSlot] != null && !ammo[ammoSlot].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
 						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
+						BulletType bullet = BulletType.getBullet(ammo[ammoSlot].getItem());
 						if(shootPlayer)
 						{
 							if(!player.capabilities.isCreativeMode)
-								ammo[j].damageItem(1, player);
+								ammo[ammoSlot].damageItem(1, player);
 						} else
 						{
-							ammo[j].setItemDamage(ammo[j].getItemDamage() + 1);
+							ammo[ammoSlot].setItemDamage(ammo[ammoSlot].getItemDamage() + 1);
 						}
 						shootDelay = type.shootDelay;
 						barrelRecoil[j] = type.recoil;

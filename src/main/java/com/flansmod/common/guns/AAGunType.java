@@ -182,6 +182,11 @@ public class AAGunType extends InfoType
 	@Override
 	protected void postRead(TypeFile file)
 	{
+		if(numBarrels > 16)
+		{
+			FlansMod.log.warn("Detected AA Gun type with ludicrous number of barrels " + numBarrels);
+			numBarrels = 16;
+		}
 	}
 	
 	@Override

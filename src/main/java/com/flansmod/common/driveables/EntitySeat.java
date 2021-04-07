@@ -432,9 +432,19 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		// Get the position of this seat globally, but positionally relative to the driveable
 		Vector3f relativePosition = driveable.axes.findLocalVectorGlobally(localPosition);
-		// Set the absol
-		setPosition(driveable.posX + relativePosition.x, driveable.posY + relativePosition.y,
-				driveable.posZ + relativePosition.z);
+		
+		if(Math.abs(driveable.posX + relativePosition.x - posX) > 100d
+		|| Math.abs(driveable.posY + relativePosition.y - posY) > 100d
+		|| Math.abs(driveable.posZ + relativePosition.z - posZ) > 100d)
+		{
+			FlansMod.log.warn("Seat was made to move stupid distance in a frame, cancelling");
+		}
+		else
+		{
+			// Set the absol
+			setPosition(driveable.posX + relativePosition.x, driveable.posY + relativePosition.y,
+					driveable.posZ + relativePosition.z);
+		}
 		
 		Entity entityInThisSeat = getControllingPassenger();
 		
