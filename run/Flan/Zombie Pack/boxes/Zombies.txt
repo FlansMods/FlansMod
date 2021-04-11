@@ -34,6 +34,9 @@ AddAmmo highexpistolammo 1 ingotIron 1 highexgunpowder
 AddAmmo appistolammo 1 ingotIron 1 highexgunpowder 1 prismarine_shard
 AddGun flareGun 9 ingotIron
 AddAmmo flareGunAmmo 2 ingotIron 2 gunpowder 1 redstone
+AddGun glock17 9 ingotIron
+AddAmmo glockAmmo 4 ingotIron 3 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
 SetPage Melee
 AddGun combatKnife 6 ingotIron
 AddGun surgicalAxe 8 ingotIron

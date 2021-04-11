@@ -7,7 +7,3 @@ Defence 0.4
 ArmourTexture PoliceJacket
 MoveSpeedModifier 0.85
 KnockbackModifier 0.5
-Enchantability 0
-Toughness 3
-Durability 0
-DamageReductionAmount 5

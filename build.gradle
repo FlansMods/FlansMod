@@ -17,22 +17,6 @@ buildscript
     }
 }
 
-repositories
-{
-	maven 
-	{
-		// location of the maven that hosts JEI files
-		name = "Progwml6 maven"
-		url = "https://dvs1.progwml6.com/files/maven/"
-	}
-	maven 
-	{
-		// location of a maven mirror for JEI files, as a fallback
-		name = "ModMaven"
-		url = "https://modmaven.k-4u.nl"
-	}
-}
-
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.johnrengelman.shadow'
 
@@ -50,11 +34,6 @@ compileJava {
 dependencies {
     compile "io.vavr:vavr:0.10.2"
     shadow "io.vavr:vavr:0.10.2"
-	
-	// compile against the JEI API but do not include it at runtime
-	deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
-	// at runtime, use the full JEI jar
-	runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
 }
 
 minecraft {

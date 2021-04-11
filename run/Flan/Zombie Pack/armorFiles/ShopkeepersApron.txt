@@ -6,9 +6,5 @@ Type Chest
 Model zombie.Apron
 Defence 0.2
 ArmourTexture ShopkeepersApron
-MoveSpeedModifier 1.25
+MoveSpeedModifier 1.0
 KnockbackModifier 0.5
-Enchantability 0
-Toughness 0
-Durability 0
-DamageReductionAmount 7
