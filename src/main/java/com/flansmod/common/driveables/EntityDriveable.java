@@ -43,6 +43,7 @@ import com.flansmod.client.handlers.KeyInputHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
+import com.flansmod.common.driveables.mechas.ContainerMechaInventory;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.EnumSpreadPattern;
@@ -1719,6 +1720,26 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			// Inventory is in the core, so drop it if the core is broken
 			if(part.type == EnumDriveablePart.core)
 			{
+				for(EntityPlayer player : world.playerEntities)
+				{
+					if(player.openContainer instanceof ContainerDriveableInventory)
+					{
+						if(((ContainerDriveableInventory)player.openContainer).plane.getEntityId() == getEntityId())
+						{
+							player.closeScreen();
+							//player.openGui(null, 0, world, (int)posX, (int)posY, (int)posZ);
+						}
+					}
+					else if(player.openContainer instanceof ContainerMechaInventory)
+					{
+						if(((ContainerMechaInventory)player.openContainer).mecha.getEntityId() == getEntityId())
+						{
+							player.closeScreen();
+							//player.openGui(null, 0, world, (int)posX, (int)posY, (int)posZ);
+						}
+					}
+				}
+				
 				for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
 				{
 					ItemStack stack = getDriveableData().getStackInSlot(i);
