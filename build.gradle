@@ -40,7 +40,7 @@ minecraft {
     version = minecraft_version + "-" + forge_version
     runDir = "run"
 
-    replace "@ALLOWED_VERSIONS@", "[5.8.0, 5.9)"
+    replace "@ALLOWED_VERSIONS@", "[5.9.0, 5.10)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 	replaceIn "ModernWeaponsPackMod.java"

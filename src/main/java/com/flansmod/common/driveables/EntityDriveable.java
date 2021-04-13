@@ -245,7 +245,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(EnumDriveablePart ep : EnumDriveablePart.values())
 		{
 			DriveablePart part = getDriveableData().parts.get(ep);
-			data.writeShort((short)part.health);
+			data.writeInt(part.health);
 			data.writeBoolean(part.onFire);
 		}
 	}
@@ -268,7 +268,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			for(EnumDriveablePart ep : EnumDriveablePart.values())
 			{
 				DriveablePart part = getDriveableData().parts.get(ep);
-				part.health = data.readShort();
+				part.health = data.readInt();
 				part.onFire = data.readBoolean();
 			}
 			
