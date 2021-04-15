@@ -638,6 +638,12 @@ public class EntityPlane extends EntityDriveable
 				float targetWheelLength = targetWheelPos.length();
 				float currentWheelLength = currentWheelPos.length();
 				
+				if(currentWheelLength > targetWheelLength * 3.0d)
+				{
+					// Make wheels break?
+					//this.attackPart(EnumDriveablePart.backLeftWheel, source, damage);
+				}
+				
 				float dLength = targetWheelLength - currentWheelLength;
 				float dAngle = Vector3f.angle(targetWheelPos, currentWheelPos);
 				
@@ -681,11 +687,11 @@ public class EntityPlane extends EntityDriveable
 					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.5F / wheels.length;
 					//amountToMoveCar.z += ((wheel.posZ - wheel.prevPosZ) - (motionZ)) * 0.0616F / wheels.length;
 					
-					if(amountToMoveWheel.lengthSquared() >= 16f * 16f)
+					if(amountToMoveWheel.lengthSquared() >= 32f * 32f)
 					{
-						FlansMod.log.warn("Wheel tried to move " + amountToMoveWheel.length() + " in a single frame, capping at 16 blocks");
+						FlansMod.log.warn("Wheel tried to move " + amountToMoveWheel.length() + " in a single frame, capping at 32 blocks");
 						amountToMoveWheel.normalise();
-						amountToMoveWheel.scale(16f);
+						amountToMoveWheel.scale(32f);
 					}
 					
 					wheel.move(MoverType.SELF, amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);

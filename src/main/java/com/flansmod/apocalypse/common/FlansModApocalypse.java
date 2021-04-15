@@ -61,6 +61,8 @@ import com.flansmod.common.CreativeTabFlan;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.IFlansModContentProvider;
 import com.flansmod.common.ItemHolderType;
+import com.flansmod.common.enchantments.GloveType;
+import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.parts.PartType;
 
 @Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS_APOCALYPSE@", dependencies = "required-after:" + FlansMod.MODID)
@@ -91,6 +93,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	public static int AIRPORT_RARITY = 125;
 	public static int DYE_FACTORY_RARITY = 400;
 	public static int LAB_RARITY = 100;
+
 	
 	// TODO: Configify
 	public static int ABANDONED_PORTAL_APOC_RARITY = 4000;
@@ -104,6 +107,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	 * How far from their death point does the player respawn?
 	 */
 	public static int SPAWN_RADIUS = 100;
+	public static boolean RESPAWN_IN_APOC = false;
 	/**
 	 * Who gets teleported to the apocalypse when a player places a mecha?
 	 */
@@ -129,6 +133,8 @@ public class FlansModApocalypse implements IFlansModContentProvider
 	
 	//References to apocalypse specific items and blocks:
 	public static BlockItemHolder skeleton, slumpedSkeleton, gunRack;
+	
+	public static ItemGlove nukraniumGauntlet;
 	
 	static
 	{
@@ -274,6 +280,11 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		if(PartType.getPart("nuclearPowerCore") != null)
 			PartType.getPart("nuclearPowerCore").item.setCreativeTab(tabApocalypse);
 		
+		if(GloveType.getGlove("nukranium_gauntlet") != null)
+		{
+			nukraniumGauntlet = (ItemGlove)GloveType.getGlove("nukranium_gauntlet").item;
+		}
+		
 		lootGenerator = new FlansModLootGenerator();
 	}
 	
@@ -343,6 +354,7 @@ public class FlansModApocalypse implements IFlansModContentProvider
 		
 		ABANDONED_PORTAL_APOC_RARITY = configFile.getInt("Abandoned Portal Rarity (Apocalypse)", Configuration.CATEGORY_GENERAL, ABANDONED_PORTAL_APOC_RARITY, 1, Integer.MAX_VALUE, "Rarity of the abandoned portal structures in the apocalypse");
 		ABANDONED_PORTAL_OVERWORLD_RARITY = configFile.getInt("Abandoned Portal Rarity (Other Dimensions)", Configuration.CATEGORY_GENERAL, ABANDONED_PORTAL_OVERWORLD_RARITY, 1, Integer.MAX_VALUE, "Rarity of the abandoned portal structures in other dimensions");
+		RESPAWN_IN_APOC = configFile.getBoolean("Respawn in Apocalypse", Configuration.CATEGORY_GENERAL, RESPAWN_IN_APOC, "If false, players will return to their overworld spawn point");
 		
 		if(configFile.hasChanged())
 			configFile.save();

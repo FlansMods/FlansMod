@@ -1,0 +1,107 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "flansmod:items/nukranium_gauntlet",
+		"particle": "flansmod:items/nukranium_gauntlet"
+	},
+	"elements": [
+		{
+			"from": [5, 5, 5],
+			"to": [11, 11, 11],
+			"faces": {
+				"north": {"uv": [0, 0, 6, 6], "texture": "#0"},
+				"east": {"uv": [0, 0, 6, 6], "texture": "#0"},
+				"south": {"uv": [0, 0, 6, 6], "texture": "#0"},
+				"west": {"uv": [0, 0, 6, 6], "texture": "#0"},
+				"up": {"uv": [0, 0, 6, 6], "texture": "#0"},
+				"down": {"uv": [0, 0, 6, 6], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, 6, 4],
+			"to": [10, 10, 5],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 4]},
+			"faces": {
+				"north": {"uv": [0, 8, 4, 12], "texture": "#0"},
+				"east": {"uv": [4, 8, 5, 12], "texture": "#0"},
+				"south": {"uv": [0, 12, 4, 16], "texture": "#0"},
+				"west": {"uv": [4, 12, 5, 16], "texture": "#0"},
+				"up": {"uv": [0, 6, 4, 7], "texture": "#0"},
+				"down": {"uv": [0, 7, 4, 8], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.5, 5.5, 9],
+			"to": [10.5, 10.5, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 5, 5], "texture": "#0"},
+				"east": {"uv": [0, 0, 4, 5], "texture": "#0"},
+				"south": {"uv": [0, 0, 5, 5], "texture": "#0"},
+				"west": {"uv": [0, 0, 4, 5], "texture": "#0"},
+				"up": {"uv": [0, 0, 5, 4], "texture": "#0"},
+				"down": {"uv": [0, 0, 5, 4], "texture": "#0"}
+			}
+		},
+		{
+			"name": "spike",
+			"from": [9.25, 9.75, 6],
+			"to": [10.25, 10.75, 10],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [9, 10, 6]},
+			"faces": {
+				"north": {"uv": [10, 0, 11, 1], "texture": "#0"},
+				"east": {"uv": [12, 1, 16, 2], "texture": "#0"},
+				"south": {"uv": [11, 1, 12, 2], "texture": "#0"},
+				"west": {"uv": [12, 0, 16, 1], "texture": "#0"},
+				"up": {"uv": [10, 0, 11, 4], "texture": "#0"},
+				"down": {"uv": [9, 0, 10, 4], "texture": "#0"}
+			}
+		},
+		{
+			"name": "spike",
+			"from": [5.75, 9.5, 6],
+			"to": [6.75, 10.5, 10],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [6, 10, 6]},
+			"faces": {
+				"north": {"uv": [10, 0, 11, 1], "texture": "#0"},
+				"east": {"uv": [12, 1, 16, 2], "texture": "#0"},
+				"south": {"uv": [11, 1, 12, 2], "texture": "#0"},
+				"west": {"uv": [12, 0, 16, 1], "texture": "#0"},
+				"up": {"uv": [10, 0, 11, 4], "texture": "#0"},
+				"down": {"uv": [9, 0, 10, 4], "texture": "#0"}
+			}
+		},
+		{
+			"name": "spike",
+			"from": [7.5, 9.625, 6],
+			"to": [8.5, 10.625, 10],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 10, 6]},
+			"faces": {
+				"north": {"uv": [10, 0, 11, 1], "texture": "#0"},
+				"east": {"uv": [12, 1, 16, 2], "texture": "#0"},
+				"south": {"uv": [11, 1, 12, 2], "texture": "#0"},
+				"west": {"uv": [12, 0, 16, 1], "texture": "#0"},
+				"up": {"uv": [10, 0, 11, 4], "texture": "#0"},
+				"down": {"uv": [9, 0, 10, 4], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, -2, 0],
+			"scale": [1, 1, 1]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, -2, 0]
+		},
+		"firstperson_righthand": {
+			"scale": [1, 1, 1]
+		},
+		"gui": {
+			"rotation": [45, 135, 0],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0]
+		}
+	}
+}

@@ -8,6 +8,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.Seat;
+import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.types.InfoType.ParseFunc;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class GloveType extends InfoType
 {
-	public static ArrayList<GloveType> types = new ArrayList<>();
+	public static ArrayList<GloveType> gloves = new ArrayList<>();
 	private static HashMap<String, ParseFunc<GloveType>> parsers = new HashMap<>();
 	static
 	{
@@ -37,7 +38,7 @@ public class GloveType extends InfoType
 	public void preRead(TypeFile file)
 	{
 		super.preRead(file);
-		types.add(this);
+		gloves.add(this);
 	}
 	
 	@Override
@@ -66,5 +67,15 @@ public class GloveType extends InfoType
 	public void postRead(TypeFile file)
 	{
 		super.postRead(file);
+	}
+
+	public static GloveType getGlove(String s) 
+	{
+		for(GloveType glove : gloves)
+		{
+			if(glove.shortName.equals(s))
+				return glove;
+		}
+		return null;
 	}
 }

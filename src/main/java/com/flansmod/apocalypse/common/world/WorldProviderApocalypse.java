@@ -32,7 +32,7 @@ public class WorldProviderApocalypse extends WorldProvider
 	@Override
 	public boolean canRespawnHere()
 	{
-		return true;
+		return FlansModApocalypse.RESPAWN_IN_APOC;
 	}
 	
 	@Override

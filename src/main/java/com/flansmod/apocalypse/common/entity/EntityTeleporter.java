@@ -136,11 +136,14 @@ public class EntityTeleporter extends Entity
 				{
 					if(overworld.isAirBlock(pos) && overworld.isSideSolid(pos.down(), EnumFacing.UP))
 					{
-						//We have found a valid position
-						if(createPortal(overworld, pos))
+						if(overworld.getWorldBorder().contains(pos) && overworld.getWorldBorder().contains(pos.add(3, 0, 3)))
 						{
-							targetTeleporter = pos;
-							return;
+							//We have found a valid position
+							if(createPortal(overworld, pos))
+							{
+								targetTeleporter = pos;
+								return;
+							}
 						}
 					}
 				}
@@ -160,11 +163,14 @@ public class EntityTeleporter extends Entity
 				{
 					if(apocWorld.isAirBlock(pos) && apocWorld.isSideSolid(pos.down(), EnumFacing.UP))
 					{
-						//We have found a valid position
-						if(createPortal(apocWorld, pos))
+						if(apocWorld.getWorldBorder().contains(pos) && apocWorld.getWorldBorder().contains(pos.add(3, 0, 3)))
 						{
-							targetTeleporter = pos;
-							return;
+							//We have found a valid position
+							if(createPortal(apocWorld, pos))
+							{
+								targetTeleporter = pos;
+								return;
+							}
 						}
 					}
 				}

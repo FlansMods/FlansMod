@@ -1,0 +1,7 @@
+Name Nukranium Gauntlet
+ShortName nukranium_gauntlet
+Icon nukranium_gauntlet
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Enchantability 50
+Durability 2048

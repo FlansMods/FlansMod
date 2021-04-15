@@ -7,6 +7,7 @@ import com.flansmod.common.guns.EntityDamageSourceFlan;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketPlaySound;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.MoverType;
@@ -390,6 +391,17 @@ public class EntitySkullBoss extends EntityLiving
 			dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
 			dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
 			dropItem(FlansMod.gunpowderBlockItem, rand.nextInt(4) + 1);
+			
+			if(FlansModApocalypse.nukraniumGauntlet != null)
+			{
+				ItemStack gauntlet = new ItemStack(FlansModApocalypse.nukraniumGauntlet);
+				// 50% enchanted, 50% clean
+				if(rand.nextBoolean())
+				{
+					EnchantmentHelper.addRandomEnchantment(world.rand, gauntlet, 50, true);
+				}
+				entityDropItem(gauntlet, 0.0f);
+			}
 		}
 	}
 }

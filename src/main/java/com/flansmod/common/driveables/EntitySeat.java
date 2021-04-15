@@ -456,14 +456,31 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 							.toVec3().subtract(0, entityInThisSeat.getEyeHeight(), 0);
 			// driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
 			
-			playerPosX = posX + yOffset.x;
-			playerPosY = posY + yOffset.y;
-			playerPosZ = posZ + yOffset.z;
+			double x = posX + yOffset.x;
+			double y = posY + yOffset.y;
+			double z = posZ + yOffset.z;
 			
-			entityInThisSeat.lastTickPosX = getControllingPassenger().prevPosX = prevPlayerPosX;
-			entityInThisSeat.lastTickPosY = getControllingPassenger().prevPosY = prevPlayerPosY;
-			entityInThisSeat.lastTickPosZ = getControllingPassenger().prevPosZ = prevPlayerPosZ;
-			entityInThisSeat.setPosition(playerPosX, playerPosY, playerPosZ);
+			if((Math.abs(prevPlayerPosX - x) > 100d
+			|| Math.abs(prevPlayerPosY - y) > 100d
+			|| Math.abs(prevPlayerPosZ - z) > 100d)
+			&& prevPlayerPosY > 0.00001d)
+			{
+				
+				FlansMod.log.warn("Player was made to move stupid distance in a frame, cancelling");
+				//entityInThisSeat.dismountRidingEntity();
+			}
+			else
+			{
+				// Set the absol
+				entityInThisSeat.setPosition(playerPosX, playerPosY, playerPosZ);
+				playerPosX = x;
+				playerPosY = y;
+				playerPosZ = z;
+				
+				entityInThisSeat.lastTickPosX = getControllingPassenger().prevPosX = prevPlayerPosX;
+				entityInThisSeat.lastTickPosY = getControllingPassenger().prevPosY = prevPlayerPosY;
+				entityInThisSeat.lastTickPosZ = getControllingPassenger().prevPosZ = prevPlayerPosZ;
+			}
 			
 			// Calculate the local look axes globally
 			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(playerLooking);
@@ -772,6 +789,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					{
 						looking.setAngles(-animal.rotationYaw, animal.rotationPitch, 0F);
 						animal.clearLeashed(true, !entityplayer.capabilities.isCreativeMode);
+						playerPosX = prevPlayerPosX = animal.posX;
+						playerPosY = prevPlayerPosY = animal.posY;
+						playerPosZ = prevPlayerPosZ = animal.posZ;
 					}
 					else
 					{
@@ -784,7 +804,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		// Put them in the seat
 		if(getControllingPassenger() == null && !driveable.getDriveableData().engine.isAIChip)
 		{
-			if(!entityplayer.startRiding(this))
+			if(entityplayer.startRiding(this))
+			{
+				playerPosX = prevPlayerPosX = entityplayer.posX;
+				playerPosY = prevPlayerPosY = entityplayer.posY;
+				playerPosZ = prevPlayerPosZ = entityplayer.posZ;
+			}
+			else
 			{
 				FlansMod.log.warn("Failed to mount seat");
 			}
@@ -841,6 +867,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			EntityDriveable driveable = (EntityDriveable)riding;
 			driveable.registerSeat(this);
 		}
+		
+		playerPosX = prevPlayerPosX = riding.posX;
+		playerPosY = prevPlayerPosY = riding.posY;
+		playerPosZ = prevPlayerPosZ = riding.posZ;
 		return success;
 	}
 	
