@@ -182,7 +182,11 @@ public class EntityAIMecha extends EntityMecha
 	{
 		return true;
 	}
-	
+	@Override
+	public boolean getCanSpawnHere()
+	{
+		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+	}
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
