@@ -54,7 +54,7 @@ EngineSound ChallengerRun
 EngineSoundLength 40
 ShootSoundPrimary 90mm
 ShootSoundSecondary M60Shoot
-TurretRotationSpeed 0.06
+TurretRotationSpeed 2.27
 DamageModifierPrimary 100
 //Recipe
 //Each section of the plane may have many parts
