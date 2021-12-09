@@ -606,13 +606,16 @@ public class InfoType
 			if(type.shortName.equals(id))
 				return new ItemStack(type.item, amount, damage);
 		}
-		
+
 		// OreIngredients, just pick an ingot
 		if(SPECIAL_INGREDIENTS.containsKey(id))
 		{
 			Ingredient ing = SPECIAL_INGREDIENTS.get(id);
-			if(ing.getMatchingStacks().length > 0)
-				return ing.getMatchingStacks()[0];
+			if (ing.getMatchingStacks().length > 0)
+			{
+				ItemStack ingItem = ing.getMatchingStacks()[0];
+				return new ItemStack(ingItem.getItem(), amount, ingItem.getItemDamage());
+			}
 		}
 
 		for(Item item : Item.REGISTRY)
@@ -703,42 +706,66 @@ public class InfoType
 	private static HashMap<String, Ingredient> SPECIAL_INGREDIENTS = new HashMap<String, Ingredient>();
 	public static void InitializeSpecialIngredients()
 	{
-		// Steel ingot - fallback is iron
+		// Iron parts with ingot fallback
+		AddOreDictEntry("plateIron", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearIron", Ingredient.fromItem(Items.IRON_INGOT));
+		// Steel with fallback iron
 		AddOreDictEntry("nuggetSteel", Ingredient.fromItem(Items.IRON_NUGGET));
 		AddOreDictEntry("ingotSteel", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("plateSteel", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearSteel", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("blockSteel", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
 		// Nickel with fallback iron
 		AddOreDictEntry("nuggetNickel", Ingredient.fromItem(Items.IRON_NUGGET));
 		AddOreDictEntry("ingotNickel", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("plateNickel", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearNickel", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("blockNickel", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
 		// Lead with fallback iron
 		AddOreDictEntry("nuggetLead", Ingredient.fromItem(Items.IRON_NUGGET));
 		AddOreDictEntry("ingotLead", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("plateLead", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearLead", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("blockLead", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
 		// Copper with fallback iron
 		AddOreDictEntry("nuggetCopper", Ingredient.fromItem(Items.IRON_NUGGET));
 		AddOreDictEntry("ingotCopper", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("plateCopper", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearCopper", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("blockCopper", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
 		// Tin with fallback iron
 		AddOreDictEntry("nuggetTin", Ingredient.fromItem(Items.IRON_NUGGET));
 		AddOreDictEntry("ingotTin", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("plateTin", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearTin", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("blockTin", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
-		
+
+		// Gold parts with ingot fallback
+		AddOreDictEntry("plateGold", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearGold", Ingredient.fromItem(Items.GOLD_INGOT));
 		// Electrum with fallback gold
 		AddOreDictEntry("nuggetElectrum", Ingredient.fromItem(Items.GOLD_NUGGET));
 		AddOreDictEntry("ingotElectrum", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("plateElectrum", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearElectrum", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("blockElectrum", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
 		// Constantan with fallback gold
 		AddOreDictEntry("nuggetConstantan", Ingredient.fromItem(Items.GOLD_NUGGET));
 		AddOreDictEntry("ingotConstantan", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("plateConstantan", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearConstantan", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("blockConstantan", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
 		// Silver with fallback gold
 		AddOreDictEntry("nuggetSilver", Ingredient.fromItem(Items.GOLD_NUGGET));
 		AddOreDictEntry("ingotSilver", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("plateSilver", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearSilver", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("blockSilver", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
 		// Bronze with fallback gold
 		AddOreDictEntry("nuggetBronze", Ingredient.fromItem(Items.GOLD_NUGGET));
 		AddOreDictEntry("ingotBronze", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("plateBronze", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearBronze", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("blockBronze", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
 
 		// IE lookups
