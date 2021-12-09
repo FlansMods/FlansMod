@@ -739,6 +739,12 @@ public class InfoType
 		AddOreDictEntry("plateTin", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("gearTin", Ingredient.fromItem(Items.IRON_INGOT));
 		AddOreDictEntry("blockTin", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
+		// Aluminum with fallback iron
+		AddOreDictEntry("nuggetAluminum", Ingredient.fromItem(Items.IRON_NUGGET));
+		AddOreDictEntry("ingotAluminum", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("plateAluminum", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("gearAluminum", Ingredient.fromItem(Items.IRON_INGOT));
+		AddOreDictEntry("blockAluminum", Ingredient.fromItems(Item.getItemFromBlock(Blocks.IRON_BLOCK)));
 
 		// Gold parts with ingot fallback
 		AddOreDictEntry("plateGold", Ingredient.fromItem(Items.GOLD_INGOT));
@@ -767,6 +773,18 @@ public class InfoType
 		AddOreDictEntry("plateBronze", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("gearBronze", Ingredient.fromItem(Items.GOLD_INGOT));
 		AddOreDictEntry("blockBronze", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
+		// Platinum with fallback gold
+		AddOreDictEntry("nuggetPlatinum", Ingredient.fromItem(Items.GOLD_NUGGET));
+		AddOreDictEntry("ingotPlatinum", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("platePlatinum", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearPlatinum", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("blockPlatinum", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
+		// Iridium with fallback gold
+		AddOreDictEntry("nuggetIridium", Ingredient.fromItem(Items.GOLD_NUGGET));
+		AddOreDictEntry("ingotIridium", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("plateIridium", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("gearIridium", Ingredient.fromItem(Items.GOLD_INGOT));
+		AddOreDictEntry("blockIridium", Ingredient.fromItems(Item.getItemFromBlock(Blocks.GOLD_BLOCK)));
 
 		// IE lookups
 		AddModEntry("treatedPlanks", "immersiveengineering:treated_wood",  Ingredient.fromItems(Item.getItemFromBlock(Blocks.PLANKS)));
