@@ -206,7 +206,7 @@ AddGun rpg 25 ingotSteel 10 log
 AddAmmo rpgAmmo 5 plateSteel 8 gunpowder
 
 AddGun m72law 12 ingotSteel 8 fiberglass
-AddAmmo m72lawAmmo 3 platetSteel 5 gunpowder
+AddAmmo m72lawAmmo 3 plateSteel 5 gunpowder
 
 AddGun at4 5 fiberglass 4 ingotSteel
 AddAmmo at4Ammo 3 plateSteel 5 gunpowder
