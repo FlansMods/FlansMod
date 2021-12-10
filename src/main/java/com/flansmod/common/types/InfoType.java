@@ -606,13 +606,16 @@ public class InfoType
 			if(type.shortName.equals(id))
 				return new ItemStack(type.item, amount, damage);
 		}
-		
+
 		// OreIngredients, just pick an ingot
 		if(SPECIAL_INGREDIENTS.containsKey(id))
 		{
 			Ingredient ing = SPECIAL_INGREDIENTS.get(id);
-			if(ing.getMatchingStacks().length > 0)
-				return ing.getMatchingStacks()[0];
+			if (ing.getMatchingStacks().length > 0)
+			{
+				ItemStack ingItem = ing.getMatchingStacks()[0];
+				return new ItemStack(ingItem.getItem(), amount, ingItem.getItemDamage());
+			}
 		}
 
 		for(Item item : Item.REGISTRY)
