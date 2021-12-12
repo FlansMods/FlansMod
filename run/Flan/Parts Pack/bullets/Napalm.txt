@@ -30,7 +30,7 @@ SmokeTrail False
 //True if this is a bomb
 Bomb True
 RecipeOutput 1
-Recipe I ingotIron T tnt F flintAndSteel
-IFI
+Recipe S plateSteel I ingotIron T tnt F flintAndSteel
+SSS
 ITI
- I 
+ F
