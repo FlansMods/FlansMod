@@ -4,7 +4,7 @@ TopTexture ModernBoxTop
 SideTexture ModernBoxSide
 BottomTexture boxBottom
 GunBoxID 155
-Recipe I ingotIron G dyePowder.2
+Recipe I ingotSteel G dyePowder.2
 III
 GGG
 III
@@ -16,229 +16,229 @@ III
 // --- Rifles ---
 SetPage Rifles
 
-AddGun dragunov 12 ingotIron 10 log
-AddAmmo dragunovAmmo 4 ingotIron 3 gunpowder
-AddAmmo seekerrifleammo 4 fiberglass 2 highexgunpowder 1 ender_eye
-AddAmmo flanMW2xScope 7 ingotIron 2 thinGlass
-AddAmmo flanMW4xScope 6 ingotIron 1 gold_ingot 2 thinGlass
-AddAmmo flanMW8xScope 6 ingotIron 1 diamond 2 thinGlass
+AddGun dragunov 12 ingotSteel 10 log
+AddAmmo dragunovAmmo 4 ingotLead 3 gunpowder
+AddAmmo seekerrifleammo 1 ingotLead 4 fiberglass 2 highexgunpowder 1 ender_eye
+AddAmmo flanMW2xScope 7 ingotSteel 2 thinGlass
+AddAmmo flanMW4xScope 6 ingotSteel 1 gold_ingot 2 thinGlass
+AddAmmo flanMW8xScope 6 ingotSteel 1 diamond 2 thinGlass
 
-AddGun m14 10 ingotIron 10 fiberglass
-AddAmmo m14Ammo 2 ingotIron 3 gunpowder
-AddAmmo seekerrifleammo 4 fiberglass 2 highexgunpowder 1 ender_eye
-AddAmmo flanMW2xScope 7 ingotIron 2 thinGlass
-AddAmmo flanMW4xScope 6 ingotIron 1 gold_ingot 2 thinGlass
-AddAmmo flanMW8xScope 6 ingotIron 1 diamond 2 thinGlass
+AddGun m14 10 ingotSteel 10 fiberglass
+AddAmmo m14Ammo 2 ingotLead 3 gunpowder
+AddAmmo seekerrifleammo 1 ingotLead 4 fiberglass 2 highexgunpowder 1 ender_eye
+AddAmmo flanMW2xScope 7 ingotSteel 2 thinGlass
+AddAmmo flanMW4xScope 6 ingotSteel 1 gold_ingot 2 thinGlass
+AddAmmo flanMW8xScope 6 ingotSteel 1 diamond 2 thinGlass
 
-AddGun g3 22 ingotIron
-AddAmmo g3Ammo 4 ingotIron 4 gunpowder
-AddAmmo seekerrifleammo 4 fiberglass 2 highexgunpowder 1 ender_eye
-AddAmmo flanMW2xScope 7 ingotIron 2 thinGlass
-AddAmmo flanMW4xScope 6 ingotIron 1 gold_ingot 2 thinGlass
-AddAmmo flanMW8xScope 6 ingotIron 1 diamond 2 thinGlass
+AddGun g3 22 ingotSteel
+AddAmmo g3Ammo 4 ingotLead 4 gunpowder
+AddAmmo seekerrifleammo 1 ingotLead 4 fiberglass 2 highexgunpowder 1 ender_eye
+AddAmmo flanMW2xScope 7 ingotSteel 2 thinGlass
+AddAmmo flanMW4xScope 6 ingotSteel 1 gold_ingot 2 thinGlass
+AddAmmo flanMW8xScope 6 ingotSteel 1 diamond 2 thinGlass
 
-AddGun tripletake 12 ingotIron 8 fiberglass
-AddAmmo tripletakeAmmo 5 fiberglass 4 gunpowder
-AddAmmo seekerrifleammo 4 fiberglass 2 highexgunpowder 1 ender_eye
-AddAmmo flanMW2xScope 7 ingotIron 2 thinGlass
-AddAmmo flanMW4xScope 6 ingotIron 1 gold_ingot 2 thinGlass
-AddAmmo flanMW8xScope 6 ingotIron 1 diamond 2 thinGlass
+AddGun tripletake 12 ingotSteel 8 fiberglass
+AddAmmo tripletakeAmmo 1 ingotLead 5 fiberglass 4 gunpowder
+AddAmmo seekerrifleammo 1 ingotLead 4 fiberglass 2 highexgunpowder 1 ender_eye
+AddAmmo flanMW2xScope 7 ingotSteel 2 thinGlass
+AddAmmo flanMW4xScope 6 ingotSteel 1 gold_ingot 2 thinGlass
+AddAmmo flanMW8xScope 6 ingotSteel 1 diamond 2 thinGlass
 
-AddGun sg550 16 ingotIron 2 fiberglass
-AddAmmo sg550Ammo 5 ingotIron 4 gunpowder
-AddAmmo seekerrifleammo 4 fiberglass 2 highexgunpowder 1 ender_eye
-AddAmmo flanMW2xScope 7 ingotIron 2 thinGlass
-AddAmmo flanMW4xScope 6 ingotIron 1 gold_ingot 2 thinGlass
-AddAmmo flanMW8xScope 6 ingotIron 1 diamond 2 thinGlass
+AddGun sg550 16 ingotSteel 2 fiberglass
+AddAmmo sg550Ammo 5 ingotLead 4 gunpowder
+AddAmmo seekerrifleammo 1 ingotLead 4 fiberglass 2 highexgunpowder 1 ender_eye
+AddAmmo flanMW2xScope 7 ingotSteel 2 thinGlass
+AddAmmo flanMW4xScope 6 ingotSteel 1 gold_ingot 2 thinGlass
+AddAmmo flanMW8xScope 6 ingotSteel 1 diamond 2 thinGlass
 
 // --- Assault Rifles 1 ---
 SetPage Assault 1
 
-AddGun m16a4 15 ingotIron 5 fiberglass
-AddAmmo m16a4Ammo 4 ingotIron 5 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun m16a4 15 ingotSteel 1 gearSteel 5 fiberglass
+AddAmmo m16a4Ammo 4 ingotLead 5 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun mtar 6 ingotIron 10 fiberglass
-AddAmmo mtarAmmo 4 fiberglass 3 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun mtar 6 ingotSteel 1 gearSteel 10 fiberglass
+AddAmmo mtarAmmo 1 ingotLead 4 fiberglass 3 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun fnscar 6 ingotIron 10 fiberglass
-AddAmmo fnscarAmmo 3 fiberglass 4 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun fnscar 6 ingotSteel 1 gearSteel 10 fiberglass
+AddAmmo fnscarAmmo 1 ingotLead 3 fiberglass 4 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun acr 6 ingotIron 12 fiberglass
-AddAmmo acrAmmo 2 fiberglass 3 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun acr 6 ingotSteel 1 gearSteel 12 fiberglass
+AddAmmo acrAmmo 1 ingotLead 2 fiberglass 3 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun aug 8 ingotIron 8 fiberglass
-AddAmmo augAmmo 3 fiberglass 3 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun aug 8 ingotSteel 1 gearSteel 8 fiberglass
+AddAmmo augAmmo 1 ingotLead 3 fiberglass 3 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
 // --- Assault Rifles 2 ---
 SetPage Assault 2
 
-AddGun adar15 8 ingotIron 8 fiberglass
-AddAmmo adar15Ammo 3 fiberglass 4 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun adar15 8 ingotSteel 1 gearSteel 8 fiberglass
+AddAmmo adar15Ammo 1 ingotLead 3 fiberglass 4 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun an94 12 ingotIron 3 fiberglass
-AddAmmo an94Ammo 2 ingotIron 4 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun an94 12 ingotSteel 1 gearSteel 3 fiberglass
+AddAmmo an94Ammo 2 ingotLead 4 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun ash12 22 ingotIron
-AddAmmo ash12Ammo 5 fiberglass 3 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun ash12 22 ingotSteel 1 gearSteel
+AddAmmo ash12Ammo 1 ingotLead 5 fiberglass 3 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun galil 5 ingotIron 15 fiberglass
-AddAmmo galilAmmo 2 ingotIron 2 fiberglass 3 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun galil 5 ingotSteel 1 gearSteel 15 fiberglass
+AddAmmo galilAmmo 2 ingotLead 2 fiberglass 3 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
-AddGun famas 6 ingotIron 14 fiberglass
-AddAmmo famasAmmo 5 ingotIron 3 gunpowder
-AddAmmo betacmag 8 fiberglass 10 gunpowder
-AddAmmo apcrrifleAmmo 6 fiberglass 3 highexgunpowder
+AddGun famas 6 ingotSteel 1 gearSteel 14 fiberglass
+AddAmmo famasAmmo 5 ingotLead 3 gunpowder
+AddAmmo betacmag 1 ingotLead 8 fiberglass 10 gunpowder
+AddAmmo apcrrifleAmmo 1 ingotLead 6 fiberglass 3 highexgunpowder
 
 // -- AKs --
 SetPage AKs
 
-AddGun ak47 10 ingotIron 10 log
-AddAmmo ak47Ammo 5 ingotIron 4 gunpowder
-AddAmmo witheringakammo 4 ingotIron 1 skull.1 3 gunpowder
+AddGun ak47 5 ingotIron 5 ingotSteel 1 gearSteel 10 log
+AddAmmo ak47Ammo 5 ingotLead 4 gunpowder
+AddAmmo witheringakammo 4 ingotLead 1 skull.1 3 gunpowder
 
-AddGun ak74 15 ingotIron 10 fiberglass
-AddAmmo ak74Ammo 3 ingotIron 4 fiberglass 3 gunpowder
-AddAmmo witheringakammo 4 ingotIron 1 skull.1 3 gunpowder
+AddGun ak74 5 ingotIron 10 ingotSteel 1 gearSteel 10 fiberglass
+AddAmmo ak74Ammo 3 ingotLead 4 fiberglass 3 gunpowder
+AddAmmo witheringakammo 4 ingotLead 1 skull.1 3 gunpowder
 
-AddGun rpd 20 ingotIron 5 log
-AddAmmo rpdAmmo 12 ingotIron 11 gunpowder
-AddAmmo witheringakammo 4 ingotIron 1 skull.1 3 gunpowder
+AddGun rpd 10 ingotIron 10 ingotSteel 1 gearSteel 5 log
+AddAmmo rpdAmmo 12 ingotLead 11 gunpowder
+AddAmmo witheringakammo 4 ingotLead 1 skull.1 3 gunpowder
 
-AddGun rpk 12 ingotIron 8 log
-AddAmmo rpkAmmo 6 ingotIron 4 gunpowder
-AddAmmo witheringakammo 4 ingotIron 1 skull.1 3 gunpowder
+AddGun rpk 6 ingotIron 6 ingotSteel 1 gearSteel 8 log
+AddAmmo rpkAmmo 6 ingotLead 4 gunpowder
+AddAmmo witheringakammo 4 ingotLead 1 skull.1 3 gunpowder
 
 // --- SMGs ---
 SetPage SMGs
 
-AddGun mp5 15 ingotIron
-AddAmmo mp5Ammo 3 ingotIron 4 gunpowder
-AddAmmo smg100ammo 6 fiberglass 9 gunpowder
+AddGun mp5 15 ingotSteel 1 gearSteel
+AddAmmo mp5Ammo 3 ingotLead 4 gunpowder
+AddAmmo smg100ammo 1 ingotLead 6 fiberglass 9 gunpowder
 
-AddGun skorpion 12 ingotIron 3 log
-AddAmmo skorpionAmmo 3 ingotIron 4 gunpowder
-AddAmmo smg100ammo 6 fiberglass 9 gunpowder
+AddGun skorpion 12 ingotSteel 1 gearSteel 3 log
+AddAmmo skorpionAmmo 3 ingotLead 4 gunpowder
+AddAmmo smg100ammo 1 ingotLead 6 fiberglass 9 gunpowder
 
-AddGun mp7 14 ingotIron
-AddAmmo mp7Ammo 4 ingotIron 4 gunpowder
-AddAmmo smg100ammo 6 fiberglass 9 gunpowder
+AddGun mp7 14 ingotSteel 1 gearSteel
+AddAmmo mp7Ammo 4 ingotLead 4 gunpowder
+AddAmmo smg100ammo 1 ingotLead 6 fiberglass 9 gunpowder
 
-AddGun fmg 5 ingotIron 8 fiberglass
-AddAmmo mp7Ammo 4 ingotIron 4 gunpowder
-AddAmmo smg100ammo 6 fiberglass 9 gunpowder
+AddGun fmg 5 ingotSteel 1 gearSteel 8 fiberglass
+AddAmmo mp7Ammo 4 ingotLead 4 gunpowder
+AddAmmo smg100ammo 1 ingotLead 6 fiberglass 9 gunpowder
 
-AddGun uzi 14 ingotIron
-AddAmmo uziAmmo 4 ingotIron 4 gunpowder
-AddAmmo smg100ammo 6 fiberglass 9 gunpowder
+AddGun uzi 14 ingotSteel 1 gearSteel
+AddAmmo uziAmmo 4 ingotLead 4 gunpowder
+AddAmmo smg100ammo 1 ingotLead 6 fiberglass 9 gunpowder
 
 // --- Shotguns ---
 SetPage Shotguns
 
-AddGun w1200 16 ingotIron 6 fiberglass
-AddAmmo 12gbirdshotAmmo 6 iron_nugget 1 gunpowder
-AddAmmo 12gbuckshotAmmo 3 iron_nugget 1 gunpowder
-AddAmmo 12gslugAmmo 1 ingotIron 1 gunpowder
-AddAmmo 12gheAmmo 1 fiberglass 1 highexgunpowder
-AddAmmo 12gflechetteAmmo 1 fiberglass 1 gunpowder
-AddAmmo 12gincendiaryAmmo 1 fiberglass 1 gunpowder 1 blazePowder
+AddGun w1200 16 ingotSteel 6 fiberglass
+AddAmmo 12gbirdshotAmmo 6 nuggetLead 1 gunpowder
+AddAmmo 12gbuckshotAmmo 3 nuggetLead 3 nuggetSteel 1 gunpowder
+AddAmmo 12gslugAmmo 1 ingotLead 1 gunpowder
+AddAmmo 12gheAmmo 3 nuggetLead 1 fiberglass 1 highexgunpowder
+AddAmmo 12gflechetteAmmo 3 nuggetSteel 1 fiberglass 1 gunpowder
+AddAmmo 12gincendiaryAmmo 3 nuggetLead 1 fiberglass 1 gunpowder 1 blazePowder
 
-AddGun m1014 12 ingotIron 10 fiberglass
-AddAmmo 12gbirdshotAmmo 6 iron_nugget 1 gunpowder
-AddAmmo 12gbuckshotAmmo 3 iron_nugget 1 gunpowder
-AddAmmo 12gslugAmmo 1 ingotIron 1 gunpowder
-AddAmmo 12gheAmmo 1 fiberglass 1 highexgunpowder
-AddAmmo 12gflechetteAmmo 1 fiberglass 1 gunpowder
-AddAmmo 12gincendiaryAmmo 1 fiberglass 1 gunpowder 1 blazePowder
+AddGun m1014 12 ingotSteel 10 fiberglass
+AddAmmo 12gbirdshotAmmo 6 nuggetLead 1 gunpowder
+AddAmmo 12gbuckshotAmmo 3 nuggetLead 3 nuggetSteel 1 gunpowder
+AddAmmo 12gslugAmmo 1 ingotLead 1 gunpowder
+AddAmmo 12gheAmmo 3 nuggetLead 1 fiberglass 1 highexgunpowder
+AddAmmo 12gflechetteAmmo 3 nuggetSteel 1 fiberglass 1 gunpowder
+AddAmmo 12gincendiaryAmmo 3 nuggetLead 1 fiberglass 1 gunpowder 1 blazePowder
 
-AddGun r870 12 ingotIron 4 log
-AddAmmo 12gbirdshotAmmo 6 iron_nugget 1 gunpowder
-AddAmmo 12gbuckshotAmmo 3 iron_nugget 1 gunpowder
-AddAmmo 12gslugAmmo 1 ingotIron 1 gunpowder
-AddAmmo 12gheAmmo 1 fiberglass 1 highexgunpowder
-AddAmmo 12gflechetteAmmo 1 fiberglass 1 gunpowder
-AddAmmo 12gincendiaryAmmo 1 fiberglass 1 gunpowder 1 blazePowder
+AddGun r870 12 ingotSteel 4 log
+AddAmmo 12gbirdshotAmmo 6 nuggetLead 1 gunpowder
+AddAmmo 12gbuckshotAmmo 3 nuggetLead 3 nuggetSteel 1 gunpowder
+AddAmmo 12gslugAmmo 1 ingotLead 1 gunpowder
+AddAmmo 12gheAmmo 3 nuggetLead 1 fiberglass 1 highexgunpowder
+AddAmmo 12gflechetteAmmo 3 nuggetSteel 1 fiberglass 1 gunpowder
+AddAmmo 12gincendiaryAmmo 3 nuggetLead 1 fiberglass 1 gunpowder 1 blazePowder
 
-AddGun spas 10 fiberglass 4 ingotIron
-AddAmmo 12gbirdshotAmmo 6 iron_nugget 1 gunpowder
-AddAmmo 12gbuckshotAmmo 3 iron_nugget 1 gunpowder
-AddAmmo 12gslugAmmo 1 ingotIron 1 gunpowder
-AddAmmo 12gheAmmo 1 fiberglass 1 highexgunpowder
-AddAmmo 12gflechetteAmmo 1 fiberglass 1 gunpowder
-AddAmmo 12gincendiaryAmmo 1 fiberglass 1 gunpowder 1 blazePowder
+AddGun spas 4 ingotSteel 1 gearSteel 10 fiberglass
+AddAmmo 12gbirdshotAmmo 6 nuggetLead 1 gunpowder
+AddAmmo 12gbuckshotAmmo 3 nuggetLead 3 nuggetSteel 1 gunpowder
+AddAmmo 12gslugAmmo 1 ingotLead 1 gunpowder
+AddAmmo 12gheAmmo 3 nuggetLead 1 fiberglass 1 highexgunpowder
+AddAmmo 12gflechetteAmmo 3 nuggetSteel 1 fiberglass 1 gunpowder
+AddAmmo 12gincendiaryAmmo 3 nuggetLead 1 fiberglass 1 gunpowder 1 blazePowder
 
-AddGun m1887 6 ingotIron 4 log
-AddAmmo 12gbirdshotAmmo 6 iron_nugget 1 gunpowder
-AddAmmo 12gbuckshotAmmo 3 iron_nugget 1 gunpowder
-AddAmmo 12gslugAmmo 1 ingotIron 1 gunpowder
-AddAmmo 12gheAmmo 1 fiberglass 1 highexgunpowder
-AddAmmo 12gflechetteAmmo 1 fiberglass 1 gunpowder
-AddAmmo 12gincendiaryAmmo 1 fiberglass 1 gunpowder 1 blazePowder
+AddGun m1887 6 ingotSteel 4 log
+AddAmmo 12gbirdshotAmmo 6 nuggetLead 1 gunpowder
+AddAmmo 12gbuckshotAmmo 3 nuggetLead 3 nuggetSteel 1 gunpowder
+AddAmmo 12gslugAmmo 1 ingotLead 1 gunpowder
+AddAmmo 12gheAmmo 3 nuggetLead 1 fiberglass 1 highexgunpowder
+AddAmmo 12gflechetteAmmo 3 nuggetSteel 1 fiberglass 1 gunpowder
+AddAmmo 12gincendiaryAmmo 3 nuggetLead 1 fiberglass 1 gunpowder 1 blazePowder
 
 // --- Pistols ---
 SetPage Pistols 1
 
-AddGun m9 8 ingotIron
-AddAmmo m9Ammo 2 ingotIron 2 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun m9 8 ingotSteel
+AddAmmo m9Ammo 2 ingotLead 2 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun usp 10 ingotIron
-AddAmmo uspAmmo 2 ingotIron 2 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun usp 10 ingotSteel
+AddAmmo uspAmmo 2 ingotLead 2 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun m1911 8 ingotIron 1 leather
-AddAmmo m1911Ammo 2 ingotIron 1 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun m1911 8 ingotSteel 1 leather
+AddAmmo m1911Ammo 2 ingotLead 1 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun sigP226 8 ingotIron
-AddAmmo sigP226Ammo 2 ingotIron 2 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun sigP226 8 ingotSteel
+AddAmmo sigP226Ammo 2 ingotLead 2 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun SIGP232 8 ingotIron
-AddAmmo sigP226Ammo 2 ingotIron 2 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun SIGP232 8 ingotSteel
+AddAmmo sigP226Ammo 2 ingotLead 2 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
 // --- Pistols ---
 SetPage Pistols 2
 
-AddGun makarov 8 ingotIron
-AddAmmo makarovAmmo 2 ingotIron 1 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun makarov 8 ingotSteel
+AddAmmo makarovAmmo 2 ingotLead 1 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun glock 9 ingotIron
-AddAmmo glockAmmo 4 ingotIron 3 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun glock 9 ingotSteel
+AddAmmo glockAmmo 4 ingotLead 3 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun desertEagle 12 ingotIron
-AddAmmo desertEagleAmmo 3 ingotIron 2 gunpowder
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun desertEagle 12 ingotSteel
+AddAmmo desertEagleAmmo 3 ingotLead 2 gunpowder
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
-AddGun kcasmartpistol 12 ingotIron
-AddAmmo kcasmartpistolAmmo 3 ingotIron 1 gunpowder 1 ender_eye
-AddAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
+AddGun kcasmartpistol 12 ingotSteel
+AddAmmo kcasmartpistolAmmo 3 ingotLead 1 gunpowder 1 ender_eye
+AddAmmo uspPoisonAmmo 2 ingotLead 2 gunpowder 2 spiderEye
 
 // --- Misc ---
 SetPage Misc
 
-AddGun m67 4 fiberglass 2 gunpowder
-AddGun mwRiotShield 12 fiberglass 12 thinGlass 16 ingotIron
-AddGun Hydra70Ammo 19 iron 19 gunpowder
-AddGun Hellfire 2 iron 4 fiberglass 4 gunpowder 2 redstone
-AddGun TRIGAT 2 iron 4 fiberglass 5 gunpowder 1 redstone
+AddGun m67 2 plateSteel 2 gunpowder
+AddGun mwRiotShield 16 plateSteel 12 fiberglass 8 thinGlass
+AddGun Hydra70Ammo 10 plateSteel 19 gunpowder
+AddGun Hellfire 2 plateSteel 4 fiberglass 4 gunpowder 2 redstone
+AddGun TRIGAT 2 plateSteel 4 fiberglass 5 gunpowder 1 redstone

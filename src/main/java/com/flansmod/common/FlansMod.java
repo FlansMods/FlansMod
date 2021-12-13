@@ -271,7 +271,7 @@ public class FlansMod
 			flanDir.mkdirs();
 			flanDir.mkdir();
 		}
-		
+
 		//Set up mod blocks and items
 		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setTranslationKey("flansWorkbench"));
 		opStick = new ItemOpStick();
@@ -346,7 +346,7 @@ public class FlansMod
 		log.info("Registering Recipes.");
 		
 		InfoType.InitializeSpecialIngredients();
-		
+
 		// Recipes
 		for(InfoType type : InfoType.infoTypes.values())
 		{
@@ -407,7 +407,7 @@ public class FlansMod
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
 		log.info("Registering Items");
-		
+
 		for(InfoType type : InfoType.infoTypes.values())
 		{
 			type.registerItem(event.getRegistry());
@@ -433,7 +433,7 @@ public class FlansMod
 		contentManager.LoadTypes();
 		contentManager.CreateItems();
 		Team.spectators = spectators;
-
+		
 		for(InfoType type : InfoType.infoTypes.values())
 		{
 			type.registerBlock(event.getRegistry());
