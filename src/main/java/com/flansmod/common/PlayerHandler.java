@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -54,7 +55,12 @@ public class PlayerHandler
 		if(event instanceof LivingAttackEvent && (entity.getRidingEntity() instanceof EntityDriveable || entity.getRidingEntity() instanceof EntitySeat))
 		{
 			//TODO Set Drivable damage
-			event.setCanceled(true);
+			if((event.getSource() != DamageSource.MAGIC)
+					&& (event.getSource() != DamageSource.WITHER)
+					&& (event.getSource() != DamageSource.STARVE)
+					&& (event.getSource() != DamageSource.ON_FIRE)
+					&& (event.getSource() != DamageSource.OUT_OF_WORLD))
+				event.setCanceled(true);
 		}
 	}
 	
