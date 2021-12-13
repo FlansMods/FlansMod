@@ -637,7 +637,7 @@ public class ItemGun extends Item implements IPaintableItem
 		// Play shot sounds
 		if(soundDelay <= 0 && type.shootSound != null)
 		{
-			PacketPlaySound.sendSoundPacket(position.x, position.y, position.z, FlansMod.soundRange, world.provider.getDimension(), type.shootSound, silenced);
+			PacketPlaySound.sendSoundPacket(position.x, position.y, position.z, silenced ? (FlansMod.soundRange*0.75F) : FlansMod.soundRange, world.provider.getDimension(), type.shootSound, silenced);
 			soundDelay = type.idleSoundLength;
 		}
 	}
