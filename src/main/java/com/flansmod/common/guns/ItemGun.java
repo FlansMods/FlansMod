@@ -352,7 +352,10 @@ public class ItemGun extends Item implements IPaintableItem
 					//PlayerData burst rounds handled on client
 					if(hold && !held)
 					{
-						data.SetBurstTicksRemaining(hand, (int) (Math.max(type.shootDelay, 1.5F) * 3));
+						if(type.mode != EnumFireMode.BURST)
+							data.SetBurstTicksRemaining(hand, (int) (Math.max(type.shootDelay, 1.5F) * 3));
+						else
+							data.SetBurstTicksRemaining(hand, (int) type.shootDelay * 3);
 					}
 					else if(held)
 					{
