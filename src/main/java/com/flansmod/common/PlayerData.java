@@ -85,7 +85,7 @@ public class PlayerData
 	/**
 	 * When the player shoots a burst fire weapon, one shot is fired immediately and this counter keeps track of how many more should be fired
 	 */
-	public int burstRoundsRemainingLeft = 0, burstRoundsRemainingRight = 0;
+	public int burstTicksRemainingLeft = 0, burstTicksRemainingRight = 0;
 	
 	// Handed getters and setters
 	public float GetShootTime(EnumHand hand)
@@ -99,20 +99,20 @@ public class PlayerData
 		else shootTimeRight = set;
 	}
 	
-	public int GetBurstRoundsRemaining(EnumHand hand)
+	public int GetBurstTicksRemaining(EnumHand hand)
 	{
-		return hand == EnumHand.OFF_HAND ? burstRoundsRemainingLeft : burstRoundsRemainingRight;
+		return hand == EnumHand.OFF_HAND ? burstTicksRemainingLeft : burstTicksRemainingRight;
 	}
 	
-	public void SetBurstRoundsRemaining(EnumHand hand, int set)
+	public void SetBurstTicksRemaining(EnumHand hand, int set)
 	{
-		if(hand == EnumHand.OFF_HAND) burstRoundsRemainingLeft = set;
-		else burstRoundsRemainingRight = set;
+		if(hand == EnumHand.OFF_HAND) burstTicksRemainingLeft = set;
+		else burstTicksRemainingRight = set;
 	}
 
 	public boolean IsBursting(EnumHand hand)
 	{
-		if(GetBurstRoundsRemaining(hand) > 0)
+		if(GetBurstTicksRemaining(hand) > 0)
 			return true;
 		else return false;
 	}

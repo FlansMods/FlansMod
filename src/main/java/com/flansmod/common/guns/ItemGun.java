@@ -57,6 +57,7 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.enchantments.EnchantmentModule;
 import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
@@ -351,14 +352,14 @@ public class ItemGun extends Item implements IPaintableItem
 					//PlayerData burst rounds handled on client
 					if(hold && !held)
 					{
-						data.SetBurstRoundsRemaining(hand, 9);
+						data.SetBurstTicksRemaining(hand, (int) (Math.max(type.shootDelay, 1.5F) * 3));
 					}
 					else if(held)
 					{
 						if(data.IsBursting(hand))
 						{
 							shouldShootThisTick = true;
-							data.SetBurstRoundsRemaining(hand, data.GetBurstRoundsRemaining(hand) - 1);
+							data.SetBurstTicksRemaining(hand, data.GetBurstTicksRemaining(hand) - 1);
 						}
 					}
 					else needsToReload = false;
