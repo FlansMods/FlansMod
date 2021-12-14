@@ -349,11 +349,20 @@ public class ItemGun extends Item implements IPaintableItem
 				case BURST:
 				{
 					//PlayerData burst rounds handled on client
-					if(data.GetBurstRoundsRemaining(hand) > 0)
+					if(hold && !held)
 					{
-						shouldShootThisTick = true;
+						data.SetBurstRoundsRemaining(hand, 9);
 					}
-					// Fallthrough to semi auto
+					else if(held)
+					{
+						if(data.IsBursting(hand))
+						{
+							shouldShootThisTick = true;
+							data.SetBurstRoundsRemaining(hand, data.GetBurstRoundsRemaining(hand) - 1);
+						}
+					}
+					else needsToReload = false;
+					break;
 				}
 				case SEMIAUTO:
 				{

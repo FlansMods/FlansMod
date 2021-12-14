@@ -109,6 +109,13 @@ public class PlayerData
 		if(hand == EnumHand.OFF_HAND) burstRoundsRemainingLeft = set;
 		else burstRoundsRemainingRight = set;
 	}
+
+	public boolean IsBursting(EnumHand hand)
+	{
+		if(GetBurstRoundsRemaining(hand) > 0)
+			return true;
+		else return false;
+	}
 	
 	public Vector3f[] lastMeleePositions;
 	
