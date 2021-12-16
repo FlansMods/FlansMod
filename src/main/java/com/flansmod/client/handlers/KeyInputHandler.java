@@ -42,6 +42,10 @@ public class KeyInputHandler
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_M,
 			"key.flansmod.category");
+	public static KeyBinding seatSwitchKey = new KeyBinding("key.seatSwitch.desc",
+			FlansKeyConflictContext.VEHICLE,
+			Keyboard.KEY_P,
+			"key.flansmod.category");
 	public static KeyBinding bombKey = new KeyBinding("key.dropBomb.desc",
 			FlansKeyConflictContext.VEHICLE,
 			Keyboard.KEY_B,
@@ -117,6 +121,7 @@ public class KeyInputHandler
 	{
 		ClientRegistry.registerKeyBinding(downKey);
 		ClientRegistry.registerKeyBinding(vehicleMenuKey);
+		ClientRegistry.registerKeyBinding(seatSwitchKey);
 		ClientRegistry.registerKeyBinding(bombKey);
 		ClientRegistry.registerKeyBinding(gunKey);
 		ClientRegistry.registerKeyBinding(controlSwitchKey);
@@ -273,6 +278,8 @@ public class KeyInputHandler
 				controllable.pressKey(15, player, true);
 			if(toggleCameraPerspective.isKeyDown())
 				controllable.pressKey(18, player, true);
+			if(seatSwitchKey.isPressed())
+				controllable.pressKey(25, player, true);
 		}
 	}
 }

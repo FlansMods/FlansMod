@@ -751,6 +751,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					}
 				}
 				return true;
+			case 25:
+				driveable.getSeats();
+				driveable.getSeat(0);
+				return true;
 		}
 		return false;
 	}
