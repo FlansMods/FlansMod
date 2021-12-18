@@ -304,6 +304,24 @@ public class EntityPlane extends EntityDriveable
 				axes.setAngles(axes.getYaw(), 0, 0);
 				return true;
 			}
+			case 25:
+			{
+				EntitySeat[] vehicleSeats = getSeats();
+				EntitySeat playerSeat = getSeat(player);
+				EnumHand hand = player.getActiveHand();
+				if(vehicleSeats.length > (playerSeat.getExpectedSeatID() + 1))
+				{
+					int newSeatID = playerSeat.getExpectedSeatID() + 1;
+					EntitySeat newSeat = getSeat(newSeatID);
+					newSeat.processInitialInteract(player, hand);
+				}
+				else
+				{
+					EntitySeat newSeat = getSeat(0);
+					newSeat.processInitialInteract(player, hand);
+				}
+				return true;
+			}
 			default:
 			{
 				return super.pressKey(key, player, isOnEvent);
