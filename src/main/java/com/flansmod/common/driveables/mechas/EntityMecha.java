@@ -639,7 +639,7 @@ public class EntityMecha extends EntityDriveable
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!isCreative)
-						data.fuelInTank -= data.engine.fuelConsumption;
+						data.fuelInTank -= data.engine.fuelConsumption * 0.5F;
 				}
 			}
 
