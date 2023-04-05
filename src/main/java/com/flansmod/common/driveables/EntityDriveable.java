@@ -5,13 +5,17 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityLargeFireball;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +33,7 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -862,16 +867,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		readyForUpdates = true;
 		for(int i = 0; i < type.numPassengers; i++)
 		{
-			if(seats[i] == null)
-			{
+			if (seats[i] == null) {
 				readyForUpdates = false;
+				break;
 			}
 		}
 		for(int i = 0; i < type.wheelPositions.length; i++)
 		{
-			if(wheels[i] == null)
-			{
+			if (wheels[i] == null) {
 				readyForUpdates = false;
+				break;
 			}
 		}
 		
@@ -1313,6 +1318,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		boolean crashInWater = false;
 		double speed = getSpeedXYZ();
+
 		for(DriveablePosition p : getDriveableType().collisionPoints)
 		{
 			if(driveableData.parts.get(p.part).dead)
@@ -1336,7 +1342,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				IBlockState state = world.getBlockState(pos);
 				
 				float blockHardness = state.getBlockHardness(world, pos);
-				float damage = (float)speed;
+				float damage = (float)(Math.pow(speed*4, Math.pow(1.8, speed*2D)));	//Let the received damage grow exponentially based on the speed
 
 				// unbreakable block
 				if(blockHardness < 0F)
@@ -1345,7 +1351,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 				else
 				{
-					damage *= blockHardness * blockHardness;
+					damage *= Math.pow(blockHardness * blockHardness, 1.3);
 				}
 
 				// Attack the part
@@ -1362,13 +1368,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						destroyBlock(worldServer, pos, getDriver(), true);
 					}
 				}
-				else
+				else if (!world.isRemote)	//Prevent Client-Side creation of the explosion to avoid ghost Blocks
 				{
-					// The part died!
-					world.createExplosion(this, currentPos.x, currentPos.y, currentPos.z, 1F, false);
+					//TODO: Introduce settings to change size of the explosion and whether it should cause fire
+					//Calculate the explosion size based on the speed and the amount of fuel in the vehicle
+					float explosionStrength = (float) (speed + Math.sqrt(Math.abs((driveableData.fuelInTank + 1D) / 1000D)));
+
+					//Create the explosion
+					world.newExplosion(this, currentPos.x, currentPos.y, currentPos.z, explosionStrength, true, true);
 				}
 			}
-			
 		}
 	}
 	
