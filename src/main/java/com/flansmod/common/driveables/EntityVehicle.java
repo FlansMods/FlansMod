@@ -390,7 +390,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			{
 				if (!driverIsCreative())
 				{
-					data.fuelInTank -= data.engine.fuelConsumption * throttle;
+					data.fuelInTank -= data.engine.fuelConsumption * Math.abs(throttle);
 				}
 
 				if(getVehicleType().tank)
