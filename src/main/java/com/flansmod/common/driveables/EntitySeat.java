@@ -751,6 +751,24 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					}
 				}
 				return true;
+			case 25:
+			{
+				EntitySeat[] vehicleSeats = driveable.getSeats();
+				EntitySeat playerSeat = getSeat(player);
+				EnumHand hand = player.getActiveHand();
+				if(vehicleSeats.length > (playerSeat.getExpectedSeatID() + 1))
+				{
+					int newSeatID = playerSeat.getExpectedSeatID() + 1;
+					EntitySeat newSeat = driveable.getSeat(newSeatID);
+					newSeat.processInitialInteract(player, hand);
+				}
+				else
+				{
+					EntitySeat newSeat = driveable.getSeat(0);
+					newSeat.processInitialInteract(player, hand);
+				}
+				return true;
+			}
 		}
 		return false;
 	}

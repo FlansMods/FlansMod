@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -484,6 +485,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					shoot(false);
 					return true;
 				}
+			case 25:
+			{
+				EntitySeat[] vehicleSeats = getSeats();
+				EntitySeat playerSeat = getSeat(player);
+				EnumHand hand = player.getActiveHand();
+				if(vehicleSeats.length > (playerSeat.getExpectedSeatID() + 1))
+				{
+					int newSeatID = playerSeat.getExpectedSeatID() + 1;
+					EntitySeat newSeat = getSeat(newSeatID);
+					newSeat.processInitialInteract(player, hand);
+				}
+				else
+				{
+					EntitySeat newSeat = getSeat(0);
+					newSeat.processInitialInteract(player, hand);
+				}
+				return true;
+			}
 		}
 		return false;
 	}
@@ -528,6 +547,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			case 18:
 			{
 				togglePerspective();
+				return true;
+			}
+			case 25:
+			{
+				if(isOnEvent)
+				{
+					FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+				}
 				return true;
 			}
 			default:
