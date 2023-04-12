@@ -29,7 +29,8 @@ FourWheelDrive true
 //Tank mode activate
 Tank false
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 10000
+//IRL had 91L or 20IG
 //Inventory Slots
 CargoSlots 10
 //Driver and passenger positions

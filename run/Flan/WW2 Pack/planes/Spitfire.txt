@@ -54,7 +54,7 @@ ShootPointPrimary 40 -4 -44 leftWing browning
 ShootPointSecondary -30 -12 0
 DamageModifierPrimary 50
 // ------------------------------------------------------ Inventory ------------------------------------------------------
-CargoSlots 0
+CargoSlots 1
 BombSlots 4
 MissileSlots 0
 AllowAllAmmo False
@@ -62,7 +62,8 @@ AddAmmo largeBomb
 AddAmmo smallBomb
 AddAmmo napalm
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 5000
+FuelTankSize 39000
+//IRL upper 168L tank and lower 218L tank + one of 135/205/228/410/775L aux-tanks on hold.
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot -4 -4 0
 Passengers 0

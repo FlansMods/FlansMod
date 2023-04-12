@@ -60,13 +60,14 @@ ShootPointSecondary 38 28 64 leftWing
 ShootPointSecondary 38 28 -64 rightWing
 
 // ------------------------------------------------------ Inventory ------------------------------------------------------
-CargoSlots 0
+CargoSlots 2
 BombSlots 0
 MissileSlots 3
 AllowAllAmmo False
 AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 6000
+FuelTankSize 366000
+//IRL 3660L from 4 internal tanks and 2*840L external aux-tanks
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 79 32 0
 Passengers 0

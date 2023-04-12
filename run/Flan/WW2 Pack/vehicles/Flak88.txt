@@ -26,7 +26,8 @@ FourWheelDrive true
 //Tank mode activate
 Tank true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 4000
+//This gun was on just simple cart, but imagine that it was motorred in minecraft.
 //Inventory Slots
 CargoSlots 0
 ShellSlots 5

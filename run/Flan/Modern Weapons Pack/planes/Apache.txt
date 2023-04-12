@@ -61,7 +61,8 @@ MissileSlots 8
 AllowAllAmmo False
 AddAmmo Hellfire
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 5000
+FuelTankSize 143000
+//officially, 1421L+4x871L in aux-tanks. If someone will introduce aux-tanks for helicopter, here is value 87000 for each. 
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 54 32 0
 Passengers 1

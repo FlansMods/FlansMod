@@ -28,9 +28,11 @@ FourWheelDrive true
 //Tank mode activate
 Tank true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 160000
+//Officially, fuel capacity is 421 USG or 1593 liters. Converted in to nearest forward value in order to avoid points less than 1000 of gerry can. So it is possible to easily manage number of cans to place into tank.
 //Inventory Slots
-CargoSlots 0
+CargoSlots 5
+//Tanks have some storage inside IRL
 ShellSlots 5
 //Driver and passenger positions
 Driver 0 28 0 -360 360 -10 20

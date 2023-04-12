@@ -33,7 +33,8 @@ WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 1000
+FuelTankSize 7000
+//57L IRL
 //Inventory Slots
 CargoSlots 36
 ShellSlots 0

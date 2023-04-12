@@ -54,13 +54,14 @@ ShootPointPrimary 27 21 -31 leftWing m60
 ShootPointSecondary 27 21 31 rightWing
 
 // ------------------------------------------------------ Inventory ------------------------------------------------------
-CargoSlots 0
+CargoSlots 2
 BombSlots 0
 MissileSlots 8
 AllowAllAmmo False
 AddAmmo TRIGAT
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 5000
+FuelTankSize 136000
+//IRL 1360L; No data about aux-tanks
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 53 15 0
 Passengers 1

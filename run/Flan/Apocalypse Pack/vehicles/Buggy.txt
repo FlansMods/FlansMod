@@ -29,7 +29,9 @@ FourWheelDrive true
 //Tank mode activate
 Tank false
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 20000
+//Increasing fuel tank size in order to beat "Vehicles consume fuel very fast" #1270 issue. It was tested in real game, now jerry cans may fill it fully for 4-5 mins,
+//as in real life, and players have real reason to make fuel stations/storages, dig coal, etc.
 //Inventory Slots
 CargoSlots 32
 ShellSlots 0
