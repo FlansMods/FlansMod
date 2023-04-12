@@ -294,9 +294,6 @@ public class FlansMod
 		contentManager.FindContentInFlanFolder();
 		contentManager.LoadAssetsFromFlanFolder();
 		contentManager.RegisterModelRedirects();
-		contentManager.LoadTypes();
-		contentManager.CreateItems();
-		Team.spectators = spectators;
 		
 		//Automates JSON adding for old content packs
 		proxy.addMissingJSONs(InfoType.infoTypes);
@@ -430,7 +427,13 @@ public class FlansMod
 	public void registerBlocks(RegistryEvent.Register<Block> event)
 	{
 		log.info("Registering Blocks");
-		
+
+		InfoType.InitializeSpecialIngredients();
+
+		contentManager.LoadTypes();
+		contentManager.CreateItems();
+		Team.spectators = spectators;
+
 		for(InfoType type : InfoType.infoTypes.values())
 		{
 			type.registerBlock(event.getRegistry());
