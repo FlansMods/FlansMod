@@ -1,14 +1,14 @@
-buildscript 
+buildscript
 {
-    dependencies 
+    dependencies
 	{
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
-    repositories 
+    repositories
 	{
         jcenter()
-        maven 
+        maven
 		{
 			// location of the maven that hosts the forge files
 			name = "Forge maven"
@@ -50,9 +50,9 @@ minecraft {
 	replaceIn "MechaPartsPackMod.java"
 	replaceIn "UtilityPackMod.java"
 	replaceIn "WW2PackMod.java"
-	replaceIn "YeOldePackMod.java"	
-	replaceIn "ZombiePackMod.java"	
-	
+	replaceIn "YeOldePackMod.java"
+	replaceIn "ZombiePackMod.java"
+
     replace "@ALLOWED_VERSIONS_APOCALYPSE@", "[1.4, 1.5)"
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
