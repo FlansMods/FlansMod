@@ -29,14 +29,14 @@ public class PacketPlaySound extends PacketBase
 	{
 	}
 	
-	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean distort)
+	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean silenced)
 	{
-		sendSoundPacket(x, y, z, range, dimension, s, distort, false);
+		sendSoundPacket(x, y, z, range, dimension, s, silenced, false);
 	}
 	
-	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean distort, boolean silenced)
+	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean silenced, boolean distort)
 	{
-		FlansMod.getPacketHandler().sendToAllAround(new PacketPlaySound(x, y, z, s, distort, silenced), x, y, z, (float)range, dimension);
+		FlansMod.getPacketHandler().sendToAllAround(new PacketPlaySound(x, y, z, s, silenced, distort), x, y, z, (float)range, dimension);
 	}
 	
 	public PacketPlaySound(double x, double y, double z, String s)
@@ -44,19 +44,19 @@ public class PacketPlaySound extends PacketBase
 		this(x, y, z, s, false);
 	}
 	
-	public PacketPlaySound(double x, double y, double z, String s, boolean distort)
+	public PacketPlaySound(double x, double y, double z, String s, boolean silenced)
 	{
-		this(x, y, z, s, distort, false);
+		this(x, y, z, s, silenced, false);
 	}
 	
-	public PacketPlaySound(double x, double y, double z, String s, boolean distort, boolean silenced)
+	public PacketPlaySound(double x, double y, double z, String s, boolean silenced, boolean distort)
 	{
 		posX = (float)x;
 		posY = (float)y;
 		posZ = (float)z;
 		sound = s;
-		this.distort = distort;
 		this.silenced = silenced;
+		this.distort = distort;
 		
 		Matrix2f audioMatrix = Matrix2f.generateAudioMatrix(x, y, z);
 		hash = audioMatrix.coords.hash;
