@@ -466,8 +466,6 @@ public class EntityPlane extends EntityDriveable
 		int numPropsWorking = 0;
 		int numProps = 0;
 		
-		float fuelConsumptionMultiplier = 2F;
-		
 		switch(mode)
 		{
 			case HELI:
@@ -509,7 +507,7 @@ public class EntityPlane extends EntityDriveable
 				motionY *= drag;
 				motionZ *= drag;
 				
-				data.fuelInTank -= upwardsForce * fuelConsumptionMultiplier * data.engine.fuelConsumption;
+				data.fuelInTank -= upwardsForce * data.engine.fuelConsumption * 2F;
 				
 				break;
 			
@@ -571,7 +569,7 @@ public class EntityPlane extends EntityDriveable
 				motionY *= drag;
 				motionZ *= drag;
 				
-				data.fuelInTank -= throttleScaled * fuelConsumptionMultiplier * data.engine.fuelConsumption;
+				data.fuelInTank -= Math.abs(throttle) * throttleScaled * data.engine.fuelConsumption * 10F;
 				break;
 			default:
 				break;
