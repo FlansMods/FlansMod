@@ -218,7 +218,7 @@ public class KeyInputHandler
 						animations.doReload(type.reloadTime, pumpDelay, pumpTime);
 						
 						data.reloadingRight = true;
-						data.burstRoundsRemainingRight = 0;
+						data.burstTicksRemainingRight = 0;
 					}
 				}
 			}

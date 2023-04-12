@@ -57,6 +57,7 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.enchantments.EnchantmentModule;
 import com.flansmod.common.enchantments.ItemGlove;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
@@ -349,11 +350,23 @@ public class ItemGun extends Item implements IPaintableItem
 				case BURST:
 				{
 					//PlayerData burst rounds handled on client
-					if(data.GetBurstRoundsRemaining(hand) > 0)
+					if(hold && !held)
 					{
-						shouldShootThisTick = true;
+						if(type.mode != EnumFireMode.BURST)
+							data.SetBurstTicksRemaining(hand, (int) (Math.max(type.shootDelay, 1.5F) * 3));
+						else
+							data.SetBurstTicksRemaining(hand, (int) type.shootDelay * 3);
 					}
-					// Fallthrough to semi auto
+					else if(held)
+					{
+						if(data.IsBursting(hand))
+						{
+							shouldShootThisTick = true;
+							data.SetBurstTicksRemaining(hand, data.GetBurstTicksRemaining(hand) - 1);
+						}
+					}
+					else needsToReload = false;
+					break;
 				}
 				case SEMIAUTO:
 				{
