@@ -396,11 +396,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						
 						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
+								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY + 1.5F, posZ);
 						
 						Double radianYaw = Math.toRadians(gunYaw + 90F);
 						Double radianPitch = Math.toRadians(gunPitch);
-						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
+						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), -Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
 						
 						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage, EnumSpreadPattern.circle);
 						FiredShot shot = new FiredShot(weapon, bullet, this, player);
@@ -430,14 +430,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			return null;
 		if(placer == null && placerName != null)
 			placer = world.getPlayerEntityByName(placerName);
-		for(Object obj : world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
+		for(Object obj : world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(type.targetRange, type.targetRange, type.targetRange)))
 		{
 			Entity candidateEntity = (Entity)obj;
 			
 			if((type.targetMobs && candidateEntity instanceof EntityMob) || (type.targetPlayers && candidateEntity instanceof EntityPlayer))
 			{
 				//Check that this entity is actually in range and visible
-				if(candidateEntity.getDistanceSq(this) < type.targetRange * type.targetRange)
+				if(candidateEntity.getDistance(this) < type.targetRange)
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
