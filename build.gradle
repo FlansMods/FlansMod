@@ -3,17 +3,17 @@ buildscript
     dependencies
 	{
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
     }
     repositories
 	{
-        jcenter()
         maven
 		{
 			// location of the maven that hosts the forge files
 			name = "Forge maven"
 			url = "http://files.minecraftforge.net/maven"
         }
+        gradlePluginPortal()
     }
 }
 
